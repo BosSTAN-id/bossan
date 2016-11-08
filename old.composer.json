@@ -1,0 +1,4 @@
+        "yiisoft/yii2-gii": "*",
+        for stable version
+                
+        "yiisoft/yii2-gii": "@dev",

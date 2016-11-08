@@ -1,0 +1,121 @@
+1 => Global Setting
+	01 => setting
+	02 => usermanagement
+	03 => grupakses
+	04 => mappingkomponen
+	05 => mappingpendapatan
+	06 => 
+	07 => 
+	08 => 
+	09 => 
+	10 => 
+	11 => 
+	12 => 
+2 => Parameter
+	01 => sekolah
+	02 => datasekolah(alamat-jabatan) 
+	03 => dataaplikasi
+	04 => 
+	05 => 
+	06 => 
+	07 => 
+	08 => 
+	09 => 
+	10 => 
+	11 => 
+	12 => 
+3 => Data Management
+	01 => batchprocess (Batch Process Management)
+	02 => 
+	03 => 
+	04 => 
+	05 => 
+	06 => 
+	07 => 
+	08 => 
+	09 => 
+	10 => 
+	11 => 
+	12 => 
+4 => Anggaran
+	01 => 
+	02 => rkas
+	03 => posting
+	04 => 
+	05 => 
+	06 => 
+	07 => 
+	08 => 
+	09 => 
+	10 => 
+	11 => 
+	12 => 			
+5 => Penatausahaan
+	01 => penerimaan
+	02 => spj
+	03 => verspj (verifikasi spj)
+	04 => pengadaanaset
+	05 => daftar aset tetap (asetetap)
+	06 => 
+	07 => 
+	08 => 
+	09 => 
+	10 => 
+	11 => 
+	12 => 
+6 => Pelaporan
+	01 => pelaporansekolah
+	02 => pelaporankabupaten
+	03 => verpemda
+	04 => 
+	05 => 
+	06 => 
+	07 => 
+	08 => 
+	09 => 
+	10 => 
+	11 => 
+	12 => 	 
+
+
+Kd_Laporan
+Kd_Urusan
+Kd_Bidang
+Kd_Unit
+Kd_Sub
+Tgl_1
+Tgl_2
+Anggaran
+	Utang
+		Pelaporan
+			Rekapitulasi Data Saldo SPH dan Sebaran Utang 1
+			Rekapitulasi Kontrol Anggaran Utang 2
+	Dana Transfer
+		Pelaporan
+			Rekapitulasi Pagu Dana Transfer (SKPD) 1
+			Rekapitulasi Kontrol Anggaran Utang 2
+Penatausahaan
+	Utang
+		Pelaporan
+			Rekapitulasi RPH 3
+			Rekapitulasi Saldo Utang Berjalan 4
+			Rekapitulasi Realisasi Utang 5
+	Dana Transfer
+		Pelaporan
+			Posisi Saldo Dana Transfer 3
+			Rekapitulasi daftar Kontrak Dana Transfer 4
+			Rekapitulasi Realisasi Pembayaran Kontrak Dana Transfer 5
+Akuntansi (akuntansi ada pilihan untuk tanggal)
+	Utang
+		Pelaporan
+			Rekapitulasi Data Saldo SPH dan Sebaran Utang 1
+			Rekapitulasi Kontrol Anggaran Utang 2
+			Rekapitulasi RPH 3
+			Rekapitulasi Saldo Utang Berjalan 4
+			Rekapitulasi Realisasi Utang 5	
+	Dana Transfer
+		Pelaporan
+			Rekapitulasi Pagu Dana Transfer (SKPD) 1
+			Rekapitulasi Kontrol Anggaran Utang 2
+			Rekapitulasi daftar Kontrak Dana Transfer 4
+			Rekapitulasi Realisasi Pembayaran Kontrak Dana Transfer 5
