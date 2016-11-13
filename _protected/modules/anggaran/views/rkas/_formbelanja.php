@@ -18,34 +18,35 @@ use kartik\widgets\DepDrop;
     // , 'layout' => 'horizontal'
     ]); ?>
 
-    <?= Html::a('Kamus Kegiatan', ['create'], [
-                                                'class' => 'btn btn-xs btn-info',
-                                                'data-toggle'=>"modal",
-                                                'data-target'=>"#myModal",
-                                                'data-title'=>"Tambah Referensi Transfer",
-                                                ]) ?>
     <?php 
-            echo $form->field($model, 'kd_program')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(\app\models\RefProgramSekolah::find()->select(['kd_program', 'CONCAT(kd_program,\' \',uraian_program) AS uraian_program'])->all(),'kd_program','uraian_program'),
-                'options' => ['placeholder' => 'Pilih Program ...'],
+            echo $form->field($model, 'Kd_Rek_3')->widget(Select2::classname(), [
+                'data' => ArrayHelper::map(
+                    \app\models\RefRek3::find()
+                    ->select(['Kd_Rek_3', 'CONCAT(Kd_Rek_3,\' \',Nm_Rek_3) AS Nm_Rek_3'])
+                    ->where(['Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2])
+                    ->all()
+                    ,'Kd_Rek_3','Nm_Rek_3'),
+                'options' => ['placeholder' => 'Pilih Jenis Belanja ...'],
                 'pluginOptions' => [
                     'allowClear' => true
                 ],
             ]);
     ?>
-    <?php  echo $form->field($model, 'kd_sub_program')->widget(DepDrop::classname(), [
+
+    <?php  echo $form->field($model, 'Kd_Rek_4')->widget(DepDrop::classname(), [
             'options'=>['id'=>'tarkaskegiatan-kd_sub_program'],
             'pluginOptions'=>[
                 'depends'=>['tarkaskegiatan-kd_program'],
-                'placeholder'=>'Pilih Sub Program ...',
-                'url'=>Url::to(['subprogram'])
+                'placeholder'=>'Pilih Kelompok Belanja ...',
+                'url'=>Url::to(['kdrek4'])
             ]
         ]); ?>
-    <?php echo $form->field($model, 'kd_kegiatan')->widget(DepDrop::classname(), [
+
+    <?php echo $form->field($model, 'Kd_Rek_5')->widget(DepDrop::classname(), [
             'pluginOptions'=>[
                 'depends'=>['tarkaskegiatan-kd_program', 'tarkaskegiatan-kd_sub_program'],
-                'placeholder'=>'Pilih Kegiatan ...',
-                'url'=>Url::to(['kegiatan'])
+                'placeholder'=>'Pilih Belanja ...',
+                'url'=>Url::to(['kdrek5'])
             ]
         ]);
     ?>
@@ -67,7 +68,21 @@ use kartik\widgets\DepDrop;
             ]);
     ?>     
 
-    <?= $form->field($model, 'pagu_anggaran')->textInput(['maxlength' => true]) ?>   
+    <?php 
+            echo $form->field($model, 'komponen_id')->widget(Select2::classname(), [
+                'data' => ArrayHelper::map(
+                    \app\models\RefKomponenBos::find()
+                    ->select(['id', 'CONCAT(id,\' \',komponen) AS komponen'])
+                    // ->where(['Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2])
+                    ->all()
+                    ,'id','komponen'),
+                'options' => ['placeholder' => 'Pilih Komponen BOS ...'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);
+    ?>
+
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Simpan' : 'Simpan', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

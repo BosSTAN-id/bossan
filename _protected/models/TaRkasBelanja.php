@@ -7,7 +7,7 @@ use Yii;
 /**
  * This is the model class for table "ta_rkas_belanja".
  *
- * @property string $Tahun
+ * @property string $tahun
  * @property integer $sekolah_id
  * @property integer $kd_program
  * @property integer $kd_sub_program
@@ -42,12 +42,12 @@ class TaRkasBelanja extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['Tahun', 'sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5'], 'required'],
-            [['Tahun'], 'safe'],
+            [['tahun', 'sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5'], 'required'],
+            [['tahun'], 'safe'],
             [['sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2', 'komponen_id'], 'integer'],
             [['Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5'], 'exist', 'skipOnError' => true, 'targetClass' => RefRek5::className(), 'targetAttribute' => ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']],
             [['kd_penerimaan_1', 'kd_penerimaan_2'], 'exist', 'skipOnError' => true, 'targetClass' => RefPenerimaanSekolah2::className(), 'targetAttribute' => ['kd_penerimaan_1' => 'kd_penerimaan_1', 'kd_penerimaan_2' => 'kd_penerimaan_2']],
-            [['Tahun', 'sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan'], 'exist', 'skipOnError' => true, 'targetClass' => TaRkasKegiatan::className(), 'targetAttribute' => ['Tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'kd_program' => 'kd_program', 'kd_sub_program' => 'kd_sub_program', 'kd_kegiatan' => 'kd_kegiatan']],
+            [['tahun', 'sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan'], 'exist', 'skipOnError' => true, 'targetClass' => TaRkasKegiatan::className(), 'targetAttribute' => ['tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'kd_program' => 'kd_program', 'kd_sub_program' => 'kd_sub_program', 'kd_kegiatan' => 'kd_kegiatan']],
         ];
     }
 
@@ -57,7 +57,7 @@ class TaRkasBelanja extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'Tahun' => Yii::t('app', 'Tahun'),
+            'tahun' => Yii::t('app', 'Tahun'),
             'sekolah_id' => Yii::t('app', 'Sekolah ID'),
             'kd_program' => Yii::t('app', 'Kd Program'),
             'kd_sub_program' => Yii::t('app', 'Kd Sub Program'),
@@ -81,12 +81,22 @@ class TaRkasBelanja extends \yii\db\ActiveRecord
         return $this->hasOne(RefRek5::className(), ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']);
     }
 
+    public function getRefRek3()
+    {
+        return $this->hasOne(RefRek3::className(), ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getTaRkasBelanjaRincs()
     {
-        return $this->hasMany(TaRkasBelanjaRinc::className(), ['tahun' => 'Tahun', 'sekolah_id' => 'sekolah_id', 'kd_program' => 'kd_program', 'kd_sub_program' => 'kd_sub_program', 'kd_kegiatan' => 'kd_kegiatan', 'Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']);
+        return $this->hasMany(TaRkasBelanjaRinc::className(), ['tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'kd_program' => 'kd_program', 'kd_sub_program' => 'kd_sub_program', 'kd_kegiatan' => 'kd_kegiatan', 'Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']);
+    }
+
+    public function getKomponen()
+    {
+        return $this->hasOne(RefKomponenBos::className(), ['id' => 'komponen_id']);
     }
 
     public function getSekolah()

@@ -77,24 +77,30 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
         'columns' => [
             // 'sekolah_id',        
             [
-                'label' => 'Kd Kegiatan',
+                'label' => 'Jenis',
+                'group' => true,
                 'value' => function($model){
-                    return $model->kd_program.'.'.substr('0'.$model->kd_sub_program, -2).'.'.substr('0'.$model->kd_kegiatan, -2);
+                    return $model->refRek3->Nm_Rek_3;
                 }
             ],
-            'refProgram.uraian_program',
-            'refSubProgram.uraian_sub_program',
-            'refKegiatan.uraian_kegiatan',
+            [
+                'label' => 'Belanja',
+                'value' => function($model){
+                    return $model->Kd_Rek_1.'.'.$model->Kd_Rek_2.'.'.$model->Kd_Rek_3.'.'.substr('0'.$model->Kd_Rek_4, -2).'.'.substr('0'.$model->Kd_Rek_5, -2).' '.$model->refRek5->Nm_Rek_5;
+                }
+            ],
             [
                 'label' => 'Sumber Dana',
                 'value' => function($model){
                     return $model->penerimaan2->uraian;
                 }
             ],
-            // 'pagu_anggaran',
-            // 'kd_penerimaan_1',
-            // 'kd_penerimaan_2',
-
+            [
+                'label' => 'Komponen',
+                'value' => function($model){
+                    return $model->komponen->komponen;
+                }
+            ],
             [
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{updatebelanja} {delete} {rkasbelanjarinc}',

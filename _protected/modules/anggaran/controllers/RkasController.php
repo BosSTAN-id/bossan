@@ -209,12 +209,14 @@ class RkasController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $model = new TaRkasBelanja();
+        $model = new \app\models\TaRkasBelanja();
         $model->tahun = $tahun;
         $model->sekolah_id = Yii::$app->user->identity->sekolah_id;
         $model->kd_program = $kd_program;
         $model->kd_sub_program = $kd_sub_program;
         $model->kd_kegiatan = $kd_kegiatan;
+        $model->Kd_Rek_1 = 5;
+        $model->Kd_Rek_2 = 2;
         
 
         if ($model->load(Yii::$app->request->post())) {
@@ -228,7 +230,7 @@ class RkasController extends Controller
                 echo 0;
             }
         } else {
-            return $this->renderAjax('_form', [
+            return $this->renderAjax('_formbelanja', [
                 'model' => $model,
             ]);
         }
