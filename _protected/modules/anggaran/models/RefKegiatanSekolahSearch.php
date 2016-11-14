@@ -5,12 +5,12 @@ namespace app\modules\anggaran\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\TaRkasBelanja;
+use app\models\RefKegiatanSekolah;
 
 /**
- * TaRkasBelanjaSearch represents the model behind the search form about `app\models\TaRkasBelanja`.
+ * RefKegiatanSekolahSearch represents the model behind the search form about `app\models\RefKegiatanSekolah`.
  */
-class TaRkasBelanjaSearch extends TaRkasBelanja
+class RefKegiatanSekolahSearch extends RefKegiatanSekolah
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class TaRkasBelanjaSearch extends TaRkasBelanja
     public function rules()
     {
         return [
-            [['tahun'], 'safe'],
-            [['sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2', 'komponen_id'], 'integer'],
+            [['id', 'kd_program', 'subprogram_id', 'kd_sub_program', 'kd_kegiatan'], 'integer'],
+            [['uraian_kegiatan'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class TaRkasBelanjaSearch extends TaRkasBelanja
      */
     public function search($params)
     {
-        $query = TaRkasBelanja::find();
+        $query = RefKegiatanSekolah::find();
 
         // add conditions that should always apply here
 
@@ -59,20 +59,14 @@ class TaRkasBelanjaSearch extends TaRkasBelanja
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'tahun' => $this->tahun,
-            'sekolah_id' => $this->sekolah_id,
+            'id' => $this->id,
             'kd_program' => $this->kd_program,
+            'subprogram_id' => $this->subprogram_id,
             'kd_sub_program' => $this->kd_sub_program,
             'kd_kegiatan' => $this->kd_kegiatan,
-            'Kd_Rek_1' => $this->Kd_Rek_1,
-            'Kd_Rek_2' => $this->Kd_Rek_2,
-            'Kd_Rek_3' => $this->Kd_Rek_3,
-            'Kd_Rek_4' => $this->Kd_Rek_4,
-            'Kd_Rek_5' => $this->Kd_Rek_5,
-            'kd_penerimaan_1' => $this->kd_penerimaan_1,
-            'kd_penerimaan_2' => $this->kd_penerimaan_2,
-            'komponen_id' => $this->komponen_id,
         ]);
+
+        $query->andFilterWhere(['like', 'uraian_kegiatan', $this->uraian_kegiatan]);
 
         return $dataProvider;
     }

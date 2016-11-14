@@ -5,12 +5,12 @@ namespace app\modules\anggaran\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\TaRkasBelanja;
+use app\models\TaRkasBelanjaRinc;
 
 /**
- * TaRkasBelanjaSearch represents the model behind the search form about `app\models\TaRkasBelanja`.
+ * TaRkasBelanjaRincSearch represents the model behind the search form about `app\models\TaRkasBelanjaRinc`.
  */
-class TaRkasBelanjaSearch extends TaRkasBelanja
+class TaRkasBelanjaRincSearch extends TaRkasBelanjaRinc
 {
     /**
      * @inheritdoc
@@ -18,8 +18,9 @@ class TaRkasBelanjaSearch extends TaRkasBelanja
     public function rules()
     {
         return [
-            [['tahun'], 'safe'],
-            [['sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2', 'komponen_id'], 'integer'],
+            [['tahun', 'keterangan', 'sat_1', 'sat_2', 'sat_3', 'satuan123'], 'safe'],
+            [['sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'no_rinc'], 'integer'],
+            [['nilai_1', 'nilai_2', 'nilai_3', 'jml_satuan', 'nilai_rp', 'total'], 'number'],
         ];
     }
 
@@ -41,7 +42,7 @@ class TaRkasBelanjaSearch extends TaRkasBelanja
      */
     public function search($params)
     {
-        $query = TaRkasBelanja::find();
+        $query = TaRkasBelanjaRinc::find();
 
         // add conditions that should always apply here
 
@@ -69,10 +70,20 @@ class TaRkasBelanjaSearch extends TaRkasBelanja
             'Kd_Rek_3' => $this->Kd_Rek_3,
             'Kd_Rek_4' => $this->Kd_Rek_4,
             'Kd_Rek_5' => $this->Kd_Rek_5,
-            'kd_penerimaan_1' => $this->kd_penerimaan_1,
-            'kd_penerimaan_2' => $this->kd_penerimaan_2,
-            'komponen_id' => $this->komponen_id,
+            'no_rinc' => $this->no_rinc,
+            'nilai_1' => $this->nilai_1,
+            'nilai_2' => $this->nilai_2,
+            'nilai_3' => $this->nilai_3,
+            'jml_satuan' => $this->jml_satuan,
+            'nilai_rp' => $this->nilai_rp,
+            'total' => $this->total,
         ]);
+
+        $query->andFilterWhere(['like', 'keterangan', $this->keterangan])
+            ->andFilterWhere(['like', 'sat_1', $this->sat_1])
+            ->andFilterWhere(['like', 'sat_2', $this->sat_2])
+            ->andFilterWhere(['like', 'sat_3', $this->sat_3])
+            ->andFilterWhere(['like', 'satuan123', $this->satuan123]);
 
         return $dataProvider;
     }

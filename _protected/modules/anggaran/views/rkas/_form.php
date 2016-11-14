@@ -13,17 +13,15 @@ use kartik\widgets\DepDrop;
 ?>
 
 <div class="ta-rkas-kegiatan-form">
+    <?= Html::a('Kamus Kegiatan', ['kamuskegiatan'], [
+                                                'class' => 'btn btn-xs btn-info',
+                                                'onClick' => "return !window.open(this.href, 'SPH', 'width=1024,height=600')"
+                                                ]) ?>
 
     <?php $form = ActiveForm::begin(['id' => $model->formName()
     // , 'layout' => 'horizontal'
     ]); ?>
 
-    <?= Html::a('Kamus Kegiatan', ['create'], [
-                                                'class' => 'btn btn-xs btn-info',
-                                                'data-toggle'=>"modal",
-                                                'data-target'=>"#myModal",
-                                                'data-title'=>"Tambah Referensi Transfer",
-                                                ]) ?>
     <?php 
             echo $form->field($model, 'kd_program')->widget(Select2::classname(), [
                 'data' => ArrayHelper::map(\app\models\RefProgramSekolah::find()->select(['kd_program', 'CONCAT(kd_program,\' \',uraian_program) AS uraian_program'])->all(),'kd_program','uraian_program'),
@@ -58,7 +56,7 @@ use kartik\widgets\DepDrop;
             //         ->select(['CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2', 'CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian'])
             //         ->where(['sekolah' => 1])
             //         ->all();     
-            echo $form->field($model, 'penerimaan2')->widget(Select2::classname(), [
+            echo $form->field($model, 'penerimaan_2')->widget(Select2::classname(), [
                 'data' => ArrayHelper::map($data, 'kd_penerimaan_2','uraian'),
                 'options' => ['placeholder' => 'Sumber Dana ...'],
                 'pluginOptions' => [

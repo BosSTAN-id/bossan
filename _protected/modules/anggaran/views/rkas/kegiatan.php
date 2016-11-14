@@ -13,7 +13,8 @@ $this->params['breadcrumbs'][] = ['label' => 'RKAS', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung'];
 ?>
 <div class="ta-rkas-kegiatan-index">
-
+<!-- <h3 class="text-center">Rencana Kegiatan Anggaran Sekolah Tahun Ajaran <?= $Tahun.'-'.($Tahun+1) ?></h3>
+<h3 class="text-center"><?= Yii::$app->user->identity->refSekolah->nama_sekolah ?></h3> -->
     <p>
         <?= Html::a('Tambah Kegiatan', ['create'], [
                                                     'class' => 'btn btn-xs btn-success',
@@ -75,10 +76,10 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung'];
                         'update' => function ($url, $model) {
                           return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
                               [  
-                                 'title' => Yii::t('yii', 'hapus'),
+                                 'title' => Yii::t('yii', 'ubah'),
                                  'data-toggle'=>"modal",
                                  'data-target'=>"#myModalubah",
-                                 'data-title'=> "Ubah Unit",                                 
+                                 'data-title'=> "Ubah Kegiatan",                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',
                                  // 'data-pjax' => 1

@@ -12,44 +12,14 @@ use kartik\widgets\DepDrop;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="ta-rkas-kegiatan-form">
-
+<div class="ta-rkas-belanja-form">
+    <?= Html::a('Kamus Belanja', ['kamusbelanja'], [
+                                                'class' => 'btn btn-xs btn-info',
+                                                'onClick' => "return !window.open(this.href, 'SPH', 'width=1024,height=600')"
+                                                ]) ?>
     <?php $form = ActiveForm::begin(['id' => $model->formName()
     // , 'layout' => 'horizontal'
     ]); ?>
-
-    <?php 
-            echo $form->field($model, 'Kd_Rek_3')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(
-                    \app\models\RefRek3::find()
-                    ->select(['Kd_Rek_3', 'CONCAT(Kd_Rek_3,\' \',Nm_Rek_3) AS Nm_Rek_3'])
-                    ->where(['Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2])
-                    ->all()
-                    ,'Kd_Rek_3','Nm_Rek_3'),
-                'options' => ['placeholder' => 'Pilih Jenis Belanja ...'],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ]);
-    ?>
-
-    <?php  echo $form->field($model, 'Kd_Rek_4')->widget(DepDrop::classname(), [
-            'options'=>['id'=>'tarkaskegiatan-kd_sub_program'],
-            'pluginOptions'=>[
-                'depends'=>['tarkaskegiatan-kd_program'],
-                'placeholder'=>'Pilih Kelompok Belanja ...',
-                'url'=>Url::to(['kdrek4'])
-            ]
-        ]); ?>
-
-    <?php echo $form->field($model, 'Kd_Rek_5')->widget(DepDrop::classname(), [
-            'pluginOptions'=>[
-                'depends'=>['tarkaskegiatan-kd_program', 'tarkaskegiatan-kd_sub_program'],
-                'placeholder'=>'Pilih Belanja ...',
-                'url'=>Url::to(['kdrek5'])
-            ]
-        ]);
-    ?>
 
     <?php 
             $connection = \Yii::$app->db;
@@ -59,8 +29,9 @@ use kartik\widgets\DepDrop;
             //         ->select(['CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2', 'CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian'])
             //         ->where(['sekolah' => 1])
             //         ->all();     
-            echo $form->field($model, 'penerimaan2')->widget(Select2::classname(), [
+            echo $form->field($model, 'penerimaan_2')->widget(Select2::classname(), [
                 'data' => ArrayHelper::map($data, 'kd_penerimaan_2','uraian'),
+                // 'value' => $model->kd_penerimaan_1.'.'.$model->kd_penerimaan_2,
                 'options' => ['placeholder' => 'Sumber Dana ...'],
                 'pluginOptions' => [
                     'allowClear' => true
@@ -83,6 +54,38 @@ use kartik\widgets\DepDrop;
             ]);
     ?>
 
+    <?php 
+            echo $form->field($model, 'Kd_Rek_3')->widget(Select2::classname(), [
+                'data' => ArrayHelper::map(
+                    \app\models\RefRek3::find()
+                    ->select(['Kd_Rek_3', 'CONCAT(Kd_Rek_3,\' \',Nm_Rek_3) AS Nm_Rek_3'])
+                    ->where(['Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2])
+                    ->all()
+                    ,'Kd_Rek_3','Nm_Rek_3'),
+                'options' => ['placeholder' => 'Pilih Jenis Belanja ...'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);
+    ?>
+
+    <?php  echo $form->field($model, 'Kd_Rek_4')->widget(DepDrop::classname(), [
+            'options'=>['id'=>'tarkasbelanja-kd_rek_4'],
+            'pluginOptions'=>[
+                'depends'=>['tarkasbelanja-kd_rek_3'],
+                'placeholder'=>'Pilih Kelompok Belanja ...',
+                'url'=>Url::to(['kdrek4'])
+            ]
+        ]); ?>
+
+    <?php echo $form->field($model, 'Kd_Rek_5')->widget(DepDrop::classname(), [
+            'pluginOptions'=>[
+                'depends'=>['tarkasbelanja-kd_rek_3', 'tarkasbelanja-kd_rek_4'],
+                'placeholder'=>'Pilih Belanja ...',
+                'url'=>Url::to(['kdrek5'])
+            ]
+        ]);
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Simpan' : 'Simpan', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -106,7 +109,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
             {
                 $("#myModal").modal('hide'); //hide modal after submit
                 //$(\$form).trigger("reset"); //reset form to reuse it to input
-                $.pjax.reload({container:'#kegiatan-pjax'});
+                $.pjax.reload({container:'#belanja-pjax'});
             }else
             {
                 $("#message").html(result);
@@ -134,7 +137,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
             {
                 $("#myModalubah").modal('hide'); //hide modal after submit
                 //$(\$form).trigger("reset"); //reset form to reuse it to input
-                $.pjax.reload({container:'#kegiatan-pjax'});
+                $.pjax.reload({container:'#belanja-pjax'});
             }else
             {
                 $("#message").html(result);

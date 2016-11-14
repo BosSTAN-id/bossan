@@ -36,6 +36,8 @@ class TaRkasBelanja extends \yii\db\ActiveRecord
         return 'ta_rkas_belanja';
     }
 
+    public $penerimaan_2;
+    
     /**
      * @inheritdoc
      */
@@ -44,6 +46,7 @@ class TaRkasBelanja extends \yii\db\ActiveRecord
         return [
             [['tahun', 'sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5'], 'required'],
             [['tahun'], 'safe'],
+            [['penerimaan_2'], 'string'],
             [['sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2', 'komponen_id'], 'integer'],
             [['Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5'], 'exist', 'skipOnError' => true, 'targetClass' => RefRek5::className(), 'targetAttribute' => ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']],
             [['kd_penerimaan_1', 'kd_penerimaan_2'], 'exist', 'skipOnError' => true, 'targetClass' => RefPenerimaanSekolah2::className(), 'targetAttribute' => ['kd_penerimaan_1' => 'kd_penerimaan_1', 'kd_penerimaan_2' => 'kd_penerimaan_2']],
@@ -70,6 +73,7 @@ class TaRkasBelanja extends \yii\db\ActiveRecord
             'kd_penerimaan_1' => Yii::t('app', 'Kd Penerimaan 1'),
             'kd_penerimaan_2' => Yii::t('app', 'Kd Penerimaan 2'),
             'komponen_id' => Yii::t('app', 'Komponen ID'),
+            'penerimaan_2' => 'Sumber Dana',
         ];
     }
 

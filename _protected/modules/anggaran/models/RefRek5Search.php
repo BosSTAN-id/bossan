@@ -5,12 +5,12 @@ namespace app\modules\anggaran\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\TaRkasBelanja;
+use app\models\RefRek5;
 
 /**
- * TaRkasBelanjaSearch represents the model behind the search form about `app\models\TaRkasBelanja`.
+ * RefRek5Search represents the model behind the search form about `app\models\RefRek5`.
  */
-class TaRkasBelanjaSearch extends TaRkasBelanja
+class RefRek5Search extends RefRek5
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class TaRkasBelanjaSearch extends TaRkasBelanja
     public function rules()
     {
         return [
-            [['tahun'], 'safe'],
-            [['sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2', 'komponen_id'], 'integer'],
+            [['Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'Sekolah'], 'integer'],
+            [['Nm_Rek_5'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class TaRkasBelanjaSearch extends TaRkasBelanja
      */
     public function search($params)
     {
-        $query = TaRkasBelanja::find();
+        $query = RefRek5::find();
 
         // add conditions that should always apply here
 
@@ -59,20 +59,15 @@ class TaRkasBelanjaSearch extends TaRkasBelanja
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'tahun' => $this->tahun,
-            'sekolah_id' => $this->sekolah_id,
-            'kd_program' => $this->kd_program,
-            'kd_sub_program' => $this->kd_sub_program,
-            'kd_kegiatan' => $this->kd_kegiatan,
             'Kd_Rek_1' => $this->Kd_Rek_1,
             'Kd_Rek_2' => $this->Kd_Rek_2,
             'Kd_Rek_3' => $this->Kd_Rek_3,
             'Kd_Rek_4' => $this->Kd_Rek_4,
             'Kd_Rek_5' => $this->Kd_Rek_5,
-            'kd_penerimaan_1' => $this->kd_penerimaan_1,
-            'kd_penerimaan_2' => $this->kd_penerimaan_2,
-            'komponen_id' => $this->komponen_id,
+            'Sekolah' => $this->Sekolah,
         ]);
+
+        $query->andFilterWhere(['like', 'Nm_Rek_5', $this->Nm_Rek_5]);
 
         return $dataProvider;
     }

@@ -13,6 +13,9 @@ use Yii;
  * @property integer $kd_sub_program
  * @property integer $kd_kegiatan
  * @property string $uraian_kegiatan
+ *
+ * @property RefSubProgramSekolah $kdProgram
+ * @property TaRkasKegiatan[] $taRkasKegiatans
  */
 class RefKegiatanSekolah extends \yii\db\ActiveRecord
 {
@@ -44,12 +47,31 @@ class RefKegiatanSekolah extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'kd_program' => Yii::t('app', 'Kd Program'),
-            'subprogram_id' => Yii::t('app', 'Subprogram ID'),
-            'kd_sub_program' => Yii::t('app', 'Kd Sub Program'),
-            'kd_kegiatan' => Yii::t('app', 'Kd Kegiatan'),
-            'uraian_kegiatan' => Yii::t('app', 'Uraian Kegiatan'),
+            'id' => 'ID',
+            'kd_program' => 'Kd Program',
+            'subprogram_id' => 'Subprogram ID',
+            'kd_sub_program' => 'Kd Sub Program',
+            'kd_kegiatan' => 'Kd Kegiatan',
+            'uraian_kegiatan' => 'Uraian Kegiatan',
         ];
+    }
+
+
+    public function getRefProgram()
+    {
+        return $this->hasOne(RefProgramSekolah::className(), ['kd_program' => 'kd_program']);
+    }  
+
+    public function getRefSubProgram()
+    {
+        return $this->hasOne(RefSubProgramSekolah::className(), ['kd_program' => 'kd_program', 'kd_sub_program' => 'kd_sub_program']);
+    } 
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTaRkasKegiatans()
+    {
+        return $this->hasMany(TaRkasKegiatan::className(), ['kd_program' => 'kd_program', 'kd_sub_program' => 'kd_sub_program', 'kd_kegiatan' => 'kd_kegiatan']);
     }
 }

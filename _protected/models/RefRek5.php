@@ -98,4 +98,14 @@ class RefRek5 extends \yii\db\ActiveRecord
     {
         return $this->hasOne(RefRek4::className(), ['Kd_Rek_4' => 'Kd_Rek_4']);
     }
+
+    public function getRefRek4()
+    {
+        return $this->hasOne(RefRek4::className(), ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4']);
+    }
+
+    public function getRefRek3()
+    {
+        return $this->hasOne(RefRek3::className(), ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3']);
+    }    
 }

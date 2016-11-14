@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="ta-rkas-kegiatan-index">
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">Rencana Kegiatan Anggaran Sekolah</h3>
+            <h3 class="box-title">Rencana Kegiatan Anggaran Sekolah Tahun Ajaran <?= $Tahun.'-'.($Tahun+1) ?></h3>
             <span class="label label-primary pull-right"><i class="fa fa-html5"></i></span>
         </div><!-- /.box-header -->
         <div class="box-body bg-info">

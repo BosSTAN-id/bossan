@@ -11,7 +11,7 @@ use yii\widgets\DetailView;
 
 $this->title = 'Belanja';
 $this->params['breadcrumbs'][] = ['label' => 'RKAS', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung', 'url' => ['kegiatan']];
+$this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung', 'url' => ['rkaskegiatan']];
 $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
 ?>
 <div class="ta-rkas-kegiatan-index">
@@ -71,11 +71,44 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
         ],
         'pjax'=>true,
         'pjaxSettings'=>[
-            'options' => ['id' => 'belanja-pjax', 'timeout' => 5000],
+            'options' => ['id' => 'belanjarinci-pjax', 'timeout' => 5000],
         ],        
         // 'filterModel' => $searchModel,
         'columns' => [
-            // 'sekolah_id',        
+            [
+                'class' => 'kartik\grid\ExpandRowColumn',
+                'value' => function ($model, $key, $index, $column) {
+
+                    return GridView::ROW_COLLAPSED;
+                },
+
+                'allowBatchToggle'=>true,
+               'detail'=>function ($model, $key, $index, $column) {
+
+                    $searchModel = new \app\modules\anggaran\models\TaRkasBelanjaRincSearch();
+                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+                    $dataProvider->query->where([
+                            'tahun' => $model->tahun,
+                            'sekolah_id' => $model->sekolah_id,
+                            'kd_program' => $model->kd_program,
+                            'kd_sub_program' => $model->kd_sub_program,
+                            'kd_kegiatan' => $model->kd_kegiatan,
+                            'Kd_Rek_1' => $model->Kd_Rek_1,
+                            'Kd_Rek_2' => $model->Kd_Rek_2,
+                            'Kd_Rek_3' => $model->Kd_Rek_3,
+                            'Kd_Rek_4' => $model->Kd_Rek_4,
+                            'Kd_Rek_5' => $model->Kd_Rek_5,
+                        ]);
+                    return Yii::$app->controller->renderPartial('belanjarinci', [
+                        'dataProvider' => $dataProvider,
+                        'model'=>$model,
+                        ]);
+                },
+                'detailOptions'=>[
+                    'class'=> 'kv-state-enable',
+                ],
+
+            ],
             [
                 'label' => 'Jenis',
                 'group' => true,
@@ -103,26 +136,38 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
             ],
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{updatebelanja} {delete} {rkasbelanjarinc}',
+                'template' => '{updatebelanja} {deletebelanja} {rkasbelanjarinc}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
                         'updatebelanja' => function ($url, $model) {
                           return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
                               [  
-                                 'title' => Yii::t('yii', 'hapus'),
+                                 'title' => Yii::t('yii', 'ubah'),
                                  'data-toggle'=>"modal",
                                  'data-target'=>"#myModalubah",
-                                 'data-title'=> "Ubah Unit",                                 
+                                 'data-title'=> "Ubah Belanja",                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',
                                  // 'data-pjax' => 1
                               ]);
                         },
+                        'deletebelanja' => function ($url, $model) {
+                          return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,
+                              [  
+                                 'title' => Yii::t('yii', 'hapus'),
+                                 // 'data-toggle'=>"modal",
+                                 // 'data-target'=>"#myModalubah",
+                                 // 'data-title'=> "Ubah Unit",                                 
+                                 'data-confirm' => "Yakin menghapus belanja ini?",
+                                 'data-method' => 'POST',
+                                 'data-pjax' => 1
+                              ]);
+                        },                        
                         'rkasbelanjarinc' => function ($url, $model) {
                           return Html::a('Rincian Belanja <i class="glyphicon glyphicon-menu-right"></i>', $url,
                               [  
-                                 'title' => Yii::t('yii', 'Input Belanja'),
+                                 'title' => Yii::t('yii', 'Input Rincian Belanja'),
                                  'class'=>"btn btn-xs btn-default",                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',
@@ -135,43 +180,29 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
     ]); ?>
 </div><!--col-->
 <div class="col-md-3">
-    <div class="well">
+    <div class="box box-info">
+        <div class="box-header with-border">
+            <h3 class="box-title">Program</h3>
+        </div><!-- /.box-header -->    
                 <ul class="tree arrow">
+                    <?php foreach($treeprogram AS $treeprogram): ?>
                     <li class="open root">
-                        <i></i><a href="#">ROOT</a>
+                        <i></i><a href="#"><?= $treeprogram->kd_program == $kegiatan->kd_program ? '<div class="label label-default">'.$treeprogram->refProgram->uraian_program.'</div>' : $treeprogram->refProgram->uraian_program ?></a>
+                        <?php IF($treeprogram->kd_program == $kegiatan->kd_program) : ?>
                         <ul>
                             <li class="open">
-                                <i></i><a href="#">Item 1</a>
+                                <i></i><a href="#"><?= $treesubprogram->uraian_sub_program ?></a>
                                 <ul>
                                     <li class="leaf">
-                                        <i></i><a href="#">Item 1.1</a>
-                                        <ul></ul>
-                                    </li>
-                                    <li class="leaf">
-                                        <i></i><a href="#">Item 1.2</a>
-                                        <ul></ul>
-                                    </li>
-                                    <li class="fold last">
-                                        <i></i><a href="#">Item 1.3</a>
+                                        <i></i><a href="#"><?= $kegiatan->refKegiatan->uraian_kegiatan ?></a>
                                         <ul></ul>
                                     </li>
                                 </ul>
-                            </li>
-                            <li class="open">
-                                <i></i><a href="#">Item 2</a>
-                                <ul>
-                                    <li class="leaf">
-                                        <i></i><a href="#">Item 2.1</a>
-                                        <ul></ul>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="leaf last">
-                                <i></i><a href="#">Item 3</a>
-                                <ul></ul>
                             </li>
                         </ul>
+                        <?php endif; ?>
                     </li>
+                    <?php endforeach; ?>              
                 </ul>
     </div>
 </div><!--col-->

@@ -31,6 +31,7 @@ class TaRkasKegiatan extends \yii\db\ActiveRecord
         return 'ta_rkas_kegiatan';
     }
 
+    public $penerimaan_2;
     /**
      * @inheritdoc
      */
@@ -41,6 +42,7 @@ class TaRkasKegiatan extends \yii\db\ActiveRecord
             [['tahun'], 'safe'],
             [['sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'kd_penerimaan_1', 'kd_penerimaan_2'], 'integer'],
             [['pagu_anggaran'], 'number'],
+            [['penerimaan_2'], 'string'],
             [['sekolah_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefSekolah::className(), 'targetAttribute' => ['sekolah_id' => 'id']],
             [['kd_program', 'kd_sub_program', 'kd_kegiatan'], 'exist', 'skipOnError' => true, 'targetClass' => RefKegiatanSekolah::className(), 'targetAttribute' => ['kd_program' => 'kd_program', 'kd_sub_program' => 'kd_sub_program', 'kd_kegiatan' => 'kd_kegiatan']],
         ];
@@ -60,6 +62,7 @@ class TaRkasKegiatan extends \yii\db\ActiveRecord
             'pagu_anggaran' => Yii::t('app', 'Pagu Anggaran'),
             'kd_penerimaan_1' => Yii::t('app', 'Kd Penerimaan 1'),
             'kd_penerimaan_2' => Yii::t('app', 'Kd Penerimaan 2'),
+            'penerimaan_2' => 'Sumber Dana',
         ];
     }
 
