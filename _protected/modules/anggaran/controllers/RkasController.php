@@ -189,7 +189,7 @@ class RkasController extends Controller
                 'kd_sub_program' => $kd_sub_program,
                 'kd_kegiatan' => $kd_kegiatan,
             ]);
-        $treeprogram = \app\models\TaRkasKegiatan::find()->where(['tahun' => $tahun, 'sekolah_id' => $sekolah_id])->groupBy('tahun, sekolah_id, kd_program')->all();
+        $treeprogram = \app\models\TaRkasKegiatan::find()->select('tahun, sekolah_id, kd_program')->where(['tahun' => $tahun, 'sekolah_id' => $sekolah_id])->groupBy('tahun, sekolah_id, kd_program')->all();
         $treesubprogram = \app\models\RefSubProgramSekolah::findOne(['kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program]);
 
         return $this->render('belanja', [
@@ -272,7 +272,7 @@ class RkasController extends Controller
         }
     }
 
-    public function actionDeletebelanja($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan)
+    public function actionDeletebelanja($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -285,10 +285,147 @@ class RkasController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $this->findModel($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan)->delete();
+        \app\models\TaRkasBelanja::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5])->delete();
 
         return $this->redirect(Yii::$app->request->referrer);
     }      
+
+    //Bagian untuk RKAS Belanjarinci-----------------------------------------------------------------------------------------
+    public function actionRkasbelanjarinci($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan)
+    {
+        // NOT YET DURUNG----------------------------------------------------------------------------------
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $kegiatan = \app\models\TaRkasKegiatan::findOne([
+                'tahun' => $tahun,
+                'sekolah_id' => $sekolah_id,
+                'kd_program' => $kd_program,
+                'kd_sub_program' => $kd_sub_program,
+                'kd_kegiatan' => $kd_kegiatan,
+                ]);
+
+        $searchModel = new \app\modules\anggaran\models\TaRkasBelanjaSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->where([
+                'tahun' => $tahun,
+                'sekolah_id' => $sekolah_id,
+                'kd_program' => $kd_program,
+                'kd_sub_program' => $kd_sub_program,
+                'kd_kegiatan' => $kd_kegiatan,
+            ]);
+        $treeprogram = \app\models\TaRkasKegiatan::find()->select('tahun, sekolah_id, kd_program')->where(['tahun' => $tahun, 'sekolah_id' => $sekolah_id])->groupBy('tahun, sekolah_id, kd_program')->all();
+        $treesubprogram = \app\models\RefSubProgramSekolah::findOne(['kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program]);
+
+        return $this->render('belanja', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'Tahun' => $Tahun,
+            'kegiatan' => $kegiatan,
+            'treeprogram' => $treeprogram,
+            'treesubprogram' => $treesubprogram,
+        ]);
+    }
+
+    public function actionCreatebelanjarinci($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = new \app\models\TaRkasBelanjaRinc();
+        $model->tahun = $tahun;
+        $model->sekolah_id = Yii::$app->user->identity->sekolah_id;
+        $model->kd_program = $kd_program;
+        $model->kd_sub_program = $kd_sub_program;
+        $model->kd_kegiatan = $kd_kegiatan;
+        $model->Kd_Rek_1 = $model->Kd_Rek_1;
+        $model->Kd_Rek_2 = $model->Kd_Rek_2;
+        $model->Kd_Rek_3 = $model->Kd_Rek_3;
+        $model->Kd_Rek_4 = $model->Kd_Rek_4;
+        $model->Kd_Rek_5 = $model->Kd_Rek_5;
+        
+
+        if ($model->load(Yii::$app->request->post())) {
+            // var_dump($model);
+            $no_rinc = \app\models\TaRkasBelanjaRinc::find()->select('MAX(no_rinc) AS no_rinc')->where(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5])->one();
+            $model->no_rinc = ($no_rinc->no_rinc + 1); 
+            $model->validate();
+            IF($model->save()){
+                echo 1;
+            }ELSE{
+                echo 0;
+            }
+        } else {
+            return $this->renderAjax('_formbelanjarinci', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionUpdatebelanjarinci($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = \app\models\TaRkasBelanja::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5]);
+
+        if ($model->load(Yii::$app->request->post())) {
+            IF($model->penerimaan_2)
+                list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
+            IF($model->save()){
+                echo 1;
+            }ELSE{
+                echo 0;
+            }
+        } else {
+            return $this->renderAjax('_formbelanjarinci', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionDeletebelanjarinci($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        \app\models\TaRkasBelanja::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5])->delete();
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }          
 
     //Bagian untuk kamus-----------------------------------------------------------------------------------------
     public function actionKamuskegiatan()

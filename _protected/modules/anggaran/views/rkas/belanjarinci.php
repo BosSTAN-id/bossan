@@ -13,7 +13,7 @@ use yii\widgets\DetailView;
 <div class="col-md-12">
     <p>
         <?= Html::a('Tambah Rincian Belanja', [
-            'createbelanja',
+            'createbelanjarinci',
                 'tahun' => $model->tahun,
                 'sekolah_id' => $model->sekolah_id,
                 'kd_program' => $model->kd_program,
@@ -27,8 +27,8 @@ use yii\widgets\DetailView;
             ], [
                 'class' => 'btn btn-xs btn-success',
                 'data-toggle'=>"modal",
-                'data-target'=>"#myModal",
-                'data-title'=>"Tambah Belanja",
+                'data-target'=>"#myModalrinci",
+                'data-title'=>"Tambah Rincian Belanja",
             ]) ?>
     </p>
     <?= GridView::widget([
@@ -55,18 +55,12 @@ use yii\widgets\DetailView;
         ],        
         // 'filterModel' => $searchModel,
         'columns' => [
-            // 'sekolah_id',        
+            'no_rinc',        
             [
-                'label' => 'Jenis',
+                'label' => 'Rincian',
                 'group' => true,
                 'value' => function($model){
-                    return $model->refRek3->Nm_Rek_3;
-                }
-            ],
-            [
-                'label' => 'Belanja',
-                'value' => function($model){
-                    return $model->Kd_Rek_1.'.'.$model->Kd_Rek_2.'.'.$model->Kd_Rek_3.'.'.substr('0'.$model->Kd_Rek_4, -2).'.'.substr('0'.$model->Kd_Rek_5, -2).' '.$model->refRek5->Nm_Rek_5;
+                    return $model->keterangan;
                 }
             ],
             // [

@@ -40,21 +40,6 @@ use kartik\widgets\DepDrop;
     ?>     
 
     <?php 
-            echo $form->field($model, 'komponen_id')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(
-                    \app\models\RefKomponenBos::find()
-                    ->select(['id', 'CONCAT(id,\' \',komponen) AS komponen'])
-                    // ->where(['Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2])
-                    ->all()
-                    ,'id','komponen'),
-                'options' => ['placeholder' => 'Pilih Komponen BOS ...'],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ]);
-    ?>
-
-    <?php 
             echo $form->field($model, 'Kd_Rek_3')->widget(Select2::classname(), [
                 'data' => ArrayHelper::map(
                     \app\models\RefRek3::find()
@@ -86,6 +71,21 @@ use kartik\widgets\DepDrop;
             ]
         ]);
     ?>
+
+    <?php 
+            echo $form->field($model, 'komponen_id')->widget(Select2::classname(), [
+                'data' => ArrayHelper::map(
+                    \app\models\RefKomponenBos::find()
+                    ->select(['id', 'CONCAT(id,\' \',komponen) AS komponen'])
+                    // ->where(['Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2])
+                    ->all()
+                    ,'id','komponen'),
+                'options' => ['placeholder' => 'Pilih Komponen BOS ...'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);
+    ?>    
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Simpan' : 'Simpan', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

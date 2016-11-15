@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\widgets\DetailView;
+use yii\bootstrap\Collapse;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\anggaran\models\TaRkasKegiatan */
@@ -71,7 +72,7 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
         ],
         'pjax'=>true,
         'pjaxSettings'=>[
-            'options' => ['id' => 'belanjarinci-pjax', 'timeout' => 5000],
+            'options' => ['id' => 'belanja-pjax', 'timeout' => 5000],
         ],        
         // 'filterModel' => $searchModel,
         'columns' => [
@@ -180,48 +181,92 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
     ]); ?>
 </div><!--col-->
 <div class="col-md-3">
-    <div class="box box-info">
-        <div class="box-header with-border">
-            <h3 class="box-title">Program</h3>
-        </div><!-- /.box-header -->    
-                <ul class="tree arrow">
-                    <?php foreach($treeprogram AS $treeprogram): ?>
-                    <li class="open root">
-                        <i></i><a href="#"><?= $treeprogram->kd_program == $kegiatan->kd_program ? '<div class="label label-default">'.$treeprogram->refProgram->uraian_program.'</div>' : $treeprogram->refProgram->uraian_program ?></a>
-                        <?php IF($treeprogram->kd_program == $kegiatan->kd_program) : ?>
-                        <ul>
-                            <li class="open">
-                                <i></i><a href="#"><?= $treesubprogram->uraian_sub_program ?></a>
-                                <ul>
-                                    <li class="leaf">
-                                        <i></i><a href="#"><?= $kegiatan->refKegiatan->uraian_kegiatan ?></a>
-                                        <ul></ul>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <?php endif; ?>
-                    </li>
-                    <?php endforeach; ?>              
-                </ul>
+    <div class="box box-solid">
+        <div class="box-header with-border bg-aqua">
+            <h3 class="box-title"><i class="fa fa-clipboard"></i>Program - Kegiatan</h3>
+        </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div id="accordion" class="box-group">
+            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+            <?php $i = 1; foreach($treeprogram AS $treeprogram): ?>
+            <div class="panel box box-<?= $treeprogram->kd_program == $kegiatan->kd_program ? 'danger' : 'primary' ?>">
+                <div class="box-header with-border">
+                    <h5 class="box-title">
+                    <a href="#collapse<?= $i ?>" data-parent="#accordion" data-toggle="collapse" class="<?= $treeprogram->kd_program == $kegiatan->kd_program ? '' : 'collapsed' ?>" aria-expanded="<?= $treeprogram->kd_program == $kegiatan->kd_program ? 'true' : 'false' ?>">
+                    <?= $treeprogram->refProgram->uraian_program ?>
+                    </a>
+                    </h5>
+                </div>
+                <div class="panel-collapse <?= $treeprogram->kd_program == $kegiatan->kd_program ? 'collapse in' : 'collapse' ?>" id="collapse<?= $i ?>" aria-expanded="<?= $treeprogram->kd_program == $kegiatan->kd_program ? 'true' : 'false' ?>" style="<?= $treeprogram->kd_program == $kegiatan->kd_program ? '' : 'height: 0px;' ?>">
+                    <div class="box-body">
+                    <?php 
+                    $subprogramawal = NULL;
+                    $listkegiatan = \app\models\TaRkasKegiatan::find()
+                        // ->select('tahun, sekolah_id, kd_program, kd_sub_program, kd_kegiatan')
+                        ->where(['tahun' => $Tahun, 'sekolah_id' => $kegiatan->sekolah_id, 'kd_program' => $treeprogram->kd_program])
+                        // ->groupBy('tahun, sekolah_id, kd_program, kd_sub_program,)
+                        ->all();
+                        foreach($listkegiatan as $listkegiatan){
+                            $subprogram = $listkegiatan->refSubProgram->uraian_sub_program;
+                            IF($subprogramawal != $subprogram){
+                                echo $subprogram;
+                                echo '<ol>';
+                                echo Html::a('<li>'.$listkegiatan->refKegiatan->uraian_kegiatan.'</li>', 
+                                    [
+                                        'rkasbelanja',
+                                        'tahun' => $listkegiatan->tahun,
+                                        'sekolah_id' => $listkegiatan->sekolah_id,
+                                        'kd_program' => $listkegiatan->kd_program,
+                                        'kd_sub_program' => $listkegiatan->kd_sub_program,
+                                        'kd_kegiatan' => $listkegiatan->kd_kegiatan,
+                                    ],
+                                    [
+                                        'class' => $listkegiatan->kd_sub_program.'.'.$listkegiatan->kd_kegiatan == $kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan ? 'text-bold' : '',
+                                    ]
+                                );
+                            }ELSE{
+                                echo Html::a('<li>'.$listkegiatan->refKegiatan->uraian_kegiatan.'</li>', 
+                                    [
+                                        'rkasbelanja',
+                                        'tahun' => $listkegiatan->tahun,
+                                        'sekolah_id' => $listkegiatan->sekolah_id,
+                                        'kd_program' => $listkegiatan->kd_program,
+                                        'kd_sub_program' => $listkegiatan->kd_sub_program,
+                                        'kd_kegiatan' => $listkegiatan->kd_kegiatan,
+                                    ],
+                                    [
+                                        'class' => $listkegiatan->kd_sub_program.'.'.$listkegiatan->kd_kegiatan == $kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan ? 'text-bold' : '',
+                                    ]
+                                );
+                            }
+                        }
+                    ?>
+<!--                     Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                    <ol>
+                        <li>Lorem ipsum dolor sit amet</li>
+                        <li>Consectetur adipiscing elit</li>
+                        <li>Integer molestie lorem at massa</li>
+                        <li>Facilisis in pretium nisl aliquet</li>
+                        <li>Faucibus porta lacus fringilla vel</li>
+                        <li>Aenean sit amet erat nunc</li>
+                        <li>Eget porttitor lorem</li> -->
+                    </ol>                    
+                    </div>
+                </div>
+            </div>
+            <?php $i++; endforeach; ?>
+        </div>
     </div>
+    <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
 </div><!--col-->
 </div><!--row-->
 </div>
-<?php Modal::begin([
-    'id' => 'myModal',
-    'header' => '<h4 class="modal-title">Lihat lebih...</h4>',
-        'options' => [
-            'tabindex' => false // important for Select2 to work properly
-        ], 
-]);
- 
-echo '...';
- 
-Modal::end();
-
+<?php 
 Modal::begin([
-    'id' => 'myModalubah',
+    'id' => 'myModal',
     'header' => '<h4 class="modal-title">Lihat lebih...</h4>',
         'options' => [
             'tabindex' => false // important for Select2 to work properly
@@ -246,8 +291,74 @@ $this->registerJs("
             });
         })
 ");
+
+Modal::begin([
+    'id' => 'myModalubah',
+    'header' => '<h4 class="modal-title">Lihat lebih...</h4>',
+        'options' => [
+            'tabindex' => false // important for Select2 to work properly
+        ], 
+]);
+ 
+echo '...';
+ 
+Modal::end();
 $this->registerJs("
     $('#myModalubah').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var modal = $(this)
+        var title = button.data('title') 
+        var href = button.attr('href') 
+        modal.find('.modal-title').html(title)
+        modal.find('.modal-body').html('<i class=\"fa fa-spinner fa-spin\"></i>')
+        $.post(href)
+            .done(function( data ) {
+                modal.find('.modal-body').html(data)
+            });
+        })
+       
+");
+
+Modal::begin([
+    'id' => 'myModalrinci',
+    'header' => '<h4 class="modal-title">Lihat lebih...</h4>',
+        'options' => [
+            'tabindex' => false // important for Select2 to work properly
+        ], 
+]);
+ 
+echo '...';
+ 
+Modal::end();
+
+$this->registerJs("
+    $('#myModalrinci').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var modal = $(this)
+        var title = button.data('title') 
+        var href = button.attr('href') 
+        modal.find('.modal-title').html(title)
+        modal.find('.modal-body').html('<i class=\"fa fa-spinner fa-spin\"></i>')
+        $.post(href)
+            .done(function( data ) {
+                modal.find('.modal-body').html(data)
+            });
+        })
+");
+
+Modal::begin([
+    'id' => 'myModalrinciubah',
+    'header' => '<h4 class="modal-title">Lihat lebih...</h4>',
+        'options' => [
+            'tabindex' => false // important for Select2 to work properly
+        ], 
+]);
+ 
+echo '...';
+ 
+Modal::end();
+$this->registerJs("
+    $('#myModalrinciubah').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
         var modal = $(this)
         var title = button.data('title') 
