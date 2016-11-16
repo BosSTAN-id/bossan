@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung'];
         'hover'=>true,     
         'resizableColumns'=>true,
         'panel'=>['type'=>'primary', 'heading'=>$this->title],
-        'responsiveWrap' => false,        
+        'responsiveWrap' => false,
         'toolbar' => [
             [
                 // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),

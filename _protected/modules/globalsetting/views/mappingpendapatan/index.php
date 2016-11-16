@@ -4,6 +4,10 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 
+function cekrekening($kd_penerimaan_1, $kd_penerimaan_2){
+    $rekening = \app\models\RefRekPenerimaan::findOne(['kd_penerimaan_1' => $kd_penerimaan_1, 'kd_penerimaan_2' => $kd_penerimaan_2]);
+    return $rekening ? $rekening['kdRek4']['Nm_Rek_4'].' > '.$rekening['kdRek5']['Nm_Rek_5'] : '-' ;
+}
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\globalsetting\models\RefPenerimaanSekolah2Search */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -39,11 +43,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'kd_penerimaan_1',
-            'kd_penerimaan_2',
+            [
+                'label' => 'Kode',
+                'value' => function ($model){
+                    return $model->kd_penerimaan_1.'.'.substr('0'.$model->kd_penerimaan_2, -2);
+                }
+            ],
             'uraian',
-            'abbr',
+            [
+                'label' => 'Rekening',
+                'value' => function ($model){
+                    return cekrekening($model->kd_penerimaan_1, $model->kd_penerimaan_2);
+                }
+            ],
 
             [
                 'class' => 'kartik\grid\ActionColumn',

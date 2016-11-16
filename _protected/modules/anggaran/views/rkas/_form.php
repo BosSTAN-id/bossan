@@ -15,7 +15,7 @@ use kartik\widgets\DepDrop;
 <div class="ta-rkas-kegiatan-form">
     <?= Html::a('Kamus Kegiatan', ['kamuskegiatan'], [
                                                 'class' => 'btn btn-xs btn-info',
-                                                'onClick' => "return !window.open(this.href, 'SPH', 'width=1024,height=600')"
+                                                'onClick' => "return !window.open(this.href, 'SPH', 'width=1024,height=600,scrollbars=1')"
                                                 ]) ?>
 
     <?php $form = ActiveForm::begin(['id' => $model->formName()

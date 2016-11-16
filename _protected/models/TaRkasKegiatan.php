@@ -55,13 +55,13 @@ class TaRkasKegiatan extends \yii\db\ActiveRecord
     {
         return [
             'tahun' => Yii::t('app', 'Tahun'),
-            'sekolah_id' => Yii::t('app', 'Sekolah ID'),
-            'kd_program' => Yii::t('app', 'Kd Program'),
-            'kd_sub_program' => Yii::t('app', 'Kd Sub Program'),
-            'kd_kegiatan' => Yii::t('app', 'Kd Kegiatan'),
+            'sekolah_id' => Yii::t('app', 'Sekolah'),
+            'kd_program' => Yii::t('app', 'Program'),
+            'kd_sub_program' => Yii::t('app', 'Sub Program'),
+            'kd_kegiatan' => Yii::t('app', 'Kegiatan'),
             'pagu_anggaran' => Yii::t('app', 'Pagu Anggaran'),
-            'kd_penerimaan_1' => Yii::t('app', 'Kd Penerimaan 1'),
-            'kd_penerimaan_2' => Yii::t('app', 'Kd Penerimaan 2'),
+            'kd_penerimaan_1' => Yii::t('app', 'Penerimaan 1'),
+            'kd_penerimaan_2' => Yii::t('app', 'Penerimaan 2'),
             'penerimaan_2' => 'Sumber Dana',
         ];
     }

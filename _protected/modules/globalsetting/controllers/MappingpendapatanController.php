@@ -72,11 +72,14 @@ class MappingpendapatanController extends Controller
 
         $komponen = $this->findModel($kd_penerimaan_1, $kd_penerimaan_2);
         $model = new \app\models\RefRekPenerimaan();
-        $model->Kd_Rek_1 = 4;
+        // $model->Kd_Rek_1 = 4;
+        $model->kd_penerimaan_1 = $kd_penerimaan_1;
+        $model->kd_penerimaan_2 = $kd_penerimaan_2;
 
         if ($model->load(Yii::$app->request->post())) {
             IF($model->rekening5)
                 list($model->Kd_Rek_1, $model->Kd_Rek_2, $model->Kd_Rek_3, $model->Kd_Rek_4, $model->Kd_Rek_5) = explode('.', $model->rekening5);
+            // var_dump($model);                
             IF($model->save()){
                 echo 1;
             }ELSE{

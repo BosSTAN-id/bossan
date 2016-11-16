@@ -47,8 +47,8 @@ class RefPenerimaanSekolah2 extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'kd_penerimaan_1' => Yii::t('app', 'Kd Penerimaan 1'),
-            'kd_penerimaan_2' => Yii::t('app', 'Kd Penerimaan 2'),
+            'kd_penerimaan_1' => Yii::t('app', 'Penerimaan 1'),
+            'kd_penerimaan_2' => Yii::t('app', 'Penerimaan 2'),
             'uraian' => Yii::t('app', 'Uraian'),
             'abbr' => Yii::t('app', 'Abbr'),
             'sekolah' => 'Digunakan',

@@ -29,13 +29,16 @@ use yii\helpers\ArrayHelper;
 
     <?php $form = ActiveForm::begin(['id' => $model->formName()]); ?>
 
-    <?php $data = \app\models\RefRek5::find()
-                    ->select(['CONCAT(Kd_Rek_1,\'.\',Kd_Rek_2,\'.\',Kd_Rek_3,\'.\',Kd_Rek_4,\'.\',Kd_Rek_5) AS Kd_Rek_5', 'CONCAT(Kd_Rek_1,\'.\',Kd_Rek_2,\'.\',Kd_Rek_3,\'.\',Kd_Rek_4,\'.\',Kd_Rek_5,\' \', Nm_Rek_5) AS Nm_Rek_5'])
-                    ->where(['Kd_Rek_1' => $model->Kd_Rek_1, 'Sekolah' => 1])
-                    ->all();
+    <?php
+            $connection = \Yii::$app->db;
+            $skpd = $connection->createCommand('SELECT CONCAT(Kd_Rek_1,".", Kd_Rek_2,".", Kd_Rek_3,".", Kd_Rek_4,".", Kd_Rek_5) AS Kd_Rek_5, CONCAT(Kd_Rek_1,".", Kd_Rek_2,".", Kd_Rek_3,".", right(CONCAT(0,Kd_Rek_4),2),".", right(CONCAT(0,Kd_Rek_5),2)," ", Nm_Rek_5) AS Nm_Rek_5 FROM ref_rek_5 WHERE (Kd_Rek_1 = 4 OR (Kd_Rek_1 = 6 AND Kd_Rek_2 = 1)) AND Sekolah = 1');
+            $data = $skpd->queryAll();
+            // $data = \app\models\RefRek5::find()
+            //         ->select(['CONCAT(Kd_Rek_1,\'.\',Kd_Rek_2,\'.\',Kd_Rek_3,\'.\',Kd_Rek_4,\'.\',Kd_Rek_5) AS Kd_Rek_5', 'CONCAT(Kd_Rek_1,\'.\',Kd_Rek_2,\'.\',Kd_Rek_3,\'.\',Kd_Rek_4,\'.\',Kd_Rek_5,\' \', Nm_Rek_5) AS Nm_Rek_5'])
+            //         ->where(['Kd_Rek_1' => $model->Kd_Rek_1, 'Sekolah' => 1])
+            //         ->all();
             echo $form->field($model, 'rekening5')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map($data,
-                'Kd_Rek_5','Nm_Rek_5'),
+                'data' => ArrayHelper::map($data, 'Kd_Rek_5', 'Nm_Rek_5'),
                 'options' => ['placeholder' => 'Pilih Akun ...'],
                 'pluginOptions' => [
                     'allowClear' => true
@@ -47,7 +50,7 @@ use yii\helpers\ArrayHelper;
     ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Simpan' : 'Simpan', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -66,9 +69,9 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
         .done(function(result){
             if(result == 1)
             {
-                $("#myModal").modal('hide'); //hide modal after submit
+                $("#myModalubah").modal('hide'); //hide modal after submit
                 //$(\$form).trigger("reset"); //reset form to reuse it to input
-                $.pjax.reload({container:'#ref-penerimaan-sekolah2-pjax'});
+                $.pjax.reload({container:'#referensi-pjax'});
             }else
             {
                 $("#message").html(result);
@@ -96,7 +99,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
             {
                 $("#myModalubah").modal('hide'); //hide modal after submit
                 //$(\$form).trigger("reset"); //reset form to reuse it to input
-                $.pjax.reload({container:'#ref-penerimaan-sekolah2-pjax'});
+                $.pjax.reload({container:'#referensi-pjax'});
             }else
             {
                 $("#message").html(result);

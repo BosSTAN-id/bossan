@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 
 /**
- * This is the model class for table "ta_rkas_arsip".
+ * This is the model class for table "ta_rkas_history".
  *
  * @property string $tahun
  * @property integer $sekolah_id
@@ -30,17 +30,21 @@ use Yii;
  * @property string $jml_satuan
  * @property string $nilai_rp
  * @property string $total
+ * @property integer $kd_penerimaan_1
+ * @property integer $kd_penerimaan_2
  * @property integer $created_at
  * @property integer $updated_at
+ *
+ * @property TaRkasPeraturan $tahun0
  */
-class TaRkasArsip extends \yii\db\ActiveRecord
+class TaRkasHistory extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'ta_rkas_arsip';
+        return 'ta_rkas_history';
     }
 
     /**
@@ -51,7 +55,7 @@ class TaRkasArsip extends \yii\db\ActiveRecord
         return [
             [['tahun', 'sekolah_id', 'perubahan_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'no_rinc', 'keterangan'], 'required'],
             [['tahun'], 'safe'],
-            [['sekolah_id', 'perubahan_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'no_rinc', 'created_at', 'updated_at'], 'integer'],
+            [['sekolah_id', 'perubahan_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'no_rinc', 'kd_penerimaan_1', 'kd_penerimaan_2', 'created_at', 'updated_at'], 'integer'],
             [['nilai_1', 'nilai_2', 'nilai_3', 'jml_satuan', 'nilai_rp', 'total'], 'number'],
             [['keterangan'], 'string', 'max' => 255],
             [['sat_1', 'sat_2', 'sat_3'], 'string', 'max' => 10],
@@ -66,31 +70,41 @@ class TaRkasArsip extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'tahun' => Yii::t('app', 'Tahun'),
-            'sekolah_id' => Yii::t('app', 'Sekolah ID'),
-            'perubahan_id' => Yii::t('app', 'Perubahan ID'),
-            'kd_program' => Yii::t('app', 'Kd Program'),
-            'kd_sub_program' => Yii::t('app', 'Kd Sub Program'),
-            'kd_kegiatan' => Yii::t('app', 'Kd Kegiatan'),
-            'Kd_Rek_1' => Yii::t('app', 'Kd  Rek 1'),
-            'Kd_Rek_2' => Yii::t('app', 'Kd  Rek 2'),
-            'Kd_Rek_3' => Yii::t('app', 'Kd  Rek 3'),
-            'Kd_Rek_4' => Yii::t('app', 'Kd  Rek 4'),
-            'Kd_Rek_5' => Yii::t('app', 'Kd  Rek 5'),
-            'no_rinc' => Yii::t('app', 'No Rinc'),
-            'keterangan' => Yii::t('app', 'Keterangan'),
-            'sat_1' => Yii::t('app', 'Sat 1'),
-            'nilai_1' => Yii::t('app', 'Nilai 1'),
-            'sat_2' => Yii::t('app', 'Sat 2'),
-            'nilai_2' => Yii::t('app', 'Nilai 2'),
-            'sat_3' => Yii::t('app', 'Sat 3'),
-            'nilai_3' => Yii::t('app', 'Nilai 3'),
-            'satuan123' => Yii::t('app', 'Satuan123'),
-            'jml_satuan' => Yii::t('app', 'Jml Satuan'),
-            'nilai_rp' => Yii::t('app', 'Nilai Rp'),
-            'total' => Yii::t('app', 'Total'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'updated_at' => Yii::t('app', 'Updated At'),
+            'tahun' => 'Tahun',
+            'sekolah_id' => 'Sekolah ID',
+            'perubahan_id' => 'Perubahan ID',
+            'kd_program' => 'Kd Program',
+            'kd_sub_program' => 'Kd Sub Program',
+            'kd_kegiatan' => 'Kd Kegiatan',
+            'Kd_Rek_1' => 'Kd  Rek 1',
+            'Kd_Rek_2' => 'Kd  Rek 2',
+            'Kd_Rek_3' => 'Kd  Rek 3',
+            'Kd_Rek_4' => 'Kd  Rek 4',
+            'Kd_Rek_5' => 'Kd  Rek 5',
+            'no_rinc' => 'No Rinc',
+            'keterangan' => 'Keterangan',
+            'sat_1' => 'Sat 1',
+            'nilai_1' => 'Nilai 1',
+            'sat_2' => 'Sat 2',
+            'nilai_2' => 'Nilai 2',
+            'sat_3' => 'Sat 3',
+            'nilai_3' => 'Nilai 3',
+            'satuan123' => 'Satuan123',
+            'jml_satuan' => 'Jml Satuan',
+            'nilai_rp' => 'Nilai Rp',
+            'total' => 'Total',
+            'kd_penerimaan_1' => 'Kd Penerimaan 1',
+            'kd_penerimaan_2' => 'Kd Penerimaan 2',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTahun0()
+    {
+        return $this->hasOne(TaRkasPeraturan::className(), ['tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'perubahan_id' => 'perubahan_id']);
     }
 }

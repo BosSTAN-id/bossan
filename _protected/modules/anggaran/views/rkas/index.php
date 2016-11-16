@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <span class="info-box-icon bg-aqua"><i class="fa fa-download"></i></span>
                     </a> 
                     <div class="info-box-content">
-                        <?= Html::a('<span class="info-box-text">PENDAPATAN</span>', ['rkaspenerimaan'], []) ?>
+                        <?= Html::a('<span class="info-box-text">PENDAPATAN</span>', ['rkaspendapatan'], []) ?>
                         Anggaran Pendapatan diisi dengan estimasi pendapatan tahun anggaran berjalan.
                         <span class="info-box-number">1,410</span>
                     </div><!-- /.info-box-content -->

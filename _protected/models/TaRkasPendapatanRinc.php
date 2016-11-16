@@ -39,20 +39,23 @@ class TaRkasPendapatanRinc extends \yii\db\ActiveRecord
         return 'ta_rkas_pendapatan_rinc';
     }
 
+    public $penerimaan_2;    
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['tahun', 'sekolah_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'no_rinc', 'nilai_1', 'nilai_2', 'nilai_3', 'satuan123', 'jml_satuan', 'nilai_rp', 'total'], 'required'],
+            [['tahun', 'sekolah_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2', 'no_rinc'], 'required'],
             [['tahun'], 'safe'],
-            [['sekolah_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'no_rinc'], 'integer'],
+            [['penerimaan_2'], 'string'],
+            [['sekolah_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'no_rinc', 'kd_penerimaan_1', 'kd_penerimaan_2'], 'integer'],
             [['nilai_1', 'nilai_2', 'nilai_3', 'jml_satuan', 'nilai_rp', 'total'], 'number'],
             [['keterangan'], 'string', 'max' => 255],
             [['sat_1', 'sat_2', 'sat_3'], 'string', 'max' => 10],
             [['satuan123'], 'string', 'max' => 50],
-            [['tahun', 'sekolah_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5'], 'exist', 'skipOnError' => true, 'targetClass' => TaRkasPendapatan::className(), 'targetAttribute' => ['tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']],
+            // [['tahun', 'sekolah_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5'], 'exist', 'skipOnError' => true, 'targetClass' => TaRkasPendapatan::className(), 'targetAttribute' => ['tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']],
         ];
     }
 
@@ -63,32 +66,37 @@ class TaRkasPendapatanRinc extends \yii\db\ActiveRecord
     {
         return [
             'tahun' => Yii::t('app', 'Tahun'),
-            'sekolah_id' => Yii::t('app', 'Sekolah ID'),
-            'Kd_Rek_1' => Yii::t('app', 'Kd  Rek 1'),
-            'Kd_Rek_2' => Yii::t('app', 'Kd  Rek 2'),
-            'Kd_Rek_3' => Yii::t('app', 'Kd  Rek 3'),
-            'Kd_Rek_4' => Yii::t('app', 'Kd  Rek 4'),
-            'Kd_Rek_5' => Yii::t('app', 'Kd  Rek 5'),
-            'no_rinc' => Yii::t('app', 'No Rinc'),
+            'sekolah_id' => Yii::t('app', 'Sekolah'),
+            'Kd_Rek_1' => Yii::t('app', 'Rek 1'),
+            'Kd_Rek_2' => Yii::t('app', 'Rek 2'),
+            'Kd_Rek_3' => Yii::t('app', 'Rek 3'),
+            'Kd_Rek_4' => Yii::t('app', 'Rek 4'),
+            'Kd_Rek_5' => Yii::t('app', 'Rek 5'),
+            'no_rinc' => Yii::t('app', 'No Rincian'),
             'keterangan' => Yii::t('app', 'Keterangan'),
-            'sat_1' => Yii::t('app', 'Sat 1'),
+            'sat_1' => Yii::t('app', 'Volume 1'),
             'nilai_1' => Yii::t('app', 'Nilai 1'),
-            'sat_2' => Yii::t('app', 'Sat 2'),
+            'sat_2' => Yii::t('app', 'Volume 2'),
             'nilai_2' => Yii::t('app', 'Nilai 2'),
-            'sat_3' => Yii::t('app', 'Sat 3'),
+            'sat_3' => Yii::t('app', 'Volume 3'),
             'nilai_3' => Yii::t('app', 'Nilai 3'),
-            'satuan123' => Yii::t('app', 'Satuan123'),
+            'satuan123' => Yii::t('app', 'Satuan Total'),
             'jml_satuan' => Yii::t('app', 'Jml Satuan'),
-            'nilai_rp' => Yii::t('app', 'Nilai Rp'),
+            'nilai_rp' => Yii::t('app', 'Harga Satuan'),
             'total' => Yii::t('app', 'Total'),
+            'kd_penerimaan_1' => Yii::t('app', 'Penerimaan 1'),
+            'kd_penerimaan_2' => Yii::t('app', 'Penerimaan 2'),            
+            'penerimaan_2' => 'Sumber Dana',
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTahun0()
+    public function getSekolah()
     {
-        return $this->hasOne(TaRkasPendapatan::className(), ['tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']);
+        return $this->hasOne(RefSekolah::className(), ['id' => 'sekolah_id']);
+    }
+
+    public function getPenerimaan2()
+    {
+        return $this->hasOne(\app\models\RefPenerimaanSekolah2::className(), ['kd_penerimaan_1' => 'kd_penerimaan_1', 'kd_penerimaan_2' => 'kd_penerimaan_2']);
     }
 }

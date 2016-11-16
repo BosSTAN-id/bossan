@@ -58,15 +58,36 @@ class RefRekPenerimaan extends \yii\db\ActiveRecord
             'Kd_Rek_5' => Yii::t('app', 'Kd  Rek 5'),
             'kd_penerimaan_1' => Yii::t('app', 'Kd Penerimaan 1'),
             'kd_penerimaan_2' => Yii::t('app', 'Kd Penerimaan 2'),
+            'rekening5' => 'Akun',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getKdRek1()
+    public function getKdRek5()
     {
         return $this->hasOne(RefRek5::className(), ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']);
+    }
+
+    public function getKdRek4()
+    {
+        return $this->hasOne(RefRek4::className(), ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4']);
+    }
+
+    public function getKdRek3()
+    {
+        return $this->hasOne(RefRek3::className(), ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3']);
+    }
+
+    public function getKdRek2()
+    {
+        return $this->hasOne(RefRek2::className(), ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2']);
+    }
+
+    public function getKdRek1()
+    {
+        return $this->hasOne(RefRek1::className(), ['Kd_Rek_1' => 'Kd_Rek_1']);
     }
 
     /**
