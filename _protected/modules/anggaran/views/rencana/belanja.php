@@ -16,30 +16,34 @@ function totalbelanja($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_keg
 /* @var $searchModel app\modules\anggaran\models\TaRkasKegiatan */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Belanja Tidak Langsung';
+$this->title = 'Belanja';
 $this->params['breadcrumbs'][] = 'Anggaran';
-$this->params['breadcrumbs'][] = ['label' => 'RKAS', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Belanja Tidak Langsung'];
+$this->params['breadcrumbs'][] = ['label' => 'Rencana', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung', 'url' => ['rkaskegiatan']];
+$this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
 ?>
 <div class="ta-rkas-kegiatan-index">
 <div class="row">
-<div class="col-md-12">       
+<div class="col-md-9">
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title"><?= $kegiatan->kd_program.'.'.$kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan.' '.$kegiatan->refKegiatan->uraian_kegiatan ?></h3>
+        </div><!-- /.box-header -->
+        <div class="box-body">
 
-    <p>
-        <?= Html::a('Tambah Belanja', [
-            'createbtl',
-                'tahun' => $Tahun,
-                'sekolah_id' => Yii::$app->user->identity->sekolah_id,
-                'kd_program' => 0,
-                'kd_sub_program' => 0,
-                'kd_kegiatan' => 0,
-            ], [
-                'class' => 'btn btn-xs btn-success',
-                'data-toggle'=>"modal",
-                'data-target'=>"#myModal",
-                'data-title'=>"Tambah Belanja",
-            ]) ?>
-    </p>
+        <?= DetailView::widget([
+            'model' => $kegiatan,
+            'attributes' => [
+                [
+                    'label' => 'Sumber Dana',
+                    'value' => $kegiatan->penerimaan2->uraian,
+                ],
+                'pagu_anggaran:decimal',
+            ],
+        ]) ?>
+        </div><!-- /.box-body -->
+    </div>
+
     <?= GridView::widget([
         'id' => 'ta-rkas-kegiatan',    
         'dataProvider' => $dataProvider,
@@ -81,13 +85,13 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Tidak Langsung'];
             [
                 'label' => 'Sumber Dana',
                 'value' => function($model){
-                    return $model['penerimaan2']['uraian'];
+                    return $model->penerimaan2->uraian;
                 }
             ],
             [
                 'label' => 'Komponen',
                 'value' => function($model){
-                    return $model['komponen']['komponen'];
+                    return $model->komponen->komponen;
                 }
             ],
             [
@@ -101,85 +105,109 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Tidak Langsung'];
             ],            
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{updatebtl} {deletebtl} ',
+                'template' => '{rencanabtl}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
-                        'updatebtl' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
+                        'rencanabtl' => function ($url, $model) {
+                          return Html::a('<span class="fa fa-bar-chart"></span><small>Input Rencana</small>', $url,
                               [  
-                                 'title' => Yii::t('yii', 'ubah'),
+                                 'class' => 'btn btn-xs btn-default',
+                                 'title' => Yii::t('yii', 'Rencana'),
                                  'data-toggle'=>"modal",
-                                 'data-target'=>"#myModalubah",
-                                 'data-title'=> "Ubah Belanja",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
-                        },
-                        'deletebtl' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'hapus'),
-                                 // 'data-toggle'=>"modal",
-                                 // 'data-target'=>"#myModalubah",
-                                 // 'data-title'=> "Ubah Unit",                                 
-                                 'data-confirm' => "Yakin menghapus belanja ini?",
-                                 'data-method' => 'POST',
-                                 'data-pjax' => 1
-                              ]);
-                        },                        
-                        'rkasbelanjarinc' => function ($url, $model) {
-                          return Html::a('Rincian Belanja <i class="glyphicon glyphicon-menu-right"></i>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'Input Rincian Belanja'),
-                                 'class'=>"btn btn-xs btn-default",                                 
+                                 'data-target'=>"#myModal",
+                                 'data-title'=> "Rencana ".$model->refRek5->Nm_Rek_5,                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',
                                  // 'data-pjax' => 1
                               ]);
                         },
                 ]
-            ],
-            [
-                'class' => 'kartik\grid\ExpandRowColumn',
-                'value' => function ($model, $key, $index, $column) {
-                    return GridView::ROW_COLLAPSED;
-                },
-
-                'allowBatchToggle'=>false,
-                'enableRowClick' => true,
-                'expandIcon' => '<span class="glyphicon glyphicon-plus-sign"></span>',
-                'collapseIcon' => '<span class="glyphicon glyphicon-minus-sign"></span>',
-
-                'detail'=>function ($model, $key, $index, $column) {
-
-                    $searchModel = new \app\modules\anggaran\models\TaRkasBelanjaRincSearch();
-                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-                    $dataProvider->query->where([
-                            'tahun' => $model->tahun,
-                            'sekolah_id' => $model->sekolah_id,
-                            'kd_program' => $model->kd_program,
-                            'kd_sub_program' => $model->kd_sub_program,
-                            'kd_kegiatan' => $model->kd_kegiatan,
-                            'Kd_Rek_1' => $model->Kd_Rek_1,
-                            'Kd_Rek_2' => $model->Kd_Rek_2,
-                            'Kd_Rek_3' => $model->Kd_Rek_3,
-                            'Kd_Rek_4' => $model->Kd_Rek_4,
-                            'Kd_Rek_5' => $model->Kd_Rek_5,
-                        ]);
-                    return Yii::$app->controller->renderPartial('belanjarinci', [
-                        'dataProvider' => $dataProvider,
-                        'model'=>$model,
-                        ]);
-                },
-                'detailOptions'=>[
-                    'class'=> 'kv-state-enable',
-                ],
-
             ],            
         ],
     ]); ?>
+</div><!--col-->
+<div class="col-md-3">
+    <div class="box box-solid">
+        <div class="box-header with-border bg-aqua">
+            <h3 class="box-title"><i class="fa fa-clipboard"></i>Program - Kegiatan</h3>
+        </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <div id="accordion" class="box-group">
+            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+            <?php $i = 1; foreach($treeprogram AS $treeprogram): ?>
+            <div class="panel box box-<?= $treeprogram->kd_program == $kegiatan->kd_program ? 'danger' : 'primary' ?>">
+                <div class="box-header with-border">
+                    <h5 class="box-title">
+                    <a href="#collapse<?= $i ?>" data-parent="#accordion" data-toggle="collapse" class="<?= $treeprogram->kd_program == $kegiatan->kd_program ? '' : 'collapsed' ?>" aria-expanded="<?= $treeprogram->kd_program == $kegiatan->kd_program ? 'true' : 'false' ?>">
+                    <?= $treeprogram->refProgram->uraian_program ?>
+                    </a>
+                    </h5>
+                </div>
+                <div class="panel-collapse <?= $treeprogram->kd_program == $kegiatan->kd_program ? 'collapse in' : 'collapse' ?>" id="collapse<?= $i ?>" aria-expanded="<?= $treeprogram->kd_program == $kegiatan->kd_program ? 'true' : 'false' ?>" style="<?= $treeprogram->kd_program == $kegiatan->kd_program ? '' : 'height: 0px;' ?>">
+                    <div class="box-body">
+                    <?php 
+                    $subprogramawal = NULL;
+                    $listkegiatan = \app\models\TaRkasKegiatan::find()
+                        // ->select('tahun, sekolah_id, kd_program, kd_sub_program, kd_kegiatan')
+                        ->where(['tahun' => $Tahun, 'sekolah_id' => $kegiatan->sekolah_id, 'kd_program' => $treeprogram->kd_program])
+                        // ->groupBy('tahun, sekolah_id, kd_program, kd_sub_program,)
+                        ->all();
+                        foreach($listkegiatan as $listkegiatan){
+                            $subprogram = $listkegiatan->refSubProgram->uraian_sub_program;
+                            IF($subprogramawal != $subprogram){
+                                echo $subprogram;
+                                echo '<ol>';
+                                echo Html::a('<li>'.$listkegiatan->refKegiatan->uraian_kegiatan.'</li>', 
+                                    [
+                                        'rkasbelanja',
+                                        'tahun' => $listkegiatan->tahun,
+                                        'sekolah_id' => $listkegiatan->sekolah_id,
+                                        'kd_program' => $listkegiatan->kd_program,
+                                        'kd_sub_program' => $listkegiatan->kd_sub_program,
+                                        'kd_kegiatan' => $listkegiatan->kd_kegiatan,
+                                    ],
+                                    [
+                                        'class' => $listkegiatan->kd_sub_program.'.'.$listkegiatan->kd_kegiatan == $kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan ? 'text-bold' : '',
+                                    ]
+                                );
+                            }ELSE{
+                                echo Html::a('<li>'.$listkegiatan->refKegiatan->uraian_kegiatan.'</li>', 
+                                    [
+                                        'rkasbelanja',
+                                        'tahun' => $listkegiatan->tahun,
+                                        'sekolah_id' => $listkegiatan->sekolah_id,
+                                        'kd_program' => $listkegiatan->kd_program,
+                                        'kd_sub_program' => $listkegiatan->kd_sub_program,
+                                        'kd_kegiatan' => $listkegiatan->kd_kegiatan,
+                                    ],
+                                    [
+                                        'class' => $listkegiatan->kd_sub_program.'.'.$listkegiatan->kd_kegiatan == $kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan ? 'text-bold' : '',
+                                    ]
+                                );
+                            }
+                        }
+                    ?>
+<!--                     Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+                    <ol>
+                        <li>Lorem ipsum dolor sit amet</li>
+                        <li>Consectetur adipiscing elit</li>
+                        <li>Integer molestie lorem at massa</li>
+                        <li>Facilisis in pretium nisl aliquet</li>
+                        <li>Faucibus porta lacus fringilla vel</li>
+                        <li>Aenean sit amet erat nunc</li>
+                        <li>Eget porttitor lorem</li> -->
+                    </ol>                    
+                    </div>
+                </div>
+            </div>
+            <?php $i++; endforeach; ?>
+        </div>
+    </div>
+    <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
 </div><!--col-->
 </div><!--row-->
 </div>

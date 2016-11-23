@@ -18,28 +18,12 @@ function totalbelanja($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_keg
 
 $this->title = 'Belanja Tidak Langsung';
 $this->params['breadcrumbs'][] = 'Anggaran';
-$this->params['breadcrumbs'][] = ['label' => 'RKAS', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Rencana', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Belanja Tidak Langsung'];
 ?>
 <div class="ta-rkas-kegiatan-index">
 <div class="row">
 <div class="col-md-12">       
-
-    <p>
-        <?= Html::a('Tambah Belanja', [
-            'createbtl',
-                'tahun' => $Tahun,
-                'sekolah_id' => Yii::$app->user->identity->sekolah_id,
-                'kd_program' => 0,
-                'kd_sub_program' => 0,
-                'kd_kegiatan' => 0,
-            ], [
-                'class' => 'btn btn-xs btn-success',
-                'data-toggle'=>"modal",
-                'data-target'=>"#myModal",
-                'data-title'=>"Tambah Belanja",
-            ]) ?>
-    </p>
     <?= GridView::widget([
         'id' => 'ta-rkas-kegiatan',    
         'dataProvider' => $dataProvider,
@@ -101,83 +85,25 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Tidak Langsung'];
             ],            
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{updatebtl} {deletebtl} ',
+                'template' => '{rencanabtl}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
-                        'updatebtl' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
+                        'rencanabtl' => function ($url, $model) {
+                          return Html::a('<span class="fa fa-bar-chart"></span><small>Input Rencana</small>', $url,
                               [  
-                                 'title' => Yii::t('yii', 'ubah'),
+                                 'class' => 'btn btn-xs btn-default',
+                                 'title' => Yii::t('yii', 'Rencana'),
                                  'data-toggle'=>"modal",
-                                 'data-target'=>"#myModalubah",
-                                 'data-title'=> "Ubah Belanja",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
-                        },
-                        'deletebtl' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'hapus'),
-                                 // 'data-toggle'=>"modal",
-                                 // 'data-target'=>"#myModalubah",
-                                 // 'data-title'=> "Ubah Unit",                                 
-                                 'data-confirm' => "Yakin menghapus belanja ini?",
-                                 'data-method' => 'POST',
-                                 'data-pjax' => 1
-                              ]);
-                        },                        
-                        'rkasbelanjarinc' => function ($url, $model) {
-                          return Html::a('Rincian Belanja <i class="glyphicon glyphicon-menu-right"></i>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'Input Rincian Belanja'),
-                                 'class'=>"btn btn-xs btn-default",                                 
+                                 'data-target'=>"#myModal",
+                                 'data-title'=> "Rencana ".$model->refRek5->Nm_Rek_5,                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',
                                  // 'data-pjax' => 1
                               ]);
                         },
                 ]
-            ],
-            [
-                'class' => 'kartik\grid\ExpandRowColumn',
-                'value' => function ($model, $key, $index, $column) {
-                    return GridView::ROW_COLLAPSED;
-                },
-
-                'allowBatchToggle'=>false,
-                'enableRowClick' => true,
-                'expandIcon' => '<span class="glyphicon glyphicon-plus-sign"></span>',
-                'collapseIcon' => '<span class="glyphicon glyphicon-minus-sign"></span>',
-
-                'detail'=>function ($model, $key, $index, $column) {
-
-                    $searchModel = new \app\modules\anggaran\models\TaRkasBelanjaRincSearch();
-                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-                    $dataProvider->query->where([
-                            'tahun' => $model->tahun,
-                            'sekolah_id' => $model->sekolah_id,
-                            'kd_program' => $model->kd_program,
-                            'kd_sub_program' => $model->kd_sub_program,
-                            'kd_kegiatan' => $model->kd_kegiatan,
-                            'Kd_Rek_1' => $model->Kd_Rek_1,
-                            'Kd_Rek_2' => $model->Kd_Rek_2,
-                            'Kd_Rek_3' => $model->Kd_Rek_3,
-                            'Kd_Rek_4' => $model->Kd_Rek_4,
-                            'Kd_Rek_5' => $model->Kd_Rek_5,
-                        ]);
-                    return Yii::$app->controller->renderPartial('belanjarinci', [
-                        'dataProvider' => $dataProvider,
-                        'model'=>$model,
-                        ]);
-                },
-                'detailOptions'=>[
-                    'class'=> 'kv-state-enable',
-                ],
-
-            ],            
+            ],           
         ],
     ]); ?>
 </div><!--col-->

@@ -33,7 +33,8 @@
         "yiisoft/yii2-jui": "^2.0",
         "yiister/yii2-gentelella": "~1.0",
         "execut/yii2-widget-bootstraptreeview": "dev-master",
-        "kartik-v/yii2-tree-manager": "@dev"  
+        "kartik-v/yii2-tree-manager": "@dev",
+        "kartik-v/yii2-widget-growl": "*"  
     },
     "require-dev": {
         "codeception/codeception": "*",

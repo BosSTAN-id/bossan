@@ -77,14 +77,14 @@ class TaRkasBelanjaRinc extends \yii\db\ActiveRecord
             'Kd_Rek_5' => Yii::t('app', 'Rek 5'),
             'no_rinc' => Yii::t('app', 'No Rincian'),
             'keterangan' => Yii::t('app', 'Keterangan'),
-            'sat_1' => Yii::t('app', 'Volume 1'),
-            'nilai_1' => Yii::t('app', 'Nilai 1'),
-            'sat_2' => Yii::t('app', 'Volume 2'),
-            'nilai_2' => Yii::t('app', 'Nilai 2'),
-            'sat_3' => Yii::t('app', 'Volume 3'),
-            'nilai_3' => Yii::t('app', 'Nilai 3'),
-            'satuan123' => Yii::t('app', 'Total Volume'),
-            'jml_satuan' => Yii::t('app', 'Jumlah Satuan'),
+            'sat_1' => Yii::t('app', 'Satuan 1'),
+            'nilai_1' => Yii::t('app', 'Volume 1'),
+            'sat_2' => Yii::t('app', 'Satuan 2'),
+            'nilai_2' => Yii::t('app', 'Volume 2'),
+            'sat_3' => Yii::t('app', 'Satuan 3'),
+            'nilai_3' => Yii::t('app', 'Volume 3'),
+            'satuan123' => Yii::t('app', 'Volume Total'),
+            'jml_satuan' => Yii::t('app', 'Satuan Total'),
             'nilai_rp' => Yii::t('app', 'Harga Satuan'),
             'total' => Yii::t('app', 'Total'),
         ];
@@ -93,8 +93,12 @@ class TaRkasBelanjaRinc extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTahun0()
+    public function getBelanja()
     {
         return $this->hasOne(TaRkasBelanja::className(), ['Tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'kd_program' => 'kd_program', 'kd_sub_program' => 'kd_sub_program', 'kd_kegiatan' => 'kd_kegiatan', 'Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']);
     }
+    public function getRefRek5()
+    {
+        return $this->hasOne(RefRek5::className(), ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']);
+    }    
 }

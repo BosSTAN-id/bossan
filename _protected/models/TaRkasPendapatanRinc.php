@@ -74,15 +74,15 @@ class TaRkasPendapatanRinc extends \yii\db\ActiveRecord
             'Kd_Rek_5' => Yii::t('app', 'Rek 5'),
             'no_rinc' => Yii::t('app', 'No Rincian'),
             'keterangan' => Yii::t('app', 'Keterangan'),
-            'sat_1' => Yii::t('app', 'Volume 1'),
-            'nilai_1' => Yii::t('app', 'Nilai 1'),
-            'sat_2' => Yii::t('app', 'Volume 2'),
-            'nilai_2' => Yii::t('app', 'Nilai 2'),
-            'sat_3' => Yii::t('app', 'Volume 3'),
-            'nilai_3' => Yii::t('app', 'Nilai 3'),
-            'satuan123' => Yii::t('app', 'Satuan Total'),
-            'jml_satuan' => Yii::t('app', 'Jml Satuan'),
-            'nilai_rp' => Yii::t('app', 'Harga Satuan'),
+            'sat_1' => Yii::t('app', 'Satuan 1'),
+            'nilai_1' => Yii::t('app', 'Volume 1'),
+            'sat_2' => Yii::t('app', 'Satuan 2'),
+            'nilai_2' => Yii::t('app', 'Volume 2'),
+            'sat_3' => Yii::t('app', 'Satuan 3'),
+            'nilai_3' => Yii::t('app', 'Volume 3'),
+            'satuan123' => Yii::t('app', 'Volume Total'),
+            'jml_satuan' => Yii::t('app', 'Satuan Total'),
+            'nilai_rp' => Yii::t('app', 'Nilai Satuan'),
             'total' => Yii::t('app', 'Total'),
             'kd_penerimaan_1' => Yii::t('app', 'Penerimaan 1'),
             'kd_penerimaan_2' => Yii::t('app', 'Penerimaan 2'),            
@@ -99,4 +99,14 @@ class TaRkasPendapatanRinc extends \yii\db\ActiveRecord
     {
         return $this->hasOne(\app\models\RefPenerimaanSekolah2::className(), ['kd_penerimaan_1' => 'kd_penerimaan_1', 'kd_penerimaan_2' => 'kd_penerimaan_2']);
     }
+
+    public function getPendapatan()
+    {
+        return $this->hasOne(TaRkasPendapatan::className(), ['Tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']);
+    }
+
+    public function getRefRek5()
+    {
+        return $this->hasOne(RefRek5::className(), ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']);
+    }      
 }

@@ -17,6 +17,7 @@ function totalbelanja($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_keg
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Belanja';
+$this->params['breadcrumbs'][] = 'Anggaran';
 $this->params['breadcrumbs'][] = ['label' => 'RKAS', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung', 'url' => ['rkaskegiatan']];
 $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
@@ -35,7 +36,7 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
             'attributes' => [
                 [
                     'label' => 'Sumber Dana',
-                    'value' => $kegiatan->penerimaan2->uraian,
+                    'value' => $kegiatan['penerimaan2']['uraian'],
                 ],
                 'pagu_anggaran:decimal',
             ],
@@ -99,13 +100,13 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
             [
                 'label' => 'Sumber Dana',
                 'value' => function($model){
-                    return $model->penerimaan2->uraian;
+                    return $model['penerimaan2']['uraian'];
                 }
             ],
             [
                 'label' => 'Komponen',
                 'value' => function($model){
-                    return $model->komponen->komponen;
+                    return $model['komponen']['komponen'];
                 }
             ],
             [

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "ta_rkas_history".
@@ -32,6 +33,7 @@ use Yii;
  * @property string $total
  * @property integer $kd_penerimaan_1
  * @property integer $kd_penerimaan_2
+ * @property integer $komponen_id
  * @property integer $created_at
  * @property integer $updated_at
  *
@@ -55,7 +57,7 @@ class TaRkasHistory extends \yii\db\ActiveRecord
         return [
             [['tahun', 'sekolah_id', 'perubahan_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'no_rinc', 'keterangan'], 'required'],
             [['tahun'], 'safe'],
-            [['sekolah_id', 'perubahan_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'no_rinc', 'kd_penerimaan_1', 'kd_penerimaan_2', 'created_at', 'updated_at'], 'integer'],
+            [['sekolah_id', 'perubahan_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'no_rinc', 'kd_penerimaan_1', 'kd_penerimaan_2', 'komponen_id', 'created_at', 'updated_at'], 'integer'],
             [['nilai_1', 'nilai_2', 'nilai_3', 'jml_satuan', 'nilai_rp', 'total'], 'number'],
             [['keterangan'], 'string', 'max' => 255],
             [['sat_1', 'sat_2', 'sat_3'], 'string', 'max' => 10],
@@ -95,10 +97,18 @@ class TaRkasHistory extends \yii\db\ActiveRecord
             'total' => 'Total',
             'kd_penerimaan_1' => 'Kd Penerimaan 1',
             'kd_penerimaan_2' => 'Kd Penerimaan 2',
+            'komponen_id' => 'Komponen ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
     }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    }     
 
     /**
      * @return \yii\db\ActiveQuery

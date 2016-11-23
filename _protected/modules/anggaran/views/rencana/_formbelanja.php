@@ -55,7 +55,6 @@ use kartik\widgets\DepDrop;
     ?>
 
     <?php  echo $form->field($model, 'Kd_Rek_4')->widget(DepDrop::classname(), [
-            'type'=>DepDrop::TYPE_SELECT2,
             'options'=>['id'=>'tarkasbelanja-kd_rek_4'],
             'pluginOptions'=>[
                 'depends'=>['tarkasbelanja-kd_rek_3'],
@@ -65,7 +64,6 @@ use kartik\widgets\DepDrop;
         ]); ?>
 
     <?php echo $form->field($model, 'Kd_Rek_5')->widget(DepDrop::classname(), [
-            'type'=>DepDrop::TYPE_SELECT2,
             'pluginOptions'=>[
                 'depends'=>['tarkasbelanja-kd_rek_3', 'tarkasbelanja-kd_rek_4'],
                 'placeholder'=>'Pilih Belanja ...',

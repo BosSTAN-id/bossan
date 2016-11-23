@@ -6,9 +6,9 @@ use yii\bootstrap\Modal;
 use yii\widgets\DetailView;
 use yii\bootstrap\Collapse;
 
-function totalbelanja($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5){
-    $belanja = \app\models\TaRkasBelanjaRinc::find()
-                ->where(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5])
+function totalbelanja($tahun, $sekolah_id, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5){
+    $belanja = \app\models\TaRkasPendapatanRinc::find()
+                ->where(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5])
                 ->sum('total');
     return  $belanja ? $belanja : 0;
 }
@@ -16,30 +16,15 @@ function totalbelanja($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_keg
 /* @var $searchModel app\modules\anggaran\models\TaRkasKegiatan */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Belanja Tidak Langsung';
+$this->title = 'Pendapatan';
 $this->params['breadcrumbs'][] = 'Anggaran';
-$this->params['breadcrumbs'][] = ['label' => 'RKAS', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => 'Belanja Tidak Langsung'];
+$this->params['breadcrumbs'][] = ['label' => 'Rencana', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Pendapatan'];
 ?>
 <div class="ta-rkas-kegiatan-index">
 <div class="row">
 <div class="col-md-12">       
 
-    <p>
-        <?= Html::a('Tambah Belanja', [
-            'createbtl',
-                'tahun' => $Tahun,
-                'sekolah_id' => Yii::$app->user->identity->sekolah_id,
-                'kd_program' => 0,
-                'kd_sub_program' => 0,
-                'kd_kegiatan' => 0,
-            ], [
-                'class' => 'btn btn-xs btn-success',
-                'data-toggle'=>"modal",
-                'data-target'=>"#myModal",
-                'data-title'=>"Tambah Belanja",
-            ]) ?>
-    </p>
     <?= GridView::widget([
         'id' => 'ta-rkas-kegiatan',    
         'dataProvider' => $dataProvider,
@@ -66,6 +51,12 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Tidak Langsung'];
         'showPageSummary'=>true,
         'columns' => [
             [
+                'label' => 'Sumber Dana',
+                'value' => function($model){
+                    return $model['penerimaan2']['uraian'];
+                }
+            ],
+            [
                 'label' => 'Jenis',
                 // 'group' => true,
                 'value' => function($model){
@@ -79,105 +70,35 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Tidak Langsung'];
                 }
             ],
             [
-                'label' => 'Sumber Dana',
-                'value' => function($model){
-                    return $model['penerimaan2']['uraian'];
-                }
-            ],
-            [
-                'label' => 'Komponen',
-                'value' => function($model){
-                    return $model['komponen']['komponen'];
-                }
-            ],
-            [
                 'label' => 'Total',
                 'format' => 'decimal',
                 'hAlign' => 'right',
                 'pageSummary'=>true,
                 'value' => function($model){
-                    return totalbelanja($model->tahun, $model->sekolah_id, $model->kd_program, $model->kd_sub_program, $model->kd_kegiatan, $model->Kd_Rek_1, $model->Kd_Rek_2, $model->Kd_Rek_3, $model->Kd_Rek_4, $model->Kd_Rek_5);
+                    return totalbelanja($model->tahun, $model->sekolah_id, $model->Kd_Rek_1, $model->Kd_Rek_2, $model->Kd_Rek_3, $model->Kd_Rek_4, $model->Kd_Rek_5);
                 }
             ],            
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{updatebtl} {deletebtl} ',
+                'template' => '{rencanapendapatan} ',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
-                        'updatebtl' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'ubah'),
+                        'rencanapendapatan' => function ($url, $model) {
+                          return Html::a('<span class="fa fa-bar-chart"></span><small>Input Rencana</small>', $url,
+                              [
+                                 'class' => 'btn btn-xs btn-default',
+                                 'title' => Yii::t('yii', 'Rencana'),
                                  'data-toggle'=>"modal",
-                                 'data-target'=>"#myModalubah",
-                                 'data-title'=> "Ubah Belanja",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
-                        },
-                        'deletebtl' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'hapus'),
-                                 // 'data-toggle'=>"modal",
-                                 // 'data-target'=>"#myModalubah",
-                                 // 'data-title'=> "Ubah Unit",                                 
-                                 'data-confirm' => "Yakin menghapus belanja ini?",
-                                 'data-method' => 'POST',
-                                 'data-pjax' => 1
-                              ]);
-                        },                        
-                        'rkasbelanjarinc' => function ($url, $model) {
-                          return Html::a('Rincian Belanja <i class="glyphicon glyphicon-menu-right"></i>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'Input Rincian Belanja'),
-                                 'class'=>"btn btn-xs btn-default",                                 
+                                 'data-target'=>"#myModal",
+                                 'data-title'=> "Rencana ".$model->penerimaan2->uraian,                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',
                                  // 'data-pjax' => 1
                               ]);
                         },
                 ]
-            ],
-            [
-                'class' => 'kartik\grid\ExpandRowColumn',
-                'value' => function ($model, $key, $index, $column) {
-                    return GridView::ROW_COLLAPSED;
-                },
-
-                'allowBatchToggle'=>false,
-                'enableRowClick' => true,
-                'expandIcon' => '<span class="glyphicon glyphicon-plus-sign"></span>',
-                'collapseIcon' => '<span class="glyphicon glyphicon-minus-sign"></span>',
-
-                'detail'=>function ($model, $key, $index, $column) {
-
-                    $searchModel = new \app\modules\anggaran\models\TaRkasBelanjaRincSearch();
-                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-                    $dataProvider->query->where([
-                            'tahun' => $model->tahun,
-                            'sekolah_id' => $model->sekolah_id,
-                            'kd_program' => $model->kd_program,
-                            'kd_sub_program' => $model->kd_sub_program,
-                            'kd_kegiatan' => $model->kd_kegiatan,
-                            'Kd_Rek_1' => $model->Kd_Rek_1,
-                            'Kd_Rek_2' => $model->Kd_Rek_2,
-                            'Kd_Rek_3' => $model->Kd_Rek_3,
-                            'Kd_Rek_4' => $model->Kd_Rek_4,
-                            'Kd_Rek_5' => $model->Kd_Rek_5,
-                        ]);
-                    return Yii::$app->controller->renderPartial('belanjarinci', [
-                        'dataProvider' => $dataProvider,
-                        'model'=>$model,
-                        ]);
-                },
-                'detailOptions'=>[
-                    'class'=> 'kv-state-enable',
-                ],
-
-            ],            
+            ],           
         ],
     ]); ?>
 </div><!--col-->

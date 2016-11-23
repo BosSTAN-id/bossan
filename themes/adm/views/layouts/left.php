@@ -112,6 +112,8 @@ function akses($menu){
                         [
                             ['label' => 'RKAS', 'icon' => 'fa fa-circle-o', 'url' => ['/anggaran/rkas'], 'visible' => akses(402)
                             ],
+                            ['label' => 'Anggaran Kas', 'icon' => 'fa fa-circle-o', 'url' => ['/anggaran/rencana'], 'visible' => akses(404)
+                            ],
                             ['label' => 'Posting Anggaran', 'icon' => 'fa fa-circle-o', 'url' => ['/anggaran/posting'], 'visible' => akses(403)
                             ],
                             // ['label' => 'Dana Transfer', 'icon' => 'fa fa-edit','url' => '#','items' => 

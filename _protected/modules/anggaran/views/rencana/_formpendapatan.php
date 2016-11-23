@@ -32,62 +32,46 @@ use kartik\widgets\DepDrop;
             echo $form->field($model, 'penerimaan_2')->widget(Select2::classname(), [
                 'data' => ArrayHelper::map($data, 'kd_penerimaan_2','uraian'),
                 // 'value' => $model->kd_penerimaan_1.'.'.$model->kd_penerimaan_2,
-                'options' => ['placeholder' => 'Sumber Dana ...'],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ]);
-    ?>     
-
-    <?php 
-            echo $form->field($model, 'Kd_Rek_3')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(
-                    \app\models\RefRek3::find()
-                    ->select(['Kd_Rek_3', 'CONCAT(Kd_Rek_3,\' \',Nm_Rek_3) AS Nm_Rek_3'])
-                    ->where(['Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2])
-                    ->all()
-                    ,'Kd_Rek_3','Nm_Rek_3'),
-                'options' => ['placeholder' => 'Pilih Jenis Belanja ...'],
+                'options' => ['placeholder' => 'Jenis Pendapatan ...'],
                 'pluginOptions' => [
                     'allowClear' => true
                 ],
             ]);
     ?>
 
-    <?php  echo $form->field($model, 'Kd_Rek_4')->widget(DepDrop::classname(), [
-            'type'=>DepDrop::TYPE_SELECT2,
-            'options'=>['id'=>'tarkasbelanja-kd_rek_4'],
-            'pluginOptions'=>[
-                'depends'=>['tarkasbelanja-kd_rek_3'],
-                'placeholder'=>'Pilih Kelompok Belanja ...',
-                'url'=>Url::to(['kdrek4'])
-            ]
-        ]); ?>
+    <?= $form->field($model, 'nilai_rp')->textInput(['id' => 'nilai_rp', 'maxlength' => true]) ?>
 
-    <?php echo $form->field($model, 'Kd_Rek_5')->widget(DepDrop::classname(), [
-            'type'=>DepDrop::TYPE_SELECT2,
-            'pluginOptions'=>[
-                'depends'=>['tarkasbelanja-kd_rek_3', 'tarkasbelanja-kd_rek_4'],
-                'placeholder'=>'Pilih Belanja ...',
-                'url'=>Url::to(['kdrek5'])
-            ]
-        ]);
-    ?>
+    <div class="col-md-6">
+    <?= $form->field($model, 'nilai_1')->textInput(['id' => 'nilai_1', 'maxlength' => true]) ?>
+    </div>
+    <div class="col-md-6">
+    <?= $form->field($model, 'sat_1')->textInput(['id' => 'sat_1', 'maxlength' => true]) ?>
+    </div>
 
-    <?php 
-            echo $form->field($model, 'komponen_id')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(
-                    \app\models\RefKomponenBos::find()
-                    ->select(['id', 'CONCAT(id,\' \',komponen) AS komponen'])
-                    // ->where(['Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2])
-                    ->all()
-                    ,'id','komponen'),
-                'options' => ['placeholder' => 'Pilih Komponen BOS ...'],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ]);
-    ?>    
+
+    <div class="col-md-6">
+    <?= $form->field($model, 'nilai_2')->textInput(['id' => 'nilai_2', 'maxlength' => true]) ?>
+    </div>
+    <div class="col-md-6">
+    <?= $form->field($model, 'sat_2')->textInput(['id' => 'sat_2', 'maxlength' => true]) ?>
+    </div>
+
+
+    <div class="col-md-6">
+    <?= $form->field($model, 'nilai_3')->textInput(['id' => 'nilai_3', 'maxlength' => true]) ?>
+    </div>
+    <div class="col-md-6">
+    <?= $form->field($model, 'sat_3')->textInput(['id' => 'sat_3', 'maxlength' => true]) ?>
+    </div>
+
+    <div class="col-md-6">
+    <?= $form->field($model, 'jml_satuan')->textInput(['id' => 'jml_satuan', 'maxlength' => true, 'readonly' => true]) ?>
+    </div>
+    <div class="col-md-6">
+    <?= $form->field($model, 'satuan123')->textInput(['id' => 'satuan123', 'maxlength' => true, 'readonly' => true]) ?>
+    </div>    
+
+    <?= $form->field($model, 'total')->textInput(['id' => 'total', 'maxlength' => true, 'readonly' => true]) ?>    
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Simpan' : 'Simpan', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -96,7 +80,47 @@ use kartik\widgets\DepDrop;
     <?php ActiveForm::end(); ?>
 
 </div>
-<?php IF($model->isNewRecord){
+<?php
+//untuk satuan
+$this->registerJs("$('#nilai_1, #nilai_2, #nilai_3').keyup(function(){
+        var nilai_1 = $('#nilai_1').val(),
+            nilai_2 = $('#nilai_2').val(),
+            nilai_3 = $('#nilai_3').val(),
+            jml_satuan = 0;
+            if(nilai_1 == '') { var nilai_1 = 1;}   
+            if(nilai_2 == '') { var nilai_2 = 1;}     
+            if(nilai_3 == '') { var nilai_3 = 1;}                            
+        nilai_1 = nilai_1 - 0;//convert to integer
+        nilai_2 = nilai_2 - 0;//convert to integer
+        nilai_3 = nilai_3 - 0;//convert to integer
+        jml_satuan = nilai_1 * nilai_2 * nilai_3;
+        if(isNaN(jml_satuan)) { var jml_satuan = 0;}
+        $('#jml_satuan').val(jml_satuan);
+});");
+//untuk satuan
+$this->registerJs("$('#sat_1, #sat_2, #sat_3').keyup(function(){
+        var sat_1 = $('#sat_1').val(),
+            sat_2 = $('#sat_2').val(),
+            sat_3 = $('#sat_3').val(),
+            satuan123 = '';
+        if(sat_1 != '') { var sat_1 = sat_1;}   
+        if(sat_2 != '') { var sat_2 = '/' + sat_2;}   
+        if(sat_3 != '') { var sat_3 = '/' + sat_3;}   
+        satuan123 = sat_1 + sat_2 + sat_3;
+        $('#satuan123').val(satuan123);
+});");
+//untuk total
+$this->registerJs("$('#jml_satuan, #nilai_rp').keyup(function(){
+        var jml_satuan = $('#jml_satuan').val(),
+            nilai_rp = $('#nilai_rp').val(),
+            total = 0;
+        nilai_rp = nilai_rp - 0;//convert to integer
+        jml_satuan = jml_satuan - 0;//convert to integer
+        total = jml_satuan * nilai_rp;
+        if(isNaN(total)) { var total = 0;}
+        $('#total').val(total);
+});");
+IF($model->isNewRecord){
 
 $script = <<<JS
 $('form#{$model->formName()}').on('beforeSubmit',function(e)

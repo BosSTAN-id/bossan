@@ -10,20 +10,13 @@ use yii\bootstrap\Modal;
 
 $this->title = 'Kegiatan';
 $this->params['breadcrumbs'][] = 'Anggaran';
-$this->params['breadcrumbs'][] = ['label' => 'RKAS', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Rencana', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung'];
 ?>
 <div class="ta-rkas-kegiatan-index">
 <!-- <h3 class="text-center">Rencana Kegiatan Anggaran Sekolah Tahun Ajaran <?= $Tahun.'-'.($Tahun+1) ?></h3>
 <h3 class="text-center"><?= Yii::$app->user->identity->refSekolah->nama_sekolah ?></h3> -->
-    <p>
-        <?= Html::a('Tambah Kegiatan', ['create'], [
-                                                    'class' => 'btn btn-xs btn-success',
-                                                    'data-toggle'=>"modal",
-                                                    'data-target'=>"#myModal",
-                                                    'data-title'=>"Tambah Kegiatan",
-                                                    ]) ?>
-    </p>
+
     <?= GridView::widget([
         'id' => 'ta-rkas-kegiatan',    
         'dataProvider' => $dataProvider,
@@ -73,26 +66,14 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung'];
 
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{update} {delete} {rkasbelanja}',
+                'template' => '{rkasbelanja}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
-                        'update' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'ubah'),
-                                 'data-toggle'=>"modal",
-                                 'data-target'=>"#myModalubah",
-                                 'data-title'=> "Ubah Kegiatan",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
-                        },
                         'rkasbelanja' => function ($url, $model) {
                           return Html::a('Belanja <i class="glyphicon glyphicon-menu-right"></i>', $url,
                               [  
-                                 'title' => Yii::t('yii', 'Input Belanja'),
+                                 'title' => Yii::t('yii', 'Rencana Belanja'),
                                  'class'=>"btn btn-xs btn-default",                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',

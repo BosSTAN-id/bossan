@@ -32,7 +32,6 @@ use kartik\widgets\DepDrop;
             ]);
     ?>
     <?php  echo $form->field($model, 'kd_sub_program')->widget(DepDrop::classname(), [
-            'type'=>DepDrop::TYPE_SELECT2,
             'options'=>['id'=>'tarkaskegiatan-kd_sub_program'],
             'pluginOptions'=>[
                 'depends'=>['tarkaskegiatan-kd_program'],
@@ -41,7 +40,6 @@ use kartik\widgets\DepDrop;
             ]
         ]); ?>
     <?php echo $form->field($model, 'kd_kegiatan')->widget(DepDrop::classname(), [
-            'type'=>DepDrop::TYPE_SELECT2,
             'pluginOptions'=>[
                 'depends'=>['tarkaskegiatan-kd_program', 'tarkaskegiatan-kd_sub_program'],
                 'placeholder'=>'Pilih Kegiatan ...',

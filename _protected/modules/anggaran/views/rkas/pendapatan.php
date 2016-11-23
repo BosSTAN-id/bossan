@@ -17,6 +17,7 @@ function totalbelanja($tahun, $sekolah_id, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Pendapatan';
+$this->params['breadcrumbs'][] = 'Anggaran';
 $this->params['breadcrumbs'][] = ['label' => 'RKAS', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => 'Pendapatan'];
 ?>
@@ -33,7 +34,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Pendapatan'];
                 'class' => 'btn btn-xs btn-success',
                 'data-toggle'=>"modal",
                 'data-target'=>"#myModal",
-                'data-title'=>"Tambah Belanja",
+                'data-title'=>"Tambah Pendapatan",
             ]) ?>
     </p>
     <?= GridView::widget([
@@ -91,42 +92,32 @@ $this->params['breadcrumbs'][] = ['label' => 'Pendapatan'];
             ],            
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{updatependapatan} {deletependapatan} ',
+                'template' => '{deletependapatan} ',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
-                        'updatebtl' => function ($url, $model) {
+                        'updatependapatan' => function ($url, $model) {
                           return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
                               [  
                                  'title' => Yii::t('yii', 'ubah'),
                                  'data-toggle'=>"modal",
                                  'data-target'=>"#myModalubah",
-                                 'data-title'=> "Ubah Belanja",                                 
+                                 'data-title'=> "Ubah Pendapatan",                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',
                                  // 'data-pjax' => 1
                               ]);
                         },
-                        'deletebtl' => function ($url, $model) {
+                        'deletependapatan' => function ($url, $model) {
                           return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,
                               [  
                                  'title' => Yii::t('yii', 'hapus'),
                                  // 'data-toggle'=>"modal",
                                  // 'data-target'=>"#myModalubah",
                                  // 'data-title'=> "Ubah Unit",                                 
-                                 'data-confirm' => "Yakin menghapus belanja ini?",
+                                 'data-confirm' => "Yakin menghapus pendapatan ini?",
                                  'data-method' => 'POST',
                                  'data-pjax' => 1
-                              ]);
-                        },                        
-                        'rkasbelanjarinc' => function ($url, $model) {
-                          return Html::a('Rincian Belanja <i class="glyphicon glyphicon-menu-right"></i>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'Input Rincian Belanja'),
-                                 'class'=>"btn btn-xs btn-default",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
                               ]);
                         },
                 ]

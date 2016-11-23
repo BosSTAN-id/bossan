@@ -3,22 +3,19 @@
 namespace app\models;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "ta_rkas_belanja_rencana_history".
+ * This is the model class for table "ta_rkas_pendapatan_rencana".
  *
  * @property string $tahun
  * @property integer $sekolah_id
- * @property integer $perubahan_id
- * @property integer $kd_program
- * @property integer $kd_sub_program
- * @property integer $kd_kegiatan
  * @property integer $Kd_Rek_1
  * @property integer $Kd_Rek_2
  * @property integer $Kd_Rek_3
  * @property integer $Kd_Rek_4
  * @property integer $Kd_Rek_5
+ * @property integer $kd_penerimaan_1
+ * @property integer $kd_penerimaan_2
  * @property string $juli
  * @property string $agustus
  * @property string $september
@@ -31,17 +28,15 @@ use yii\behaviors\TimestampBehavior;
  * @property string $april1
  * @property string $mei1
  * @property string $juni1
- * @property integer $created_at
- * @property integer $updated_at
  */
-class TaRkasBelanjaRencanaHistory extends \yii\db\ActiveRecord
+class TaRkasPendapatanRencana extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'ta_rkas_belanja_rencana_history';
+        return 'ta_rkas_pendapatan_rencana';
     }
 
     /**
@@ -50,9 +45,9 @@ class TaRkasBelanjaRencanaHistory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tahun', 'sekolah_id', 'perubahan_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5'], 'required'],
+            [['tahun', 'sekolah_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2'], 'required'],
             [['tahun'], 'safe'],
-            [['sekolah_id', 'perubahan_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'created_at', 'updated_at'], 'integer'],
+            [['sekolah_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2'], 'integer'],
             [['juli', 'agustus', 'september', 'oktober', 'november', 'desember', 'januari1', 'februari1', 'maret1', 'april1', 'mei1', 'juni1'], 'number'],
         ];
     }
@@ -65,36 +60,25 @@ class TaRkasBelanjaRencanaHistory extends \yii\db\ActiveRecord
         return [
             'tahun' => 'Tahun',
             'sekolah_id' => 'Sekolah ID',
-            'perubahan_id' => 'Perubahan ID',
-            'kd_program' => 'Kd Program',
-            'kd_sub_program' => 'Kd Sub Program',
-            'kd_kegiatan' => 'Kd Kegiatan',
             'Kd_Rek_1' => 'Kd  Rek 1',
             'Kd_Rek_2' => 'Kd  Rek 2',
             'Kd_Rek_3' => 'Kd  Rek 3',
             'Kd_Rek_4' => 'Kd  Rek 4',
             'Kd_Rek_5' => 'Kd  Rek 5',
+            'kd_penerimaan_1' => 'Kd Penerimaan 1',
+            'kd_penerimaan_2' => 'Kd Penerimaan 2',
             'juli' => 'Juli',
             'agustus' => 'Agustus',
             'september' => 'September',
             'oktober' => 'Oktober',
             'november' => 'November',
             'desember' => 'Desember',
-            'januari1' => 'Januari1',
-            'februari1' => 'Februari1',
-            'maret1' => 'Maret1',
-            'april1' => 'April1',
-            'mei1' => 'Mei1',
-            'juni1' => 'Juni1',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'januari1' => 'Januari+1',
+            'februari1' => 'Februari+1',
+            'maret1' => 'Maret+1',
+            'april1' => 'April+1',
+            'mei1' => 'Mei+1',
+            'juni1' => 'Juni+1',
         ];
     }
-
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
-    }     
 }
