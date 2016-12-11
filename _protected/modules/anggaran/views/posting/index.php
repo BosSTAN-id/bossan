@@ -5,7 +5,7 @@ use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use dosamigos\chartjs\ChartJs;
 use yii\bootstrap\ActiveForm;
-
+use kartik\widgets\DatePicker;
 /* @var $this yii\web\View */
 /* @var $searchrencana app\modules\anggaran\rencanas\TaRkasKegiatan */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -40,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		    <?php 
 		    $form = ActiveForm::begin(['id' => $rencana->formName()]);
 		    IF( $rencana->isNewRecord ): ?>
+		    <?php echo $form->field($rencana, 'perubahan_id')->hiddenInput(['value' => 3])->label(false); ?>
 		    <div class="col-md-11">          
 			    <div class="col-md-2">
 				    <i class="fa fa-star-o text-yellow"></i> Rencana
@@ -48,7 +49,18 @@ $this->params['breadcrumbs'][] = $this->title;
 		        	<?= $form->field($rencana, 'no_peraturan')->textInput(['class' => 'form-control input-sm','placeholder' => 'No Peraturan'])->label(false) ?>
 		        </div>
 				<div class="col-md-2">
-		        	<?= $form->field($rencana, 'tgl_peraturan')->textInput(['class' => 'form-control input-sm','placeholder' => 'Tgl Peraturan'])->label(false) ?>
+			        <?= DatePicker::widget([
+			        	'model' => $rencana,
+			            'attribute' => 'tgl_peraturan',
+			            'id' => 'daterencana',
+			            'size' => 'sm',
+			            'removeButton' => false,
+			            'options' => ['placeholder' => 'Tgl Peraturan'],
+			            'pluginOptions' => [
+			                'autoclose'=>true,
+			                'format' => 'yyyy-m-d',
+			            ]
+			        ]); ?> 		        	
 		        </div>
 				<div class="col-md-2">
 		        	<?= $form->field($rencana, 'penandatangan')->textInput(['class' => 'form-control input-sm','placeholder' => 'Penandantangan'])->label(false) ?>
@@ -72,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		        	<?= $rencana->no_peraturan ?>
 		        </div>
 				<div class="col-md-5">
-		        	<?= date('d-m-Y', $rencana->tgl_peraturan) ?>
+		        	<?= date('d-m-Y', strtotime($rencana->tgl_peraturan)) ?>
 		        </div>
 	        </div>
 	    	<?php endif; ?>
@@ -88,6 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		    <?php 
 		    $form = ActiveForm::begin(['id' => $induk->formName()]);
 		    IF( $induk->isNewRecord ): ?>
+		    <?php echo $form->field($induk, 'perubahan_id')->hiddenInput(['value' => 4])->label(false); ?>
 		    <div class="col-md-11">          
 			    <div class="col-md-2">
 				    <i class="fa fa-star-o text-yellow"></i> RKAS
@@ -96,7 +109,18 @@ $this->params['breadcrumbs'][] = $this->title;
 		        	<?= $form->field($induk, 'no_peraturan')->textInput(['class' => 'form-control input-sm','placeholder' => 'No Peraturan'])->label(false) ?>
 		        </div>
 				<div class="col-md-2">
-		        	<?= $form->field($induk, 'tgl_peraturan')->textInput(['class' => 'form-control input-sm','placeholder' => 'Tgl Peraturan'])->label(false) ?>
+			        <?= DatePicker::widget([
+			        	'model' => $induk,
+			            'attribute' => 'tgl_peraturan',
+			            'id' => 'dateinduk',
+			            'size' => 'sm',
+			            'removeButton' => false,
+			            'options' => ['placeholder' => 'Tgl Peraturan'],
+			            'pluginOptions' => [
+			                'autoclose'=>true,
+			                'format' => 'yyyy-m-d',
+			            ]
+			        ]); ?>  		        	
 		        </div>
 				<div class="col-md-2">
 		        	<?= $form->field($induk, 'penandatangan')->textInput(['class' => 'form-control input-sm','placeholder' => 'Penandantangan'])->label(false) ?>
@@ -120,7 +144,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		        	<?= $induk->no_peraturan ?>
 		        </div>
 				<div class="col-md-5">
-		        	<?= date('d-m-Y', $induk->tgl_peraturan) ?>
+		        	<?= date('d-m-Y', strtotime($induk->tgl_peraturan)) ?>
 		        </div>
 	        </div>
 	    	<?php endif; ?>
@@ -136,6 +160,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		    <?php 
 		    $form = ActiveForm::begin(['id' => $perubahan1->formName()]);
 		    IF( $perubahan1->isNewRecord ): ?>
+		    <?php echo $form->field($perubahan1, 'perubahan_id')->hiddenInput(['value' => 6])->label(false); ?>
 		    <div class="col-md-11">          
 			    <div class="col-md-2">
 				    <i class="fa fa-star-o text-yellow"></i> RKAS Perubahan
@@ -144,7 +169,18 @@ $this->params['breadcrumbs'][] = $this->title;
 		        	<?= $form->field($perubahan1, 'no_peraturan')->textInput(['class' => 'form-control input-sm','placeholder' => 'No Peraturan'])->label(false) ?>
 		        </div>
 				<div class="col-md-2">
-		        	<?= $form->field($perubahan1, 'tgl_peraturan')->textInput(['class' => 'form-control input-sm','placeholder' => 'Tgl Peraturan'])->label(false) ?>
+			        <?= DatePicker::widget([
+			        	'model' => $perubahan1,
+			            'attribute' => 'tgl_peraturan',
+			            'id' => 'dateperubahan',
+			            'size' => 'sm',
+			            'removeButton' => false,
+			            'options' => ['placeholder' => 'Tgl Peraturan'],
+			            'pluginOptions' => [
+			                'autoclose'=>true,
+			                'format' => 'yyyy-m-d',
+			            ]
+			        ]); ?> 		        	
 		        </div>
 				<div class="col-md-2">
 		        	<?= $form->field($perubahan1, 'penandatangan')->textInput(['class' => 'form-control input-sm','placeholder' => 'Penandantangan'])->label(false) ?>
@@ -168,7 +204,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		        	<?= $perubahan1->no_peraturan ?>
 		        </div>
 				<div class="col-md-5">
-		        	<?= date('d-m-Y', $perubahan1->tgl_peraturan) ?>
+		        	<?= date('d-m-Y', strtotime($perubahan1->tgl_peraturan)) ?>
 		        </div>
 	        </div>
 	    	<?php endif; ?>
@@ -183,7 +219,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">Anggaran Kas Rencana Kegiatan Anggaran Sekolah Tahun Ajaran <?= $Tahun.'-'.($Tahun+1) ?></h3>
+            <h3 class="box-title">Anggaran Kas Rencana Kegiatan Anggaran Sekolah Tahun Anggaran <?= $Tahun?></h3>
             <span class="label label-primary pull-right"><i class="fa fa-html5"></i></span>
         </div><!-- /.box-header -->
         <div class="box-body bg-info">

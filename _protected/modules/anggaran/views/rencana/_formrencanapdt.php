@@ -61,6 +61,15 @@ use yii\widgets\DetailView;
     ]); ?>
 
     <div class="col-md-6">
+        <?= $form->field($model, 'januari1')->textInput(['id' => 'januari1', 'maxlength' => true]) ?>
+        <?= $form->field($model, 'februari1')->textInput(['id' => 'februari1', 'maxlength' => true]) ?>
+        <?= $form->field($model, 'maret1')->textInput(['id' => 'maret1', 'maxlength' => true]) ?>
+        <?= $form->field($model, 'april1')->textInput(['id' => 'april1', 'maxlength' => true]) ?>
+        <?= $form->field($model, 'mei1')->textInput(['id' => 'mei1', 'maxlength' => true]) ?>
+        <?= $form->field($model, 'juni1')->textInput(['id' => 'juni1', 'maxlength' => true]) ?>
+    </div>
+
+    <div class="col-md-6">
     <?= $form->field($model, 'juli')->textInput(['id' => 'juli', 'maxlength' => true]) ?>
     <?= $form->field($model, 'agustus')->textInput(['id' => 'agustus', 'maxlength' => true]) ?>
     <?= $form->field($model, 'september')->textInput(['id' => 'september', 'maxlength' => true]) ?>
@@ -68,16 +77,6 @@ use yii\widgets\DetailView;
     <?= $form->field($model, 'november')->textInput(['id' => 'november', 'maxlength' => true]) ?>
     <?= $form->field($model, 'desember')->textInput(['id' => 'desember', 'maxlength' => true]) ?>
     </div>
-    <div class="col-md-6">
-    <?= $form->field($model, 'januari1')->textInput(['id' => 'januari1', 'maxlength' => true]) ?>
-    <?= $form->field($model, 'februari1')->textInput(['id' => 'februari1', 'maxlength' => true]) ?>
-    <?= $form->field($model, 'maret1')->textInput(['id' => 'maret1', 'maxlength' => true]) ?>
-    <?= $form->field($model, 'april1')->textInput(['id' => 'april1', 'maxlength' => true]) ?>
-    <?= $form->field($model, 'mei1')->textInput(['id' => 'mei1', 'maxlength' => true]) ?>
-    <?= $form->field($model, 'juni1')->textInput(['id' => 'juni1', 'maxlength' => true]) ?>
-    </div>
-
-
 
     <div class="form-group">
         <?= Html::submitButton('Simpan' , ['class' => 'btn btn-sm btn-success']) ?>

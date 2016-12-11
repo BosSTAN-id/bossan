@@ -75,12 +75,12 @@ class TaRkasBelanjaRencana extends \yii\db\ActiveRecord
             'oktober' => 'Oktober',
             'november' => 'November',
             'desember' => 'Desember',
-            'januari1' => 'Januari1',
-            'februari1' => 'Februari1',
-            'maret1' => 'Maret1',
-            'april1' => 'April1',
-            'mei1' => 'Mei1',
-            'juni1' => 'Juni1',
+            'januari1' => 'Januari',
+            'februari1' => 'Februari',
+            'maret1' => 'Maret',
+            'april1' => 'April',
+            'mei1' => 'Mei',
+            'juni1' => 'Juni',
         ];
     }
 }

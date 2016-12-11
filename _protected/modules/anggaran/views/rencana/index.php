@@ -30,13 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="ta-rkas-kegiatan-index">
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">Anggaran Kas Rencana Kegiatan Anggaran Sekolah Tahun Ajaran <?= $Tahun.'-'.($Tahun+1) ?></h3>
+            <h3 class="box-title">Anggaran Kas Rencana Kegiatan Anggaran Sekolah Tahun Anggaran <?= $Tahun ?></h3>
             <span class="label label-primary pull-right"><i class="fa fa-html5"></i></span>
         </div><!-- /.box-header -->
         <div class="box-body bg-info">
             <p style="margin-top: 10px;" class="text-muted well well-sm no-shadow">
                 Anggaran Kas menentukan waktu penerimaan ataupun pengeluaran kas yang direncanakan. Kas tidak dapat dikeluarkan selama anggaran kas untuk belanja tersebut belum dimulai (sebagai contoh apabila suatu anggaran dianggarkan pada bulan September, maka belanja baru dapat dilakukan bulan September dan setelahnya.)
-                Belanja dibatasi anggaran kasnya minimal 2 kali, yaitu pada awal tahun ajaran (bulan Juli) dan pada awal tahun anggaran (bulan Januari). Hal ini untuk menyesuaikan <i>cut off</i> tahun anggaran untuk kebutuhan laporan keuangan Pemerintah Daerah.
             </p>            
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="info-box">

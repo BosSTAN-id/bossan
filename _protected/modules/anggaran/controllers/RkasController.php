@@ -758,6 +758,7 @@ class RkasController extends Controller
         }
         $searchModel = new \app\modules\anggaran\models\RefKegiatanSekolahSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->orderBy('kd_program, kd_sub_program, kd_kegiatan ASC');
         $dataProvider->pagination->pageSize=100;
 
         return $this->renderAjax('kamuskegiatan', [

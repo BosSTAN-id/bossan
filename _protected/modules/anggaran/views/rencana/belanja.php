@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
             [
                 'label' => 'Komponen',
                 'value' => function($model){
-                    return $model->komponen->komponen;
+                    return $model['komponen']['komponen'];
                 }
             ],
             [

@@ -36,11 +36,12 @@ class PostingController extends \yii\web\Controller
         $rencana = \app\models\TaRkasPeraturan::findOne(['tahun' => $Tahun, 'sekolah_id' => $sekolah_id, 'perubahan_id' => 3]);
         $induk = \app\models\TaRkasPeraturan::findOne(['tahun' => $Tahun, 'sekolah_id' => $sekolah_id, 'perubahan_id' => 4]);
         $perubahan1 = \app\models\TaRkasPeraturan::findOne(['tahun' => $Tahun, 'sekolah_id' => $sekolah_id, 'perubahan_id' => 6]);
+
         IF(!$rencana){
         	$rencana = new \app\models\TaRkasPeraturan();
         	$rencana->tahun = $Tahun;
         	$rencana->sekolah_id = $sekolah_id;
-        	$rencana->perubahan_id = 3;
+        	// $rencana->perubahan_id = 3;
         	$rencana->verifikasi = 0;
         }
 
@@ -48,7 +49,7 @@ class PostingController extends \yii\web\Controller
         	$induk = new \app\models\TaRkasPeraturan();
         	$induk->tahun = $Tahun;
         	$induk->sekolah_id = $sekolah_id;
-        	$induk->perubahan_id = 4;
+        	// $induk->perubahan_id = 4;
         	$induk->verifikasi = 0;
         }
 
@@ -56,11 +57,43 @@ class PostingController extends \yii\web\Controller
         	$perubahan1 = new \app\models\TaRkasPeraturan();
         	$perubahan1->tahun = $Tahun;
         	$perubahan1->sekolah_id = $sekolah_id;
-        	$perubahan1->perubahan_id = 6;
+        	// $perubahan1->perubahan_id = 6;
         	$perubahan1->verifikasi = 0;
         }
 
-        if($rencana->load(Yii::$app->request->post())) {
+        if(isset($_POST['TaRkasPeraturan'])) {
+          $perubahan_id = $_POST['TaRkasPeraturan']['perubahan_id'];
+          switch ($perubahan_id) {
+            case 3:
+              $rencana = new \app\models\TaRkasPeraturan();
+              $rencana->tahun = $Tahun;
+              $rencana->sekolah_id = $sekolah_id;
+              $rencana->verifikasi = 0;              
+              $rencana->load(Yii::$app->request->post());
+              // var_dump($rencana);
+              break;
+            case 4:
+              $rencana = new \app\models\TaRkasPeraturan();
+              $rencana->tahun = $Tahun;
+              $rencana->sekolah_id = $sekolah_id;
+              $rencana->verifikasi = 0;              
+              $rencana->load(Yii::$app->request->post());
+              // var_dump($rencana);
+              break;
+            case 6:
+              $rencana = new \app\models\TaRkasPeraturan();
+              $rencana->tahun = $Tahun;
+              $rencana->sekolah_id = $sekolah_id;
+              $rencana->verifikasi = 0;              
+              $rencana->load(Yii::$app->request->post());
+              // var_dump($rencana);
+              break;                          
+            default:
+              # code...
+              break;
+          }
+          // $rencana->load(Yii::$app->request->post())
+          // var_dump($rencana);
             //cek rencana terlebih dahulu
             $connection = \Yii::$app->db;      
             $sql = $connection->createCommand("
@@ -161,8 +194,8 @@ class PostingController extends \yii\web\Controller
             $cekrencanapendapatan = $sql->queryAll();                        
 
             IF(!$cekbelanja && !$cekrencanabelanja && !$cekrencanapendapatan){
-                $date = new DateTime();
-                $date->getTimestamp();
+                $date = new \DateTime();
+                $date = $date->getTimestamp();
                 //insert via sql for better php handling
                 $connection = \Yii::$app->db;           
                 $rkashistorybelanja = $connection->createCommand("
@@ -198,7 +231,7 @@ class PostingController extends \yii\web\Controller
                     SELECT
                     b.tahun,
                     b.sekolah_id,
-                    $kd_rencana AS perubahan_id,
+                    $perubahan_id AS perubahan_id,
                     b.kd_program,
                     b.kd_sub_program,
                     b.kd_kegiatan,
@@ -260,7 +293,7 @@ class PostingController extends \yii\web\Controller
                     SELECT
                       tahun,
                       sekolah_id,
-                      $kd_rencana AS perubahan_id,
+                      $perubahan_id AS perubahan_id,
                       kd_program,
                       kd_sub_program,
                       kd_kegiatan,
@@ -280,7 +313,9 @@ class PostingController extends \yii\web\Controller
                       maret1,
                       april1,
                       mei1,
-                      juni1
+                      juni1,
+                      $date AS created_at,
+                      $date AS updated_at
                     FROM ta_rkas_belanja_rencana
                     WHERE
                     tahun = $Tahun AND sekolah_id = $sekolah_id
@@ -318,7 +353,7 @@ class PostingController extends \yii\web\Controller
                     SELECT
                     a.tahun,
                     a.sekolah_id,
-                    $kd_rencana AS perubahan_id,
+                    $perubahan_id AS perubahan_id,
                     0 AS kd_program,
                     0 AS kd_sub_program,
                     0 AS kd_kegiatan,
@@ -345,12 +380,12 @@ class PostingController extends \yii\web\Controller
                     $date AS created_at,
                     $date AS updated_at
                     FROM
-                    ta_rkas_belanja_rinc AS a
+                    ta_rkas_pendapatan_rinc AS a
                     WHERE
                     a.tahun = $Tahun AND a.sekolah_id = $sekolah_id
                     ");
                 $rkashistorypendapatanrencana = $connection->createCommand("
-                    insert into bos.ta_rkas_pendapatan_rencana_history
+                    insert into ta_rkas_pendapatan_rencana_history
                                 (tahun,
                                  sekolah_id,
                                  perubahan_id,
@@ -372,11 +407,13 @@ class PostingController extends \yii\web\Controller
                                  maret1,
                                  april1,
                                  mei1,
-                                 juni1)
+                                 juni1,
+                                 created_at,
+                                 updated_at)
                     SELECT
                       tahun,
                       sekolah_id,
-                      $kd_rencana AS perubahan_id,
+                      $perubahan_id AS perubahan_id,
                       Kd_Rek_1,
                       Kd_Rek_2,
                       Kd_Rek_3,
@@ -395,7 +432,9 @@ class PostingController extends \yii\web\Controller
                       maret1,
                       april1,
                       mei1,
-                      juni1
+                      juni1,
+                      $date AS created_at,
+                      $date AS updated_at
                     FROM ta_rkas_pendapatan_rencana
                     WHERE
                     tahun = $Tahun AND sekolah_id = $sekolah_id
@@ -404,10 +443,13 @@ class PostingController extends \yii\web\Controller
                     $rkashistorybelanja->execute();
                     $rkashistorybelanjarencana->execute();
                     $rkashistorypendapatan->execute();
-                    $rkashistorypendapatanrencanaexecute();
-                    echo 1;
+                    $rkashistorypendapatanrencana->execute();
+                    return $this->redirect(Yii::$app->request->referrer);   
+                    // echo 1;
                 }ELSE{
-                    echo 0;
+                    // echo 0;
+                    Yii::$app->getSession()->setFlash('danger',  'Posting gagal!');
+                    return $this->redirect(Yii::$app->request->referrer);                                
                 }
             }ELSE{
                 Yii::$app->getSession()->setFlash('danger',  'Posting gagal! Rincian belanja atau rencana pendapatan/belanja belum semua terisi.');
@@ -415,21 +457,23 @@ class PostingController extends \yii\web\Controller
             }
         }
 
-        if($induk->load(Yii::$app->request->post())) {
-            IF($induk->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
-        }
+        // if($induk->load(Yii::$app->request->post())) {
+        //   var_dump($induk);
+        //     // IF($induk->save()){
+        //     //     echo 1;
+        //     // }ELSE{
+        //     //     echo 0;
+        //     // }
+        // }
 
-        if($perubahan1->load(Yii::$app->request->post())) {
-            IF($perubahan1->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
-        }
+        // if($perubahan1->load(Yii::$app->request->post())) {
+        //   var_dump($perubahan1);
+        //     // IF($perubahan1->save()){
+        //     //     echo 1;
+        //     // }ELSE{
+        //     //     echo 0;
+        //     // }
+        // }
 
         return $this->render('index', [
             'Tahun' => $Tahun,

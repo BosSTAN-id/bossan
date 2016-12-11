@@ -73,12 +73,12 @@ class TaRkasPendapatanRencana extends \yii\db\ActiveRecord
             'oktober' => 'Oktober',
             'november' => 'November',
             'desember' => 'Desember',
-            'januari1' => 'Januari+1',
-            'februari1' => 'Februari+1',
-            'maret1' => 'Maret+1',
-            'april1' => 'April+1',
-            'mei1' => 'Mei+1',
-            'juni1' => 'Juni+1',
+            'januari1' => 'Januari',
+            'februari1' => 'Februari',
+            'maret1' => 'Maret',
+            'april1' => 'April',
+            'mei1' => 'Mei',
+            'juni1' => 'Juni',
         ];
     }
 }
