@@ -56,7 +56,7 @@
 	03 => verspj (verifikasi spj)
 	04 => pengadaanaset
 	05 => daftar aset tetap (asetetap)
-	06 => 
+	06 => belanja
 	07 => 
 	08 => 
 	09 => 

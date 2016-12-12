@@ -49,7 +49,7 @@ class TaRkasPendapatanRencanaHistory extends \yii\db\ActiveRecord
         return [
             [['tahun', 'sekolah_id', 'perubahan_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2'], 'required'],
             [['tahun'], 'safe'],
-            [['sekolah_id', 'perubahan_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2'], 'integer'],
+            [['sekolah_id', 'perubahan_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2', 'created_at', 'updated_at'], 'integer'],
             [['juli', 'agustus', 'september', 'oktober', 'november', 'desember', 'januari1', 'februari1', 'maret1', 'april1', 'mei1', 'juni1'], 'number'],
         ];
     }
@@ -82,6 +82,8 @@ class TaRkasPendapatanRencanaHistory extends \yii\db\ActiveRecord
             'april1' => 'April',
             'mei1' => 'Mei',
             'juni1' => 'Juni',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 

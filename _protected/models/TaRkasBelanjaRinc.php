@@ -97,8 +97,47 @@ class TaRkasBelanjaRinc extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TaRkasBelanja::className(), ['Tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'kd_program' => 'kd_program', 'kd_sub_program' => 'kd_sub_program', 'kd_kegiatan' => 'kd_kegiatan', 'Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']);
     }
+
     public function getRefRek5()
     {
         return $this->hasOne(RefRek5::className(), ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3', 'Kd_Rek_4' => 'Kd_Rek_4', 'Kd_Rek_5' => 'Kd_Rek_5']);
+    }
+
+    public function getRefRek3()
+    {
+        return $this->hasOne(RefRek3::className(), ['Kd_Rek_1' => 'Kd_Rek_1', 'Kd_Rek_2' => 'Kd_Rek_2', 'Kd_Rek_3' => 'Kd_Rek_3']);
+    }
+
+    public function getKomponen()
+    {
+        return $this->hasOne(RefKomponenBos::className(), ['id' => 'komponen_id']);
+    }
+
+    public function getSekolah()
+    {
+        return $this->hasOne(RefSekolah::className(), ['id' => 'sekolah_id']);
+    }
+
+    public function getPenerimaan2()
+    {
+        return $this->hasOne(\app\models\RefPenerimaanSekolah2::className(), ['kd_penerimaan_1' => 'kd_penerimaan_1', 'kd_penerimaan_2' => 'kd_penerimaan_2']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRefKegiatan()
+    {
+        return $this->hasOne(RefKegiatanSekolah::className(), ['kd_program' => 'kd_program', 'kd_sub_program' => 'kd_sub_program', 'kd_kegiatan' => 'kd_kegiatan']);
+    }
+
+    public function getRefProgram()
+    {
+        return $this->hasOne(RefProgramSekolah::className(), ['kd_program' => 'kd_program']);
+    }  
+
+    public function getRefSubProgram()
+    {
+        return $this->hasOne(RefSubProgramSekolah::className(), ['kd_program' => 'kd_program', 'kd_sub_program' => 'kd_sub_program']);
     }    
 }
