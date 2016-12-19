@@ -8,8 +8,9 @@ use yii\bootstrap\Modal;
 /* @var $searchModel app\modules\penatausahaan\models\TaSPJRincSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Penerimaan';
+$this->title = 'Belanja Tidak Langsung';
 $this->params['breadcrumbs'][] = 'Penatausahaan';
+$this->params['breadcrumbs'][] = ['label' => 'Belanja', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ta-spjrinc-index">
@@ -17,11 +18,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Tambah Bukti Penerimaan', ['create'], [
+        <?= Html::a('Tambah Bukti Belanja', ['createbtl'], [
                                                     'class' => 'btn btn-xs btn-success',
                                                     'data-toggle'=>"modal",
                                                     'data-target'=>"#myModal",
-                                                    'data-title'=>"Tambah Bukti Penerimaan",
+                                                    'data-title'=>"Tambah Bukti Belanja",
                                                     ]) ?>
     </p>
     <?= GridView::widget([
@@ -50,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
             [
-                'label' => 'Jenis Pendapatan',
+                'label' => 'Jenis Belanja',
                 'value' => function($model){
                     return $model->refRek5->Nm_Rek_5;
                 }
@@ -61,11 +62,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'nilai:decimal',
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {update} {delete}',
+                'template' => '{view} {updatebtl} {delete}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
-                        'update' => function ($url, $model) {
+                        'updatebtl' => function ($url, $model) {
                           IF($model->no_spj == NULL)
                           return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
                               [  

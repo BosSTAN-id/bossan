@@ -17,23 +17,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Tambah Belanja', ['create'], [
-                                                    'class' => 'btn btn-xs btn-success',
-                                                    'data-toggle'=>"modal",
-                                                    'data-target'=>"#myModal",
-                                                    'data-title'=>"Tambah Bukti Penerimaan",
-                                                    ]) ?>
-    </p>
     <?= GridView::widget([
-        'id' => 'ta-spjrinc',    
+        'id' => 'ta-rkas-kegiatan',    
         'dataProvider' => $dataProvider,
         'export' => false, 
         'responsive'=>true,
         'hover'=>true,     
         'resizableColumns'=>true,
         'panel'=>['type'=>'primary', 'heading'=>$this->title],
-        'responsiveWrap' => false,        
+        'responsiveWrap' => false,
         'toolbar' => [
             [
                 // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
@@ -45,58 +37,78 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'pjax'=>true,
         'pjaxSettings'=>[
-            'options' => ['id' => 'penerimaan-pjax', 'timeout' => 5000],
+            'options' => ['id' => 'kegiatan-pjax', 'timeout' => 5000],
         ],        
         // 'filterModel' => $searchModel,
+        'rowOptions'   => function ($model, $key, $index, $grid) {
+            return ['data-id' => $model->tahun.'.'.$model->sekolah_id.'.'.$model->kd_program.'.'.$model->kd_sub_program.'.'.$model->kd_kegiatan];
+        },        
         'columns' => [
-            ['class' => 'kartik\grid\SerialColumn'],
+            // 'sekolah_id',        
             [
-                'label' => 'Jenis Pendapatan',
+                'label' => 'Kd Kegiatan',
                 'value' => function($model){
-                    return $model->refRek5->Nm_Rek_5;
+                    return $model->kd_program.'.'.substr('0'.$model->kd_sub_program, -2).'.'.substr('0'.$model->kd_kegiatan, -2);
                 }
             ],
-            'no_bukti',
-            'tgl_bukti',            
-            'uraian',
-            'nilai',
+            'refProgram.uraian_program',
+            'refSubProgram.uraian_sub_program',
+            'refKegiatan.uraian_kegiatan',
+            [
+                'label' => 'Sumber Dana',
+                'value' => function($model){
+                    return $model->penerimaan2->uraian;
+                }
+            ],
+            'pagu_anggaran:decimal',
+            // 'kd_penerimaan_1',
+            // 'kd_penerimaan_2',
+
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {update} {delete}',
+                'template' => '{blbelanja}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
                         'update' => function ($url, $model) {
-                          IF($model->no_spj == NULL)
                           return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
                               [  
                                  'title' => Yii::t('yii', 'ubah'),
                                  'data-toggle'=>"modal",
-                                 'data-target'=>"#myModal",
-                                 'data-title'=> "Ubah Bukti",                                 
+                                 'data-target'=>"#myModalubah",
+                                 'data-title'=> "Ubah Kegiatan",                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',
                                  // 'data-pjax' => 1
                               ]);
                         },
-                        'view' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,
+                        'blbelanja' => function ($url, $model) {
+                          return Html::a('Belanja <i class="glyphicon glyphicon-menu-right"></i>', $url,
                               [  
-                                 'title' => Yii::t('yii', 'lihat'),
-                                 'data-toggle'=>"modal",
-                                 'data-target'=>"#myModal",
-                                 'data-title'=> "Bukti".$model->no_bukti,                                 
+                                 'title' => Yii::t('yii', 'Input Belanja'),
+                                 'class'=>"btn btn-xs btn-default",                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
+                                 'data-pjax' => 0
                               ]);
-                      }
+                        },
                 ]
             ],
         ],
     ]); ?>
 </div>
-<?php Modal::begin([
+<?php
+//row click link
+$this->registerJs("
+
+    $('td').click(function (e) {
+        var id = $(this).closest('tr').data('id').split('.');
+        if(e.target == this)
+            location.href = '" . \Yii\helpers\Url::to(['blbelanja']) . "?tahun=' + id[0] +'&sekolah_id=' + id[1] +'&kd_program=' + id[2] +'&kd_sub_program=' + id[3] +'&kd_kegiatan=' + id[4];
+    });
+
+");
+Modal::begin([
     'id' => 'myModal',
     'header' => '<h4 class="modal-title">Lihat lebih...</h4>',
         'options' => [

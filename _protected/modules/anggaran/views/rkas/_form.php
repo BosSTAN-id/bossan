@@ -67,7 +67,16 @@ use kartik\widgets\DepDrop;
             ]);
     ?>     
 
-    <?= $form->field($model, 'pagu_anggaran')->textInput(['maxlength' => true]) ?>   
+    <?= $form->field($model, 'pagu_anggaran', ['enableClientValidation' => false])->widget(\yii\widgets\MaskedInput::classname(), [
+            'clientOptions' => [
+                'alias' =>  'decimal',
+                // 'groupSeparator' => ',',
+                'groupSeparator' => '.',
+                'radixPoint'=>',',                
+                'autoGroup' => true,
+                'removeMaskOnSubmit' => true,
+            ],
+    ]) ?>    
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Simpan' : 'Simpan', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

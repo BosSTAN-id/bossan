@@ -96,7 +96,7 @@ use yii\widgets\DetailView;
                                  'title' => Yii::t('yii', 'ubah'),
                                  'data-toggle'=>"modal",
                                  'data-target'=>"#myModalrinciubah",
-                                 'data-title'=> "Ubah Belanja",                                 
+                                 'data-title'=> "Ubah Rincian Belanja",                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',
                                  // 'data-pjax' => 1

@@ -15,7 +15,7 @@ $tahun = $connection->createCommand('SELECT Tahun FROM ta_th GROUP BY Tahun')->q
         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
             <!--<img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/> -->
-            <span class"pull-left"><B>  SD 81 BANYUASIN III</B></span>
+            <span class"pull-left"><B>  <?= Yii::$app->user->identity->sekolah_id == NULL ? 'PEMERINTAH KABUPATEN BANYUASIN' : strtoupper(Yii::$app->user->identity->refSekolah->nama_sekolah) ?></B></span>
         </a>
 
         <div class="navbar-custom-menu">
