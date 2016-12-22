@@ -113,7 +113,7 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         }ELSE{
             $Tahun = DATE('Y');
         }   
-        return $this->render('view', [
+        return $this->renderAjax('view', [
             'model' => $this->findModel(<?= $actionParams ?>),
         ]);
     }

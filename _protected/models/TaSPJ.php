@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "ta_spj".
@@ -25,8 +26,7 @@ use Yii;
  * @property string $jbt_bendahara
  * @property string $jbt_pengesahan
  * @property string $tgl_pengesahan
- *
- * @property TaSpjRinc[] $taSpjRincs
+ * @property integer $kd_verifikasi
  */
 class TaSPJ extends \yii\db\ActiveRecord
 {
@@ -46,7 +46,7 @@ class TaSPJ extends \yii\db\ActiveRecord
         return [
             [['tahun', 'no_spj', 'sekolah_id', 'tgl_spj', 'no_bku'], 'required'],
             [['tahun', 'tgl_spj', 'tgl_pengesahan'], 'safe'],
-            [['sekolah_id', 'no_bku', 'kd_sah', 'created_at', 'updated_at', 'user_id'], 'integer'],
+            [['sekolah_id', 'no_bku', 'kd_sah', 'created_at', 'updated_at', 'user_id', 'kd_verifikasi'], 'integer'],
             [['no_spj', 'no_pengesahan', 'nip_pengesahan', 'nm_bendahara'], 'string', 'max' => 50],
             [['keterangan', 'jbt_bendahara', 'jbt_pengesahan'], 'string', 'max' => 255],
             [['disahkan_oleh'], 'string', 'max' => 100],
@@ -54,6 +54,13 @@ class TaSPJ extends \yii\db\ActiveRecord
         ];
     }
 
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className(),
+        ];
+    } 
+    
     /**
      * @inheritdoc
      */
@@ -61,31 +68,24 @@ class TaSPJ extends \yii\db\ActiveRecord
     {
         return [
             'tahun' => 'Tahun',
-            'no_spj' => 'No Spj',
+            'no_spj' => 'No SPJ',
             'sekolah_id' => 'Sekolah ID',
             'tgl_spj' => 'Tgl Spj',
-            'no_bku' => 'No Bku',
+            'no_bku' => 'No BKU',
             'keterangan' => 'Keterangan',
             'kd_sah' => 'Kd Sah',
             'no_pengesahan' => 'No Pengesahan',
             'disahkan_oleh' => 'Disahkan Oleh',
-            'nip_pengesahan' => 'Nip Pengesahan',
+            'nip_pengesahan' => 'NIP Pengesahan',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'user_id' => 'User ID',
-            'nm_bendahara' => 'Nm Bendahara',
-            'nip_bendahara' => 'Nip Bendahara',
-            'jbt_bendahara' => 'Jbt Bendahara',
+            'nm_bendahara' => 'Nama Bendahara',
+            'nip_bendahara' => 'NIP Bendahara',
+            'jbt_bendahara' => 'Jabatan',
             'jbt_pengesahan' => 'Jbt Pengesahan',
             'tgl_pengesahan' => 'Tgl Pengesahan',
+            'kd_verifikasi' => 'Kd Verifikasi',
         ];
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTaSpjRincs()
-    {
-        return $this->hasMany(TaSpjRinc::className(), ['tahun' => 'tahun', 'no_spj' => 'no_spj']);
     }
 }
