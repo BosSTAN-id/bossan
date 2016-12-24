@@ -49,6 +49,8 @@ class TaRkasHistory extends \yii\db\ActiveRecord
         return 'ta_rkas_history';
     }
 
+    public $kode_kegiatan;
+
     /**
      * @inheritdoc
      */
@@ -117,4 +119,23 @@ class TaRkasHistory extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TaRkasPeraturan::className(), ['tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'perubahan_id' => 'perubahan_id']);
     }
+
+    public function getKodekegiatan(){
+        return $this->kd_program.'.'.$this->kd_sub_program.'.'.$this->kd_kegiatan;
+    }
+
+    public function getPenerimaan2()
+    {
+        return $this->hasOne(\app\models\RefPenerimaanSekolah2::className(), ['kd_penerimaan_1' => 'kd_penerimaan_1', 'kd_penerimaan_2' => 'kd_penerimaan_2']);
+    }
+
+    public function getRefprogram()
+    {
+        return $this->hasOne(RefProgramSekolah::className(), ['kd_program' => 'kd_program']);
+    } 
+
+    public function getRefKegiatan()
+    {
+        return $this->hasOne(RefKegiatanSekolah::className(), ['kd_program' => 'kd_program', 'kd_sub_program' => 'kd_sub_program', 'kd_kegiatan' => 'kd_kegiatan']);
+    }     
 }

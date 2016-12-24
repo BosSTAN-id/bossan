@@ -57,7 +57,7 @@
 	04 => pengadaanaset
 	05 => daftar aset tetap (asetetap)
 	06 => belanja
-	07 => 
+	07 => saldoawal
 	08 => 
 	09 => 
 	10 => 

@@ -12,10 +12,14 @@ use yii\data\ActiveDataProvider;
 class Laporan extends Model
 {
     public $Kd_Laporan;
-    public $Kd_Urusan;
+    public $Kd_Sumber;
     public $Kd_Bidang;
     public $Kd_Unit;
     public $Kd_Sub;
+    public $Tgl_1;
+    public $Tgl_2;
+    public $Tgl_Laporan;
+    public $perubahan_id;
 
     public function rules()
     {

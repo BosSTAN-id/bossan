@@ -181,39 +181,6 @@ ActiveForm::end();
             'tgl_bukti',            
             'uraian',
             'nilai:decimal',
-            [
-                'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {updatebl} {delete}',
-                'noWrap' => true,
-                'vAlign'=>'top',
-                'buttons' => [
-                        'updatebl' => function ($url, $model) {
-                          IF($model->no_spj == NULL)
-                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'ubah'),
-                                 'data-toggle'=>"modal",
-                                 'data-target'=>"#myModal",
-                                 'data-title'=> "Ubah Bukti",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
-                        },
-                        'view' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'lihat'),
-                                 'data-toggle'=>"modal",
-                                 'data-target'=>"#myModal",
-                                 'data-title'=> "Bukti".$model->no_bukti,                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
-                      }
-                ]
-            ],
         ],
     ]);
     } ?>

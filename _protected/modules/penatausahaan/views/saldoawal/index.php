@@ -5,19 +5,27 @@ use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\penatausahaan\models\TaSPJSearch */
+/* @var $searchModel app\modules\penatausahaan\models\TaSaldoAwalSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Verifikasi SPJ';
-$this->params['breadcrumbs'][] = 'Penatausahaan';
+$this->title = 'Ta Saldo Awals';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="ta-spj-index">
+<div class="ta-saldo-awal-index">
 
+    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
+    <p>
+        <?= Html::a('Tambah Ta Saldo Awal', ['create'], [
+                                                    'class' => 'btn btn-xs btn-success',
+                                                    'data-toggle'=>"modal",
+                                                    'data-target'=>"#myModal",
+                                                    'data-title'=>"Tambah Referensi Transfer",
+                                                    ]) ?>
+    </p>
     <?= GridView::widget([
-        'id' => 'ta-spj',    
+        'id' => 'ta-saldo-awal',    
         'dataProvider' => $dataProvider,
         'export' => false, 
         'responsive'=>true,
@@ -27,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'responsiveWrap' => false,        
         'toolbar' => [
             [
-                // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
+                'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
             ],
         ],       
         'pager' => [
@@ -36,49 +44,37 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'pjax'=>true,
         'pjaxSettings'=>[
-            'options' => ['id' => 'ta-spj-pjax', 'timeout' => 5000],
-        ],
-        'rowOptions'   => function ($model, $key, $index, $grid) {
-            return ['data-id' => $model->tahun.'~'.$model->no_spj];
-        },             
+            'options' => ['id' => 'ta-saldo-awal-pjax', 'timeout' => 5000],
+        ],        
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'tahun',
-            'no_spj',
             'sekolah_id',
-            'tgl_spj',
-            'no_bku',
-            // 'keterangan',
-            // 'kd_sah',
-            // 'no_pengesahan',
-            // 'disahkan_oleh',
-            // 'nip_pengesahan',
-            // 'created_at',
-            // 'updated_at',
-            // 'user_id',
-            // 'nm_bendahara',
-            // 'nip_bendahara',
-            // 'jbt_bendahara',
-            // 'jbt_pengesahan',
-            // 'tgl_pengesahan',
-            // 'kd_verifikasi',
+            'keterangan',
+            'nilai',
+            'Kd_Rek_1',
+            // 'Kd_Rek_2',
+            // 'Kd_Rek_3',
+            // 'Kd_Rek_4',
+            // 'Kd_Rek_5',
+            // 'kd_penerimaan_1',
+            // 'kd_penerimaan_2',
 
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {update} {spjbukti}',
+                'template' => '{view} {update} {delete}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
                         'update' => function ($url, $model) {
-                          IF($model->kd_sah <> 2)
-                            return Html::a('<span class="glyphicon glyphicon-ok"></span>', $url,
+                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
                               [  
-                                 'title' => Yii::t('yii', 'Setuju'),
+                                 'title' => Yii::t('yii', 'ubah'),
                                  'data-toggle'=>"modal",
                                  'data-target'=>"#myModalubah",
-                                 'data-title'=> "Verifikasi SPJ ".$model->no_spj,                                 
+                                 'data-title'=> "Ubah",                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',
                                  // 'data-pjax' => 1
@@ -90,36 +86,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                  'title' => Yii::t('yii', 'lihat'),
                                  'data-toggle'=>"modal",
                                  'data-target'=>"#myModalubah",
-                                 'data-title'=> "SPJ ".$model->no_spj,
+                                 'data-title'=> "Lihat",
                               ]);
-                        },
-                        'spjbukti' => function ($url, $model) {
-                          return Html::a('Bukti SPJ <i class="glyphicon glyphicon-menu-right"></i>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'Bukti SPJ'),
-                                 'class'=>"btn btn-xs btn-default",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 'data-pjax' => 0
-                              ]);
-                        },                                               
+                        },                        
                 ]
             ],
         ],
     ]); ?>
 </div>
-<?php
-//row click link
-$this->registerJs("
-
-    $('td').click(function (e) {
-        var id = $(this).closest('tr').data('id').split('~');
-        if(e.target == this)
-            location.href = '" . \Yii\helpers\Url::to(['spjbukti']) . "?tahun=' + id[0] +'&no_spj=' + id[1];
-    });
-
-");
-Modal::begin([
+<?php Modal::begin([
     'id' => 'myModal',
     'header' => '<h4 class="modal-title">Lihat lebih...</h4>',
         'options' => [
