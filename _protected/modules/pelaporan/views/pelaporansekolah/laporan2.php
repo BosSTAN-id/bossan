@@ -9,20 +9,21 @@ use yii\web\Controller;
 ?>
 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+<?php 
+    echo GridView::widget([
         'dataProvider' => $data,
         //'filterModel' => $searchModel,
         // 'export' => true, 
         'responsive'=>true,
         'hover'=>true,     
         'resizableColumns'=>false,
-        'panel'=>['type'=>'primary', 'heading'=>'Rekapitulasi Kontrol Anggaran Utang'],
+        'panel'=>['type'=>'primary', 'heading'=> $heading],
         'responsiveWrap' => false,        
         'toolbar' => [
             '{toggleData}',
             '{export}',
         [
-            'content' => Yii::$app->user->identity->Kd_Urusan ? '' : $this->render('_skpd'),
+            // 'content' => Yii::$app->user->identity->Kd_Urusan ? '' : $this->render('_skpd'),
         ],
         ],       
         'pager' => [
@@ -35,12 +36,16 @@ use yii\web\Controller;
         ],
         'showPageSummary'=>true,         
         'columns' => [
-            ['class' => 'kartik\grid\SerialColumn'],            
+            // ['class' => 'kartik\grid\SerialColumn'],            
             [
-                'label' => 'Kegiatan',
+                'label' => 'Jenis',
                 'width'=>'20%',
                 'value' =>function($model){
-                    return $model->Kd_Prog.'.'.$model->Kd_Keg.' '.$model->taKegiatan->Ket_Kegiatan;
+                    IF($model['Kd_Rek_1'] == 4){
+                        return 'Pendapatan';
+                    }ELSE{
+                        return 'Belanja';
+                    }
                 },
                 'group'=>true,  // enable grouping,
                 // 'groupedRow'=>true,                    // move grouped column to a single grouped row
@@ -48,32 +53,49 @@ use yii\web\Controller;
                 // 'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
             ],
             [
-                'label' => 'Rekening 5',
+                'label' => 'Kode',
                 'width'=>'20%',
                 'value' =>function($model){
-                    return $model->Kd_Rek_1.'.'.$model->Kd_Rek_2.'.'.$model->Kd_Rek_3.'.'.$model->Kd_Rek_4.'.'.$model->Kd_Rek_5.' '.$model->refRek5->Nm_Rek_5;
+                    return $model['kd_program'].'.'.substr('0'.$model['kd_sub_program'], -2).'.'.substr('0'.$model['kd_kegiatan'], -2);
                 },
-                'group'=>true,  // enable grouping,
+                // 'group'=>true,  // enable grouping,
+                // 'groupedRow'=>true,                    // move grouped column to a single grouped row
+                // 'groupOddCssClass'=>'kv-grouped-row',  // configure odd group cell css class
+                // 'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
+            ],            
+            [
+                'label' => 'Program',
+                'width'=>'20%',
+                'value' =>function($model){
+                    return $model['uraian_program'];
+                },
+                // 'group'=>true,  // enable grouping,
                 // 'groupedRow'=>true,                    // move grouped column to a single grouped row
                 // 'groupOddCssClass'=>'kv-grouped-row',  // configure odd group cell css class
                 // 'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
             ],
             [
-                'label' => 'Rincian Belanja', 
+                'label' => 'Sub Program',
                 'width'=>'20%',
-                'value' => 'Keterangan_Rinc',               
-                'group'=>true,  // enable grouping,
+                'value' =>function($model){
+                    return $model['uraian_sub_program'];
+                },
+                // 'group'=>true,  // enable grouping,
                 // 'groupedRow'=>true,                    // move grouped column to a single grouped row
                 // 'groupOddCssClass'=>'kv-grouped-row',  // configure odd group cell css class
                 // 'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
             ],
             [
-                'label' => 'Sub Rincian', 
+                'label' => 'Kegiatan', 
                 'width'=>'20%',
-                'value' => 'Keterangan',
+                'value' => 'uraian_kegiatan',               
+                // 'group'=>true,  // enable grouping,
+                // 'groupedRow'=>true,                    // move grouped column to a single grouped row
+                // 'groupOddCssClass'=>'kv-grouped-row',  // configure odd group cell css class
+                // 'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
             ],
             [
-                'attribute'=>'Total',
+                'attribute'=>'anggaran',
                 'width'=>'5%',
                 'noWrap' => true,
                 'hAlign'=>'right',
@@ -81,12 +103,37 @@ use yii\web\Controller;
                 'pageSummary'=>true
             ],
             [
-                'attribute'=>'No_SPH',
+                'attribute'=>'TW1',
                 'noWrap' => true,                
                 'width'=>'5%',
                 'hAlign'=>'right',
+                'format'=>['decimal', 0],
                 'pageSummary'=>true
             ],
+            [
+                'attribute'=>'TW2',
+                'noWrap' => true,                
+                'width'=>'5%',
+                'hAlign'=>'right',
+                'format'=>['decimal', 0],
+                'pageSummary'=>true
+            ],
+            [
+                'attribute'=>'TW3',
+                'noWrap' => true,                
+                'width'=>'5%',
+                'hAlign'=>'right',
+                'format'=>['decimal', 0],
+                'pageSummary'=>true
+            ],
+            [
+                'attribute'=>'TW4',
+                'noWrap' => true,                
+                'width'=>'5%',
+                'hAlign'=>'right',
+                'format'=>['decimal', 0],
+                'pageSummary'=>true
+            ],                                    
         ],
-    ]); ?>
-<?php Pjax::end(); ?>
+    ]); 
+?>
