@@ -23,9 +23,9 @@ $this->title = Yii::t('app', Yii::$app->name);
 <div class="site-index">
 
     <div class="well">
-        <h3>Selamat Datang di Si-Imut!</h3>
+        <h3>Selamat Datang di BosSTAN!</h3>
 
-        <p class="lead">Tulis Disini ya...</p>
+        <p class="lead">Sistem Pengelolaan Pertanggungjawaban dana BOS Kabupaten Banyuasin...</p>
 
     </div>
 

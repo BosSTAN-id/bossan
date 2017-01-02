@@ -20,19 +20,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php 
 	                switch ($Kd_Laporan) {
 	                    case 1:
-	                        $heading = 'Rencana Kegiatan dan Anggaran Sekolah (RKAS) Tahun Anggaran '.$Tahun;
+	                        $heading = 'BOS-K1 Rencana Kegiatan dan Anggaran Sekolah (RKAS) Tahun Anggaran '.$Tahun;
 	                        break;
 	                    case 2:
-	                        $heading = 'Rekapitulasi Kontrol Anggaran Utang';
+	                        $heading = 'BOS-K2 Rencana Kegiatan dan Anggaran '.$Tahun;
 	                        break;	                	
 	                    case 3:
-	                        $heading = 'Rekapitulasi RPH';
+	                        $heading = 'BOS-K3 Buku Kas Umum '.$Tahun;
 	                        break;
 	                    case 4:
-	                        $heading = 'Rekapitulasi Saldo Utang Berjalan';
+	                        $heading = 'BOS-K4 Buku Pembantu Kas Tunai '.$Tahun;
 	                        break;
                         case 5:
-                            $heading = 'Rekapitulasi Realisasi Utang';
+                            $heading = 'BOS-K5 Buku Pembantu Kas Bank '.$Tahun;
+                            break;
+                        case 6:
+                            $heading = 'BOS-K7 Realisasi Penggunaan Dana Tiap Jenis Anggaran '.$Tahun;
+                            break;
+                        case 7:
+                            $heading = 'BOS-K7A Realisasi Penggunaan Dana Tiap Komponen BOS '.$Tahun;
                             break;
 	                    default:
 	                        # code...
