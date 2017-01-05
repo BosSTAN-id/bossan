@@ -666,7 +666,20 @@ class BelanjaController extends Controller
                 $result = 0;
                 Yii::$app->getSession()->setFlash('warning',  'Sisa Kas tidak mencukupi! Sisa Kas Untuk pembayaran '.$metode.' '.number_format($sisa_kas['nilai'], 0, ',', '.').' pembayaran diajukan senilai '.number_format($model->nilai, 0, ',', '.'));
                 return $this->redirect(Yii::$app->request->referrer);              
-            }        
+            }
+            $komponen_id = \app\models\TaRkasHistory::find()->where("perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE sekolah_id = ".$model->sekolah_id." AND tahun = $Tahun AND tgl_peraturan <= '".$model->tgl_bukti."')")->andWhere([
+                    'tahun' => $Tahun,
+                    'sekolah_id' => $sekolah_id,
+                    'kd_program' => $kd_program,
+                    'kd_sub_program' => $kd_sub_program,
+                    'kd_kegiatan' => $kd_kegiatan,
+                    'Kd_Rek_1' => $model->Kd_Rek_1,
+                    'Kd_Rek_2' => $model->Kd_Rek_2,
+                    'Kd_Rek_3' => $model->Kd_Rek_3,
+                    'Kd_Rek_4' => $model->Kd_Rek_4,
+                    'Kd_Rek_5' => $model->Kd_Rek_5,
+                ])->one();
+            $model->komponen_id = $komponen_id['komponen_id'];
             IF($model->save() && $result == 1){
                 echo 1;
             }ELSE{

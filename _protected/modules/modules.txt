@@ -67,8 +67,8 @@
 	01 => pelaporansekolah
 	02 => pelaporankabupaten
 	03 => verpemda
-	04 => 
-	05 => 
+	04 => SP3B
+	05 => SP2B
 	06 => 
 	07 => 
 	08 => 
