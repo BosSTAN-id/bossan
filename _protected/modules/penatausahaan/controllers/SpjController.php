@@ -79,6 +79,29 @@ class SpjController extends Controller
         ]);
     }
 
+    public function actionPrint($tahun, $no_spj)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = $this->findModel($tahun, $no_spj);
+        //find all bukti
+        $bukti = $this->findBukti($tahun, $no_spj);
+
+        return $this->renderAjax('view', [
+            'model' => $model,
+            'bukti' => $bukti,
+        ]);
+    }    
+
     public function actionSpjbukti($tahun, $no_spj)
     {
         IF($this->cekakses() !== true){
@@ -281,6 +304,16 @@ class SpjController extends Controller
         }
     }
 
+    protected function findBukti($tahun, $no_spj)
+    {
+        if (($model = \app\models\TaSPJRinc::find()->where(['tahun' => $tahun, 'no_spj' => $no_spj])
+        ->orderBy('tgl_bukti, no_bukti, kd_program, kd_sub_program, kd_kegiatan, Kd_Rek_1, Kd_Rek_2, Kd_Rek_3, Kd_Rek_4, Kd_Rek_5')
+        ->all() ) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }   
 
     protected function cekakses(){
 

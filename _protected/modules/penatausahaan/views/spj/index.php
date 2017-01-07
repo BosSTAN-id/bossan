@@ -75,21 +75,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {update} {delete} {spjbukti}',
+                'template' => '{print} {view} {update} {delete} {spjbukti}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
+                        'print' => function($url, $model){
+                            return  Html::a('<i class="glyphicon glyphicon-print bg-white"></i>', $url, ['onClick' => "return !window.open(this.href, 'SPJ', 'width=1024,height=768')"]);
+                        },
                         'update' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'ubah'),
-                                 'data-toggle'=>"modal",
-                                 'data-target'=>"#myModalubah",
-                                 'data-title'=> "Ubah SPJ ".$model->no_spj,                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
+                          IF($model->kd_sah == 1 ){
+                              return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
+                                [  
+                                    'title' => Yii::t('yii', 'ubah'),
+                                    'data-toggle'=>"modal",
+                                    'data-target'=>"#myModalubah",
+                                    'data-title'=> "Ubah SPJ ".$model->no_spj,                                 
+                                    // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                    // 'data-method' => 'POST',
+                                    // 'data-pjax' => 1
+                                ]);
+                          }
                         },
                         'view' => function ($url, $model) {
                           return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,
