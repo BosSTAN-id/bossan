@@ -1461,12 +1461,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-dynagrid.git",
-                "reference": "69432af2ccab6b07e4f75a569246f52965511279"
+                "reference": "8d71c779588f217188e00bf192eec77532a3b6eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-dynagrid/zipball/69432af2ccab6b07e4f75a569246f52965511279",
-                "reference": "69432af2ccab6b07e4f75a569246f52965511279",
+                "url": "https://api.github.com/repos/kartik-v/yii2-dynagrid/zipball/8d71c779588f217188e00bf192eec77532a3b6eb",
+                "reference": "8d71c779588f217188e00bf192eec77532a3b6eb",
                 "shasum": ""
             },
             "require": {
@@ -1513,7 +1513,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-12-09 16:31:08"
+            "time": "2017-01-07 03:31:27"
         },
         {
             "name": "kartik-v/yii2-field-range",
@@ -1930,12 +1930,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-tree-manager.git",
-                "reference": "6d38f5b50c16e6fa576b7381f876c6d4c05c3db4"
+                "reference": "62fa89456956da95bd67a82d06ec3f386138fb3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-tree-manager/zipball/6d38f5b50c16e6fa576b7381f876c6d4c05c3db4",
-                "reference": "6d38f5b50c16e6fa576b7381f876c6d4c05c3db4",
+                "url": "https://api.github.com/repos/kartik-v/yii2-tree-manager/zipball/62fa89456956da95bd67a82d06ec3f386138fb3e",
+                "reference": "62fa89456956da95bd67a82d06ec3f386138fb3e",
                 "shasum": ""
             },
             "require": {
@@ -1979,7 +1979,7 @@
                 "tree",
                 "treeview"
             ],
-            "time": "2017-01-05 12:31:11"
+            "time": "2017-01-07 05:09:19"
         },
         {
             "name": "kartik-v/yii2-widget-activeform",

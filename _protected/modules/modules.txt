@@ -119,3 +119,81 @@ Akuntansi (akuntansi ada pilihan untuk tanggal)
 			Rekapitulasi Kontrol Anggaran Utang 2
 			Rekapitulasi daftar Kontrak Dana Transfer 4
 			Rekapitulasi Realisasi Pembayaran Kontrak Dana Transfer 5
+
+spj
+SET @p_tahun = 2016;
+SET @p_sekolah = 1;
+SET @p_perubahan = 4;
+SET @p_tgl1 = '2016-01-01';
+SET @p_tgl2 = '2016-06-31';
+SET @p_penerimaan1 = '%';
+SET @p_penerimaan2 = '%';
+SET @no_spj = '1/2.1.1.3/SMPN3BA3/2016';
+
+SELECT a.tahun, a.sekolah_id, a.kd_program, c.uraian_program, a.kd_sub_program, d.uraian_sub_program, a.kd_kegiatan, e.uraian_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.anggaran,
+IFNULL(f.nilai,0) AS spjlalu, IFNULL(g.nilai,0) AS spjini, (IFNULL(f.nilai,0) + IFNULL(g.nilai,0)) AS sdspjini, (a.anggaran - (IFNULL(f.nilai,0) + IFNULL(g.nilai,0))) AS sisa_anggaran
+FROM
+(
+	SELECT 
+	a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.anggaran, b.nilai
+	FROM
+	(
+		SELECT
+		a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, SUM(a.total) AS anggaran
+		FROM
+		ta_rkas_history a
+		WHERE a.tahun = @p_tahun AND a.sekolah_id = @p_sekolah AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = @p_tahun AND sekolah_id = 1 AND tgl_peraturan <= @p_tgl2)
+		AND IFNULL(a.kd_penerimaan_1, '') LIKE @p_penerimaan1 AND IFNULL(a.kd_penerimaan_2, '') LIKE @p_penerimaan2
+		GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
+	)a INNER JOIN
+	(
+		SELECT a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, SUM(a.nilai) AS nilai
+		FROM ta_spj_rinc a WHERE a.tahun = @p_tahun AND a.sekolah_id = @p_sekolah AND a.tgl_bukti <= @p_tgl2 AND a.no_spj IS NOT NULL
+		GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
+	)b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan
+		AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
+) a 
+-- Untuk saldo s/d spj lalu
+LEFT JOIN
+(
+	SELECT
+	a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5,
+	SUM(a.nilai) AS nilai
+	FROM
+	ta_spj_rinc AS a
+	LEFT JOIN
+	(
+		SELECT 
+		a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+		FROM ta_rkas_history a 
+		WHERE a.tahun = @p_tahun AND a.sekolah_id = @p_sekolah AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = @p_tahun AND sekolah_id = 1 AND tgl_peraturan <= @p_tgl2)
+		GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+	) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+	AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
+	WHERE a.tahun = @p_tahun AND a.sekolah_id = @p_sekolah AND a.tgl_bukti <= @p_tgl2 AND a.no_spj IS NOT NULL AND a.no_spj <> @no_spj
+	GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
+) f ON a.tahun = f.tahun AND a.sekolah_id = f.sekolah_id AND a.kd_program = f.kd_program AND a.kd_sub_program = f.kd_sub_program AND a.kd_kegiatan = f.kd_kegiatan AND a.Kd_Rek_1 = f.Kd_Rek_1 AND a.Kd_rek_2 = f.Kd_Rek_2 AND a.Kd_Rek_3 = f.Kd_Rek_3 AND a.Kd_Rek_4 = f.Kd_Rek_4 AND a.Kd_Rek_5 = f.Kd_Rek_5
+-- Untuk saldo s/d spj saat ini
+LEFT JOIN
+(
+	SELECT
+	a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5,
+	SUM(a.nilai) AS nilai
+	FROM
+	ta_spj_rinc AS a
+	LEFT JOIN
+	(
+		SELECT 
+		a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+		FROM ta_rkas_history a 
+		WHERE a.tahun = @p_tahun AND a.sekolah_id = @p_sekolah AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = @p_tahun AND sekolah_id = 1 AND tgl_peraturan <= @p_tgl2)
+		GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+	) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+	AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
+	WHERE a.tahun = @p_tahun AND a.sekolah_id = @p_sekolah AND a.tgl_bukti <= @p_tgl2 AND a.no_spj = @no_spj
+	GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
+) g ON a.tahun = g.tahun AND a.sekolah_id = g.sekolah_id AND a.kd_program = g.kd_program AND a.kd_sub_program = g.kd_sub_program AND a.kd_kegiatan = g.kd_kegiatan AND a.Kd_Rek_1 = g.Kd_Rek_1 AND a.Kd_rek_2 = g.Kd_Rek_2 AND a.Kd_Rek_3 = g.Kd_Rek_3 AND a.Kd_Rek_4 = g.Kd_Rek_4 AND a.Kd_Rek_5 = g.Kd_Rek_5
+LEFT JOIN ref_program_sekolah c ON a.kd_program = c.kd_program
+LEFT JOIN ref_sub_program_sekolah d ON a.kd_program = d.kd_program AND a.kd_sub_program = d.kd_sub_program
+LEFT JOIN ref_kegiatan_sekolah e ON a.kd_program = e.kd_program AND a.kd_sub_program = e.kd_sub_program AND a.kd_kegiatan = e.kd_kegiatan
+ORDER BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5 ASC;
