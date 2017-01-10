@@ -125,21 +125,21 @@ echo TabularForm::widget([
         'panel' => [
             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> Bukti Untuk SPJ '.$model->no_spj.'</h3>',
             'type' => GridView::TYPE_PRIMARY,
-            'after'=> 
-                // Html::a(
-                //     '<i class="glyphicon glyphicon-plus"></i> Set Bukti SPJ', 
-                //     ['assign'], 
-                //     ['class'=>'btn btn-xs btn-success']
-                // ) . '&nbsp;' . 
-                // Html::a(
-                //     '<i class="glyphicon glyphicon-remove"></i> Delete', 
-                //     $deleteUrl, 
-                //     ['class'=>'btn btn-danger']
-                // ) . '&nbsp;' .
-                Html::submitButton(
-                    '<i class="glyphicon glyphicon-floppy-disk"></i> Tambahkan Bukti', 
-                    ['class'=>'btn btn-xs btn-success']
-                )
+            // 'after'=> 
+            //     // Html::a(
+            //     //     '<i class="glyphicon glyphicon-plus"></i> Set Bukti SPJ', 
+            //     //     ['assign'], 
+            //     //     ['class'=>'btn btn-xs btn-success']
+            //     // ) . '&nbsp;' . 
+            //     // Html::a(
+            //     //     '<i class="glyphicon glyphicon-remove"></i> Delete', 
+            //     //     $deleteUrl, 
+            //     //     ['class'=>'btn btn-danger']
+            //     // ) . '&nbsp;' .
+            //     Html::submitButton(
+            //         '<i class="glyphicon glyphicon-floppy-disk"></i> Tambahkan Bukti', 
+            //         ['class'=>'btn btn-xs btn-success']
+            //     )
         ]
     ]     
 ]); 

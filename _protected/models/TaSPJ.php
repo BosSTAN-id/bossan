@@ -88,4 +88,9 @@ class TaSPJ extends \yii\db\ActiveRecord
             'kd_verifikasi' => 'Kd Verifikasi',
         ];
     }
+
+    public function getSekolah()
+    {
+        return $this->hasOne(\app\models\RefSekolah::className(), ['id' => 'sekolah_id']);
+    }    
 }
