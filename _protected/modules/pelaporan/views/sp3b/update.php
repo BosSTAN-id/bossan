@@ -3,14 +3,14 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TaSP3B */
+/* @var $model app\models\TaSPJ */
 
-$this->title = 'Update Ta Sp3 B: ' . $model->tahun;
-$this->params['breadcrumbs'][] = ['label' => 'Ta Sp3 Bs', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->tahun, 'url' => ['view', 'tahun' => $model->tahun, 'no_sp3b' => $model->no_sp3b]];
+$this->title = 'Update Ta Spj: ' . $model->tahun;
+$this->params['breadcrumbs'][] = ['label' => 'Ta Spjs', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->tahun, 'url' => ['view', 'tahun' => $model->tahun, 'no_spj' => $model->no_spj]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="ta-sp3-b-update">
+<div class="ta-spj-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

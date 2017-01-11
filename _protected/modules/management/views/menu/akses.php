@@ -532,7 +532,7 @@ function akses($id, $menu){
 		<!--end of menu-->
 		<!--Menu 6 -->
 		<tr>
-			<td rowspan="3">Pelaporan</td>
+			<td rowspan="5">Pelaporan</td>
 			<td>Pelaporan Sekolah</td>
 			<td>-</td>
 			<td>
@@ -560,6 +560,60 @@ function akses($id, $menu){
 			?>
 			</td>
 		</tr>
+		<tr>
+			<td>SP3B (Pemda)</td>
+			<td>-</td>
+			<td>
+			<?php
+				$menu = 604;
+				IF(akses($model->id, $menu) === true){
+					echo Html::a('<span class = "label label-success"><i class="fa  fa-sign-in bg-white"></i></span>', ['give', 'id' => $model->id, 'menu' => $menu, 'akses' => 0 ],
+                            [  
+                             'pjax-container' => 'akses-pjax',
+                             'data-confirm' => "Hapus Akses?",
+                             'data-method' => 'POST',
+                             'data-pjax' => 1
+                          ]);							
+				}ELSE{
+					echo Html::a('<span class = "label label-danger"><i class="fa  fa-lock bg-white"></i></span>', ['give', 'id' => $model->id, 'menu' => $menu, 'akses' => 1 ],
+                            [  
+                             'pjax-container' => 'akses-pjax',
+                             'data-confirm' => "Berikan Akses?",
+                             'data-method' => 'POST',
+                             'data-pjax' => 1
+                          ]);
+				}
+
+			?>
+			</td>
+		</tr>
+		<tr>
+			<td>SP2B (Pemda)</td>
+			<td>-</td>
+			<td>
+			<?php
+				$menu = 605;
+				IF(akses($model->id, $menu) === true){
+					echo Html::a('<span class = "label label-success"><i class="fa  fa-sign-in bg-white"></i></span>', ['give', 'id' => $model->id, 'menu' => $menu, 'akses' => 0 ],
+                            [  
+                             'pjax-container' => 'akses-pjax',
+                             'data-confirm' => "Hapus Akses?",
+                             'data-method' => 'POST',
+                             'data-pjax' => 1
+                          ]);							
+				}ELSE{
+					echo Html::a('<span class = "label label-danger"><i class="fa  fa-lock bg-white"></i></span>', ['give', 'id' => $model->id, 'menu' => $menu, 'akses' => 1 ],
+                            [  
+                             'pjax-container' => 'akses-pjax',
+                             'data-confirm' => "Berikan Akses?",
+                             'data-method' => 'POST',
+                             'data-pjax' => 1
+                          ]);
+				}
+
+			?>
+			</td>
+		</tr>				
 		<tr>
 			<td>Pelaporan Kabupaten</td>
 			<td>-</td>

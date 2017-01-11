@@ -67,10 +67,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {update} {spjbukti}',
+                'template' => '{print} {view} {update} {spjbukti}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
+                        'print' => function($url, $model){
+                            return  Html::a('<i class="glyphicon glyphicon-print bg-white"></i>', $url, ['onClick' => "return !window.open(this.href, 'SPJ', 'width=1024,height=768')"]);
+                        },
                         'update' => function ($url, $model) {
                           IF($model->kd_sah <> 2)
                             return Html::a('<span class="glyphicon glyphicon-ok"></span>', $url,
