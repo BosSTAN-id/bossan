@@ -12,23 +12,19 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(['id' => $model->formName()]); ?>
 
-    <?= $form->field($model, 'no_spj')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'no_sp3b')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tgl_spj')->widget(\yii\jui\DatePicker::classname(), [
+    <?= $form->field($model, 'tgl_sp3b')->widget(\yii\jui\DatePicker::classname(), [
             'language' => 'id',
             'dateFormat' => 'yyyy-MM-dd',
             'options' => ['class' => 'form-control']
         ]) ?> 
 
-    <?= $form->field($model, 'no_bku')->textInput() ?>
+    <?= $form->field($model, 'penandatangan')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'keterangan')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'jbt_penandatangan')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'nm_bendahara')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'nip_bendahara')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'jbt_bendahara')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'nip_penandatangan')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

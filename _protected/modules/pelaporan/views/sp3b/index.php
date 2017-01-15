@@ -8,8 +8,8 @@ use yii\bootstrap\Modal;
 /* @var $searchModel app\modules\penatausahaan\models\TaSPJSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'SPJ';
-$this->params['breadcrumbs'][] = 'Penatausahaan';
+$this->title = 'Surat Permintaan Persetujuan Pendapatan dan Belanja (SP3B)';
+$this->params['breadcrumbs'][] = 'Pelaporan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ta-spj-index">
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Buat SPJ', ['create'], [
+        <?= Html::a('Buat SP3B', ['create'], [
                                                     'class' => 'btn btn-xs btn-success',
                                                     'data-toggle'=>"modal",
                                                     'data-target'=>"#myModal",
@@ -47,32 +47,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'options' => ['id' => 'ta-spj-pjax', 'timeout' => 5000],
         ],
         'rowOptions'   => function ($model, $key, $index, $grid) {
-            return ['data-id' => $model->tahun.'~'.$model->no_spj];
+            return ['data-id' => $model->tahun.'~'.$model->no_sp3b];
         },             
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             'tahun',
-            'no_spj',
-            'sekolah_id',
-            'tgl_spj',
-            'no_bku',
-            // 'keterangan',
-            // 'kd_sah',
-            // 'no_pengesahan',
-            // 'disahkan_oleh',
-            // 'nip_pengesahan',
-            // 'created_at',
-            // 'updated_at',
-            // 'user_id',
-            // 'nm_bendahara',
-            // 'nip_bendahara',
-            // 'jbt_bendahara',
-            // 'jbt_pengesahan',
-            // 'tgl_pengesahan',
-            // 'kd_verifikasi',
-
+            'no_sp3b',
+            'tgl_sp3b',
+            'pendapatan:decimal',
+            'belanja:decimal',
+            'status',
             [
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{print} {view} {update} {delete} {spjbukti}',
@@ -83,13 +69,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             return  Html::a('<i class="glyphicon glyphicon-print bg-white"></i>', $url, ['onClick' => "return !window.open(this.href, 'SPJ', 'width=1024,height=768')"]);
                         },
                         'update' => function ($url, $model) {
-                          IF($model->kd_sah == 1 ){
+                          IF($model->status == 1 ){
                               return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
                                 [  
                                     'title' => Yii::t('yii', 'ubah'),
                                     'data-toggle'=>"modal",
                                     'data-target'=>"#myModalubah",
-                                    'data-title'=> "Ubah SPJ ".$model->no_spj,                                 
+                                    'data-title'=> "Ubah SPJ ".$model->no_sp3b,                                 
                                     // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                     // 'data-method' => 'POST',
                                     // 'data-pjax' => 1
@@ -102,13 +88,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                  'title' => Yii::t('yii', 'lihat'),
                                  'data-toggle'=>"modal",
                                  'data-target'=>"#myModalubah",
-                                 'data-title'=> "SPJ ".$model->no_spj,
+                                 'data-title'=> "SPJ ".$model->no_sp3b,
                               ]);
                         },
                         'spjbukti' => function ($url, $model) {
-                          return Html::a('Bukti SPJ <i class="glyphicon glyphicon-menu-right"></i>', $url,
+                          return Html::a('Daftar SPJ <i class="glyphicon glyphicon-menu-right"></i>', $url,
                               [  
-                                 'title' => Yii::t('yii', 'Bukti SPJ'),
+                                 'title' => Yii::t('yii', 'Rincian SP3B'),
                                  'class'=>"btn btn-xs btn-default",                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',

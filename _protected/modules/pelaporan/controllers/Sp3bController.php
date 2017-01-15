@@ -5,6 +5,8 @@ namespace app\modules\pelaporan\controllers;
 use Yii;
 use app\models\TaSPJ;
 use app\modules\penatausahaan\models\TaSPJSearch;
+use app\models\TaSP3B;
+use app\modules\pelaporan\models\TaSP3BSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -45,7 +47,7 @@ class Sp3bController extends Controller
         }ELSE{
             $Tahun = DATE('Y');
         }
-        $searchModel = new TaSPJSearch();
+        $searchModel = new TaSP3BSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['tahun' => $Tahun]);
 
@@ -176,7 +178,7 @@ class Sp3bController extends Controller
         ]);
     }    
 
-    public function actionSpjbukti($tahun, $no_spj)
+    public function actionSpjbukti($tahun, $no_sp3b)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -188,21 +190,20 @@ class Sp3bController extends Controller
         }ELSE{
             $Tahun = DATE('Y');
         }
-        $model = $this->findModel($tahun, $no_spj);
-        $searchModel = new \app\modules\penatausahaan\models\TaSPJRincSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['tahun' => $Tahun]);
-        $dataProvider->query->andWhere('(Kd_Rek_1 IN (4,5))');
-        IF(Yii::$app->user->identity->sekolah_id && $sekolah_id = Yii::$app->user->identity->sekolah_id){
-            $dataProvider->query->andWhere(['sekolah_id' => $sekolah_id]);
+        $model = $this->findModel($tahun, $no_sp3b);
+        $sp3brinc_lalu = \app\models\TaSP3BRinc::find()->where(['tahun' => $Tahun])->andWhere('no_sp3b <> \''.$model->no_sp3b.'\'')->all();
+        $no_spjs = [];
+        foreach ($sp3brinc_lalu as $data) {
+            $no_spjs[] = $data['no_spj'];
         }
-        $dataProvider->query->andWhere("tgl_bukti <= '".$model->tgl_spj."'");
-
-        IF($model->kd_sah == 1){
-            $dataProvider->query->andWhere("no_spj  IS NULL OR no_spj = '$no_spj' ");
-            $dataProvider->query->orderBy('no_spj, tgl_bukti ASC');
-        }ELSE{
-            $dataProvider->query->andWhere(['no_spj' => $model->no_spj]);
+        var_dump($no_spjs);
+        IF($model->status == 1){
+            //jika masih draft munculkan semua spj
+            $searchModel = new \app\modules\penatausahaan\models\TaSPJSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['tahun' => 'tahun']);
+            $dataProvider->query->andWhere('tgl_spj <= \''.$model->tgl_sp3b.'\'');
+            // $dataProvider->query->andWhere("no_spj NOT IN $no_spjs");
         }
 
         IF(isset($_POST) AND $_POST <> NULL){
@@ -271,12 +272,9 @@ class Sp3bController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $model = new TaSPJ();
+        $model = new TaSP3B();
         $model->tahun = $Tahun;
-        $model->sekolah_id = Yii::$app->user->identity->sekolah_id;
-        $model->kd_sah = 1;
-        $model->kd_verifikasi = 0;
-        $model->user_id = Yii::$app->user->identity->id;
+        $model->status = 1;
 
         if ($model->load(Yii::$app->request->post())) {
             IF($model->save()){
@@ -298,7 +296,7 @@ class Sp3bController extends Controller
      * @param string $no_spj
      * @return mixed
      */
-    public function actionUpdate($tahun, $no_spj)
+    public function actionUpdate($tahun, $no_sp3b)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -311,14 +309,14 @@ class Sp3bController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $model = $this->findModel($tahun, $no_spj);
-        IF($model->kd_sah <> 1){
-            Yii::$app->getSession()->setFlash('warning',  'SPJ ini sudah diproses Tata Usaha, tidak dapat diubah atau dihapus.');
+        $model = $this->findModel($tahun, $no_sp3b);
+        IF($model->status <> 1){
+            Yii::$app->getSession()->setFlash('warning',  'SP3B ini sudah diproses SP2B, tidak dapat diubah atau dihapus.');
             return $this->redirect(Yii::$app->request->referrer);
         }        
 
         if ($model->load(Yii::$app->request->post())) {
-            \app\models\TaSPJRinc::updateAll(['no_spj' => $model->no_spj], 'no_spj = \''.$no_spj.'\'');
+            \app\models\TaSP3BRinc::updateAll(['no_sp3b' => $model->no_sp3b], 'no_sp3b = \''.$no_sp3b.'\'');
             IF($model->save()){
                 echo 1;
             }ELSE{
@@ -338,7 +336,7 @@ class Sp3bController extends Controller
      * @param string $no_spj
      * @return mixed
      */
-    public function actionDelete($tahun, $no_spj)
+    public function actionDelete($tahun, $no_sp3b)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -351,10 +349,10 @@ class Sp3bController extends Controller
             $Tahun = DATE('Y');
         }
         $model = $this->findModel($tahun, $no_spj);
-        IF($model->kd_sah == 1){
+        IF($model->status == 1){
             $model->delete();
         }ELSE{
-            Yii::$app->getSession()->setFlash('warning',  'SPJ ini sudah diproses Tata Usaha, tidak dapat diubah atau dihapus.');
+            Yii::$app->getSession()->setFlash('warning',  'SP3B ini sudah diproses SP2B, tidak dapat diubah atau dihapus.');
         }
         
 
@@ -369,19 +367,19 @@ class Sp3bController extends Controller
      * @return TaSPJ the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($tahun, $no_spj)
+    protected function findModel($tahun, $no_sp3b)
     {
-        if (($model = TaSPJ::findOne(['tahun' => $tahun, 'no_spj' => $no_spj])) !== null) {
+        if (($model = TaSP3B::findOne(['tahun' => $tahun, 'no_sp3b' => $no_sp3b])) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 
-    protected function findBukti($tahun, $no_spj)
+    protected function findBukti($tahun, $no_sp3b)
     {
-        if (($model = \app\models\TaSPJRinc::find()->where(['tahun' => $tahun, 'no_spj' => $no_spj])
-        ->orderBy('tgl_bukti, no_bukti, kd_program, kd_sub_program, kd_kegiatan, Kd_Rek_1, Kd_Rek_2, Kd_Rek_3, Kd_Rek_4, Kd_Rek_5')
+        if (($model = \app\models\TaSP3BRinc::find()->where(['tahun' => $tahun, 'no_sp3b' => $no_sp3b])
+        ->orderBy('tgl_spj, no_spj')
         ->all() ) !== null) {
             return $model;
         } else {
