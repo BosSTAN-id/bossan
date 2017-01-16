@@ -201,7 +201,7 @@ class Sp3bController extends Controller
             //jika masih draft munculkan semua spj
             $searchModel = new \app\modules\penatausahaan\models\TaSPJSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $dataProvider->query->andWhere(['tahun' => 'tahun']);
+            $dataProvider->query->andWhere(['tahun' => $Tahun]);
             $dataProvider->query->andWhere('tgl_spj <= \''.$model->tgl_sp3b.'\'');
             // $dataProvider->query->andWhere("no_spj NOT IN $no_spjs");
         }

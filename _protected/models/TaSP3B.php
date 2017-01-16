@@ -45,6 +45,7 @@ class TaSP3B extends \yii\db\ActiveRecord
             [['jumlah_sekolah', 'status'], 'integer'],
             [['no_sp3b'], 'string', 'max' => 50],
             [['penandatangan', 'jbt_penandatangan', 'nip_penandatangan'], 'string', 'max' => 100],
+            [['keterangan'], 'string', 'max' => 255],
         ];
     }
 
@@ -66,6 +67,7 @@ class TaSP3B extends \yii\db\ActiveRecord
             'nip_penandatangan' => 'Nip Penandatangan',
             'jumlah_sekolah' => 'Jumlah Sekolah',
             'status' => 'Status',
+            'keterangan' => 'Keterangan',
         ];
     }
 

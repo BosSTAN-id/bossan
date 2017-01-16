@@ -20,6 +20,8 @@ use yii\widgets\ActiveForm;
             'options' => ['class' => 'form-control']
         ]) ?> 
 
+    <?= $form->field($model, 'keterangan')->textarea(['rows' => 3]) ?>
+    
     <?= $form->field($model, 'penandatangan')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'jbt_penandatangan')->textInput(['maxlength' => true]) ?>

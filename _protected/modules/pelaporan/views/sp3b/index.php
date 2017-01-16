@@ -55,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'tahun',
             'no_sp3b',
+            'keterangan',
             'tgl_sp3b',
             'pendapatan:decimal',
             'belanja:decimal',
