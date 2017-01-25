@@ -26,6 +26,8 @@ class Sp3bController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'assign' => ['POST'],
+                    'status' => ['POST'],
                 ],
             ],
         ];
@@ -81,7 +83,7 @@ class Sp3bController extends Controller
         ]);
     }
 
-    public function actionPrint($tahun, $no_spj)
+    public function actionPrint($tahun, $no_sp3b)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -94,82 +96,40 @@ class Sp3bController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $model = $this->findModel($tahun, $no_spj);
-        //query untuk halaman SPJ
-        $sekolah = $model->sekolah_id;
-        $tgl_spj = $model->tgl_spj;
+        $model = $this->findModel($tahun, $no_sp3b);
         $spjdata = \Yii::$app->db->createCommand("
-            SELECT a.tahun, a.sekolah_id, a.kd_program, c.uraian_program, a.kd_sub_program, d.uraian_sub_program, a.kd_kegiatan, e.uraian_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, h.Nm_Rek_5, a.anggaran,
-            IFNULL(f.nilai,0) AS spjlalu, IFNULL(g.nilai,0) AS spjini, (IFNULL(f.nilai,0) + IFNULL(g.nilai,0)) AS sdspjini, (a.anggaran - (IFNULL(f.nilai,0) + IFNULL(g.nilai,0))) AS sisa_anggaran
-            FROM
-            (
-                SELECT 
-                a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.anggaran, b.nilai
-                FROM
-                (
-                    SELECT
-                    a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, SUM(a.total) AS anggaran
-                    FROM
-                    ta_rkas_history a
-                    WHERE a.tahun = $tahun AND a.sekolah_id = $sekolah AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = $tahun AND sekolah_id = 1 AND tgl_peraturan <= '$tgl_spj')
-                    GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
-                )a INNER JOIN
-                (
-                    SELECT a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, SUM(a.nilai) AS nilai
-                    FROM ta_spj_rinc a WHERE a.tahun = $tahun AND a.sekolah_id = $sekolah AND a.tgl_bukti <= '$tgl_spj' AND a.no_spj IS NOT NULL
-                    GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
-                )b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan
-                    AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-            ) a 
-            -- Untuk saldo s/d spj lalu
-            LEFT JOIN
-            (
-                SELECT
-                a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5,
-                SUM(a.nilai) AS nilai
-                FROM
-                ta_spj_rinc AS a
-                LEFT JOIN
-                (
-                    SELECT 
-                    a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
-                    FROM ta_rkas_history a 
-                    WHERE a.tahun = $tahun AND a.sekolah_id = $sekolah AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = $tahun AND sekolah_id = 1 AND tgl_peraturan <= '$tgl_spj')
-                    GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
-                ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
-                AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                WHERE a.tahun = $tahun AND a.sekolah_id = $sekolah AND a.tgl_bukti <= '$tgl_spj' AND a.no_spj IS NOT NULL AND a.no_spj <> '$no_spj'
-                GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
-            ) f ON a.tahun = f.tahun AND a.sekolah_id = f.sekolah_id AND a.kd_program = f.kd_program AND a.kd_sub_program = f.kd_sub_program AND a.kd_kegiatan = f.kd_kegiatan AND a.Kd_Rek_1 = f.Kd_Rek_1 AND a.Kd_rek_2 = f.Kd_Rek_2 AND a.Kd_Rek_3 = f.Kd_Rek_3 AND a.Kd_Rek_4 = f.Kd_Rek_4 AND a.Kd_Rek_5 = f.Kd_Rek_5
-            -- Untuk saldo s/d spj saat ini
-            LEFT JOIN
-            (
-                SELECT
-                a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5,
-                SUM(a.nilai) AS nilai
-                FROM
-                ta_spj_rinc AS a
-                LEFT JOIN
-                (
-                    SELECT 
-                    a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
-                    FROM ta_rkas_history a 
-                    WHERE a.tahun = $tahun AND a.sekolah_id = $sekolah AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = $tahun AND sekolah_id = 1 AND tgl_peraturan <= '$tgl_spj')
-                    GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
-                ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
-                AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                WHERE a.tahun = $tahun AND a.sekolah_id = $sekolah AND a.tgl_bukti <= '$tgl_spj' AND a.no_spj = '$no_spj'
-                GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
-            ) g ON a.tahun = g.tahun AND a.sekolah_id = g.sekolah_id AND a.kd_program = g.kd_program AND a.kd_sub_program = g.kd_sub_program AND a.kd_kegiatan = g.kd_kegiatan AND a.Kd_Rek_1 = g.Kd_Rek_1 AND a.Kd_rek_2 = g.Kd_Rek_2 AND a.Kd_Rek_3 = g.Kd_Rek_3 AND a.Kd_Rek_4 = g.Kd_Rek_4 AND a.Kd_Rek_5 = g.Kd_Rek_5
-            LEFT JOIN ref_program_sekolah c ON a.kd_program = c.kd_program
-            LEFT JOIN ref_sub_program_sekolah d ON a.kd_program = d.kd_program AND a.kd_sub_program = d.kd_sub_program
-            LEFT JOIN ref_kegiatan_sekolah e ON a.kd_program = e.kd_program AND a.kd_sub_program = e.kd_sub_program AND a.kd_kegiatan = e.kd_kegiatan
-            LEFT JOIN ref_rek_5 h ON a.Kd_Rek_1 = h.Kd_Rek_1 AND a.Kd_Rek_2 = h.Kd_Rek_2 AND a.Kd_Rek_3 = h.Kd_Rek_3 AND a.Kd_Rek_4 = h.Kd_Rek_4 AND a.Kd_Rek_5 = h.Kd_Rek_5
-            ORDER BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5 ASC
+SELECT
+-- a.tahun,
+-- c.no_sp3b,
+-- a.sekolah_id,
+a.kd_program,
+g.uraian_program,
+a.kd_sub_program,
+f.uraian_sub_program,
+a.kd_kegiatan,
+e.uraian_kegiatan,
+a.Kd_Rek_1,
+a.Kd_Rek_2,
+a.Kd_Rek_3,
+a.Kd_Rek_4,
+a.Kd_Rek_5,
+d.Nm_Rek_5,
+SUM(a.nilai) AS nilai
+FROM
+ta_spj_rinc AS a
+INNER JOIN ta_sp3b_rinc AS b ON a.tahun = b.tahun AND a.no_spj = b.no_spj AND a.sekolah_id = b.sekolah_id
+INNER JOIN ta_sp3b AS c ON b.tahun = c.tahun AND b.no_sp3b = c.no_sp3b
+INNER JOIN ref_rek_5 AS d ON d.Kd_Rek_1 = a.Kd_Rek_1 AND d.Kd_Rek_2 = a.Kd_Rek_2 AND d.Kd_Rek_3 = a.Kd_Rek_3 AND d.Kd_Rek_4 = a.Kd_Rek_4 AND d.Kd_Rek_5 = a.Kd_Rek_5
+INNER JOIN ref_kegiatan_sekolah AS e ON e.kd_program = a.kd_program AND e.kd_sub_program = a.kd_sub_program AND e.kd_kegiatan = a.kd_kegiatan
+INNER JOIN ref_sub_program_sekolah AS f ON e.kd_program = f.kd_program AND e.kd_sub_program = f.kd_sub_program
+INNER JOIN ref_program_sekolah AS g ON f.kd_program = g.kd_program
+WHERE b.no_sp3b = '$no_sp3b'
+GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
+ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
             ");
         $data = $spjdata->queryAll();        
         //find all bukti
-        $bukti = $this->findBukti($tahun, $no_spj);
+        $bukti = $this->findBukti($tahun, $no_sp3b);
 
         return $this->render('print', [
             'model' => $model,
@@ -194,16 +154,22 @@ class Sp3bController extends Controller
         $sp3brinc_lalu = \app\models\TaSP3BRinc::find()->where(['tahun' => $Tahun])->andWhere('no_sp3b <> \''.$model->no_sp3b.'\'')->all();
         $no_spjs = [];
         foreach ($sp3brinc_lalu as $data) {
-            $no_spjs[] = $data['no_spj'];
+            $no_spjs[] = '\''.$data['no_spj'].'\'';
         }
-        var_dump($no_spjs);
+        $no_spjs = implode(',', $no_spjs); 
+        // var_dump(strlen($no_spjs));
         IF($model->status == 1){
             //jika masih draft munculkan semua spj
             $searchModel = new \app\modules\penatausahaan\models\TaSPJSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query->andWhere(['tahun' => $Tahun]);
             $dataProvider->query->andWhere('tgl_spj <= \''.$model->tgl_sp3b.'\'');
-            // $dataProvider->query->andWhere("no_spj NOT IN $no_spjs");
+            IF(strlen($no_spjs) > 0) $dataProvider->query->andWhere("no_spj NOT IN ( $no_spjs )");
+        }ELSE{
+            $searchModel = new \app\modules\penatausahaan\models\TaS3BRincSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['tahun' => $Tahun]);
+            $dataProvider->query->andWhere(['no_sp3b' => $no_sp3b]);            
         }
 
         IF(isset($_POST) AND $_POST <> NULL){
@@ -233,7 +199,7 @@ class Sp3bController extends Controller
         ]);
     }  
 
-    public function actionAssign()
+    public function actionStatus($kd, $tahun, $no_sp3b)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -245,13 +211,66 @@ class Sp3bController extends Controller
         }ELSE{
             $Tahun = DATE('Y');
         }
-        var_dump($_POST);   
-        // return $this->render('spjbukti', [
-        //     'model' => $model,
-        //     'searchModel' => $searchModel,
-        //     'dataProvider' => $dataProvider,
-        //     'Tahun' => $Tahun,
-        // ]);
+        $model = $this->findModel($tahun, $no_sp3b);
+        switch ($kd) {
+            case 1:
+                $model->status = 2;
+                $model->save();
+                Yii::$app->getSession()->setFlash('Success',  'SP3B Ini sudah difinalkan.');
+                return $this->redirect(Yii::$app->request->referrer);
+                break;
+            case 2:
+                $model->status = 1;
+                $model->save();
+                Yii::$app->getSession()->setFlash('Success',  'SP3B Ini sudah di draft ulang.');
+                return $this->redirect(Yii::$app->request->referrer);
+                break;            
+            default:
+                # code...
+                break;
+        }
+
+    }     
+
+    public function actionAssign($kd, $tahun, $no_sp3b, $no_spj)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+        switch ($kd) {
+            case 1: //assign
+                $sp3b = \app\models\TaSP3B::findOne(['tahun' => $tahun, 'no_sp3b' => $no_sp3b]);
+                $spj = \app\models\TaSPJ::findOne(['tahun' => $tahun, 'no_spj' => $no_spj]);
+                $sp3brinc = new \app\models\TaSP3BRinc();
+                $sp3brinc->tahun = $tahun;
+                $sp3brinc->no_sp3b = $no_sp3b;
+                $sp3brinc->sekolah_id = $spj->sekolah_id;
+                $sp3brinc->no_spj = $no_spj;
+                // var_dump($sp3brinc->validate());
+                IF($sp3brinc->validate() == true){
+                    IF($sp3brinc->save()){
+                        Yii::$app->getSession()->setFlash('success',  'SPJ Berhasil Ditambahkan.');
+                        return $this->redirect(Yii::$app->request->referrer);                        
+                    }ELSE{
+                        Yii::$app->getSession()->setFlash('warning',  'SPJ gagal ditambahkan.');
+                        return $this->redirect(Yii::$app->request->referrer);                                                
+                    }
+                }
+                break;
+            case 0: //hapus 
+                $status = 'Terverifikasi';
+                break;
+            default:
+                // code goes here
+                break;
+        }
     }        
 
     /**
@@ -379,7 +398,7 @@ class Sp3bController extends Controller
     protected function findBukti($tahun, $no_sp3b)
     {
         if (($model = \app\models\TaSP3BRinc::find()->where(['tahun' => $tahun, 'no_sp3b' => $no_sp3b])
-        ->orderBy('tgl_spj, no_spj')
+        ->orderBy('sekolah_id, no_spj')
         ->all() ) !== null) {
             return $model;
         } else {

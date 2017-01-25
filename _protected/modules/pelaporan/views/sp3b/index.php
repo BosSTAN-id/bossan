@@ -59,7 +59,37 @@ $this->params['breadcrumbs'][] = $this->title;
             'tgl_sp3b',
             'pendapatan:decimal',
             'belanja:decimal',
-            'status',
+            // 'status',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function($model){
+                    switch ($model->status) {
+                        case 1:
+                            $status = 'Draft';
+                            break;
+                        case 2:
+                            $status = 'Final';
+                            break;
+                        case 3:
+                            $status = 'Diproses';
+                            break;
+                        default:
+                            $status = 'Draft';
+                            break;
+                    }
+                    return $model->status == 3 ? $status : 
+                            Html::a($status, 
+                            ['status', 'kd' => $model->status == 1 ? 1 : 2, 'tahun' => $model->tahun, 'no_sp3b' => $model->no_sp3b], 
+                            [
+                                'class' => $model->status == 1 ? 'btn btn-xs btn-default' : 'btn btn-xs btn-success',
+                                'title' => $model->status == 1 ? 'Finalkan' : 'Draft Ulang',                             
+                                'data-confirm' => $model->status == 1 ? 'Yakin finalkan usulan ini?' : 'Yakin Draft Ulang?',
+                                'data-method' => 'POST',
+                                'data-pjax' => 0                       
+                            ]);                    
+                }
+            ],            
             [
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{print} {view} {update} {delete} {spjbukti}',
@@ -114,7 +144,7 @@ $this->registerJs("
     $('td').click(function (e) {
         var id = $(this).closest('tr').data('id').split('~');
         if(e.target == this)
-            location.href = '" . \Yii\helpers\Url::to(['spjbukti']) . "?tahun=' + id[0] +'&no_spj=' + id[1];
+            location.href = '" . \Yii\helpers\Url::to(['spjbukti']) . "?tahun=' + id[0] +'&no_sp3b=' + id[1];
     });
 
 ");

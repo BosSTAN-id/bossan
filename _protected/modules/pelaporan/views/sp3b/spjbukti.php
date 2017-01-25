@@ -8,11 +8,11 @@ use yii\widgets\DetailView;
 use yii\bootstrap\Collapse;
 use kartik\widgets\ActiveForm;
 
-function totalbelanja($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5){
-    $belanja = \app\models\TaRkasBelanjaRinc::find()
-                ->where(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5])
-                ->sum('total');
-    return  $belanja ? $belanja : 0;
+function cekspj($tahun, $sekolah_id, $no_spj){
+    $spj = \app\models\TaSP3BRinc::find()
+                ->where(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'no_spj' => $no_spj])
+                ->one();
+    return  $spj;
 }
 $sp3b = $model->no_sp3b;
 switch ($model->status) {
@@ -101,21 +101,43 @@ $this->params['breadcrumbs'][] = $this->title;
             'tgl_spj',
             'sekolah.nama_sekolah',
             [
-                'label' => 'Aksi',
+                'label' => '[]',
                 'format' => 'raw',
-                'value' => function($model) use ($sp3b) {
-                    return Html::a('<span class="fa fa-square-o"></span>', ['assign', 'no_sp3b' => $sp3b, 'no_spj' => $model->no_spj ],
-                    [  
-                        'title' => Yii::t('yii', 'Tambah SPJ ini'),
-                        // 'data-toggle'=>"modal",
-                        // 'data-target'=>"#myModalubah",
-                        // 'data-title'=> "Ubah SPJ ".$model->no_spj,                                 
-                        // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                        'data-method' => 'POST',
-                        'data-pjax' => 1
-                    ]);
+                'value' => function($model) use ($sp3b, $status) {
+                    IF(cekspj($model->tahun, $model->sekolah_id, $model->no_spj) === NULL){
+                        return Html::a('<span class="fa fa-square-o"></span>', ['assign', 'kd' => 1, 'tahun' => $model->tahun, 'no_sp3b' => $sp3b,  'no_spj' => $model->no_spj ],
+                        [  
+                            'title' => Yii::t('yii', 'Tambah SPJ ini'),
+                            // 'data-toggle'=>"modal",
+                            // 'data-target'=>"#myModalubah",
+                            // 'data-title'=> "Ubah SPJ ".$model->no_spj,                                 
+                            // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                            'data-method' => 'POST',
+                            'data-pjax' => 0
+                        ]);
+                    }ELSE{
+                        return Html::a('<span class="fa fa-check-square-o"></span>', ['assign', 'kd' => 0, 'tahun' => $model->tahun, 'no_sp3b' => $sp3b,  'no_spj' => $model->no_spj ],
+                        [  
+                            'title' => Yii::t('yii', 'Tambah SPJ ini'),
+                            // 'data-toggle'=>"modal",
+                            // 'data-target'=>"#myModalubah",
+                            // 'data-title'=> "Ubah SPJ ".$model->no_spj,                                 
+                            // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                            'data-method' => 'POST',
+                            'data-pjax' => 0
+                        ]);
+                    }
                 }
             ],
+            // [
+            //     'label' => 'Cek',
+            //     'format' => 'raw',
+            //     'value' => function($model) use ($sp3b) {
+            //         IF(cekspj($model->tahun, $model->sekolah_id, $model->no_spj) === NULL){
+            //             return 'null';
+            //         }
+            //     }
+            // ],
             // [
             //     'class' => 'kartik\grid\ActionColumn',
             //     'template' => '{print} {view} {update} {delete} {spjbukti}',
