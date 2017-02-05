@@ -36,7 +36,7 @@ class TaRkasPeraturan extends \yii\db\ActiveRecord
             [['tahun', 'sekolah_id', 'perubahan_id'], 'required'],
             [['tahun', 'tgl_peraturan'], 'safe'],
             [['sekolah_id', 'perubahan_id', 'verifikasi'], 'integer'],
-            [['no_peraturan', 'penandatangan', 'jabatan'], 'string', 'max' => 100],
+            [['no_peraturan', 'penandatangan', 'jabatan', 'komite_sekolah', 'jabatan_komite'], 'string', 'max' => 100],
             [['nip'], 'string', 'max' => 18],
         ];
     }
@@ -55,7 +55,19 @@ class TaRkasPeraturan extends \yii\db\ActiveRecord
             'penandatangan' => Yii::t('app', 'Penandatangan'),
             'nip' => Yii::t('app', 'Nip'),
             'jabatan' => Yii::t('app', 'Jabatan'),
+            'komite_sekolah' => Yii::t('app', 'Penandatangan Komite'),
+            'jabatan_komite' => Yii::t('app', 'Jabatan Penandatangan Komite'),
             'verifikasi' => Yii::t('app', 'Verifikasi'),
         ];
     }
+
+    public function getSekolah()
+    {
+        return $this->hasOne(RefSekolah::className(), ['id' => 'sekolah_id']);
+    }
+
+    // public function getPerubahan()
+    // {
+    //     return $this->hasOne(RefPerubahan::className(), ['id' => 'sekolah_id']);
+    // }       
 }

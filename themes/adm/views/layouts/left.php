@@ -95,6 +95,8 @@ function akses($menu){
                             ['label' => 'Mapping Komponen', 'icon' => 'fa fa-circle-o', 'url' => ['/globalsetting/mappingkomponen'], 'visible' => akses(104)
                             ],
                             ['label' => 'Mapping Pendapatan', 'icon' => 'fa fa-circle-o', 'url' => ['/globalsetting/mappingpendapatan'], 'visible' => akses(105)
+                            ],  
+                            ['label' => 'Blog/Pengumuman', 'icon' => 'fa fa-circle-o', 'url' => ['/management/pengumuman'], 'visible' => akses(106)
                             ],                                                        
                         ],
                     ],                    

@@ -28,7 +28,7 @@ $this->title = Yii::t('app', Yii::$app->name);
         <p class="lead">Sistem Pengelolaan Pertanggungjawaban dana BOS Kabupaten Banyuasin...</p>
 
     </div>
-
+<?php /*
     <div class="body-content">
     <div class ="row">
     <div class ="col-md-6">
@@ -100,10 +100,10 @@ $this->title = Yii::t('app', Yii::$app->name);
                 <?php 
                 // echo ChartJs::widget([
                 //     'type' => 'bar',
-                //     /*'options' => [
+                //     'options' => [
                 //         'height' => 400,
                 //         'width' => 400
-                //     ],*/
+                //     ],
                 //     'data' => [
                 //         'labels' => ["January", "February", "March", "April", "May", "June", "July"],
                 //         'datasets' => [
@@ -136,5 +136,6 @@ $this->title = Yii::t('app', Yii::$app->name);
 
     </div>
     </div>
+*/ ?>
 </div>
 

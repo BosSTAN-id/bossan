@@ -4,7 +4,7 @@
 	03 => grupakses
 	04 => mappingkomponen
 	05 => mappingpendapatan
-	06 => 
+	06 => blog/pengumuman
 	07 => 
 	08 => 
 	09 => 

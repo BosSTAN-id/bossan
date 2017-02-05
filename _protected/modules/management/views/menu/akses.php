@@ -22,7 +22,7 @@ function akses($id, $menu){
 		</tr>
 		<!--Menu 1 -->
 		<tr>
-			<td rowspan="5">Pengaturan</td>
+			<td rowspan="6">Pengaturan</td>
 			<td>Pengaturan Global</td>
 			<td>-</td>
 			<td>
@@ -158,7 +158,34 @@ function akses($id, $menu){
 
 			?>
 			</td>
-		</tr>				
+		</tr>
+		<tr>
+			<td>Pengumuman</td>
+			<td>-</td>
+			<td>
+			<?php
+				$menu = 106;
+				IF(akses($model->id, $menu) === true){
+					echo Html::a('<span class = "label label-success"><i class="fa  fa-sign-in bg-white"></i></span>', ['give', 'id' => $model->id, 'menu' => $menu, 'akses' => 0 ],
+                            [  
+                             'pjax-container' => 'akses-pjax',
+                             'data-confirm' => "Hapus Akses?",
+                             'data-method' => 'POST',
+                             'data-pjax' => 1
+                          ]);							
+				}ELSE{
+					echo Html::a('<span class = "label label-danger"><i class="fa  fa-lock bg-white"></i></span>', ['give', 'id' => $model->id, 'menu' => $menu, 'akses' => 1 ],
+                            [  
+                             'pjax-container' => 'akses-pjax',
+                             'data-confirm' => "Berikan Akses?",
+                             'data-method' => 'POST',
+                             'data-pjax' => 1
+                          ]);
+				}
+
+			?>
+			</td>
+		</tr>						
 		<!--end of menu-->
 		<!--Menu 2 -->
 		<tr>

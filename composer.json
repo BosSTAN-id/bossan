@@ -35,7 +35,8 @@
         "execut/yii2-widget-bootstraptreeview": "dev-master",
         "kartik-v/yii2-tree-manager": "@dev",
         "kartik-v/yii2-widget-growl": "*",
-        "kartik-v/yii2-builder": "@dev"  
+        "kartik-v/yii2-builder": "@dev",
+        "2amigos/yii2-ckeditor-widget": "^2.0"  
     },
     "require-dev": {
         "codeception/codeception": "*",
