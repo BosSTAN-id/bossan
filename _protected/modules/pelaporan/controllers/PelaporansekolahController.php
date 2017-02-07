@@ -1113,86 +1113,7 @@ SELECT * FROM
                         $render = 'cetaklaporan2';
                         break;   
                     case 3:
-                        $totalCount = Yii::$app->db->createCommand("
-SELECT COUNT(a.tahun) FROM
-(
-    /*SALDO AWAL */
-    SELECT
-    a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '2016-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
-    FROM
-    ta_saldo_awal a
-    WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND IFNULL(a.kd_penerimaan_1, '') LIKE 3 AND IFNULL(a.kd_penerimaan_2, '') LIKE 2 AND a.pembayaran LIKE 1
-    GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
-    /*Saldo Awal sejak tanggal */
-    UNION ALL
-    SELECT
-    a.tahun,
-    a.sekolah_id,
-    '' AS kd_penerimaan_1,
-    '' AS kd_penerimaan_2,
-    '' AS kode, 
-    '' AS no_bukti,
-    '2016-01-01' AS tgl_bukti,
-    'Akumulasi Transaksi' AS uraian,
-    SUM(
-    CASE a.Kd_Rek_1
-        WHEN 4 THEN a.nilai
-        WHEN 5 THEN -(a.nilai)
-    END
-    ) AS nilai
-    FROM
-    ta_spj_rinc AS a
-    LEFT JOIN
-    (
-        SELECT 
-        a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
-        FROM ta_rkas_history a 
-        WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = 2016 AND sekolah_id = 1)
-        AND IFNULL(a.kd_penerimaan_1, '') LIKE 3 AND IFNULL(a.kd_penerimaan_2, '') LIKE 2
-        GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
-    ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
-    AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-    WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.tgl_bukti <= '2016-01-01' AND IFNULL(b.kd_penerimaan_1,'') LIKE 3 AND IFNULL(b.kd_penerimaan_2, '') LIKE 2
-    GROUP BY a.tahun, a.sekolah_id
-    /*Transaksi */
-    UNION ALL
-    SELECT
-    a.tahun,
-    a.sekolah_id,
-    b.kd_penerimaan_1,
-    b.kd_penerimaan_2,
-    CONCAT(a.kd_program, RIGHT(CONCAT('0',a.kd_sub_program),2), RIGHT(CONCAT('0',a.kd_kegiatan),2), '.', a.Kd_Rek_3, RIGHT(CONCAT('0',a.Kd_Rek_4),2), RIGHT(CONCAT('0',a.Kd_Rek_5),2)) AS kode,
-    a.no_bukti,
-    a.tgl_bukti,
-    a.uraian,
-    CASE a.Kd_Rek_1
-        WHEN 4 THEN a.nilai
-        WHEN 5 THEN -(a.nilai)
-    END
-    FROM
-    ta_spj_rinc AS a
-    LEFT JOIN
-    (
-        SELECT 
-        a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
-        FROM ta_rkas_history a 
-        WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = 2016 AND sekolah_id = 1)
-        AND IFNULL(a.kd_penerimaan_1, '') LIKE 3 AND IFNULL(a.kd_penerimaan_2, '') LIKE 2
-        GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
-    ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
-    AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-    WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.tgl_bukti <= '2016-06-31' AND a.tgl_bukti >= '2016-01-01' AND IFNULL(b.kd_penerimaan_1,'') LIKE 3 AND IFNULL(b.kd_penerimaan_2, '') LIKE 2
-) a ORDER BY tgl_bukti, no_bukti ASC    
-                            ", [
-                                ':tahun' => $Tahun,
-                                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
-                                ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
-                                ':kd_penerimaan_1' => $kd_penerimaan_1,
-                                ':kd_penerimaan_2' => $kd_penerimaan_2,
-                            ])->queryScalar();
-
-                        $data = new SqlDataProvider([
-                            'sql' => "
+                        $data =  Yii::$app->db->createCommand("
 SELECT * FROM
 (
     /*SALDO AWAL */
@@ -1261,21 +1182,15 @@ SELECT * FROM
     ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
     AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
     WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.tgl_bukti <= '2016-06-31' AND a.tgl_bukti >= '2016-01-01' AND IFNULL(b.kd_penerimaan_1,'') LIKE 3 AND IFNULL(b.kd_penerimaan_2, '') LIKE 2
-) a ORDER BY tgl_bukti, no_bukti ASC
-                                    ",
-                            'params' => [
+) a ORDER BY tgl_bukti, no_bukti ASC                     
+                        ")->bindValues([
                                 ':tahun' => $Tahun,
                                 ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
                                 ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
                                 ':kd_penerimaan_1' => $kd_penerimaan_1,
                                 ':kd_penerimaan_2' => $kd_penerimaan_2,
-                            ],
-                            'totalCount' => $totalCount,
-                            //'sort' =>false, to remove the table header sorting
-                            'pagination' => [
-                                'pageSize' => 50,
-                            ],
-                        ]);                                  
+                        ])->queryAll();
+ 
                         $render = 'cetaklaporan3';
                         break;                                                 
                     case 6:

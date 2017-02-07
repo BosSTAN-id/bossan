@@ -8,7 +8,7 @@ class PDF extends \fpdf\FPDF
 	{
 		//ambil link
 		$link = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];		
-		$this->Image("http://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$link", 280, 203 ,5,0,'PNG');		
+		// $this->Image("http://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$link", 280, 203 ,5,0,'PNG');		
 	    // Go to 1.5 cm from bottom
 	    $this->SetY(-15);
 	    // Select Arial italic 8

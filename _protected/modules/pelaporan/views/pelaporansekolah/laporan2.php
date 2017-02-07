@@ -23,19 +23,19 @@ use yii\web\Controller;
         'toolbar' => [
             '{toggleData}',
             '{export}',
-        [
-            'content' =>    Html::a('<i class="glyphicon glyphicon-print"></i> Cetak', ['cetak', 'Laporan' => [
-                                'Kd_Laporan' => $getparam['Laporan']['Kd_Laporan'], 
-                                'Kd_Sumber' => $getparam['Laporan']['Kd_Sumber'],
-                                'Tgl_1' => $getparam['Laporan']['Tgl_1'],
-                                'Tgl_2' => $getparam['Laporan']['Tgl_2'],
-                                'Tgl_Laporan' => $getparam['Laporan']['Tgl_Laporan'],
-                                'perubahan_id' => $getparam['Laporan']['perubahan_id']
-                            ] ], [
-                                'class' => 'btn btn btn-default pull-right',
-                                'onClick' => "return !window.open(this.href, 'SPH', 'width=1024,height=600,scrollbars=1')"
-                                    ]) 
-        ],
+            [
+                'content' =>    Html::a('<i class="glyphicon glyphicon-print"></i> Cetak', ['cetak', 'Laporan' => [
+                                    'Kd_Laporan' => $getparam['Laporan']['Kd_Laporan'], 
+                                    'Kd_Sumber' => $getparam['Laporan']['Kd_Sumber'],
+                                    'Tgl_1' => $getparam['Laporan']['Tgl_1'],
+                                    'Tgl_2' => $getparam['Laporan']['Tgl_2'],
+                                    'Tgl_Laporan' => $getparam['Laporan']['Tgl_Laporan'],
+                                    'perubahan_id' => $getparam['Laporan']['perubahan_id']
+                                ] ], [
+                                    'class' => 'btn btn btn-default pull-right',
+                                    'onClick' => "return !window.open(this.href, 'SPH', 'width=1024,height=600,scrollbars=1')"
+                                        ]) 
+            ],
         ],       
         'pager' => [
             'firstPageLabel' => 'Awal',
