@@ -1194,27 +1194,7 @@ SELECT * FROM
                         $render = 'cetaklaporan3';
                         break;                                                 
                     case 6:
-                        $totalCount = Yii::$app->db->createCommand("
-                            SELECT COUNT(a.tahun) FROM
-                            (   
-                                SELECT
-                                a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, SUM(a.total) AS anggaran
-                                FROM
-                                ta_rkas_history a
-                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = :perubahan_id
-                                AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
-                                GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1
-                            ) a
-                            ", [
-                                ':tahun' => $Tahun,
-                                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
-                                ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
-                                ':kd_penerimaan_1' => $kd_penerimaan_1,
-                                ':kd_penerimaan_2' => $kd_penerimaan_2,
-                            ])->queryScalar();
-
-                        $data = new SqlDataProvider([
-                            'sql' => "
+                        $data =  Yii::$app->db->createCommand("
 
                                     SELECT a.tahun, a.sekolah_id, a.kd_program, c.uraian_program, a.kd_sub_program, d.uraian_sub_program, a.kd_kegiatan, e.uraian_kegiatan, a.Kd_Rek_1, a.anggaran,
                                     IFNULL(f.nilai,0) AS rutin, IFNULL(g.nilai,0) AS bos_pusat, IFNULL(j.nilai,0) AS bos_provinsi, IFNULL(k.nilai,0) AS bos_lain, IFNULL(h.nilai,0) AS bantuan, IFNULL(i.nilai,0) AS lain
@@ -1351,10 +1331,8 @@ SELECT * FROM
                                     LEFT JOIN ref_program_sekolah c ON a.kd_program = c.kd_program
                                     LEFT JOIN ref_sub_program_sekolah d ON a.kd_program = d.kd_program AND a.kd_sub_program = d.kd_sub_program
                                     LEFT JOIN ref_kegiatan_sekolah e ON a.kd_program = e.kd_program AND a.kd_sub_program = e.kd_sub_program AND a.kd_kegiatan = e.kd_kegiatan
-                                    ORDER BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1 ASC;
-
-                                    ",
-                            'params' => [
+                                    ORDER BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1 ASC                  
+                        ")->bindValues([
                                 ':tahun' => $Tahun,
                                 ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
                                 ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
@@ -1362,37 +1340,12 @@ SELECT * FROM
                                 ':kd_penerimaan_2' => $kd_penerimaan_2,
                                 ':tgl_1' => $getparam['Laporan']['Tgl_1'],
                                 ':tgl_2' => $getparam['Laporan']['Tgl_2'],
-                            ],
-                            'totalCount' => $totalCount,
-                            //'sort' =>false, to remove the table header sorting
-                            'pagination' => [
-                                'pageSize' => 50,
-                            ],
-                        ]);   
+                        ])->queryAll();
 
                         $render = 'cetaklaporan6';
                         break;   
                     case 7:
-                        $totalCount = Yii::$app->db->createCommand("
-                            SELECT COUNT(a.tahun) FROM(
-                                SELECT
-                                a.tahun, a.sekolah_id, a.kd_program, a.Kd_Rek_1, SUM(a.total) AS anggaran
-                                FROM
-                                ta_rkas_history a
-                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = :perubahan_id
-                                AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.Kd_Rek_1 = 5
-                                GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.Kd_Rek_1
-                            ) a
-                            ", [
-                                ':tahun' => $Tahun,
-                                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
-                                ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
-                                ':kd_penerimaan_1' => $kd_penerimaan_1,
-                                ':kd_penerimaan_2' => $kd_penerimaan_2,
-                            ])->queryScalar();
-
-                        $data = new SqlDataProvider([
-                            'sql' => "
+                        $data =  Yii::$app->db->createCommand("
                                     SELECT a.tahun, a.sekolah_id, a.kd_program, c.uraian_program, a.Kd_Rek_1, a.anggaran,
                                     IFNULL(d.nilai,0) AS komponen1,
                                     IFNULL(e.nilai,0) AS komponen2,
@@ -1713,10 +1666,8 @@ SELECT * FROM
                                         GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.Kd_Rek_1
                                     ) q ON a.tahun = q.tahun AND a.sekolah_id = q.sekolah_id AND a.kd_program = q.kd_program AND a.Kd_Rek_1 = q.Kd_Rek_1
                                     LEFT JOIN ref_program_sekolah c ON a.kd_program = c.kd_program
-                                    ORDER BY a.tahun, a.sekolah_id, a.kd_program, a.Kd_Rek_1 ASC;
-
-                                    ",
-                            'params' => [
+                                    ORDER BY a.tahun, a.sekolah_id, a.kd_program, a.Kd_Rek_1 ASC                
+                        ")->bindValues([
                                 ':tahun' => $Tahun,
                                 ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
                                 ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
@@ -1724,13 +1675,7 @@ SELECT * FROM
                                 ':kd_penerimaan_2' => $kd_penerimaan_2,
                                 ':tgl_1' => $getparam['Laporan']['Tgl_1'],
                                 ':tgl_2' => $getparam['Laporan']['Tgl_2'],
-                            ],
-                            'totalCount' => $totalCount,
-                            //'sort' =>false, to remove the table header sorting
-                            'pagination' => [
-                                'pageSize' => 50,
-                            ],
-                        ]);   
+                        ])->queryAll();
 
                         $render = 'cetaklaporan7';
                         break;                                         

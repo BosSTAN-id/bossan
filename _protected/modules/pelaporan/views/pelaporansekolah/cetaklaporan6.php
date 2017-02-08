@@ -123,7 +123,7 @@ $left = 25;
 
 $pdf->SetXY(10,20);
 $pdf->SetFont('Arial','B',12);
-$pdf->MultiCell(310,5,'RENCANA KEGIATAN DAN ANGGARAN SEKOLAH (RKAS)', '', 'C', 0);
+$pdf->MultiCell(310,5,'REALISASI PENGGUNAAN DANA TIAP JENIS ANGGARAN', '', 'C', 0);
 $pdf->SetX(10);
 $pdf->MultiCell(310,5, 'TAHUN ANGGARAN '.$Tahun, '', 'C', 0);
 
@@ -131,7 +131,7 @@ $pdf->SetFont('Arial','B',10);
 $pdf->SetXY(15,$pdf->GetY()+10);
 $pdf->Cell(40,5,'Nama Sekolah','',0,'L');
 $pdf->Cell(110,5,': '.$peraturan->sekolah->nama_sekolah,'',0,'L');
-$pdf->Cell(140,5,'Formulir BOS-K2',1,0,'C');
+$pdf->Cell(140,5,'Formulir BOS-K7',1,0,'C');
 $pdf->ln();
 
 $pdf->SetFont('Arial','B',10);
@@ -151,37 +151,39 @@ $pdf->Cell(140,5,'Dikirim ke Tim Manajemen BOS','LRB',0,'C');
 $pdf->ln();
 
 
-$w = [20, 110, 40, 30, 30, 30, 30]; // Tentukan width masing-masing kolom
+$w = [20, 90, 30, 25, 25, 25, 25, 25, 25]; // Tentukan width masing-masing kolom
  
 
-$pdf->SetFont('Arial','B',10);
+$pdf->SetFont('Times','B',10);
 $pdf->SetXY(15,$pdf->GetY()+6);
-$pdf->Cell($w['0'],5,'No.','LT',0,'C');
-$pdf->Cell($w['1'],5,'Uraian','LTR',0,'C');
+$pdf->Cell($w['0'],5,'No','LT',0,'C');
+$pdf->Cell($w['1'],5,'','LTR',0,'C');
 $pdf->Cell($w['2'],5,'Jumlah','LTR',0,'C');
-$pdf->Cell($w['3']+$w['4']+$w['5']+$w['6'],5,'TRIWULAN','LTR',0,'C');
+$pdf->Cell($w['3']+$w['4']+$w['5']+$w['6']+$w['7']+$w['8'],5,'Penggunaan Dana per Sumber Dana','LTR',0,'C');
 $pdf->ln();
 
-$pdf->SetFont('Arial','B',10);
+$pdf->SetFont('Times','B',10);
 $pdf->SetXY(15,$pdf->GetY());
 $pdf->Cell($w['0'],5,'Kode','L',0,'C');
-$pdf->Cell($w['1'],5,'','LR',0,'C');
+$pdf->Cell($w['1'],5,'Uraian','LR',0,'C');
 $pdf->Cell($w['2'],5,'(dalam Rp)','LR',0,'C');
-$pdf->Cell($w['3'],5,'I','LTR',0,'C');
-$pdf->Cell($w['4'],5,'II','LTR',0,'C');
-$pdf->Cell($w['5'],5,'III','LTR',0,'C');
-$pdf->Cell($w['6'],5,'IV','LTR',0,'C');
+$pdf->Cell($w['3'],5,'Rutin','LTR',0,'C');
+$pdf->Cell($w['4']+$w['5']+$w['6'],5,'Bantuan Operasional Sekolah (BOS)','LTR',0,'C');
+$pdf->Cell($w['7'],5,'Bantuan','LTR',0,'C');
+$pdf->Cell($w['8'],5,'Sumber','LTR',0,'C');
 $pdf->ln();
 
-$pdf->SetFont('Arial','B',10);
+$pdf->SetFont('Times','B',10);
 $pdf->SetXY(15,$pdf->GetY());
-$pdf->Cell($w['0'],5,'1','LTB',0,'C');
-$pdf->Cell($w['1'],5,'2','LTRB',0,'C');
-$pdf->Cell($w['2'],5,'3','LTRB',0,'C');
-$pdf->Cell($w['3'],5,'4','LTRB',0,'C');
-$pdf->Cell($w['4'],5,'5','LTRB',0,'C');
-$pdf->Cell($w['5'],5,'6','LTRB',0,'C');
-$pdf->Cell($w['6'],5,'7','LTRB',0,'C');
+$pdf->Cell($w['0'],5,'','L',0,'C');
+$pdf->Cell($w['1'],5,'','LR',0,'C');
+$pdf->Cell($w['2'],5,'','LR',0,'C');
+$pdf->Cell($w['3'],5,'','LR',0,'C');
+$pdf->Cell($w['4'],5,'Pusat','LTR',0,'C');
+$pdf->Cell($w['5'],5,'Provinsi','LTR',0,'C');
+$pdf->Cell($w['6'],5,'Kab/Kota','LTR',0,'C');
+$pdf->Cell($w['7'],5,'Lain','LR',0,'C');
+$pdf->Cell($w['8'],5,'Lainnya','LR',0,'C');
 $pdf->ln();
 
 
@@ -199,15 +201,19 @@ $i = 1;
 $ysisa = $y1;
 
 $totalanggaran = 0;
-$totaltw1 = 0;
-$totaltw2 = 0;
-$totaltw3 = 0;
-$totaltw4 = 0;
+$totalrutin = 0;
+$totalbospusat = 0;
+$totalbosprov = 0;
+$totalboslain = 0;
+$totalbantuan = 0;
+$totallain = 0;
 $totalanggaranp = 0;
-$totaltw1p = 0;
-$totaltw2p = 0;
-$totaltw3p = 0;
-$totaltw4p = 0;
+$totalrutinp = 0;
+$totalbospusatp = 0;
+$totalbosprovp = 0;
+$totalboslainp = 0;
+$totalbantuanp = 0;
+$totallainp = 0;
 
 foreach($data as $model){
 
@@ -227,18 +233,24 @@ foreach($data as $model){
         $xcurrent = $xcurrent+$w['2'];
         $y1 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
         $pdf->SetXY($xcurrent, $y);
-        $pdf->MultiCell($w['3'],5,number_format($totaltw1p,0,',','.'),'BT','R');
+        $pdf->MultiCell($w['3'],5,number_format($totalrutinp,0,',','.'),'BT','R');
         $xcurrent = $xcurrent+$w['3'];
         $pdf->SetXY($xcurrent, $y);
-        $pdf->MultiCell($w['4'],5,number_format($totaltw2p,0,',','.'),'BT','R');
+        $pdf->MultiCell($w['4'],5,number_format($totalbospusatp,0,',','.'),'BT','R');
         $y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
         $xcurrent = $xcurrent+$w['4'];
         $pdf->SetXY($xcurrent, $y);
-        $pdf->MultiCell($w['5'],5,number_format($totaltw3p,0,',','.'),'BT','R');
+        $pdf->MultiCell($w['5'],5,number_format($totalbosprovp,0,',','.'),'BT','R');
         $xcurrent = $xcurrent+$w['5'];
         $pdf->SetXY($xcurrent, $y);
-        $pdf->MultiCell($w['6'],5,number_format($totaltw4p,0,',','.'),'BTR','R');
+        $pdf->MultiCell($w['6'],5,number_format($totalboslainp,0,',','.'),'BTR','R');
         $xcurrent = $xcurrent+$w['6'];
+        $pdf->SetXY($xcurrent, $y);
+        $pdf->MultiCell($w['7'],6,number_format($totalbantuan,0,',','.'),'BTR','R');
+        $xcurrent = $xcurrent+$w['7'];
+        $pdf->SetXY($xcurrent, $y);
+        $pdf->MultiCell($w['8'],6,number_format($totallain,0,',','.'),'BTR','R');
+        $xcurrent = $xcurrent+$w['8'];
         $pdf->SetXY($xcurrent, $y);    
         $ysisa = $y;
         $pdf->ln();
@@ -346,7 +358,7 @@ foreach($data as $model){
 
 
 
-	IF($y2 > 196 || $y1 + (5*(strlen($model['uraian_kegiatan'])/35)) > 180 ){ //cek pagebreak
+	IF($y2 > 196 || $y1 + (5*(strlen($model['uraian_kegiatan'])/35)) > 180 || $y1 + (5*(strlen($model['uraian_sub_program'])/35)) > 180 || $y1 + (5*(strlen($model['uraian_program'])/35)) > 180 ){ //cek pagebreak
 		$ylst = 190 - $yst; //207 batas margin bawah dikurang dengan y pertama
 		//setiap selesai page maka buat rectangle
 		$pdf->Rect($x, $yst, $w['0'] ,$ylst);
@@ -356,6 +368,8 @@ foreach($data as $model){
 		$pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
 		$pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
 		$pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
+        $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5']+$w['6'],$yst, $w['7'],$ylst);
+        $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5']+$w['6']+$w['7'],$yst, $w['8'],$ylst);        
 		
 		//setelah buat rectangle baru kemudian addPage
 		$pdf->AddPage();
@@ -363,35 +377,37 @@ foreach($data as $model){
 		$pdf->AliasNbPages();
 		$left = 25;
 
-		$pdf->SetFont('Arial','B',10);
-		$pdf->SetXY(15,$pdf->GetY()+6);
-		$pdf->Cell($w['0'],5,'No.','LT',0,'C');
-		$pdf->Cell($w['1'],5,'Uraian','LTR',0,'C');
-		$pdf->Cell($w['2'],5,'Jumlah','LTR',0,'C');
-		$pdf->Cell($w['3']+$w['4']+$w['5']+$w['6'],5,'TRIWULAN','LTR',0,'C');
-		$pdf->ln();
+        $pdf->SetFont('Times','B',10);
+        $pdf->SetXY(15,$pdf->GetY()+6);
+        $pdf->Cell($w['0'],5,'No','LT',0,'C');
+        $pdf->Cell($w['1'],5,'','LTR',0,'C');
+        $pdf->Cell($w['2'],5,'Jumlah','LTR',0,'C');
+        $pdf->Cell($w['3']+$w['4']+$w['5']+$w['6']+$w['7']+$w['8'],5,'Penggunaan Dana per Sumber Dana','LTR',0,'C');
+        $pdf->ln();
 
-		$pdf->SetFont('Arial','B',10);
-		$pdf->SetXY(15,$pdf->GetY());
-		$pdf->Cell($w['0'],5,'Kode','L',0,'C');
-		$pdf->Cell($w['1'],5,'','LR',0,'C');
-		$pdf->Cell($w['2'],5,'(dalam Rp)','LR',0,'C');
-		$pdf->Cell($w['3'],5,'I','LTR',0,'C');
-		$pdf->Cell($w['4'],5,'II','LTR',0,'C');
-		$pdf->Cell($w['5'],5,'III','LTR',0,'C');
-		$pdf->Cell($w['6'],5,'IV','LTR',0,'C');
-		$pdf->ln();
+        $pdf->SetFont('Times','B',10);
+        $pdf->SetXY(15,$pdf->GetY());
+        $pdf->Cell($w['0'],5,'Kode','L',0,'C');
+        $pdf->Cell($w['1'],5,'Uraian','LR',0,'C');
+        $pdf->Cell($w['2'],5,'(dalam Rp)','LR',0,'C');
+        $pdf->Cell($w['3'],5,'Rutin','LTR',0,'C');
+        $pdf->Cell($w['4']+$w['5']+$w['6'],5,'Bantuan Operasional Sekolah (BOS)','LTR',0,'C');
+        $pdf->Cell($w['7'],5,'Bantuan','LTR',0,'C');
+        $pdf->Cell($w['8'],5,'Sumber','LTR',0,'C');
+        $pdf->ln();
 
-		$pdf->SetFont('Arial','B',10);
-		$pdf->SetXY(15,$pdf->GetY());
-		$pdf->Cell($w['0'],5,'1','LTB',0,'C');
-		$pdf->Cell($w['1'],5,'2','LTRB',0,'C');
-		$pdf->Cell($w['2'],5,'3','LTRB',0,'C');
-		$pdf->Cell($w['3'],5,'4','LTRB',0,'C');
-		$pdf->Cell($w['4'],5,'5','LTRB',0,'C');
-		$pdf->Cell($w['5'],5,'6','LTRB',0,'C');
-		$pdf->Cell($w['6'],5,'7','LTRB',0,'C');
-		$pdf->ln();
+        $pdf->SetFont('Times','B',10);
+        $pdf->SetXY(15,$pdf->GetY());
+        $pdf->Cell($w['0'],5,'','L',0,'C');
+        $pdf->Cell($w['1'],5,'','LR',0,'C');
+        $pdf->Cell($w['2'],5,'','LR',0,'C');
+        $pdf->Cell($w['3'],5,'','LR',0,'C');
+        $pdf->Cell($w['4'],5,'Pusat','LTR',0,'C');
+        $pdf->Cell($w['5'],5,'Provinsi','LTR',0,'C');
+        $pdf->Cell($w['6'],5,'Kab/Kota','LTR',0,'C');
+        $pdf->Cell($w['7'],5,'Lain','LR',0,'C');
+        $pdf->Cell($w['8'],5,'Lainnya','LR',0,'C');
+        $pdf->ln();
 
 
 		$y1 = $pdf->GetY(); // Untuk baris berikutnya
@@ -419,19 +435,24 @@ foreach($data as $model){
 	$pdf->MultiCell($w['2'],5,number_format($model['anggaran'],0,',','.'),'','R');
 	$xcurrent = $xcurrent+$w['2'];
 	$pdf->SetXY($xcurrent, $y);
-	$pdf->MultiCell($w['3'],5,number_format($model['TW1'],0,',','.'),'','R');
+	$pdf->MultiCell($w['3'],5,number_format($model['rutin'],0,',','.'),'','R');
 	$xcurrent = $xcurrent+$w['3'];
 	$pdf->SetXY($xcurrent, $y);
-	$pdf->MultiCell($w['4'],5,number_format($model['TW2'],0,',','.'),'','R');
+	$pdf->MultiCell($w['4'],5,number_format($model['bos_pusat'],0,',','.'),'','R');
 	$y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
 	$xcurrent = $xcurrent+$w['4'];
 	$pdf->SetXY($xcurrent, $y);
-	$pdf->MultiCell($w['5'],5,number_format($model['TW3'],0,',','.'),'','R');
+	$pdf->MultiCell($w['5'],5,number_format($model['bos_provinsi'],0,',','.'),'','R');
 	$y3 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
 	$xcurrent = $xcurrent+$w['5'];
 	$pdf->SetXY($xcurrent, $y);
-	$pdf->MultiCell($w['6'],5,number_format($model['TW4'],0,',','.'),'','R');
+	$pdf->MultiCell($w['6'],5,number_format($model['bos_lain'],0,',','.'),'','R');
 	$xcurrent = $xcurrent+$w['6'];
+    $pdf->SetXY($xcurrent, $y);
+	$pdf->MultiCell($w['7'],5,number_format($model['bantuan'],0,',','.'),'','R');
+	$xcurrent = $xcurrent+$w['7'];$pdf->SetXY($xcurrent, $y);
+	$pdf->MultiCell($w['8'],5,number_format($model['lain'],0,',','.'),'','R');
+	$xcurrent = $xcurrent+$w['8'];
 	$pdf->SetXY($xcurrent, $y);
 
 	
@@ -444,18 +465,22 @@ foreach($data as $model){
 
 	IF($model['Kd_Rek_1'] == 5){
         $totalanggaran = $totalanggaran+$model['anggaran'];
-        $totaltw1 = $totaltw1+$model['TW1'];
-        $totaltw2 = $totaltw2+$model['TW2'];
-        $totaltw3 = $totaltw3+$model['TW3'];
-        $totaltw4 = $totaltw4+$model['TW4'];
+        $totalrutin = $totalrutin + $model['rutin'];
+        $totalbospusat = $totalbospusat + $model['bos_pusat'];
+        $totalbosprov = $totalbosprov + $model['bos_provinsi'];
+        $totalboslain = $totalboslain + $model['bos_lain'];
+        $totalbantuan = $totalbantuan + $model['bantuan'];
+        $totallain = $totallain + $model['lain'];
         
     }
 	IF($model['Kd_Rek_1'] == 4){
         $totalanggaranp = $totalanggaranp+$model['anggaran'];
-        $totaltw1p = $totaltw1p+$model['TW1'];
-        $totaltw2p = $totaltw2p+$model['TW2'];
-        $totaltw3p = $totaltw3p+$model['TW3'];
-        $totaltw4p = $totaltw4p+$model['TW4'];
+        $totalrutinp = $totalrutinp + $model['rutin'];
+        $totalbospusatp = $totalbospusatp + $model['bos_pusat'];
+        $totalbosprovp = $totalbosprovp + $model['bos_provinsi'];
+        $totalboslainp = $totalboslainp + $model['bos_lain'];
+        $totalbantuanp = $totalbantuanp + $model['bantuan'];
+        $totallainp = $totallainp + $model['lain'];
         
     }   
 
@@ -483,18 +508,24 @@ $pdf->MultiCell($w['2'],6,number_format($totalanggaran,0,',','.'),'BT','R');
 $xcurrent = $xcurrent+$w['2'];
 $y1 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
 $pdf->SetXY($xcurrent, $y);
-$pdf->MultiCell($w['3'],6,number_format($totaltw1,0,',','.'),'BT','R');
+$pdf->MultiCell($w['3'],6,number_format($totalrutin,0,',','.'),'BT','R');
 $xcurrent = $xcurrent+$w['3'];
 $pdf->SetXY($xcurrent, $y);
-$pdf->MultiCell($w['4'],6,number_format($totaltw2,0,',','.'),'BT','R');
+$pdf->MultiCell($w['4'],6,number_format($totalbospusat,0,',','.'),'BT','R');
 $y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
 $xcurrent = $xcurrent+$w['4'];
 $pdf->SetXY($xcurrent, $y);
-$pdf->MultiCell($w['5'],6,number_format($totaltw3,0,',','.'),'BT','R');
+$pdf->MultiCell($w['5'],6,number_format($totalbosprov,0,',','.'),'BT','R');
 $xcurrent = $xcurrent+$w['5'];
 $pdf->SetXY($xcurrent, $y);
-$pdf->MultiCell($w['6'],6,number_format($totaltw4,0,',','.'),'BTR','R');
+$pdf->MultiCell($w['6'],6,number_format($totalboslain,0,',','.'),'BTR','R');
 $xcurrent = $xcurrent+$w['6'];
+$pdf->SetXY($xcurrent, $y);
+$pdf->MultiCell($w['7'],6,number_format($totalbantuan,0,',','.'),'BTR','R');
+$xcurrent = $xcurrent+$w['7'];
+$pdf->SetXY($xcurrent, $y);
+$pdf->MultiCell($w['8'],6,number_format($totallain,0,',','.'),'BTR','R');
+$xcurrent = $xcurrent+$w['8'];
 $pdf->SetXY($xcurrent, $y);    
 $ysisa = $y;
 $pdf->ln();
@@ -510,6 +541,8 @@ $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
 $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
 $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
 $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'],$yst, $w['6'],$ylst);
+$pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5']+$w['6'],$yst, $w['7'],$ylst);
+$pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5']+$w['6']+$w['7'],$yst, $w['8'],$ylst);
 
 
 //Menampilkan jumlah halaman terakhir
@@ -518,10 +551,12 @@ $pdf->SetFont('Times','BU',10);
 $pdf->Cell($w['0'],6,'','LB');
 $pdf->Cell($w['1'],6,'TOTAL','LB',0,'C');
 $pdf->Cell($w['2'],6,number_format($totalanggaranp - $totalanggaran,0,',','.'),'BL',0,'R');
-$pdf->Cell($w['3'],6,number_format($totaltw1p - $totaltw1,0,',','.'),'BL',0,'R');
-$pdf->Cell($w['4'],6,number_format($totaltw2p - $totaltw2,0,',','.'),'BL',0,'R');
-$pdf->Cell($w['5'],6,number_format($totaltw3p - $totaltw3,0,',','.'),'BL',0,'R');
-$pdf->Cell($w['6'],6,number_format($totaltw4p - $totaltw4,0,',','.'),1,0,'R');
+$pdf->Cell($w['3'],6,number_format($totalrutinp - $totalrutin,0,',','.'),'BL',0,'R');
+$pdf->Cell($w['4'],6,number_format($totalbospusatp - $totalbospusat,0,',','.'),'BL',0,'R');
+$pdf->Cell($w['5'],6,number_format($totalbosprovp - $totalbosprov,0,',','.'),'BL',0,'R');
+$pdf->Cell($w['6'],6,number_format($totalboslainp - $totalboslain,0,',','.'),1,0,'R');
+$pdf->Cell($w['7'],6,number_format($totalbantuanp - $totalbantuan,0,',','.'),1,0,'R');
+$pdf->Cell($w['8'],6,number_format($totallainp - $totallain,0,',','.'),1,0,'R');
 
 //Menampilkan tanda tangan
 IF(($pdf->gety()+6) >= 175) $pdf->AddPage();

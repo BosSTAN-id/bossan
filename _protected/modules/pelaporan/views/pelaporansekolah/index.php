@@ -7,9 +7,8 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\modules\controlhutang\models\RekananSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Pelaporan';
-$this->params['breadcrumbs'][] = 'Akuntansi';
-$this->params['breadcrumbs'][] = 'Utang';
+$this->title = 'Pelaporan Sekolah';
+$this->params['breadcrumbs'][] = 'Pelaporan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
