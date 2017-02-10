@@ -336,7 +336,7 @@ foreach($data as $model){
 	//new data		
 	$pdf->SetXY($x, $y);
 	$xcurrent= $x;
-	$pdf->MultiCell($w['0'],5,$model['kd_program'],'','L');
+	$pdf->MultiCell($w['0'],5,$model['kd_program'],'','C');
 	$xcurrent = $xcurrent+$w['0'];
 	$pdf->SetXY($xcurrent, $y);
 	$pdf->MultiCell($w['1'],5,$model['uraian_program'],'','L');
@@ -454,7 +454,7 @@ $xcurrent= $x;
 $pdf->MultiCell($w['0'],6, '','BLT','R');
 $xcurrent = $xcurrent+$w['0'];
 $pdf->SetXY($xcurrent, $y);
-$pdf->MultiCell($w['1'],6,'Subtotal','BTR','L');
+$pdf->MultiCell($w['1'],6,'Total','BTR','L');
 $xcurrent = $xcurrent+$w['1'];
 $pdf->SetXY($xcurrent, $y);
 $pdf->MultiCell($w['2'],6,number_format($totalanggaran,0,',','.'),'BTR','R');

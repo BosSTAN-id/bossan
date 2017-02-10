@@ -133,6 +133,8 @@ function akses($menu){
                     ],
                     ['label' => 'Penatausahaan', 'icon' => 'fa fa-edit', 'url' => '#', 'visible' => !Yii::$app->user->isGuest, 'items' => 
                         [
+                            ['label' => 'Saldo Awal', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/saldoawal'], 'visible' => akses(507)
+                            ],
                             ['label' => 'Penerimaan', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/penerimaan'], 'visible' => akses(501)
                             ],
                             ['label' => 'Belanja', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/belanja'], 'visible' => akses(506)

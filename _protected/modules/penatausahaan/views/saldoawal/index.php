@@ -8,20 +8,19 @@ use yii\bootstrap\Modal;
 /* @var $searchModel app\modules\penatausahaan\models\TaSaldoAwalSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ta Saldo Awals';
+$this->title = 'Saldo Awal';
+$this->params['breadcrumbs'][] = 'Penatausahaan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ta-saldo-awal-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Tambah Ta Saldo Awal', ['create'], [
+        <?= Html::a('Tambah Saldo Awal', ['create'], [
                                                     'class' => 'btn btn-xs btn-success',
                                                     'data-toggle'=>"modal",
                                                     'data-target'=>"#myModal",
-                                                    'data-title'=>"Tambah Referensi Transfer",
+                                                    'data-title'=>"Tambah Saldo Awal",
                                                     ]) ?>
     </p>
     <?= GridView::widget([
@@ -35,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'responsiveWrap' => false,        
         'toolbar' => [
             [
-                'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
+                // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
             ],
         ],       
         'pager' => [
@@ -46,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'pjaxSettings'=>[
             'options' => ['id' => 'ta-saldo-awal-pjax', 'timeout' => 5000],
         ],        
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 

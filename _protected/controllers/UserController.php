@@ -47,6 +47,12 @@ class UserController extends AppController
         return $this->render('view', ['model' => $this->findModel($id)]);
     }
 
+    public function actionProfile()
+    {
+        $id = Yii::$app->user->identity->id;
+        return $this->render('view', ['model' => $this->findModel($id)]);
+    }    
+
     /**
      * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.

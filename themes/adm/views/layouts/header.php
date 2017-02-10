@@ -56,7 +56,7 @@ $tahun = $connection->createCommand('SELECT Tahun FROM ta_th GROUP BY Tahun')->q
                             <div class="pull-left">
                                <?= Html::a(
                                     'Profile',
-                                    ['/user'],
+                                    ['/management/user'],
                                     ['class' => 'btn btn-default btn-flat']
                                 ) ?>
                             </div>

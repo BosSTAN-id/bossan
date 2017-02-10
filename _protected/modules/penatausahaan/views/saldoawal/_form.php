@@ -1,7 +1,11 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
+use kartik\widgets\DepDrop;
+use yii\helpers\Url;
+use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\TaSaldoAwal */
@@ -12,27 +16,36 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(['id' => $model->formName()]); ?>
 
-    <?= $form->field($model, 'tahun')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'sekolah_id')->textInput() ?>
+    <?php 
+            $connection = \Yii::$app->db;
+            $skpd = $connection->createCommand('SELECT CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2, CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian FROM ref_penerimaan_sekolah_2 WHERE sekolah = 1');
+            $data = $skpd->queryAll();
+            // $data = \app\models\RefPenerimaanSekolah2::find()
+            //         ->select(['CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2', 'CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian'])
+            //         ->where(['sekolah' => 1])
+            //         ->all();     
+            echo $form->field($model, 'penerimaan_2')->widget(Select2::classname(), [
+                'data' => ArrayHelper::map($data, 'kd_penerimaan_2','uraian'),
+                // 'value' => $model->kd_penerimaan_1.'.'.$model->kd_penerimaan_2,
+                'options' => ['placeholder' => 'Jenis Pendapatan ...'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);
+    ?>    
 
     <?= $form->field($model, 'keterangan')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'nilai')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'Kd_Rek_1')->textInput() ?>
-
-    <?= $form->field($model, 'Kd_Rek_2')->textInput() ?>
-
-    <?= $form->field($model, 'Kd_Rek_3')->textInput() ?>
-
-    <?= $form->field($model, 'Kd_Rek_4')->textInput() ?>
-
-    <?= $form->field($model, 'Kd_Rek_5')->textInput() ?>
-
-    <?= $form->field($model, 'kd_penerimaan_1')->textInput() ?>
-
-    <?= $form->field($model, 'kd_penerimaan_2')->textInput() ?>
+    <?= $form->field($model, 'nilai', ['enableClientValidation' => false])->widget(\yii\widgets\MaskedInput::classname(), [
+            'clientOptions' => [
+                'alias' =>  'decimal',
+                // 'groupSeparator' => ',',
+                'groupSeparator' => '.',
+                'radixPoint'=>',',                
+                'autoGroup' => true,
+                'removeMaskOnSubmit' => true,
+            ],
+    ]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

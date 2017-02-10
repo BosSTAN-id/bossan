@@ -45,11 +45,4 @@ class RefJabatan extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getTaSubUnitJabs()
-    {
-        return $this->hasMany(TaSubUnitJab::className(), ['Kd_Jab' => 'Kd_Jab']);
-    }
 }

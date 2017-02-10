@@ -56,4 +56,10 @@ class TaSekolahJab extends \yii\db\ActiveRecord
             'jabatan' => Yii::t('app', 'Jabatan'),
         ];
     }
+
+    public function getKdJabatan()
+    {
+        return $this->hasOne(RefJabatan::className(), ['Kd_Jab' => 'kd_jabatan']);
+    }
+
 }

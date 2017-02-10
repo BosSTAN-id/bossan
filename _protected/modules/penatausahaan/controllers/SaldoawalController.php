@@ -47,6 +47,7 @@ class SaldoawalController extends Controller
         }
         $searchModel = new TaSaldoAwalSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['tahun' => $Tahun]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -97,8 +98,18 @@ class SaldoawalController extends Controller
         }
 
         $model = new TaSaldoAwal();
+        $model->tahun = $Tahun;
+        $model->sekolah_id = Yii::$app->user->identity->sekolah_id;        
 
         if ($model->load(Yii::$app->request->post())) {
+            IF($model->penerimaan_2)
+                list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
+            $mapping = \app\models\RefRekPenerimaan::findOne(['kd_penerimaan_1' => $model->kd_penerimaan_1, 'kd_penerimaan_2' => $model->kd_penerimaan_2]);
+            $model->Kd_Rek_1 = $mapping->Kd_Rek_1;
+            $model->Kd_Rek_2 = $mapping->Kd_Rek_2;
+            $model->Kd_Rek_3 = $mapping->Kd_Rek_3;
+            $model->Kd_Rek_4 = $mapping->Kd_Rek_4;
+            $model->Kd_Rek_5 = $mapping->Kd_Rek_5;            
             IF($model->save()){
                 echo 1;
             }ELSE{
@@ -134,6 +145,14 @@ class SaldoawalController extends Controller
         $model = $this->findModel($tahun, $sekolah_id);
 
         if ($model->load(Yii::$app->request->post())) {
+            IF($model->penerimaan_2)
+                list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
+            $mapping = \app\models\RefRekPenerimaan::findOne(['kd_penerimaan_1' => $model->kd_penerimaan_1, 'kd_penerimaan_2' => $model->kd_penerimaan_2]);
+            $model->Kd_Rek_1 = $mapping->Kd_Rek_1;
+            $model->Kd_Rek_2 = $mapping->Kd_Rek_2;
+            $model->Kd_Rek_3 = $mapping->Kd_Rek_3;
+            $model->Kd_Rek_4 = $mapping->Kd_Rek_4;
+            $model->Kd_Rek_5 = $mapping->Kd_Rek_5;              
             IF($model->save()){
                 echo 1;
             }ELSE{
