@@ -154,11 +154,11 @@ function akses($menu){
                         [
                             ['label' => 'Pelaporan', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/pelaporansekolah'], 'visible' => akses(601)
                             ],
+                            ['label' => 'Pelaporan', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/pelaporanrekap'], 'visible' => akses(602)
+                            ],
                             ['label' => 'SP3B', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/sp3b'], 'visible' => akses(604)
                             ],
                             ['label' => 'SP2B', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/sp2b'], 'visible' => akses(605)
-                            ],
-                            ['label' => 'Pelaporan', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/pelaporanpemda'], 'visible' => akses(602)
                             ],
                             ['label' => 'Verifikasi SPJ', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/verpemda'], 'visible' => akses(603)
                             ],                           
