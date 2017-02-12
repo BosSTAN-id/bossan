@@ -35,14 +35,13 @@ echo GridView::widget([
 	'pjaxSettings'=>[
 	    'options' => ['id' => 'laporan1-pjax', 'timeout' => 5000],
 	],
-	'showPageSummary'=>true,    
+	// 'showPageSummary'=>true,    
 	'columns' => [
+        // ['class' => 'kartik\grid\SerialColumn'],            
         [
-            'label' => 'Tanggal',
-            'width'=>'10%',
-            'format' => 'date',
+            'label' => 'Tingkat',
             'value' =>function($model){
-                return $model['tgl_bukti'];
+                return $model['jenis'];
             },
             'group'=>true,  // enable grouping,
             // 'groupedRow'=>true,                    // move grouped column to a single grouped row
@@ -50,21 +49,19 @@ echo GridView::widget([
             // 'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
         ],
         [
-            'label' => 'No Kode',
-            'width'=>'10%',
+            'label' => 'Sekolah',
             'value' =>function($model){
-                return $model['kode'];
+                return $model['nama_sekolah'];
             },
-            // 'group'=>true,  // enable grouping,
+            'group'=>true,  // enable grouping,
             // 'groupedRow'=>true,                    // move grouped column to a single grouped row
             // 'groupOddCssClass'=>'kv-grouped-row',  // configure odd group cell css class
             // 'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
         ],
         [
-            'label' => 'No Bukti',
-            'width'=>'20%',
+            'label' => 'No SPJ',
             'value' =>function($model){
-                return $model['no_bukti'];
+                return $model['no_spj'];
             },
             // 'group'=>true,  // enable grouping,
             // 'groupedRow'=>true,                    // move grouped column to a single grouped row
@@ -72,66 +69,26 @@ echo GridView::widget([
             // 'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
         ],        
         [
-            'label' => 'Urian',
+            'label' => 'Tgl SPJ',
             // 'width'=>'20%',
+            'format' => 'date',
             'value' =>function($model){
-                return $model['keterangan'];
+                return $model['tgl_spj'];
             },
             // 'group'=>true,  // enable grouping,
             // 'groupedRow'=>true,                    // move grouped column to a single grouped row
             // 'groupOddCssClass'=>'kv-grouped-row',  // configure odd group cell css class
             // 'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
         ],
-        [
-            'label'=>'Penerimaan (Debit)',
-            // 'width'=>'150px',
-            'hAlign'=>'right',
-            'format'=>['decimal', 0],
-            'pageSummary'=>true,
-            'value' => function($model){
-                IF($model['nilai'] >= 0 ){
-                    return $model['nilai'];
-                }ELSE{
-                    return '';
-                }
-            }
-        ],           
-        [
-            'label'=>'Pengeluaran (Kredit)',
-            // 'width'=>'150px',
-            'hAlign'=>'right',
-            'format'=>['decimal', 0],
-            'pageSummary'=>true,
-            'value' => function($model){
-                IF($model['nilai'] < 0 ){
-                    return -$model['nilai'];
-                }ELSE{
-                    return '';
-                }
-            }
-        ],                   
-  //       [
-  //           'attribute' => 'No SPM',
-  //           'value' => function ($model){
-  //               return $model->No_SPM ? $model->No_SPM : '-';
-  //           }
-  //       ],        
-  //       'Tgl_RPH:date',
-  //       [
-  //           'label' => 'Jatuh Tempo',
-  //           'format' => 'date',
-  //           'value' => function ($model){
-  //               return $model->Jatuh_Tempo;
-  //           }
-  //       ],
-		// 'noSPH.Nm_Perusahaan',
-  //       [
-  //           'attribute'=>'Nilai_Bayar',
-  //           'width'=>'150px',
-  //           'hAlign'=>'right',
-  //           'format'=>['decimal', 0],
-  //           'pageSummary'=>true
-  //       ],		
+        'keterangan'
+        // [
+        //     'attribute'=>'total',
+        //     'noWrap' => true,                
+        //     'width'=>'5%',
+        //     'hAlign'=>'right',
+        //     'format'=>['decimal', 0],
+        //     'pageSummary'=>true
+        // ],       		
 	],
 ]); 
  ?>

@@ -166,7 +166,7 @@ ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, 
             $dataProvider->query->andWhere('tgl_spj <= \''.$model->tgl_sp3b.'\'');
             IF(strlen($no_spjs) > 0) $dataProvider->query->andWhere("no_spj NOT IN ( $no_spjs )");
         }ELSE{
-            $searchModel = new \app\modules\penatausahaan\models\TaS3BRincSearch();
+            $searchModel = new \app\modules\penatausahaan\models\TaSP3BRincSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
             $dataProvider->query->andWhere(['tahun' => $Tahun]);
             $dataProvider->query->andWhere(['no_sp3b' => $no_sp3b]);            

@@ -58,7 +58,7 @@
 	05 => daftar aset tetap (asetetap)
 	06 => belanja
 	07 => saldoawal
-	08 => 
+	08 => Mutasi Kas
 	09 => 
 	10 => 
 	11 => 

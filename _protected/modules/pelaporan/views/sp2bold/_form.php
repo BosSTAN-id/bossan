@@ -4,29 +4,39 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TaSPJ */
+/* @var $model app\models\TaSP2B */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="ta-spj-form">
+<div class="ta-sp2-b-form">
 
     <?php $form = ActiveForm::begin(['id' => $model->formName()]); ?>
 
+    <?= $form->field($model, 'tahun')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'no_sp2b')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'no_sp3b')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tgl_sp3b')->widget(\yii\jui\DatePicker::classname(), [
-            'language' => 'id',
-            'dateFormat' => 'yyyy-MM-dd',
-            'options' => ['class' => 'form-control']
-        ]) ?> 
+    <?= $form->field($model, 'tgl_sp2b')->textInput() ?>
 
-    <?= $form->field($model, 'keterangan')->textarea(['rows' => 3]) ?>
-    
+    <?= $form->field($model, 'saldo_awal')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'pendapatan')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'belanja')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'saldo_akhir')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'penandatangan')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'jbt_penandatangan')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'nip_penandatangan')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'jumlah_sekolah')->textInput() ?>
+
+    <?= $form->field($model, 'status')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -50,7 +60,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
             {
                 $("#myModal").modal('hide'); //hide modal after submit
                 //$(\$form).trigger("reset"); //reset form to reuse it to input
-                $.pjax.reload({container:'#ta-spj-pjax'});
+                $.pjax.reload({container:'#ta-sp2-b-pjax'});
             }else
             {
                 $("#message").html(result);
@@ -78,7 +88,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
             {
                 $("#myModalubah").modal('hide'); //hide modal after submit
                 //$(\$form).trigger("reset"); //reset form to reuse it to input
-                $.pjax.reload({container:'#ta-spj-pjax'});
+                $.pjax.reload({container:'#ta-sp2-b-pjax'});
             }else
             {
                 $("#message").html(result);

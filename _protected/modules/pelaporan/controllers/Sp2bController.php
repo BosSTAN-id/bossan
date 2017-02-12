@@ -3,14 +3,16 @@
 namespace app\modules\pelaporan\controllers;
 
 use Yii;
-use app\models\TaSP2B;
-use app\modules\pelaporan\models\TaSP2BSearch;
+use app\models\TaSPJ;
+use app\modules\penatausahaan\models\TaSPJSearch;
+use app\models\TaSP3B;
+use app\modules\pelaporan\models\TaSP3BSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * Sp2bController implements the CRUD actions for TaSP2B model.
+ * SpjController implements the CRUD actions for TaSPJ model.
  */
 class Sp2bController extends Controller
 {
@@ -24,13 +26,15 @@ class Sp2bController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'assign' => ['POST'],
+                    'status' => ['POST'],
                 ],
             ],
         ];
     }
 
     /**
-     * Lists all TaSP2B models.
+     * Lists all TaSPJ models.
      * @return mixed
      */
     public function actionIndex()
@@ -45,8 +49,10 @@ class Sp2bController extends Controller
         }ELSE{
             $Tahun = DATE('Y');
         }
-        $searchModel = new TaSP2BSearch();
+        $searchModel = new TaSP3BSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['tahun' => $Tahun, 'status' => 2]);
+        $dataProvider->query->orderBy('status, tgl_sp3b, no_sp3b ASC');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -56,13 +62,12 @@ class Sp2bController extends Controller
     }
 
     /**
-     * Displays a single TaSP2B model.
+     * Displays a single TaSPJ model.
      * @param string $tahun
-     * @param string $no_sp2b
-     * @param string $no_sp3b
+     * @param string $no_spj
      * @return mixed
      */
-    public function actionView($tahun, $no_sp2b, $no_sp3b)
+    public function actionView($tahun, $no_spj)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -75,12 +80,201 @@ class Sp2bController extends Controller
             $Tahun = DATE('Y');
         }   
         return $this->renderAjax('view', [
-            'model' => $this->findModel($tahun, $no_sp2b, $no_sp3b),
+            'model' => $this->findModel($tahun, $no_spj),
         ]);
     }
 
+    public function actionPrint($tahun, $no_sp3b)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = $this->findModel($tahun, $no_sp3b);
+        $spjdata = \Yii::$app->db->createCommand("
+SELECT
+-- a.tahun,
+-- c.no_sp3b,
+-- a.sekolah_id,
+a.kd_program,
+g.uraian_program,
+a.kd_sub_program,
+f.uraian_sub_program,
+a.kd_kegiatan,
+e.uraian_kegiatan,
+a.Kd_Rek_1,
+a.Kd_Rek_2,
+a.Kd_Rek_3,
+a.Kd_Rek_4,
+a.Kd_Rek_5,
+d.Nm_Rek_5,
+SUM(a.nilai) AS nilai
+FROM
+ta_spj_rinc AS a
+INNER JOIN ta_sp3b_rinc AS b ON a.tahun = b.tahun AND a.no_spj = b.no_spj AND a.sekolah_id = b.sekolah_id
+INNER JOIN ta_sp3b AS c ON b.tahun = c.tahun AND b.no_sp3b = c.no_sp3b
+INNER JOIN ref_rek_5 AS d ON d.Kd_Rek_1 = a.Kd_Rek_1 AND d.Kd_Rek_2 = a.Kd_Rek_2 AND d.Kd_Rek_3 = a.Kd_Rek_3 AND d.Kd_Rek_4 = a.Kd_Rek_4 AND d.Kd_Rek_5 = a.Kd_Rek_5
+INNER JOIN ref_kegiatan_sekolah AS e ON e.kd_program = a.kd_program AND e.kd_sub_program = a.kd_sub_program AND e.kd_kegiatan = a.kd_kegiatan
+INNER JOIN ref_sub_program_sekolah AS f ON e.kd_program = f.kd_program AND e.kd_sub_program = f.kd_sub_program
+INNER JOIN ref_program_sekolah AS g ON f.kd_program = g.kd_program
+WHERE b.no_sp3b = '$no_sp3b'
+GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
+ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
+            ");
+        $data = $spjdata->queryAll();        
+        //find all bukti
+        $bukti = $this->findBukti($tahun, $no_sp3b);
+
+        return $this->render('print', [
+            'model' => $model,
+            'data' => $data,
+            'bukti' => $bukti,
+        ]);
+    }    
+
+    public function actionSpjbukti($tahun, $no_sp3b)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+        $model = $this->findModel($tahun, $no_sp3b);
+        $sp3brinc_lalu = \app\models\TaSP3BRinc::find()->where(['tahun' => $Tahun])->andWhere('no_sp3b <> \''.$model->no_sp3b.'\'')->all();
+        $no_spjs = [];
+        foreach ($sp3brinc_lalu as $data) {
+            $no_spjs[] = '\''.$data['no_spj'].'\'';
+        }
+        $no_spjs = implode(',', $no_spjs); 
+        // var_dump(strlen($no_spjs));
+        IF($model->status == 1){
+            //jika masih draft munculkan semua spj
+            $searchModel = new \app\modules\penatausahaan\models\TaSPJSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['tahun' => $Tahun]);
+            $dataProvider->query->andWhere('tgl_spj <= \''.$model->tgl_sp3b.'\'');
+            IF(strlen($no_spjs) > 0) $dataProvider->query->andWhere("no_spj NOT IN ( $no_spjs )");
+        }ELSE{
+            $searchModel = new \app\modules\pelaporan\models\TaSP3BRincSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['tahun' => $Tahun]);
+            $dataProvider->query->andWhere(['no_sp3b' => $no_sp3b]);            
+        }
+
+        IF(isset($_POST) AND $_POST <> NULL){
+            // var_dump($_POST); 
+            foreach ($_POST['selection'] as $value) {
+                //convert to array, array key tahun, no_bukti, tgl_bukti
+                $data = \yii\helpers\Json::decode($value);
+                $bukti = \app\models\TaSPJRinc::findOne(['tahun' => $data['tahun'], 'no_bukti' => $data['no_bukti'] ]);
+                $bukti->no_spj = $no_spj;
+
+                $bukti->save();
+
+                // print_r($data);
+                // echo '-';
+                // print_r($data['tahun']);
+                // echo '-';
+                // print_r($data['no_bukti']);
+                // echo '</br>';
+            }
+        }
+        return $this->render('spjbukti', [
+            'model' => $model,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'Tahun' => $Tahun,
+        ]);
+    }  
+
+    public function actionStatus($kd, $tahun, $no_sp3b)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+        $model = $this->findModel($tahun, $no_sp3b);
+        switch ($kd) {
+            case 1:
+                $model->status = 2;
+                $model->save();
+                Yii::$app->getSession()->setFlash('Success',  'SP3B Ini sudah difinalkan.');
+                return $this->redirect(Yii::$app->request->referrer);
+                break;
+            case 2:
+                $model->status = 1;
+                $model->save();
+                Yii::$app->getSession()->setFlash('Success',  'SP3B Ini sudah di draft ulang.');
+                return $this->redirect(Yii::$app->request->referrer);
+                break;            
+            default:
+                # code...
+                break;
+        }
+
+    }     
+
+    public function actionAssign($kd, $tahun, $no_sp3b, $no_spj)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+        switch ($kd) {
+            case 1: //assign
+                $sp3b = \app\models\TaSP3B::findOne(['tahun' => $tahun, 'no_sp3b' => $no_sp3b]);
+                $spj = \app\models\TaSPJ::findOne(['tahun' => $tahun, 'no_spj' => $no_spj]);
+                $sp3brinc = new \app\models\TaSP3BRinc();
+                $sp3brinc->tahun = $tahun;
+                $sp3brinc->no_sp3b = $no_sp3b;
+                $sp3brinc->sekolah_id = $spj->sekolah_id;
+                $sp3brinc->no_spj = $no_spj;
+                // var_dump($sp3brinc->validate());
+                IF($sp3brinc->validate() == true){
+                    IF($sp3brinc->save()){
+                        Yii::$app->getSession()->setFlash('success',  'SPJ Berhasil Ditambahkan.');
+                        return $this->redirect(Yii::$app->request->referrer);                        
+                    }ELSE{
+                        Yii::$app->getSession()->setFlash('warning',  'SPJ gagal ditambahkan.');
+                        return $this->redirect(Yii::$app->request->referrer);                                                
+                    }
+                }
+                break;
+            case 0: //hapus 
+                $status = 'Terverifikasi';
+                break;
+            default:
+                // code goes here
+                break;
+        }
+    }        
+
     /**
-     * Creates a new TaSP2B model.
+     * Creates a new TaSPJ model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -97,7 +291,9 @@ class Sp2bController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $model = new TaSP2B();
+        $model = new TaSP3B();
+        $model->tahun = $Tahun;
+        $model->status = 1;
 
         if ($model->load(Yii::$app->request->post())) {
             IF($model->save()){
@@ -113,14 +309,13 @@ class Sp2bController extends Controller
     }
 
     /**
-     * Updates an existing TaSP2B model.
+     * Updates an existing TaSPJ model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $tahun
-     * @param string $no_sp2b
-     * @param string $no_sp3b
+     * @param string $no_spj
      * @return mixed
      */
-    public function actionUpdate($tahun, $no_sp2b, $no_sp3b)
+    public function actionUpdate($tahun, $no_sp3b)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -133,9 +328,14 @@ class Sp2bController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $model = $this->findModel($tahun, $no_sp2b, $no_sp3b);
+        $model = $this->findModel($tahun, $no_sp3b);
+        IF($model->status <> 1){
+            Yii::$app->getSession()->setFlash('warning',  'SP3B ini sudah diproses SP2B, tidak dapat diubah atau dihapus.');
+            return $this->redirect(Yii::$app->request->referrer);
+        }        
 
         if ($model->load(Yii::$app->request->post())) {
+            \app\models\TaSP3BRinc::updateAll(['no_sp3b' => $model->no_sp3b], 'no_sp3b = \''.$no_sp3b.'\'');
             IF($model->save()){
                 echo 1;
             }ELSE{
@@ -149,14 +349,13 @@ class Sp2bController extends Controller
     }
 
     /**
-     * Deletes an existing TaSP2B model.
+     * Deletes an existing TaSPJ model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $tahun
-     * @param string $no_sp2b
-     * @param string $no_sp3b
+     * @param string $no_spj
      * @return mixed
      */
-    public function actionDelete($tahun, $no_sp2b, $no_sp3b)
+    public function actionDelete($tahun, $no_sp3b)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -168,30 +367,44 @@ class Sp2bController extends Controller
         }ELSE{
             $Tahun = DATE('Y');
         }
-
-        $this->findModel($tahun, $no_sp2b, $no_sp3b)->delete();
+        $model = $this->findModel($tahun, $no_spj);
+        IF($model->status == 1){
+            $model->delete();
+        }ELSE{
+            Yii::$app->getSession()->setFlash('warning',  'SP3B ini sudah diproses SP2B, tidak dapat diubah atau dihapus.');
+        }
+        
 
         return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**
-     * Finds the TaSP2B model based on its primary key value.
+     * Finds the TaSPJ model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $tahun
-     * @param string $no_sp2b
-     * @param string $no_sp3b
-     * @return TaSP2B the loaded model
+     * @param string $no_spj
+     * @return TaSPJ the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($tahun, $no_sp2b, $no_sp3b)
+    protected function findModel($tahun, $no_sp3b)
     {
-        if (($model = TaSP2B::findOne(['tahun' => $tahun, 'no_sp2b' => $no_sp2b, 'no_sp3b' => $no_sp3b])) !== null) {
+        if (($model = TaSP3B::findOne(['tahun' => $tahun, 'no_sp3b' => $no_sp3b])) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 
+    protected function findBukti($tahun, $no_sp3b)
+    {
+        if (($model = \app\models\TaSP3BRinc::find()->where(['tahun' => $tahun, 'no_sp3b' => $no_sp3b])
+        ->orderBy('sekolah_id, no_spj')
+        ->all() ) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }   
 
     protected function cekakses(){
 

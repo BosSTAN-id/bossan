@@ -74,9 +74,9 @@ class TaSP3B extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTaSp2bs()
+    public function getSp2b()
     {
-        return $this->hasMany(TaSp2b::className(), ['tahun' => 'tahun', 'no_sp3b' => 'no_sp3b']);
+        return $this->hasOne(TaSp2b::className(), ['tahun' => 'tahun', 'no_sp3b' => 'no_sp3b']);
     }
 
     /**

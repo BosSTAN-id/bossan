@@ -8,7 +8,7 @@ use yii\bootstrap\Modal;
 /* @var $searchModel app\modules\penatausahaan\models\TaSPJSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Surat Permintaan Persetujuan Pendapatan dan Belanja (SP3B)';
+$this->title = 'Surat Permintaan Pengesahan Pendapatan dan Belanja (SP3B)';
 $this->params['breadcrumbs'][] = 'Pelaporan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>

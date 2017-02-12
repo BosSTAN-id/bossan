@@ -137,6 +137,8 @@ function akses($menu){
                             ],
                             ['label' => 'Penerimaan', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/penerimaan'], 'visible' => akses(501)
                             ],
+                            ['label' => 'Mutasi Kas', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/mutasikas'], 'visible' => akses(508)
+                            ],
                             ['label' => 'Belanja', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/belanja'], 'visible' => akses(506)
                             ],
                             ['label' => 'SPJ', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/spj'], 'visible' => akses(502)
@@ -144,10 +146,10 @@ function akses($menu){
 
                             ['label' => 'Verifikasi SPJ', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/verspj'], 'visible' => akses(503)
                             ],
-                            ['label' => 'Pengadaan Aset Tetap', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/pengadaanaset'], 'visible' => akses(504)
-                            ],
-                            ['label' => 'Daftar Aset Tetap', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/asettetap'], 'visible' => akses(505)
-                            ],
+                            // ['label' => 'Pengadaan Aset Tetap', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/pengadaanaset'], 'visible' => akses(504)
+                            // ],
+                            // ['label' => 'Daftar Aset Tetap', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/asettetap'], 'visible' => akses(505)
+                            // ],
                         ],
                     ],                   
                     ['label' => 'Pelaporan', 'icon' => 'fa fa-edit', 'url' => '#', 'visible' => !Yii::$app->user->isGuest, 'items' => 

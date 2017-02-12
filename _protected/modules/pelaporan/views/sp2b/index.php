@@ -5,27 +5,19 @@ use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\pelaporan\models\TaSP2BSearch */
+/* @var $searchModel app\modules\penatausahaan\models\TaSPJSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ta Sp2 Bs';
+$this->title = 'Surat Pengesahan Pendapatan dan Belanja (SP3B)';
+$this->params['breadcrumbs'][] = 'Pelaporan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="ta-sp2-b-index">
+<div class="ta-spj-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Tambah Ta Sp2 B', ['create'], [
-                                                    'class' => 'btn btn-xs btn-success',
-                                                    'data-toggle'=>"modal",
-                                                    'data-target'=>"#myModal",
-                                                    'data-title'=>"Tambah Referensi Transfer",
-                                                    ]) ?>
-    </p>
     <?= GridView::widget([
-        'id' => 'ta-sp2-b',    
+        'id' => 'ta-spj',    
         'dataProvider' => $dataProvider,
         'export' => false, 
         'responsive'=>true,
@@ -44,43 +36,46 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'pjax'=>true,
         'pjaxSettings'=>[
-            'options' => ['id' => 'ta-sp2-b-pjax', 'timeout' => 5000],
-        ],        
-        'filterModel' => $searchModel,
+            'options' => ['id' => 'ta-spj-pjax', 'timeout' => 5000],
+        ],
+        'rowOptions'   => function ($model, $key, $index, $grid) {
+            return ['data-id' => $model->tahun.'~'.$model->no_sp3b];
+        },             
+        // 'filterModel' => $searchModel,   
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'tahun',
-            'no_sp2b',
             'no_sp3b',
-            'tgl_sp2b',
-            'saldo_awal',
-            // 'pendapatan',
-            // 'belanja',
-            // 'saldo_akhir',
-            // 'penandatangan',
-            // 'jbt_penandatangan',
-            // 'nip_penandatangan',
-            // 'jumlah_sekolah',
-            // 'status',
-
+            'keterangan',
+            'tgl_sp3b:date',
             [
+                'value' => function($model){
+                    return $model->sp2b['no_sp2b'];
+                }
+            ],
+            [
+                'header' => 'SP3B',
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {update} {delete}',
+                'template' => '{print} {spjbukti}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
+                        'print' => function($url, $model){
+                            return  Html::a('<i class="glyphicon glyphicon-print bg-white"></i>', $url, ['title' => 'Cetak SP3B' ,'onClick' => "return !window.open(this.href, 'SPJ', 'width=1024,height=768')"]);
+                        },
                         'update' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'ubah'),
-                                 'data-toggle'=>"modal",
-                                 'data-target'=>"#myModalubah",
-                                 'data-title'=> "Ubah",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
+                          IF($model->status == 1 ){
+                              return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
+                                [  
+                                    'title' => Yii::t('yii', 'ubah'),
+                                    'data-toggle'=>"modal",
+                                    'data-target'=>"#myModalubah",
+                                    'data-title'=> "Ubah SPJ ".$model->no_sp3b,                                 
+                                    // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                    // 'data-method' => 'POST',
+                                    // 'data-pjax' => 1
+                                ]);
+                          }
                         },
                         'view' => function ($url, $model) {
                           return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,
@@ -88,15 +83,75 @@ $this->params['breadcrumbs'][] = $this->title;
                                  'title' => Yii::t('yii', 'lihat'),
                                  'data-toggle'=>"modal",
                                  'data-target'=>"#myModalubah",
-                                 'data-title'=> "Lihat",
+                                 'data-title'=> "SPJ ".$model->no_sp3b,
                               ]);
-                        },                        
+                        },
+                        'spjbukti' => function ($url, $model) {
+                          return Html::a('Daftar SPJ <i class="glyphicon glyphicon-menu-right"></i>', $url,
+                              [  
+                                 'title' => Yii::t('yii', 'Rincian SP3B'),
+                                 'class'=>"btn btn-xs btn-default",                                 
+                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                 // 'data-method' => 'POST',
+                                 'data-pjax' => 0
+                              ]);
+                        },                                               
                 ]
             ],
+            [
+                'header' => 'SP2B',
+                'class' => 'kartik\grid\ActionColumn',
+                'template' => '{print2} {sp2b}',
+                'noWrap' => true,
+                'vAlign'=>'top',
+                'buttons' => [
+                        'print2' => function($url, $model){
+                            IF($model->sp2b['no_sp2b'] <> NULL){
+                                return  Html::a('<i class="glyphicon glyphicon-print bg-white"></i>', $url, ['title' => 'Cetak SP3B' ,'onClick' => "return !window.open(this.href, 'SPJ', 'width=1024,height=768')"]);
+                            }
+                        },
+                        'sp2b' => function ($url, $model) {
+                          IF($model->sp2b['no_sp2b'] == NULL ){
+                              return Html::a('<span class="glyphicon glyphicon-plus"></span>', $url,
+                                [  
+                                    'title' => Yii::t('yii', 'Buat SP2B'),
+                                    'data-toggle'=>"modal",
+                                    'data-target'=>"#myModalubah",
+                                    'data-title'=> "Buat SP2B atas ".$model->no_sp3b,                                 
+                                    // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                    // 'data-method' => 'POST',
+                                    // 'data-pjax' => 1
+                                ]);
+                          }ELSE{
+                              return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,
+                                [  
+                                    'title' => Yii::t('yii', 'Hapus SP2B'),
+                                    // 'data-toggle'=>"modal",
+                                    // 'data-target'=>"#myModalubah",
+                                    // 'data-title'=> "Buat SP2B atas ".$model->no_sp3b,                                 
+                                    'data-confirm' => "Yakin menghapus SP2B ini?",
+                                    'data-method' => 'POST',
+                                    'data-pjax' => 1
+                                ]);
+                          }
+                        },
+                ]
+            ],            
         ],
     ]); ?>
 </div>
-<?php Modal::begin([
+<?php
+//row click link
+$this->registerJs("
+
+    $('td').click(function (e) {
+        var id = $(this).closest('tr').data('id').split('~');
+        if(e.target == this)
+            location.href = '" . \Yii\helpers\Url::to(['spjbukti']) . "?tahun=' + id[0] +'&no_sp3b=' + id[1];
+    });
+
+");
+Modal::begin([
     'id' => 'myModal',
     'header' => '<h4 class="modal-title">Lihat lebih...</h4>',
         'options' => [

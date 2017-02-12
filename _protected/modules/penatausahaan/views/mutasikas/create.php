@@ -4,13 +4,13 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TaSPJ */
+/* @var $model app\models\TaMutasiKas */
 
-$this->title = 'Create Ta Spj';
-$this->params['breadcrumbs'][] = ['label' => 'Ta Spjs', 'url' => ['index']];
+$this->title = 'Create Ta Mutasi Kas';
+$this->params['breadcrumbs'][] = ['label' => 'Ta Mutasi Kas', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="ta-spj-create">
+<div class="ta-mutasi-kas-create">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

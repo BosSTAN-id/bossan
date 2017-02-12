@@ -67,4 +67,14 @@ class TaSP3BRinc extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TaSp3b::className(), ['tahun' => 'tahun', 'no_sp3b' => 'no_sp3b']);
     }
+
+    public function getSpj()
+    {
+        return $this->hasOne(\app\models\TaSPJ::className(), ['no_spj' => 'no_spj']);
+    }     
+
+    public function getSekolah()
+    {
+        return $this->hasOne(\app\models\RefSekolah::className(), ['id' => 'sekolah_id']);
+    }     
 }
