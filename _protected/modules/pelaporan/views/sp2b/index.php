@@ -8,7 +8,7 @@ use yii\bootstrap\Modal;
 /* @var $searchModel app\modules\penatausahaan\models\TaSPJSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Surat Pengesahan Pendapatan dan Belanja (SP3B)';
+$this->title = 'Surat Pengesahan Pendapatan dan Belanja (SP2B)';
 $this->params['breadcrumbs'][] = 'Pelaporan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
         // 'filterModel' => $searchModel,   
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'tahun',
+            // 'tahun',
             'no_sp3b',
             'keterangan',
             'tgl_sp3b:date',
@@ -123,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     // 'data-pjax' => 1
                                 ]);
                           }ELSE{
-                              return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,
+                              return Html::a('<span class="glyphicon glyphicon-trash"></span> '.$model->sp2b['no_sp2b'], ['delete', 'tahun' => $model->tahun, 'no_sp3b' => $model->no_sp3b],
                                 [  
                                     'title' => Yii::t('yii', 'Hapus SP2B'),
                                     // 'data-toggle'=>"modal",

@@ -12,16 +12,14 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(['id' => $model->formName()]); ?>
 
-    <?= $form->field($model, 'no_sp3b')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'no_sp2b')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'tgl_sp3b')->widget(\yii\jui\DatePicker::classname(), [
+    <?= $form->field($model, 'tgl_sp2b')->widget(\yii\jui\DatePicker::classname(), [
             'language' => 'id',
             'dateFormat' => 'yyyy-MM-dd',
             'options' => ['class' => 'form-control']
         ]) ?> 
 
-    <?= $form->field($model, 'keterangan')->textarea(['rows' => 3]) ?>
-    
     <?= $form->field($model, 'penandatangan')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'jbt_penandatangan')->textInput(['maxlength' => true]) ?>
@@ -48,7 +46,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
         .done(function(result){
             if(result == 1)
             {
-                $("#myModal").modal('hide'); //hide modal after submit
+                $("#myModalubah").modal('hide'); //hide modal after submit
                 //$(\$form).trigger("reset"); //reset form to reuse it to input
                 $.pjax.reload({container:'#ta-spj-pjax'});
             }else

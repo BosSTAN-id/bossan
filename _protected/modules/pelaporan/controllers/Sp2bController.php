@@ -61,29 +61,6 @@ class Sp2bController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single TaSPJ model.
-     * @param string $tahun
-     * @param string $no_spj
-     * @return mixed
-     */
-    public function actionView($tahun, $no_spj)
-    {
-        IF($this->cekakses() !== true){
-            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
-            return $this->redirect(Yii::$app->request->referrer);
-        }    
-        IF(Yii::$app->session->get('tahun'))
-        {
-            $Tahun = Yii::$app->session->get('tahun');
-        }ELSE{
-            $Tahun = DATE('Y');
-        }   
-        return $this->renderAjax('view', [
-            'model' => $this->findModel($tahun, $no_spj),
-        ]);
-    }
-
     public function actionPrint($tahun, $no_sp3b)
     {
         IF($this->cekakses() !== true){
@@ -99,34 +76,34 @@ class Sp2bController extends Controller
 
         $model = $this->findModel($tahun, $no_sp3b);
         $spjdata = \Yii::$app->db->createCommand("
-SELECT
--- a.tahun,
--- c.no_sp3b,
--- a.sekolah_id,
-a.kd_program,
-g.uraian_program,
-a.kd_sub_program,
-f.uraian_sub_program,
-a.kd_kegiatan,
-e.uraian_kegiatan,
-a.Kd_Rek_1,
-a.Kd_Rek_2,
-a.Kd_Rek_3,
-a.Kd_Rek_4,
-a.Kd_Rek_5,
-d.Nm_Rek_5,
-SUM(a.nilai) AS nilai
-FROM
-ta_spj_rinc AS a
-INNER JOIN ta_sp3b_rinc AS b ON a.tahun = b.tahun AND a.no_spj = b.no_spj AND a.sekolah_id = b.sekolah_id
-INNER JOIN ta_sp3b AS c ON b.tahun = c.tahun AND b.no_sp3b = c.no_sp3b
-INNER JOIN ref_rek_5 AS d ON d.Kd_Rek_1 = a.Kd_Rek_1 AND d.Kd_Rek_2 = a.Kd_Rek_2 AND d.Kd_Rek_3 = a.Kd_Rek_3 AND d.Kd_Rek_4 = a.Kd_Rek_4 AND d.Kd_Rek_5 = a.Kd_Rek_5
-INNER JOIN ref_kegiatan_sekolah AS e ON e.kd_program = a.kd_program AND e.kd_sub_program = a.kd_sub_program AND e.kd_kegiatan = a.kd_kegiatan
-INNER JOIN ref_sub_program_sekolah AS f ON e.kd_program = f.kd_program AND e.kd_sub_program = f.kd_sub_program
-INNER JOIN ref_program_sekolah AS g ON f.kd_program = g.kd_program
-WHERE b.no_sp3b = '$no_sp3b'
-GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
-ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
+            SELECT
+            -- a.tahun,
+            -- c.no_sp3b,
+            -- a.sekolah_id,
+            a.kd_program,
+            g.uraian_program,
+            a.kd_sub_program,
+            f.uraian_sub_program,
+            a.kd_kegiatan,
+            e.uraian_kegiatan,
+            a.Kd_Rek_1,
+            a.Kd_Rek_2,
+            a.Kd_Rek_3,
+            a.Kd_Rek_4,
+            a.Kd_Rek_5,
+            d.Nm_Rek_5,
+            SUM(a.nilai) AS nilai
+            FROM
+            ta_spj_rinc AS a
+            INNER JOIN ta_sp3b_rinc AS b ON a.tahun = b.tahun AND a.no_spj = b.no_spj AND a.sekolah_id = b.sekolah_id
+            INNER JOIN ta_sp3b AS c ON b.tahun = c.tahun AND b.no_sp3b = c.no_sp3b
+            INNER JOIN ref_rek_5 AS d ON d.Kd_Rek_1 = a.Kd_Rek_1 AND d.Kd_Rek_2 = a.Kd_Rek_2 AND d.Kd_Rek_3 = a.Kd_Rek_3 AND d.Kd_Rek_4 = a.Kd_Rek_4 AND d.Kd_Rek_5 = a.Kd_Rek_5
+            INNER JOIN ref_kegiatan_sekolah AS e ON e.kd_program = a.kd_program AND e.kd_sub_program = a.kd_sub_program AND e.kd_kegiatan = a.kd_kegiatan
+            INNER JOIN ref_sub_program_sekolah AS f ON e.kd_program = f.kd_program AND e.kd_sub_program = f.kd_sub_program
+            INNER JOIN ref_program_sekolah AS g ON f.kd_program = g.kd_program
+            WHERE b.no_sp3b = '$no_sp3b'
+            GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
+            ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
             ");
         $data = $spjdata->queryAll();        
         //find all bukti
@@ -138,6 +115,63 @@ ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, 
             'bukti' => $bukti,
         ]);
     }    
+
+    public function actionPrint2($tahun, $no_sp3b)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = \app\models\TaSP2B::findOne(['tahun' => $tahun, 'no_sp3b' => $no_sp3b]);
+        $sp3b = $this->findModel($tahun, $no_sp3b);
+        $spjdata = \Yii::$app->db->createCommand("
+            SELECT
+            -- a.tahun,
+            -- c.no_sp3b,
+            -- a.sekolah_id,
+            a.kd_program,
+            g.uraian_program,
+            a.kd_sub_program,
+            f.uraian_sub_program,
+            a.kd_kegiatan,
+            e.uraian_kegiatan,
+            a.Kd_Rek_1,
+            a.Kd_Rek_2,
+            a.Kd_Rek_3,
+            a.Kd_Rek_4,
+            a.Kd_Rek_5,
+            d.Nm_Rek_5,
+            SUM(a.nilai) AS nilai
+            FROM
+            ta_spj_rinc AS a
+            INNER JOIN ta_sp3b_rinc AS b ON a.tahun = b.tahun AND a.no_spj = b.no_spj AND a.sekolah_id = b.sekolah_id
+            INNER JOIN ta_sp3b AS c ON b.tahun = c.tahun AND b.no_sp3b = c.no_sp3b
+            INNER JOIN ref_rek_5 AS d ON d.Kd_Rek_1 = a.Kd_Rek_1 AND d.Kd_Rek_2 = a.Kd_Rek_2 AND d.Kd_Rek_3 = a.Kd_Rek_3 AND d.Kd_Rek_4 = a.Kd_Rek_4 AND d.Kd_Rek_5 = a.Kd_Rek_5
+            INNER JOIN ref_kegiatan_sekolah AS e ON e.kd_program = a.kd_program AND e.kd_sub_program = a.kd_sub_program AND e.kd_kegiatan = a.kd_kegiatan
+            INNER JOIN ref_sub_program_sekolah AS f ON e.kd_program = f.kd_program AND e.kd_sub_program = f.kd_sub_program
+            INNER JOIN ref_program_sekolah AS g ON f.kd_program = g.kd_program
+            WHERE b.no_sp3b = '$no_sp3b'
+            GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
+            ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
+            ");
+        $data = $spjdata->queryAll();        
+        //find all bukti
+        $bukti = $this->findBukti($tahun, $no_sp3b);
+
+        return $this->render('print2', [
+            'model' => $model,
+            'data' => $data,
+            'bukti' => $bukti,
+            'sp3b' => $sp3b,
+        ]);
+    }        
 
     public function actionSpjbukti($tahun, $no_sp3b)
     {
@@ -278,7 +312,7 @@ ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, 
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionSp2b($tahun, $no_sp3b)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -291,9 +325,17 @@ ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, 
             $Tahun = DATE('Y');
         }
 
-        $model = new TaSP3B();
-        $model->tahun = $Tahun;
-        $model->status = 1;
+        $sp3b = $this->findModel($tahun, $no_sp3b);
+
+        $model = new \app\models\TaSP2B();
+        $model->tahun = $tahun;
+        $model->status = 2;
+        $model->no_sp3b = $sp3b->no_sp3b;
+        $model->saldo_awal = $sp3b->saldo_awal;
+        $model->pendapatan = $sp3b->pendapatan;
+        $model->belanja = $sp3b->belanja;
+        $model->saldo_akhir = $sp3b->saldo_akhir;
+        $model->jumlah_sekolah = $sp3b->jumlah_sekolah;
 
         if ($model->load(Yii::$app->request->post())) {
             IF($model->save()){
@@ -328,14 +370,15 @@ ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, 
             $Tahun = DATE('Y');
         }
 
-        $model = $this->findModel($tahun, $no_sp3b);
-        IF($model->status <> 1){
-            Yii::$app->getSession()->setFlash('warning',  'SP3B ini sudah diproses SP2B, tidak dapat diubah atau dihapus.');
-            return $this->redirect(Yii::$app->request->referrer);
-        }        
+        $sp3b = $this->findModel($tahun, $no_sp3b);
+        $model = \app\models\TaSP2B::findOne(['tahun' => $tahun, 'no_sp3b' => $no_sp3b]);
+        // IF($model->status <> 1){
+        //     Yii::$app->getSession()->setFlash('warning',  'SP2B ini sudah diproses, tidak dapat diubah atau dihapus.');
+        //     return $this->redirect(Yii::$app->request->referrer);
+        // }        
 
         if ($model->load(Yii::$app->request->post())) {
-            \app\models\TaSP3BRinc::updateAll(['no_sp3b' => $model->no_sp3b], 'no_sp3b = \''.$no_sp3b.'\'');
+            // \app\models\TaSP3BRinc::updateAll(['no_sp3b' => $model->no_sp3b], 'no_sp3b = \''.$no_sp3b.'\'');
             IF($model->save()){
                 echo 1;
             }ELSE{
@@ -367,12 +410,13 @@ ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, 
         }ELSE{
             $Tahun = DATE('Y');
         }
-        $model = $this->findModel($tahun, $no_spj);
-        IF($model->status == 1){
+        $sp3b = $this->findModel($tahun, $no_sp3b);
+        $model = \app\models\TaSP2B::findOne(['tahun' => $tahun, 'no_sp3b' => $no_sp3b]);
+        // IF($model->status == 1){
             $model->delete();
-        }ELSE{
-            Yii::$app->getSession()->setFlash('warning',  'SP3B ini sudah diproses SP2B, tidak dapat diubah atau dihapus.');
-        }
+        // }ELSE{
+        //     Yii::$app->getSession()->setFlash('warning',  'SP3B ini sudah diproses SP2B, tidak dapat diubah atau dihapus.');
+        // }
         
 
         return $this->redirect(Yii::$app->request->referrer);
