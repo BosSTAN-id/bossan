@@ -12,7 +12,8 @@ function cekrekening($kd_penerimaan_1, $kd_penerimaan_2){
 /* @var $searchModel app\modules\globalsetting\models\RefPenerimaanSekolah2Search */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ref Penerimaan Sekolah2s';
+$this->title = 'Mapping Pendapatan';
+$this->params['breadcrumbs'][] = 'Pengaturan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ref-penerimaan-sekolah2-index">
@@ -29,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'responsiveWrap' => false,        
         'toolbar' => [
             [
-                'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
+                // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
             ],
         ],       
         'pager' => [
@@ -40,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'pjaxSettings'=>[
             'options' => ['id' => 'referensi-pjax', 'timeout' => 5000],
         ],        
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [

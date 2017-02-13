@@ -39,7 +39,16 @@ use kartik\widgets\DepDrop;
             ]);
     ?>
 
-    <?= $form->field($model, 'nilai_rp')->textInput(['id' => 'nilai_rp', 'maxlength' => true]) ?>
+    <?= $form->field($model, 'nilai_rp', ['enableClientValidation' => false])->widget(\yii\widgets\MaskedInput::classname(), [
+            'clientOptions' => [
+                'alias' =>  'decimal',
+                // 'groupSeparator' => ',',
+                'groupSeparator' => '.',
+                'radixPoint'=>',',                
+                'autoGroup' => true,
+                'removeMaskOnSubmit' => true,
+            ],
+    ]) ?> 
 
     <div class="col-md-6">
     <?= $form->field($model, 'nilai_1')->textInput(['id' => 'nilai_1', 'maxlength' => true]) ?>

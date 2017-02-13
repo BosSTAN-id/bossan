@@ -53,9 +53,9 @@ class RkasController extends Controller
 
         return $this->render('index', [
             'Tahun' => $Tahun,
-            'pdt' => $pdt,
-            'belanja' => $belanja,
-            'btl' => $btl,
+            'pdt' => $pdt == NULL ? 0 : $pdt,
+            'belanja' => $belanja == NULL ? 0 : $belanja,
+            'btl' => $btl == NULL ? 0 : $btl,
         ]);
     }
 

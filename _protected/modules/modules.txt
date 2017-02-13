@@ -5,7 +5,7 @@
 	04 => mappingkomponen
 	05 => mappingpendapatan
 	06 => blog/pengumuman
-	07 => 
+	07 => (selection) rekeningberlaku
 	08 => 
 	09 => 
 	10 => 

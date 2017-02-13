@@ -64,12 +64,14 @@ $this->params['breadcrumbs'][] = $this->title;
 		        </div>
 				<div class="col-md-2">
 		        	<?= $form->field($rencana, 'penandatangan')->textInput(['class' => 'form-control input-sm','placeholder' => 'Penandantangan'])->label(false) ?>
+					<?= $form->field($rencana, 'komite_sekolah')->textInput(['class' => 'form-control input-sm','placeholder' => 'Penandatangan Komite'])->label(false) ?>
 		        </div>
 				<div class="col-md-2">
 		        	<?= $form->field($rencana, 'nip')->textInput(['class' => 'form-control input-sm','placeholder' => 'NIP'])->label(false) ?>
 		        </div>
 				<div class="col-md-2">
 		        	<?= $form->field($rencana, 'jabatan')->textInput(['class' => 'form-control input-sm','placeholder' => 'Jabatan'])->label(false) ?>
+					<?= $form->field($rencana, 'jabatan_komite')->textInput(['class' => 'form-control input-sm','placeholder' => 'Jabatan Komite'])->label(false) ?>
 		        </div>
 	        </div>
 			<div class="col-md-1">
@@ -124,12 +126,14 @@ $this->params['breadcrumbs'][] = $this->title;
 		        </div>
 				<div class="col-md-2">
 		        	<?= $form->field($induk, 'penandatangan')->textInput(['class' => 'form-control input-sm','placeholder' => 'Penandantangan'])->label(false) ?>
+					<?= $form->field($induk, 'komite_sekolah')->textInput(['class' => 'form-control input-sm','placeholder' => 'Penandatangan Komite'])->label(false) ?>
 		        </div>
 				<div class="col-md-2">
 		        	<?= $form->field($induk, 'nip')->textInput(['class' => 'form-control input-sm','placeholder' => 'NIP'])->label(false) ?>
 		        </div>
 				<div class="col-md-2">
 		        	<?= $form->field($induk, 'jabatan')->textInput(['class' => 'form-control input-sm','placeholder' => 'Jabatan'])->label(false) ?>
+					<?= $form->field($induk, 'jabatan_komite')->textInput(['class' => 'form-control input-sm','placeholder' => 'Jabatan Komite'])->label(false) ?>
 		        </div>
 	        </div>
 			<div class="col-md-1">
@@ -184,12 +188,14 @@ $this->params['breadcrumbs'][] = $this->title;
 		        </div>
 				<div class="col-md-2">
 		        	<?= $form->field($perubahan1, 'penandatangan')->textInput(['class' => 'form-control input-sm','placeholder' => 'Penandantangan'])->label(false) ?>
+					<?= $form->field($perubahan1, 'komite_sekolah')->textInput(['class' => 'form-control input-sm','placeholder' => 'Penandatangan Komite'])->label(false) ?>
 		        </div>
 				<div class="col-md-2">
 		        	<?= $form->field($perubahan1, 'nip')->textInput(['class' => 'form-control input-sm','placeholder' => 'NIP'])->label(false) ?>
 		        </div>
 				<div class="col-md-2">
 		        	<?= $form->field($perubahan1, 'jabatan')->textInput(['class' => 'form-control input-sm','placeholder' => 'Jabatan'])->label(false) ?>
+					<?= $form->field($perubahan1, 'jabatan_komite')->textInput(['class' => 'form-control input-sm','placeholder' => 'Jabatan Komite'])->label(false) ?>
 		        </div>
 	        </div>
 			<div class="col-md-1">
