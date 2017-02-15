@@ -34,7 +34,7 @@ class RefPenerimaanSekolah2 extends \yii\db\ActiveRecord
     {
         return [
             [['kd_penerimaan_1', 'kd_penerimaan_2', 'uraian'], 'required'],
-            [['kd_penerimaan_1', 'kd_penerimaan_2', 'sekolah'], 'integer'],
+            [['kd_penerimaan_1', 'kd_penerimaan_2', 'sekolah', 'pengesahan'], 'integer'],
             [['uraian'], 'string', 'max' => 100],
             [['abbr'], 'string', 'max' => 10],
             [['kd_penerimaan_1'], 'exist', 'skipOnError' => true, 'targetClass' => RefPenerimaanSekolah1::className(), 'targetAttribute' => ['kd_penerimaan_1' => 'kd_penerimaan_1']],
@@ -52,6 +52,7 @@ class RefPenerimaanSekolah2 extends \yii\db\ActiveRecord
             'uraian' => Yii::t('app', 'Uraian'),
             'abbr' => Yii::t('app', 'Abbr'),
             'sekolah' => 'Digunakan',
+            'pengesahan' => 'SP3B-SP2B'
         ];
     }
 

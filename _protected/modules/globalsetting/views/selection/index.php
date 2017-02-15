@@ -13,121 +13,74 @@ $this->params['breadcrumbs'][] = 'Pengaturan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ref-rek5-index">
-    <div class="alert-warning alert fade in" id="w1-success">
-        <button class="close" aria-hidden="true" type="button" data-dismiss="alert">×</button>
+<div class="row">
+    <div class="col-md-2">
+        <div class="box box-primary">
+            <div class="box-body box-profile">
+                <?= Html::img('@web/images/logo.jpg', ['alt'=>'Image', 'class'=>'profile-user-img img-responsive img-circle']);?> 
 
-        <i class="icon fa fa-info-circle"></i> Saat ini menu ini hanya akan mempengaruhi pendapatan. Hanya Pendapatan dan penerimaan pembiayaan saja yang akan berpengaruh terhadap akun yang dapat dipilih oleh sekolah.
+                <h3 class="profile-username text-center">Seleksi Akun</h3>
 
+                <p class="text-muted text-center">Bagan Akun Standar</p>
+
+                <ul class="list-group list-group-unbordered">
+                    <li class="list-group-item">
+                        <b>Untuk menyeleksi akun bagan akun standar yang dapat digunakan sekolah.</b> 
+                        <!--<a class="pull-right">1,322</a>-->
+                    </li>
+                    <li class="list-group-item">
+                        <?= Html::a('Buka <i class="glyphicon glyphicon-log-in"></i>' , ['bas'], ['class' => 'btn btn-primary btn-block']) ?>
+                    </li>
+                </ul>
+            </div>
+        <!-- /.box-body -->
+        </div>
     </div>
-    <?= GridView::widget([
-        'id' => 'ref-rek5',    
-        'dataProvider' => $dataProvider,
-        'export' => false, 
-        'responsive'=>true,
-        'hover'=>true,     
-        'resizableColumns'=>true,
-        'panel'=>['type'=>'primary', 'heading'=>$this->title],
-        'responsiveWrap' => false,        
-        'toolbar' => [
-            [
-                // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
-            ],
-        ],       
-        'pager' => [
-            'firstPageLabel' => 'Awal',
-            'lastPageLabel'  => 'Akhir'
-        ],
-        'pjax'=>true,
-        'pjaxSettings'=>[
-            'options' => ['id' => 'ref-rek5-pjax', 'timeout' => 5000],
-        ],        
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <div class="col-md-2">
+        <div class="box box-danger">
+            <div class="box-body box-profile">
+                <?= Html::img('@web/images/logo.jpg', ['alt'=>'Image', 'class'=>'profile-user-img img-responsive img-circle']);?> 
 
-            'Kd_Rek_1',
-            'Kd_Rek_2',
-            'Kd_Rek_3',
-            'Kd_Rek_4',
-            'Kd_Rek_5',
-            'Nm_Rek_5',
-            [
-                'attribute' => 'Sekolah',
-                'label' => '',
-                'hAlign' => 'center',
-                'format' => 'raw',
-                'value' => function($model, $url, $key){
-                    IF($model->Sekolah == 1){
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', '#',
-                              [  
-                                 'class' => 'btn btn-xs btn-success', 
-                                //  'title' => Yii::t('yii', 'ubah'),
-                                //  'data-toggle'=>"modal",
-                                //  'data-target'=>"#myModalubah",
-                                //  'data-title'=> "Ubah",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
-                    }ELSE{
-                        return Html::a('<span class="glyphicon glyphicon-remove"></span>', '#',
-                              [  
-                                 'class' => 'btn btn-xs btn-danger', 
-                                //  'title' => Yii::t('yii', 'ubah'),
-                                //  'data-toggle'=>"modal",
-                                //  'data-target'=>"#myModalubah",
-                                //  'data-title'=> "Ubah",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
-                    }
-                }
-            ],
+                <h3 class="profile-username text-center">Sumber Dana</h3>
 
-            [
-                'class' => 'kartik\grid\ActionColumn',
-                'template' => '{assign}',
-                'noWrap' => true,
-                'vAlign'=>'top',
-                'buttons' => [
-                        'assign' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-refresh"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'Ubah Seleksi'),
-                                //  'data-toggle'=>"modal",
-                                //  'data-target'=>"#myModalubah",
-                                //  'data-title'=> "Ubah",                                 
-                                 'data-confirm' => "Ubah seleksi akun ini?",
-                                 // 'data-method' => 'POST',
-                                 'data-pjax' => 1
-                              ]);
-                        },
-                        'update' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'ubah'),
-                                 'data-toggle'=>"modal",
-                                 'data-target'=>"#myModalubah",
-                                 'data-title'=> "Ubah",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
-                        },
-                        'view' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'lihat'),
-                                 'data-toggle'=>"modal",
-                                 'data-target'=>"#myModalubah",
-                                 'data-title'=> "Lihat",
-                              ]);
-                        },                        
-                ]
-            ],
-        ],
-    ]); ?>
+                <p class="text-muted text-center">Kode Penerimaan Sekolah</p>
+
+                <ul class="list-group list-group-unbordered">
+                    <li class="list-group-item">
+                        <b>Menyeleksi penerimaan untuk sekolah.</b> 
+                        <!--<a class="pull-right">1,322</a>-->
+                    </li>
+                    <li class="list-group-item">
+                        <?= Html::a('Buka <i class="glyphicon glyphicon-log-in"></i>' , ['penerimaansekolah'], ['class' => 'btn btn-danger btn-block']) ?>
+                    </li>
+                </ul>
+            </div>
+        <!-- /.box-body -->
+        </div>
+    </div>
+    <div class="col-md-2">
+        <div class="box box-info">
+            <div class="box-body box-profile">
+                <?= Html::img('@web/images/logo.jpg', ['alt'=>'Image', 'class'=>'profile-user-img img-responsive img-circle']);?> 
+
+                <h3 class="profile-username text-center">Pengesahan</h3>
+
+                <p class="text-muted text-center">SP3B-SP2B</p>
+
+                <ul class="list-group list-group-unbordered">
+                    <li class="list-group-item">
+                        <b>Daftar sumber dana yang akan ditambahkan dalam SP3B dan SP2B</b> 
+                        <!--<a class="pull-right">1,322</a>-->
+                    </li>
+                    <li class="list-group-item">
+                        <?= Html::a('Buka <i class="glyphicon glyphicon-log-in"></i>' , ['pengesahan'], ['class' => 'btn btn-info btn-block']) ?>
+                    </li>
+                </ul>
+            </div>
+        <!-- /.box-body -->
+        </div>
+    </div>    
+</div>
 </div>
 <?php Modal::begin([
     'id' => 'myModal',

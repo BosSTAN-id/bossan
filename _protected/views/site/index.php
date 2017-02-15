@@ -1,5 +1,7 @@
 <?php
 use dosamigos\chartjs\ChartJs;
+use yii\widgets\ListView;
+use yii\helpers\Html;
 /* @var $this yii\web\View */
 
 function angka($n) {
@@ -23,10 +25,38 @@ $this->title = Yii::t('app', Yii::$app->name);
 <div class="site-index">
 
     <div class="well">
-        <h3>Selamat Datang di BosSTAN!</h3>
-
-        <p class="lead">Sistem Pengelolaan Pertanggungjawaban dana BOS Kabupaten Banyuasin...</p>
-
+        <?php
+          echo ListView::widget([
+              'dataProvider' => $dataProvider,
+              'itemView' => function ($model, $key, $index, $widget) {
+                // IF(strlen($model->content) <= 1000){
+                    return '
+                      <div class="panel panel-success">
+                          <div class="panel-heading">
+                              <h3 class="panel-title">'.Html::a($model->title, ['view', 'id' => $model->id], ['class' => '']).'</h3>
+                          </div>
+                          <div class="panel-body">
+                          '.$model->content.'
+                          </div>
+                        
+                      </div>
+                    ';                  
+                // }ELSE{
+                //   return '
+                //     <div class="panel panel-success">
+                //         <div class="panel-heading">
+                //             <h3 class="panel-title">'.Html::a($model->title, ['view', 'id' => $model->id], ['class' => '']).'</h3>
+                //         </div>
+                //         <div class="panel-body">
+                //         '.substr($model->content, 0, 1000).Html::a('read more...', ['view', 'id' => $model->id], ['class' => 'btn btn-xs btn-default']).'
+                //         </div>
+                      
+                //     </div>
+                //   ';                  
+                // }
+              },
+          ]);
+        ?> 
     </div>
 <?php /*
     <div class="body-content">

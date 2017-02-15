@@ -2,27 +2,42 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\widgets\SwitchInput;
-use kartik\widgets\Select2;
+use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
+use kartik\widgets\DepDrop;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\RefRek5 */
+/* @var $model app\models\RefKegiatanSekolah */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="ref-rek5-form">
+<div class="ref-kegiatan-sekolah-form">
 
     <?php $form = ActiveForm::begin(['id' => $model->formName()]); ?>
 
-    <?= $form->field($model, 'kd_penerimaan_1')->textInput() ?>
+    <?php 
+            echo $form->field($model, 'kd_program')->widget(Select2::classname(), [
+                'data' => ArrayHelper::map(\app\models\RefProgramSekolah::find()->select(['kd_program', 'CONCAT(kd_program,\' \',uraian_program) AS uraian_program'])->all(),'kd_program','uraian_program'),
+                'options' => ['placeholder' => 'Pilih Program ...'],
+                'pluginOptions' => [
+                    'allowClear' => true
+                ],
+            ]);
+    ?>
+    <?php  echo $form->field($model, 'kd_sub_program')->widget(DepDrop::classname(), [
+            'type'=>DepDrop::TYPE_SELECT2,
+            'options'=>['id'=>'refkegiatansekolah-kd_sub_program'],
+            'pluginOptions'=>[
+                'depends'=>['refkegiatansekolah-kd_program'],
+                'placeholder'=>'Pilih Sub Program ...',
+                'url'=>Url::to(['subprogram'])
+            ]
+        ]); ?>   
 
-    <?= $form->field($model, 'kd_penerimaan_2')->textInput() ?>
+    <?= $form->field($model, 'kd_kegiatan')->textInput() ?>
 
-    <?= $form->field($model, 'uraian')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'sekolah')->checkbox(); ?>
-
-    <?= $form->field($model, 'pengesahan')->checkbox(); ?>
+    <?= $form->field($model, 'uraian_kegiatan')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -46,7 +61,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
             {
                 $("#myModal").modal('hide'); //hide modal after submit
                 //$(\$form).trigger("reset"); //reset form to reuse it to input
-                $.pjax.reload({container:'#ref-rek5-pjax'});
+                $.pjax.reload({container:'#ref-kegiatan-sekolah-pjax'});
             }else
             {
                 $("#message").html(result);
@@ -74,7 +89,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
             {
                 $("#myModalubah").modal('hide'); //hide modal after submit
                 //$(\$form).trigger("reset"); //reset form to reuse it to input
-                $.pjax.reload({container:'#ref-rek5-pjax'});
+                $.pjax.reload({container:'#ref-kegiatan-sekolah-pjax'});
             }else
             {
                 $("#message").html(result);

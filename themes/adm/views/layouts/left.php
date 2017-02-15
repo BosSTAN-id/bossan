@@ -87,12 +87,13 @@ function akses($menu){
                     ['label' => 'Pengaturan', 'icon' => 'fa fa-circle-o','url' => '#', 'visible' => 1,'items'  =>
                         [
                             ['label' => 'Pengaturan Global', 'icon' => 'fa fa-circle-o', 'url' => ['/globalsetting/setting'], 'visible' => akses(202)],
-                            ['label' => 'User Management', 'icon' => 'fa fa-circle-o', 'url' => ['/user/index'], 'visible' => akses(404)],
+                            ['label' => 'User Management', 'icon' => 'fa fa-circle-o', 'url' => ['/user/index'], 'visible' => akses(102)],
                             ['label' => 'Akses Grup', 'icon' => 'fa fa-circle-o', 'url' => ['/management/menu'], 'visible' => akses(401)],
                             // ['label' => 'Mapping Komponen', 'icon' => 'fa fa-circle-o', 'url' => ['/globalsetting/mappingkomponen'], 'visible' => akses(104)],
                             ['label' => 'Mapping Pendapatan', 'icon' => 'fa fa-circle-o', 'url' => ['/globalsetting/mappingpendapatan'], 'visible' => akses(105)],  
                             ['label' => 'Blog/Pengumuman', 'icon' => 'fa fa-circle-o', 'url' => ['/management/pengumuman'], 'visible' => akses(106)],  
-                            ['label' => 'Seleksi Rekening', 'icon' => 'fa fa-circle-o', 'url' => ['/globalsetting/selection'], 'visible' => akses(107)],                                                        
+                            ['label' => 'Seleksi Rekening', 'icon' => 'fa fa-circle-o', 'url' => ['/globalsetting/selection'], 'visible' => akses(107)], 
+                            ['label' => 'Program dan Kegiatan', 'icon' => 'fa fa-circle-o', 'url' => ['/globalsetting/progker'], 'visible' => akses(108)],                                                        
                         ],
                     ],                    
                     ['label' => 'Parameter', 'icon' => 'fa fa-circle-o','url' => '#', 'visible' => 1,'items'  =>

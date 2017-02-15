@@ -6,7 +6,7 @@ use yii\bootstrap\Modal;
 
 function cekrekening($kd_penerimaan_1, $kd_penerimaan_2){
     $rekening = \app\models\RefRekPenerimaan::findOne(['kd_penerimaan_1' => $kd_penerimaan_1, 'kd_penerimaan_2' => $kd_penerimaan_2]);
-    return $rekening ? $rekening['kdRek4']['Nm_Rek_4'].' > '.$rekening['kdRek5']['Nm_Rek_5'] : '-' ;
+    return $rekening ? $rekening['Kd_Rek_1'].'.'.$rekening['Kd_Rek_2'].'.'.$rekening['Kd_Rek_3'].'.'.substr('0'.$rekening['Kd_Rek_4'], -2).'.'.substr('0'.$rekening['Kd_Rek_5'], -2).' '. $rekening['kdRek4']['Nm_Rek_4'].' > '.$rekening['kdRek5']['Nm_Rek_5'] : '-' ;
 }
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\globalsetting\models\RefPenerimaanSekolah2Search */

@@ -15,6 +15,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use Yii;
+use yii\data\ActiveDataProvider;
 
 /**
  * Site controller.
@@ -105,11 +106,30 @@ class SiteController extends Controller
         }ELSE{
             $Tahun = DATE('Y');
         }
-
-        return $this->render('index');
+        $sticky = \app\models\TaPengumuman::find()->where(['published' => 1, 'sticky' => 1]);
+        $pengumuman = \app\models\TaPengumuman::find()->where(['published' => 1, 'sticky' => 0]);
+        $sticky->andWhere('diumumkan_di = 3 OR diumumkan_di = 2');
+        $sticky = count($sticky->all());
+        $pengumuman->andWhere('diumumkan_di = 3 OR diumumkan_di = 2');
+        $pengumuman = $pengumuman->orderBy('id DESC');
+        // $pengumuman = $pengumuman;
+        $dataProvider = new ActiveDataProvider([
+            'query' => $pengumuman,
+            'pagination' => [
+                'pageSize' => $sticky + 3,
+            ],
+        ]);                
+        return $this->render('index',[
+                    'dataProvider' => $dataProvider,
+                ]);
         
     }
 
+    // Bagian ini untuk menampilkan pengumuman
+    public function actionView($id)
+    {
+        return $this->render('pengumuman', ['model' => \app\models\TaPengumuman::findOne(['id' => $id])]);
+    }
 
     /**
      * Displays the about static page.
