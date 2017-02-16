@@ -75,13 +75,13 @@ class PelaporanrekapController extends Controller
                     case 1:
                         $totalCount = Yii::$app->db->createCommand("
                                 SELECT
-                                COUNT(a.tahun)
+                                COUNT(b.id)
                                 FROM
-                                ta_rkas_peraturan AS a
-                                INNER JOIN ref_sekolah AS b ON a.sekolah_id = b.id
-                                INNER JOIN ref_jenis_sekolah AS c ON b.jenis_id = c.id
-                                INNER JOIN ref_pendidikan AS d ON c.pendidikan_id = d.id
-                                WHERE a.tahun = :tahun AND d.id LIKE :pendidikan_id AND a.perubahan_id LIKE :perubahan_id
+                                ref_sekolah AS b
+                                LEFT JOIN (SELECT * FROM ta_rkas_peraturan a WHERE a.tahun = :tahun AND a.perubahan_id LIKE :perubahan_id) AS a ON a.sekolah_id = b.id
+                                LEFT JOIN ref_jenis_sekolah AS c ON b.jenis_id = c.id
+                                LEFT JOIN ref_pendidikan AS d ON c.pendidikan_id = d.id
+                                WHERE d.id LIKE :pendidikan_id
                             ", [
                                 ':tahun' => $Tahun,
                                 ':pendidikan_id' => $getparam['Laporan']['pendidikan_id'],
@@ -100,11 +100,11 @@ class PelaporanrekapController extends Controller
                                 a.tgl_peraturan,
                                 a.verifikasi
                                 FROM
-                                ta_rkas_peraturan AS a
-                                INNER JOIN ref_sekolah AS b ON a.sekolah_id = b.id
-                                INNER JOIN ref_jenis_sekolah AS c ON b.jenis_id = c.id
-                                INNER JOIN ref_pendidikan AS d ON c.pendidikan_id = d.id
-                                WHERE a.tahun = :tahun AND d.id LIKE :pendidikan_id AND a.perubahan_id LIKE :perubahan_id
+                                ref_sekolah AS b
+                                LEFT JOIN (SELECT * FROM ta_rkas_peraturan a WHERE a.tahun = :tahun AND a.perubahan_id LIKE :perubahan_id) AS a ON a.sekolah_id = b.id
+                                LEFT JOIN ref_jenis_sekolah AS c ON b.jenis_id = c.id
+                                LEFT JOIN ref_pendidikan AS d ON c.pendidikan_id = d.id
+                                WHERE d.id LIKE :pendidikan_id
                                 ORDER BY d.jenis, a.sekolah_id, a.perubahan_id, a.tgl_peraturan ASC
                                     ",
                             'params' => [

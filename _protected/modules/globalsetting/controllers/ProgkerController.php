@@ -48,6 +48,7 @@ class ProgkerController extends Controller
         }
         $searchModel = new RefKegiatanSekolahSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->pagination->pageSize = 0;
 
         return $this->render('index', [
             'searchModel' => $searchModel,

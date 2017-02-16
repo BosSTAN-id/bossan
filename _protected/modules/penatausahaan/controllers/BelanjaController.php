@@ -345,7 +345,7 @@ class BelanjaController extends Controller
                 Yii::$app->getSession()->setFlash('warning',  'Sisa Anggaran tidak mencukupi! Sisa anggaran '.number_format($sisa_anggaran['sisa_anggaran'], 0, ',', '.').' pembayaran diajukan senilai '.number_format($model->nilai, 0, ',', '.'));
                 return $this->redirect(Yii::$app->request->referrer);          
             }
-            $query = \Yii::$app->db->createCommand("call sisa_kas($Tahun, ".$model->sekolah_id.",".$model->pembayaran.",NOW())");
+            $query = \Yii::$app->db->createCommand("call sisa_kas($Tahun, ".$model->sekolah_id.",".$model->pembayaran.",'".$model->tgl_bukti."')");
             $sisa_kas = $query->queryOne();
             IF($sisa_kas['nilai'] < $model->nilai){
                 IF($model->pembayaran == 1){
@@ -486,7 +486,7 @@ class BelanjaController extends Controller
                 Yii::$app->getSession()->setFlash('warning',  'Sisa Anggaran tidak mencukupi! Sisa anggaran '.number_format($sisa_anggaran['sisa_anggaran'], 0, ',', '.').' pembayaran diajukan senilai '.number_format($model->nilai, 0, ',', '.'));
                 return $this->redirect(Yii::$app->request->referrer);          
             }
-            $query = \Yii::$app->db->createCommand("call sisa_kas($Tahun, ".$model->sekolah_id.",".$model->pembayaran.",NOW())");
+            $query = \Yii::$app->db->createCommand("call sisa_kas($Tahun, ".$model->sekolah_id.",".$model->pembayaran.",'".$model->tgl_bukti."')");
             $sisa_kas = $query->queryOne();
             IF($sisa_kas['nilai'] < $model->nilai){
                 IF($model->pembayaran == 1){
@@ -655,7 +655,7 @@ class BelanjaController extends Controller
                 Yii::$app->getSession()->setFlash('warning',  'Sisa Anggaran tidak mencukupi! Sisa anggaran '.number_format($sisa_anggaran['sisa_anggaran'], 0, ',', '.').' pembayaran diajukan senilai '.number_format($model->nilai, 0, ',', '.'));
                 return $this->redirect(Yii::$app->request->referrer);          
             }
-            $query = \Yii::$app->db->createCommand("call sisa_kas($Tahun, ".$model->sekolah_id.",".$model->pembayaran.",NOW())");
+            $query = \Yii::$app->db->createCommand("call sisa_kas($Tahun, ".$model->sekolah_id.",".$model->pembayaran.",'".$model->tgl_bukti."')");
             $sisa_kas = $query->queryOne();
             IF($sisa_kas['nilai'] < $model->nilai){
                 IF($model->pembayaran == 1){
@@ -818,7 +818,7 @@ class BelanjaController extends Controller
                 Yii::$app->getSession()->setFlash('warning',  'Sisa Anggaran tidak mencukupi! Sisa anggaran '.number_format($sisa_anggaran['sisa_anggaran'], 0, ',', '.').' pembayaran diajukan senilai '.number_format($model->nilai, 0, ',', '.'));
                 return $this->redirect(Yii::$app->request->referrer);          
             }
-            $query = \Yii::$app->db->createCommand("call sisa_kas($Tahun, ".$model->sekolah_id.",".$model->pembayaran.",NOW())");
+            $query = \Yii::$app->db->createCommand("call sisa_kas($Tahun, ".$model->sekolah_id.",".$model->pembayaran.",'".$model->tgl_bukti."')");
             $sisa_kas = $query->queryOne();
             IF($sisa_kas['nilai'] < $model->nilai){
                 IF($model->pembayaran == 1){

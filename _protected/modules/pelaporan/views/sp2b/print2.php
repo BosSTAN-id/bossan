@@ -246,22 +246,23 @@ $ttk = 85;
 $pdf->SetXY(15,$y);
 $pdf->MultiCell(70,6,'1.  Saldo Awal', '', 'L', 0);
 $pdf->SetXY($ttk,$y);
-$pdf->MultiCell(115,6,': '.$model['saldo_awal'], '', 'L', 0);
+$pdf->MultiCell(115,6,': '.number_format($saldoawal,0, ',', '.'), '', 'L', 0);
 $y = $pdf->GetY();
 $pdf->SetXY(15,$y);
 $pdf->MultiCell(70,6,'2.  Pendapatan', '', 'L', 0);
 $pdf->SetXY($ttk,$y);
-$pdf->MultiCell(115,6,': '.$model['pendapatan'], '', 'L', 0);
+$pdf->MultiCell(115,6,': '.number_format($model['pendapatan'],0, ',', '.'), '', 'L', 0);
 $y = $pdf->GetY();
 $pdf->SetXY(15,$y);
 $pdf->MultiCell(70,6,'3.  Belanja', '', 'L', 0);
 $pdf->SetXY($ttk,$y);
-$pdf->MultiCell(115,6,': '.$model['belanja'], '', 'L', 0);
+$pdf->MultiCell(115,6,': '.number_format($model['belanja'],0, ',', '.'), '', 'L', 0);
 $y = $pdf->GetY();
 $pdf->SetXY(15,$y);
 $pdf->MultiCell(70,6,'4.  Saldo Akhir', '', 'L', 0);
 $pdf->SetXY($ttk,$y);
-$pdf->MultiCell(115,6,': '.$model['saldo_akhir'], '', 'L', 0);
+$saldoakhir = $saldoawal + $model['pendapatan'] - $model['belanja'];
+$pdf->MultiCell(115,6,': '.number_format($saldoakhir,0, ',', '.'), '', 'L', 0);
 $y = $pdf->GetY();
 $pdf->SetXY(15,$y);
 $pdf->MultiCell(70,6,'5.  Jumlah Sekolah', '', 'L', 0);
@@ -540,7 +541,7 @@ foreach($data as $data){
     $pdf->MultiCell($w['3'],4,number_format($data['nilai'],0,',','.'),'','R');
     $xcurrent = $xcurrent+$w['3'];
     $pdf->SetXY($xcurrent, $y);
-    $pdf->MultiCell($w['4'],4,'','','L');
+    $pdf->MultiCell($w['4'],4,$data['abbr'],'','L');
     $y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
     $xcurrent = $xcurrent+$w['4'];
     $pdf->SetXY($xcurrent, $y);
@@ -574,6 +575,7 @@ $ylst = $y - $yst;  //$y batas marjin bawah dikurangi dengan y pertama
 
 
 //Menampilkan jumlah halaman terakhir
+// $pdf->setTotal($model);
 $pdf->SetFont('Arial','B',8);
 $pdf->setxy($x,$y);
 $pdf->Cell($w['0'],6,'','LB');
@@ -583,6 +585,7 @@ $pdf->Cell($w['3'],6,'','B',0,'C');
 $pdf->Cell($w['4'],6,number_format($totalusulan, 0, ',', '.'),'BLR',0,'R');
 $pdf->Cell($w['5'],6,'','BR',0,'R');
 // $pdf->Cell($w['5'],6,'','BR',0,'C');
+
 
 $pdf->ln();
 

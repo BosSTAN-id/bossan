@@ -19,6 +19,8 @@ use kartik\widgets\Select2;
     <?= $form->field($model, 'kd_penerimaan_2')->textInput() ?>
 
     <?= $form->field($model, 'uraian')->textInput(['maxlength' => true]) ?>
+    
+    <?= $form->field($model, 'abbr')->textInput(['maxlength' => true])->label('Singkatan') ?>
 
     <?= $form->field($model, 'sekolah')->checkbox(); ?>
 

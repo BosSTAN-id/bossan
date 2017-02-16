@@ -51,6 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'kd_penerimaan_1',
+            'kdPenerimaan1.uraian_penerimaan_1',
             'kd_penerimaan_2',
             'uraian',
             [

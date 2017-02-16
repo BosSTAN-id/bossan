@@ -105,14 +105,28 @@ class Sp2bController extends Controller
             GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
             ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
             ");
-        $data = $spjdata->queryAll();        
-        //find all bukti
+        $data = $spjdata->queryAll();
+
+        $saldobank = NULL;
+        $saldokas = NULL;
+        //find all spj atas sp2b ini
         $bukti = $this->findBukti($tahun, $no_sp3b);
+        foreach($bukti AS $bukti){
+            $query = \Yii::$app->db->createCommand("SELECT MAX(tgl_spj) AS tgl_spj FROM ta_spj WHERE tahun = $tahun AND sekolah_id = ".$bukti->spj->sekolah_id." AND tgl_spj < '".$bukti->spj->tgl_spj."'");
+            $tglsaldo = $query->queryOne()['tgl_spj'];
+            IF($tglsaldo == NULL) $tglsaldo = $tahun.'-01-01';
+            $query = \Yii::$app->db->createCommand("call sisa_kas($tahun, ".$bukti->spj->sekolah_id.", 1,'$tglsaldo')");
+            $saldobank = $saldobank + $query->queryOne()['nilai'];
+            $query = \Yii::$app->db->createCommand("call sisa_kas($tahun, ".$bukti->spj->sekolah_id.", 2,'$tglsaldo')");
+            $saldokas = $saldokas + $query->queryOne()['nilai'];            
+        }
+        $saldoawal = $saldobank + $saldokas;
 
         return $this->render('print', [
             'model' => $model,
             'data' => $data,
             'bukti' => $bukti,
+            'saldoawal' => $saldoawal,
         ]);
     }    
 
@@ -131,6 +145,7 @@ class Sp2bController extends Controller
 
         $model = \app\models\TaSP2B::findOne(['tahun' => $tahun, 'no_sp3b' => $no_sp3b]);
         $sp3b = $this->findModel($tahun, $no_sp3b);
+        $tgl_sp3b = $sp3b->tgl_sp3b;
         $spjdata = \Yii::$app->db->createCommand("
             SELECT
             -- a.tahun,
@@ -148,6 +163,8 @@ class Sp2bController extends Controller
             a.Kd_Rek_4,
             a.Kd_Rek_5,
             d.Nm_Rek_5,
+            h.sumber_dana,
+            h.abbr,
             SUM(a.nilai) AS nilai
             FROM
             ta_spj_rinc AS a
@@ -157,19 +174,72 @@ class Sp2bController extends Controller
             INNER JOIN ref_kegiatan_sekolah AS e ON e.kd_program = a.kd_program AND e.kd_sub_program = a.kd_sub_program AND e.kd_kegiatan = a.kd_kegiatan
             INNER JOIN ref_sub_program_sekolah AS f ON e.kd_program = f.kd_program AND e.kd_sub_program = f.kd_sub_program
             INNER JOIN ref_program_sekolah AS g ON f.kd_program = g.kd_program
+            INNER JOIN (
+                SELECT
+                a.tahun,
+                a.sekolah_id,
+                a.kd_program,
+                a.kd_sub_program,
+                a.kd_kegiatan,
+                a.Kd_Rek_1,
+                a.Kd_Rek_2,
+                a.Kd_Rek_3,
+                a.Kd_Rek_4,
+                a.Kd_Rek_5,
+                b.pengesahan,
+                b.kd_penerimaan_1,
+                b.kd_penerimaan_2,
+                b.uraian AS sumber_dana,
+                b.abbr,
+                SUM(a.total) AS total
+                FROM
+                ta_rkas_history AS a
+                INNER JOIN ref_penerimaan_sekolah_2 AS b ON a.kd_penerimaan_1 = b.kd_penerimaan_1 AND a.kd_penerimaan_2 = b.kd_penerimaan_2
+                WHERE b.pengesahan = 1 AND perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE sekolah_id = a.sekolah_id AND tgl_peraturan <= '$tgl_sp3b')
+                GROUP BY a.tahun,
+                a.sekolah_id,
+                a.kd_program,
+                a.kd_sub_program,
+                a.kd_kegiatan,
+                a.Kd_Rek_1,
+                a.Kd_Rek_2,
+                a.Kd_Rek_3,
+                a.Kd_Rek_4,
+                a.Kd_Rek_5,
+                b.pengesahan,
+                b.kd_penerimaan_1,
+                b.kd_penerimaan_2,
+                b.uraian,
+                b.abbr
+            ) h ON a.tahun = h.tahun AND a.sekolah_id = h.sekolah_id AND a.kd_program = h.kd_program AND a.kd_sub_program = h.kd_sub_program AND a.kd_kegiatan = h.kd_kegiatan
+            AND a.Kd_Rek_1 = h.Kd_Rek_1 AND a.Kd_Rek_2 = h.Kd_Rek_2 AND a.Kd_Rek_3 = h.Kd_Rek_3 AND a.Kd_Rek_4 = h.Kd_Rek_4 AND a.Kd_Rek_5 = h.Kd_Rek_5            
             WHERE b.no_sp3b = '$no_sp3b'
-            GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
+            GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, h.sumber_dana, h.abbr
             ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
             ");
         $data = $spjdata->queryAll();        
-        //find all bukti
+
+        $saldobank = NULL;
+        $saldokas = NULL;
+        //find all spj atas sp2b ini
         $bukti = $this->findBukti($tahun, $no_sp3b);
+        foreach($bukti AS $bukti){
+            $query = \Yii::$app->db->createCommand("SELECT MAX(tgl_spj) AS tgl_spj FROM ta_spj WHERE tahun = $tahun AND sekolah_id = ".$bukti->spj->sekolah_id." AND tgl_spj < '".$bukti->spj->tgl_spj."'");
+            $tglsaldo = $query->queryOne()['tgl_spj'];
+            IF($tglsaldo == NULL) $tglsaldo = $tahun.'-01-01';
+            $query = \Yii::$app->db->createCommand("call sisa_kas($tahun, ".$bukti->spj->sekolah_id.", 1,'$tglsaldo')");
+            $saldobank = $saldobank + $query->queryOne()['nilai'];
+            $query = \Yii::$app->db->createCommand("call sisa_kas($tahun, ".$bukti->spj->sekolah_id.", 2,'$tglsaldo')");
+            $saldokas = $saldokas + $query->queryOne()['nilai'];            
+        }
+        $saldoawal = $saldobank + $saldokas;
 
         return $this->render('print2', [
             'model' => $model,
             'data' => $data,
             'bukti' => $bukti,
             'sp3b' => $sp3b,
+            'saldoawal' => $saldoawal,
         ]);
     }        
 

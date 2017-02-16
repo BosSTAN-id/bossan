@@ -39,7 +39,7 @@ class TaSaldoAwal extends \yii\db\ActiveRecord
         return [
             [['tahun', 'sekolah_id'], 'required'],
             [['tahun'], 'safe'],
-            [['sekolah_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2'], 'integer'],
+            [['sekolah_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2', 'pembayaran'], 'integer'],
             [['nilai'], 'number'],
             [['keterangan'], 'string', 'max' => 255],
             [['penerimaan_2'], 'string'],
@@ -63,7 +63,8 @@ class TaSaldoAwal extends \yii\db\ActiveRecord
             'Kd_Rek_5' => 'Kd  Rek 5',
             'kd_penerimaan_1' => 'Kd Penerimaan 1',
             'kd_penerimaan_2' => 'Kd Penerimaan 2',
-            'penerimaan_2' => 'Sumber Dana',  
+            'penerimaan_2' => 'Sumber Dana',
+            'pembayaran' => 'Pembayaran',
         ];
     }
 

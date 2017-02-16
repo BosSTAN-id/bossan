@@ -127,14 +127,28 @@ WHERE b.no_sp3b = '$no_sp3b'
 GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
 ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
             ");
-        $data = $spjdata->queryAll();        
-        //find all bukti
+        $data = $spjdata->queryAll();
+            
+        $saldobank = NULL;
+        $saldokas = NULL;
+        //find all spj atas sp2b ini
         $bukti = $this->findBukti($tahun, $no_sp3b);
+        foreach($bukti AS $bukti){
+            $query = \Yii::$app->db->createCommand("SELECT MAX(tgl_spj) AS tgl_spj FROM ta_spj WHERE tahun = $tahun AND sekolah_id = ".$bukti->spj->sekolah_id." AND tgl_spj < '".$bukti->spj->tgl_spj."'");
+            $tglsaldo = $query->queryOne()['tgl_spj'];
+            IF($tglsaldo == NULL) $tglsaldo = $tahun.'-01-01';
+            $query = \Yii::$app->db->createCommand("call sisa_kas($tahun, ".$bukti->spj->sekolah_id.", 1,'$tglsaldo')");
+            $saldobank = $saldobank + $query->queryOne()['nilai'];
+            $query = \Yii::$app->db->createCommand("call sisa_kas($tahun, ".$bukti->spj->sekolah_id.", 2,'$tglsaldo')");
+            $saldokas = $saldokas + $query->queryOne()['nilai'];            
+        }
+        $saldoawal = $saldobank + $saldokas;
 
         return $this->render('print', [
             'model' => $model,
             'data' => $data,
             'bukti' => $bukti,
+            'saldoawal' => $saldoawal,
         ]);
     }    
 

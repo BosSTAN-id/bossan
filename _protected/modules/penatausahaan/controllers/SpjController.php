@@ -211,7 +211,11 @@ class SpjController extends Controller
                 //convert to array, array key tahun, no_bukti, tgl_bukti
                 $data = \yii\helpers\Json::decode($value);
                 $bukti = \app\models\TaSPJRinc::findOne(['tahun' => $data['tahun'], 'no_bukti' => $data['no_bukti'] ]);
-                $bukti->no_spj = $no_spj;
+                IF($bukti['no_spj'] == NULL){
+                    $bukti->no_spj = $no_spj;
+                }ELSE{
+                    $bukti->no_spj = NULL;
+                }
 
                 $bukti->save();
 

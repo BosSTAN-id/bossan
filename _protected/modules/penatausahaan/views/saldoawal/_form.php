@@ -47,6 +47,12 @@ use yii\bootstrap\ActiveForm;
             ],
     ]) ?>
 
+    <?= $form->field($model, 'pembayaran')->radioList([1 => 'Bank', 2 => 'Tunai'], [
+        'item' => function ($index, $label, $name, $checked, $value) {
+            return '<label class="radio-inline">' . Html::radio($name, $checked, ['value'  => $value]) . $label . '</label>';
+        }
+    ]); ?>      
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>

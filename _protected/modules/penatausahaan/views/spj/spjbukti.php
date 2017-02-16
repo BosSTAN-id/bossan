@@ -137,7 +137,7 @@ echo TabularForm::widget([
                 //     ['class'=>'btn btn-danger']
                 // ) . '&nbsp;' .
                 Html::submitButton(
-                    '<i class="glyphicon glyphicon-floppy-disk"></i> Tambahkan Bukti', 
+                    '<i class="glyphicon glyphicon-floppy-disk"></i> Pilih/Tidak Pilih Bukti', 
                     ['class'=>'btn btn-xs btn-success']
                 )
         ]

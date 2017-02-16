@@ -1,5 +1,6 @@
 <?php
 Use app\itbz\fpdf\src\fpdf\fpdf;
+use yii\db\Expression;
 
 
 class PDF extends \fpdf\FPDF
@@ -196,7 +197,10 @@ $ysisa = $y1;
 
 	//Saldo Awal		
     $y = MAX($y1, $y2, $y3);
-    $saldoawal = $data1->all();
+    $saldoawal = $data1
+                    ->select(['tahun', 'sekolah_id', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'kd_penerimaan_1', 'kd_penerimaan_2', new Expression('SUM(nilai) as nilai')])
+                    ->groupBy('tahun, sekolah_id, Kd_Rek_1, Kd_Rek_2, Kd_Rek_3, Kd_Rek_4, Kd_Rek_5, kd_penerimaan_1, kd_penerimaan_2')
+                    ->all();
     $pdf->SetFont('Arial','B',10);
     $jumlah_saldoawal = $data1->sum('nilai');
 	$pdf->SetXY($x, $y);
