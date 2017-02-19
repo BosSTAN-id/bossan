@@ -37,7 +37,7 @@ use dmstr\widgets\Alert;
 
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-        <b>Version</b> 2.0
+        <b>Version</b> 1.0.0beta
     </div>
     <strong>Copyright &copy; 2016 <a href="http://belajararief.com">Heru Arief Wijaya (154060006366)</a> @ </strong> <a href="http://pknstan.ac.id">Politeknik Keuangan Negara - STAN</a> dan <a href="http://bpkp.go.id">Badan Pengawasan Keuangan</a> <a href="http://simda-online.com">dan Pembangunan</a>
 </footer>
