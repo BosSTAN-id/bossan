@@ -131,6 +131,63 @@ class SiteController extends Controller
         return $this->render('pengumuman', ['model' => \app\models\TaPengumuman::findOne(['id' => $id])]);
     }
 
+    // Bagian ini untuk menampilkan user profile
+    public function actionProfile()
+    {
+        $id = Yii::$app->user->identity->id;
+        $model = \app\models\User::findOne(['id' => $id]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('kv-detail-success', 'Perubahan disimpan');
+            return $this->redirect(Yii::$app->request->referrer); 
+        }
+
+        return $this->render('profile', ['model' => $model]);
+    } 
+
+    public function actionUbahpassword()
+    {
+        $id = Yii::$app->user->identity->id;
+        // load user data
+        $model = \app\models\User::findOne($id);
+
+        if ($model->load(Yii::$app->request->post())) {
+            //  $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+            // var_dump($model->password_hash);
+            // var_dump(Yii::$app->security->validatePassword($model->passwordlama, $model->password_hash));
+            // var_dump(Yii::$app->security->generatePasswordHash($model->passwordlama));
+            IF(Yii::$app->security->validatePassword($model->passwordlama, $model->password_hash)){
+                $model->setPassword($model->password);
+                $model->save();
+                Yii::$app->getSession()->setFlash('success',  'Password sudah diganti');
+                return $this->redirect(Yii::$app->request->referrer);                                
+                // IF($model->save()){
+                //     echo 1;
+                // }ELSE{
+                //     echo 0;
+                // }                 
+            }ELSE{
+                Yii::$app->getSession()->setFlash('warning',  'Password lama anda salah');
+                return $this->redirect(Yii::$app->request->referrer);                
+            }
+           
+        } else {
+            return $this->renderAjax('ubahpwd', [
+                'user' => $model,
+            ]);
+        }        
+
+        // if (!$user->load(Yii::$app->request->post())) {
+        //     return $this->renderAjax('ubahpwd', ['user' => $user, 'role' => $user->item_name]);
+        // }
+
+        // // only if user entered new password we want to hash and save it
+        // if ($user->password) {
+        //     $user->setPassword($user->password);
+        // }
+
+        // return $this->redirect(['view', 'id' => $user->id]);
+    }          
+
     /**
      * Displays the about static page.
      *

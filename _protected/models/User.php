@@ -36,6 +36,7 @@ class User extends UserIdentity
      */
     public $password;
     public $skpd;
+    public $passwordlama;
     /**
      * @var \app\rbac\models\Role
      */
@@ -68,6 +69,7 @@ class User extends UserIdentity
             // password field is required on 'create' scenario
             ['password', 'required', 'on' => 'create'],
             [['status', 'kd_user', 'sekolah_id'], 'integer'],
+            ['passwordlama', 'string' ],
             // use passwordStrengthRule() method to determine password strength
             $this->passwordStrengthRule(),
             ['skpd', 'string'],
