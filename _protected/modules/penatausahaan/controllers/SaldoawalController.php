@@ -47,7 +47,7 @@ class SaldoawalController extends Controller
         }
         $searchModel = new TaSaldoAwalSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['tahun' => $Tahun]);
+        $dataProvider->query->andWhere(['tahun' => $Tahun, 'sekolah_id' => Yii::$app->user->identity->sekolah_id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

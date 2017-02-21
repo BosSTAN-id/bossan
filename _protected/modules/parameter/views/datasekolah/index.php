@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'enableEditMode' => true,
             'hideIfEmpty' => false, //sembunyikan row ketika kosong
             'panel'=>[
-                'heading'=>'<i class="fa fa-tag"></i> Rincian Program</h3>',
+                'heading'=>'<i class="fa fa-tag"></i> Data Umum Sekolah</h3>',
                 'type'=>'warning',
                 'headingOptions' => [
                     'tag' => 'h3', //tag untuk heading

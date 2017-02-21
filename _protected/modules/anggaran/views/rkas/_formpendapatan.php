@@ -23,7 +23,7 @@ use kartik\widgets\DepDrop;
 
     <?php 
             $connection = \Yii::$app->db;
-            $skpd = $connection->createCommand('SELECT CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2, CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian FROM ref_penerimaan_sekolah_2 WHERE sekolah = 1');
+            $skpd = $connection->createCommand('SELECT CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2, CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian FROM ref_penerimaan_sekolah_2 WHERE sekolah = 1 AND kd_penerimaan_1 > 1');
             $data = $skpd->queryAll();
             // $data = \app\models\RefPenerimaanSekolah2::find()
             //         ->select(['CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2', 'CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian'])
