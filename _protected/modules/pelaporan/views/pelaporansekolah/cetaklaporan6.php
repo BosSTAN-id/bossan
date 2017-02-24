@@ -158,7 +158,7 @@ $pdf->SetFont('Times','B',10);
 $pdf->SetXY(15,$pdf->GetY()+6);
 $pdf->Cell($w['0'],5,'No','LT',0,'C');
 $pdf->Cell($w['1'],5,'','LTR',0,'C');
-$pdf->Cell($w['2'],5,'Jumlah','LTR',0,'C');
+$pdf->Cell($w['2'],5,'Anggaran','LTR',0,'C');
 $pdf->Cell($w['3']+$w['4']+$w['5']+$w['6']+$w['7']+$w['8'],5,'Penggunaan Dana per Sumber Dana','LTR',0,'C');
 $pdf->ln();
 
@@ -381,7 +381,7 @@ foreach($data as $model){
         $pdf->SetXY(15,$pdf->GetY()+6);
         $pdf->Cell($w['0'],5,'No','LT',0,'C');
         $pdf->Cell($w['1'],5,'','LTR',0,'C');
-        $pdf->Cell($w['2'],5,'Jumlah','LTR',0,'C');
+        $pdf->Cell($w['2'],5,'Anggaran','LTR',0,'C');
         $pdf->Cell($w['3']+$w['4']+$w['5']+$w['6']+$w['7']+$w['8'],5,'Penggunaan Dana per Sumber Dana','LTR',0,'C');
         $pdf->ln();
 

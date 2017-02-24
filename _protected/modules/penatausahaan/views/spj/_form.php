@@ -20,8 +20,6 @@ use yii\widgets\ActiveForm;
             'options' => ['class' => 'form-control']
         ]) ?> 
 
-    <?= $form->field($model, 'no_bku')->textInput() ?>
-
     <?= $form->field($model, 'keterangan')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'nm_bendahara')->textInput(['maxlength' => true]) ?>
@@ -31,7 +29,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'jbt_bendahara')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Simpan' : 'Simpan', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

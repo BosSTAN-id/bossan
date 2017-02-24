@@ -44,12 +44,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'tahun',
             'no_spj',
-            'sekolah_id',
             'tgl_spj',
-            'no_bku',
+            // 'no_bku',
+            'keterangan',
             // 'keterangan',
             // 'kd_sah',
             // 'no_pengesahan',

@@ -103,6 +103,7 @@ class BelanjaController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['tahun' => $Tahun]);
         $dataProvider->query->andWhere('(Kd_Rek_1 = 5 AND Kd_Rek_2 = 2)');
+        $dataProvider->query->andWhere(['sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan]); 
         $treeprogram = \app\models\TaRkasKegiatan::find()->select('tahun, sekolah_id, kd_program')->where(['tahun' => $tahun, 'sekolah_id' => $sekolah_id])->groupBy('tahun, sekolah_id, kd_program')->andWhere('kd_program <> 0')->all();
 
         return $this->render('belanja', [
@@ -129,6 +130,7 @@ class BelanjaController extends Controller
         $searchModel = new TaSPJRincSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['tahun' => $Tahun]);
+        IF(isset(Yii::$app->user->identity->sekolah_id)) $dataProvider->query->andWhere(['sekolah_id' => Yii::$app->user->identity->sekolah_id]);
         $dataProvider->query->andWhere('(Kd_Rek_1 = 5 AND Kd_Rek_2 = 1) OR (Kd_Rek_1 = 6 AND Kd_Rek_2 = 2)');
 
         return $this->render('indexbtl', [

@@ -20,10 +20,7 @@ use yii\bootstrap\ActiveForm;
             $connection = \Yii::$app->db;
             $skpd = $connection->createCommand('SELECT CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2, CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian FROM ref_penerimaan_sekolah_2 WHERE /*sekolah = 1 AND*/ kd_penerimaan_1 = 1');
             $data = $skpd->queryAll();
-            // $data = \app\models\RefPenerimaanSekolah2::find()
-            //         ->select(['CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2', 'CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian'])
-            //         ->where(['sekolah' => 1])
-            //         ->all();     
+            IF(!$model->isNewRecord) $model->penerimaan_2 = $model->kd_penerimaan_1.'.'.$model->kd_penerimaan_2;     
             echo $form->field($model, 'penerimaan_2')->widget(Select2::classname(), [
                 'data' => ArrayHelper::map($data, 'kd_penerimaan_2','uraian'),
                 // 'value' => $model->kd_penerimaan_1.'.'.$model->kd_penerimaan_2,

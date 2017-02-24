@@ -48,18 +48,12 @@ $this->params['breadcrumbs'][] = $this->title;
         // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'tahun',
-            'sekolah_id',
+            [
+                'label' => 'Klasifikasi',
+                'value' => 'penerimaan2.uraian'
+            ],
             'keterangan',
-            'nilai',
-            'Kd_Rek_1',
-            // 'Kd_Rek_2',
-            // 'Kd_Rek_3',
-            // 'Kd_Rek_4',
-            // 'Kd_Rek_5',
-            // 'kd_penerimaan_1',
-            // 'kd_penerimaan_2',
+            'nilai:decimal',
 
             [
                 'class' => 'kartik\grid\ActionColumn',

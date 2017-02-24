@@ -666,7 +666,7 @@ foreach($bukti as $data){
 	$y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
 	$xcurrent = $xcurrent+$w['4'];
 	$pdf->SetXY($xcurrent, $y);
-	$pdf->MultiCell($w['5'],6,$data['Kd_Rek_1'] == 4 ? number_format($data['nilai'],0,',','.') : number_format(-$data['nilai'],0,',','.'),'','R');
+	$pdf->MultiCell($w['5'],6,$data['Kd_Rek_1'] == 4 ? number_format($data['nilai'],0,',','.') : '('.number_format($data['nilai'],0,',','.').')','','R');
 
 	IF($data['Kd_Rek_1'] == 5){
         $data['nilai'] = -($data['nilai']);

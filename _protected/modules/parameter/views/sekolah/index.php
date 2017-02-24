@@ -76,6 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <?php Modal::begin([
     'id' => 'myModal',
+    'size' => 'modal-md',
     'header' => '<h4 class="modal-title">Lihat lebih...</h4>',
         'options' => [
             'tabindex' => false // important for Select2 to work properly

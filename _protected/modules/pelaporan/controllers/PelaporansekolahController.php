@@ -222,10 +222,10 @@ SELECT COUNT(a.tahun) FROM
 (
     /*SALDO AWAL */
     SELECT
-    a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '2016-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
+    a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, NULL AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
     FROM
     ta_saldo_awal a
-    WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND IFNULL(a.kd_penerimaan_1, '') LIKE 3 AND IFNULL(a.kd_penerimaan_2, '') LIKE 2 AND a.pembayaran LIKE 1
+    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran LIKE '%'
     GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
     /*Saldo Awal sejak tanggal */
     UNION ALL
@@ -251,12 +251,12 @@ SELECT COUNT(a.tahun) FROM
         SELECT 
         a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
         FROM ta_rkas_history a 
-        WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = 2016 AND sekolah_id = 1)
-        AND IFNULL(a.kd_penerimaan_1, '') LIKE 3 AND IFNULL(a.kd_penerimaan_2, '') LIKE 2
+        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
+        AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
         GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
     ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
     AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-    WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.tgl_bukti <= '2016-01-01' AND IFNULL(b.kd_penerimaan_1,'') LIKE 3 AND IFNULL(b.kd_penerimaan_2, '') LIKE 2
+    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
     GROUP BY a.tahun, a.sekolah_id
     /*Transaksi */
     UNION ALL
@@ -280,12 +280,12 @@ SELECT COUNT(a.tahun) FROM
         SELECT 
         a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
         FROM ta_rkas_history a 
-        WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = 2016 AND sekolah_id = 1)
-        AND IFNULL(a.kd_penerimaan_1, '') LIKE 3 AND IFNULL(a.kd_penerimaan_2, '') LIKE 2
+        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
+        AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
         GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
     ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
     AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-    WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.tgl_bukti <= '2016-06-31' AND a.tgl_bukti >= '2016-01-01' AND IFNULL(b.kd_penerimaan_1,'') LIKE 3 AND IFNULL(b.kd_penerimaan_2, '') LIKE 2
+    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
 ) a ORDER BY tgl_bukti, no_bukti ASC    
                             ", [
                                 ':tahun' => $Tahun,
@@ -293,6 +293,8 @@ SELECT COUNT(a.tahun) FROM
                                 ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
                                 ':kd_penerimaan_1' => $kd_penerimaan_1,
                                 ':kd_penerimaan_2' => $kd_penerimaan_2,
+                                ':tgl_1' => $getparam['Laporan']['Tgl_1'],
+                                ':tgl_2' => $getparam['Laporan']['Tgl_2'],
                             ])->queryScalar();
 
                         $data = new SqlDataProvider([
@@ -301,10 +303,10 @@ SELECT * FROM
 (
     /*SALDO AWAL */
     SELECT
-    a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '2016-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
+    a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
     FROM
     ta_saldo_awal a
-    WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND IFNULL(a.kd_penerimaan_1, '') LIKE 3 AND IFNULL(a.kd_penerimaan_2, '') LIKE 2 AND a.pembayaran LIKE 1
+    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran LIKE '%'
     GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
     /*Saldo Awal sejak tanggal */
     UNION ALL
@@ -330,12 +332,12 @@ SELECT * FROM
         SELECT 
         a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
         FROM ta_rkas_history a 
-        WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = 2016 AND sekolah_id = 1)
-        AND IFNULL(a.kd_penerimaan_1, '') LIKE 3 AND IFNULL(a.kd_penerimaan_2, '') LIKE 2
+        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
+        AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
         GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
     ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
     AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-    WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.tgl_bukti <= '2016-01-01' AND IFNULL(b.kd_penerimaan_1,'') LIKE 3 AND IFNULL(b.kd_penerimaan_2, '') LIKE 2
+    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
     GROUP BY a.tahun, a.sekolah_id
     /*Transaksi */
     UNION ALL
@@ -359,12 +361,12 @@ SELECT * FROM
         SELECT 
         a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
         FROM ta_rkas_history a 
-        WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = 2016 AND sekolah_id = 1)
-        AND IFNULL(a.kd_penerimaan_1, '') LIKE 3 AND IFNULL(a.kd_penerimaan_2, '') LIKE 2
+        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
+        AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
         GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
     ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
     AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-    WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.tgl_bukti <= '2016-06-31' AND a.tgl_bukti >= '2016-01-01' AND IFNULL(b.kd_penerimaan_1,'') LIKE 3 AND IFNULL(b.kd_penerimaan_2, '') LIKE 2
+    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
 ) a ORDER BY tgl_bukti, no_bukti ASC
                                     ",
                             'params' => [
@@ -373,6 +375,8 @@ SELECT * FROM
                                 ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
                                 ':kd_penerimaan_1' => $kd_penerimaan_1,
                                 ':kd_penerimaan_2' => $kd_penerimaan_2,
+                                ':tgl_1' => $getparam['Laporan']['Tgl_1'],
+                                ':tgl_2' => $getparam['Laporan']['Tgl_2'],
                             ],
                             'totalCount' => $totalCount,
                             //'sort' =>false, to remove the table header sorting
@@ -1118,10 +1122,10 @@ SELECT * FROM
 (
     /*SALDO AWAL */
     SELECT
-    a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '2016-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
+    a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
     FROM
     ta_saldo_awal a
-    WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND IFNULL(a.kd_penerimaan_1, '') LIKE 3 AND IFNULL(a.kd_penerimaan_2, '') LIKE 2 AND a.pembayaran LIKE 1
+    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran LIKE '%'
     GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
     /*Saldo Awal sejak tanggal */
     UNION ALL
@@ -1147,12 +1151,12 @@ SELECT * FROM
         SELECT 
         a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
         FROM ta_rkas_history a 
-        WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = 2016 AND sekolah_id = 1)
-        AND IFNULL(a.kd_penerimaan_1, '') LIKE 3 AND IFNULL(a.kd_penerimaan_2, '') LIKE 2
+        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
+        AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
         GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
     ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
     AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-    WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.tgl_bukti <= '2016-01-01' AND IFNULL(b.kd_penerimaan_1,'') LIKE 3 AND IFNULL(b.kd_penerimaan_2, '') LIKE 2
+    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
     GROUP BY a.tahun, a.sekolah_id
     /*Transaksi */
     UNION ALL
@@ -1176,19 +1180,21 @@ SELECT * FROM
         SELECT 
         a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
         FROM ta_rkas_history a 
-        WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = 2016 AND sekolah_id = 1)
-        AND IFNULL(a.kd_penerimaan_1, '') LIKE 3 AND IFNULL(a.kd_penerimaan_2, '') LIKE 2
+        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
+        AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
         GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
     ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
     AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-    WHERE a.tahun = 2016 AND a.sekolah_id = 1 AND a.tgl_bukti <= '2016-06-31' AND a.tgl_bukti >= '2016-01-01' AND IFNULL(b.kd_penerimaan_1,'') LIKE 3 AND IFNULL(b.kd_penerimaan_2, '') LIKE 2
-) a ORDER BY tgl_bukti, no_bukti ASC                     
+    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+) a ORDER BY tgl_bukti, no_bukti ASC                    
                         ")->bindValues([
                                 ':tahun' => $Tahun,
                                 ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
                                 ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
                                 ':kd_penerimaan_1' => $kd_penerimaan_1,
                                 ':kd_penerimaan_2' => $kd_penerimaan_2,
+                                ':tgl_1' => $getparam['Laporan']['Tgl_1'],
+                                ':tgl_2' => $getparam['Laporan']['Tgl_2'],
                         ])->queryAll();
  
                         $render = 'cetaklaporan3';

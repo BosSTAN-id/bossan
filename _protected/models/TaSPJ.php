@@ -44,7 +44,7 @@ class TaSPJ extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['tahun', 'no_spj', 'sekolah_id', 'tgl_spj', 'no_bku'], 'required'],
+            [['tahun', 'no_spj', 'sekolah_id', 'tgl_spj'], 'required'],
             [['tahun', 'tgl_spj', 'tgl_pengesahan'], 'safe'],
             [['sekolah_id', 'no_bku', 'kd_sah', 'created_at', 'updated_at', 'user_id', 'kd_verifikasi'], 'integer'],
             [['no_spj', 'no_pengesahan', 'nip_pengesahan', 'nm_bendahara'], 'string', 'max' => 50],

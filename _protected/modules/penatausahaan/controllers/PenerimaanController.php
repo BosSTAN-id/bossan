@@ -48,6 +48,7 @@ class PenerimaanController extends Controller
         $searchModel = new TaSPJRincSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['tahun' => $Tahun]);
+        IF(isset(Yii::$app->user->identity->sekolah_id)) $dataProvider->query->andWhere(['sekolah_id' => Yii::$app->user->identity->sekolah_id]);
         $dataProvider->query->andWhere('Kd_Rek_1 = 4 OR (Kd_Rek_1 = 6 AND Kd_Rek_2 = 1)');
 
         return $this->render('index', [

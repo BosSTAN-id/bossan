@@ -24,14 +24,17 @@ use kartik\widgets\DepDrop;
 
     <?php 
             echo $form->field($model, 'kd_program')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map(\app\models\RefProgramSekolah::find()->select(['kd_program', 'CONCAT(kd_program,\' \',uraian_program) AS uraian_program'])->all(),'kd_program','uraian_program'),
+                'data' => ArrayHelper::map(\app\models\RefProgramSekolah::find()->select(['kd_program', 'CONCAT(kd_program,\' \',uraian_program) AS uraian_program'])->where('kd_program > 0')->all(),'kd_program','uraian_program'),
                 'options' => ['placeholder' => 'Pilih Program ...'],
                 'pluginOptions' => [
                     'allowClear' => true
                 ],
             ]);
     ?>
-    <?php  echo $form->field($model, 'kd_sub_program')->widget(DepDrop::classname(), [
+    <?php 
+    IF(!$model->isNewRecord) $subprogram = \app\models\RefSubProgramSekolah::findOne(['kd_program' => $model->kd_program, 'kd_sub_program' => $model->kd_sub_program]);
+    echo $form->field($model, 'kd_sub_program')->widget(DepDrop::classname(), [
+            'data' => $model->isNewRecord ? NULL : [$subprogram->kd_sub_program => $subprogram->kd_program.'.'.$subprogram->kd_sub_program.' '.$subprogram->uraian_sub_program],
             'type'=>DepDrop::TYPE_SELECT2,
             'options'=>['id'=>'tarkaskegiatan-kd_sub_program'],
             'pluginOptions'=>[
@@ -40,7 +43,10 @@ use kartik\widgets\DepDrop;
                 'url'=>Url::to(['subprogram'])
             ]
         ]); ?>
-    <?php echo $form->field($model, 'kd_kegiatan')->widget(DepDrop::classname(), [
+    <?php
+    IF(!$model->isNewRecord) $kegiatan = \app\models\RefKegiatanSekolah::findOne(['kd_program' => $model->kd_program, 'kd_sub_program' => $model->kd_sub_program, 'kd_kegiatan' => $model->kd_kegiatan]);
+    echo $form->field($model, 'kd_kegiatan')->widget(DepDrop::classname(), [
+            'data' => $model->isNewRecord ? NULL : [$kegiatan->kd_sub_program => $kegiatan->kd_program.'.'.$kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan.' '.$kegiatan->uraian_kegiatan],
             'type'=>DepDrop::TYPE_SELECT2,
             'pluginOptions'=>[
                 'depends'=>['tarkaskegiatan-kd_program', 'tarkaskegiatan-kd_sub_program'],
@@ -54,10 +60,7 @@ use kartik\widgets\DepDrop;
             $connection = \Yii::$app->db;
             $skpd = $connection->createCommand('SELECT CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2, CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian FROM ref_penerimaan_sekolah_2 WHERE sekolah = 1 AND kd_penerimaan_1 > 1');
             $data = $skpd->queryAll();
-            // $data = \app\models\RefPenerimaanSekolah2::find()
-            //         ->select(['CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2', 'CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian'])
-            //         ->where(['sekolah' => 1])
-            //         ->all();     
+            IF(!$model->isNewRecord) $model->penerimaan_2 = $model->kd_penerimaan_1.'.'.$model->kd_penerimaan_2;
             echo $form->field($model, 'penerimaan_2')->widget(Select2::classname(), [
                 'data' => ArrayHelper::map($data, 'kd_penerimaan_2','uraian'),
                 'options' => ['placeholder' => 'Sumber Dana ...'],

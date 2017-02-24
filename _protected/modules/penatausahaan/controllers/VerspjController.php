@@ -48,6 +48,7 @@ class VerspjController extends Controller
         $searchModel = new TaSPJSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['tahun' => $Tahun]);
+        IF(isset(Yii::$app->user->identity->sekolah_id)) $dataProvider->query->andWhere(['sekolah_id' => Yii::$app->user->identity->sekolah_id]);
         $dataProvider->query->orderBy('kd_sah ASC');
 
         return $this->render('index', [

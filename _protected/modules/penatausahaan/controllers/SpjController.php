@@ -48,6 +48,7 @@ class SpjController extends Controller
         $searchModel = new TaSPJSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['tahun' => $Tahun]);
+        IF(isset(Yii::$app->user->identity->sekolah_id)) $dataProvider->query->andWhere(['sekolah_id' => Yii::$app->user->identity->sekolah_id]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

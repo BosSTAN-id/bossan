@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     'class' => 'btn btn-xs btn-success',
                                                     'data-toggle'=>"modal",
                                                     'data-target'=>"#myModal",
-                                                    'data-title'=>"Tambah Surat Pertanggungjawaban",
+                                                    'data-title'=>"Tambah SP3B",
                                                     ]) ?>
     </p>
     <?= GridView::widget([
