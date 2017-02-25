@@ -76,7 +76,7 @@ class TaSP3B extends \yii\db\ActiveRecord
      */
     public function getSp2b()
     {
-        return $this->hasOne(TaSp2b::className(), ['tahun' => 'tahun', 'no_sp3b' => 'no_sp3b']);
+        return $this->hasOne(TaSP2B::className(), ['tahun' => 'tahun', 'no_sp3b' => 'no_sp3b']);
     }
 
     /**
@@ -84,6 +84,6 @@ class TaSP3B extends \yii\db\ActiveRecord
      */
     public function getTaSp3bRincs()
     {
-        return $this->hasMany(TaSp3bRinc::className(), ['tahun' => 'tahun', 'no_sp3b' => 'no_sp3b']);
+        return $this->hasMany(TaSP3BRinc::className(), ['tahun' => 'tahun', 'no_sp3b' => 'no_sp3b']);
     }
 }

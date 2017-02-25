@@ -1,6 +1,7 @@
 <?php 
 use yii\helpers\Html;
 use kartik\grid\GridView;
+
 echo GridView::widget([
 	'dataProvider' => $data,
 	//'filterModel' => $searchModel,

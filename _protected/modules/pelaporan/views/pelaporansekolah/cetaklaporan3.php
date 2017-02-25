@@ -123,7 +123,20 @@ $left = 15;
 
 $pdf->SetXY($left,20);
 $pdf->SetFont('Times','B',12);
-$pdf->MultiCell(215-(2*$left),5,'BUKU KAS UMUM', '', 'C', 0);
+switch ($getparam['Laporan']['Kd_Laporan']) {
+	case 3:
+		$pdf->MultiCell(215-(2*$left),5,'BUKU KAS UMUM', '', 'C', 0);
+		break;
+	case 4:
+		$pdf->MultiCell(215-(2*$left),5,'BUKU PEMBANTU KAS', '', 'C', 0);
+		break;
+	case 5:
+		$pdf->MultiCell(215-(2*$left),5,'BUKU PEMBANTU BANK', '', 'C', 0);
+		break;
+	default:
+		$pdf->MultiCell(215-(2*$left),5,'BUKU KAS UMUM', '', 'C', 0);
+		break;
+}
 $pdf->SetX($left);
 $pdf->MultiCell(215-(2*$left),5, date('d/m/Y', strtotime($getparam['Laporan']['Tgl_1'])).' s.d. '.date('d/m/Y', strtotime($getparam['Laporan']['Tgl_2'])), '', 'C', 0);
 
@@ -132,7 +145,20 @@ $pdf->SetXY($left,$pdf->GetY()+10);
 $pdf->Cell(33,5,'Nama Sekolah','',0,'L');
 $pdf->Cell(60,5,': '.$peraturan->sekolah->nama_sekolah,'',0,'L');
 $pdf->SetFont('Times','B',10);
-$pdf->Cell(92,5,'Formulir BOS-K3',1,0,'C');
+switch ($getparam['Laporan']['Kd_Laporan']) {
+	case 3:
+		$pdf->Cell(92,5,'Formulir BOS-K3',1,0,'C');
+		break;
+	case 4:
+		$pdf->Cell(92,5,'Formulir BOS-K4',1,0,'C');
+		break;
+	case 5:
+		$pdf->Cell(92,5,'Formulir BOS-K5',1,0,'C');
+		break;
+	default:
+		$pdf->Cell(92,5,'Formulir BOS-K3',1,0,'C');
+		break;
+}
 $pdf->ln();
 
 $pdf->SetFont('Times','',10);
@@ -357,32 +383,35 @@ $pdf->Cell($w['5'],6,number_format($totalkr,0,',','.'),'BL',0,'R');
 $pdf->Cell($w['6'],6,number_format($totalsaldo,0,',','.'),1,0,'R');
 
 //Menampilkan tanda tangan
+// Penandatangan Bendahara
+$bendahara = \app\models\TaSekolahJab::find()->andWhere(['tahun' => $Tahun, 'sekolah_id' => Yii::$app->user->identity->sekolah_id])->andWhere('jabatan LIKE \'%bendahara%\'')->one();
+
 IF(($pdf->gety()+6) >= 175) $pdf->AddPage();
-$pdf->SetXY(215,$pdf->gety()+10);
-$pdf->SetFont('Times','B',10);
+$y = $pdf->getY()+10;
+$pdf->SetXY(125,$y);
+$pdf->SetFont('Times','',10);
 $pdf->MultiCell(100,5,$peraturan->sekolah->refKecamatan->Nm_Kecamatan.', '.DATE('j', strtotime($peraturan['tgl_peraturan'])).' '.bulan(DATE('m', strtotime($peraturan['tgl_peraturan']))).' '.DATE('Y', strtotime($peraturan['tgl_peraturan'])), '', 'J', 0);
-$y = $pdf->getY();
-$pdf->SetXY(215,$pdf->gety());
-$pdf->SetFont('Times','B',10);
-$pdf->MultiCell(100,5,'Menyetujui,', '', 'j', 0);
-$pdf->SetXY(215,$pdf->gety());
-$pdf->SetFont('Times','B',10);
-$pdf->MultiCell(100,5,$peraturan['jabatan'], '', 'j', 0);
-$pdf->SetXY(215,$pdf->gety()+15);
-$pdf->SetFont('Times','B',10);
-$pdf->MultiCell(100,5,$peraturan['penandatangan'], '', 'j', 0);
-$pdf->SetX(215);
-$pdf->MultiCell(100,5,'NIP '.$peraturan['nip'], '', 'j', 0);
+$pdf->SetXY(125,$pdf->gety());
+$pdf->SetFont('Times','',10);
+$pdf->MultiCell(100,5,$bendahara['jabatan'], '', 'j', 0);
+$pdf->SetXY(125,$pdf->gety()+15);
+$pdf->SetFont('Times','',10);
+$pdf->MultiCell(100,5,$bendahara['nama'], '', 'j', 0);
+$pdf->SetX(125);
+$pdf->MultiCell(100,5,'NIP '.$bendahara['nip'], '', 'j', 0);
 
 $pdf->SetXY(15,$y);
-$pdf->SetFont('Times','B',10);
+$pdf->SetFont('Times','',10);
 $pdf->MultiCell(100,5,'Mengetahui,', '', 'j', 0);
 $pdf->SetXY(15,$pdf->gety());
-$pdf->SetFont('Times','B',10);
-$pdf->MultiCell(100,5,$peraturan['jabatan_komite'], '', 'j', 0);
+$pdf->SetFont('Times','',10);
+$pdf->MultiCell(100,5,$peraturan['jabatan'], '', 'j', 0);
 $pdf->SetXY(15,$pdf->gety()+15);
-$pdf->SetFont('Times','B',10);
-$pdf->MultiCell(100,5,$peraturan['komite_sekolah'] == NULL ? '-' : $peraturan['komite_sekolah'], '', 'j', 0);
+$pdf->SetFont('Times','',10);
+$pdf->MultiCell(100,5,$peraturan['penandatangan'] == NULL ? '-' : $peraturan['penandatangan'], '', 'j', 0);
+$pdf->SetXY(15,$pdf->gety());
+$pdf->SetFont('Times','',10);
+$pdf->MultiCell(100,5,$peraturan['nip'] == NULL ? '-' : $peraturan['nip'], '', 'j', 0);
 
 
 //Untuk mengakhiri dokumen pdf, dan mengirim dokumen ke output

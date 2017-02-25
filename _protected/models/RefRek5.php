@@ -27,7 +27,7 @@ class RefRek5 extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'Ref_Rek_5';
+        return 'ref_rek_5';
     }
 
     public static function primaryKey()
