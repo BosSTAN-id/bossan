@@ -69,121 +69,104 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>        
     
     <?php
-    echo GridView::widget([
-        'id' => 'ta-spj',    
-        'dataProvider' => $dataProvider,
-        'export' => false, 
-        'responsive'=>true,
-        'hover'=>true,     
-        'resizableColumns'=>true,
-        'panel'=>['type'=>'primary', 'heading'=>$this->title],
-        'responsiveWrap' => false,        
-        'toolbar' => [
-            [
-                // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
+    IF($model->status == 1){
+        echo GridView::widget([
+            'id' => 'ta-spj',    
+            'dataProvider' => $dataProvider,
+            'export' => false, 
+            'responsive'=>true,
+            'hover'=>true,     
+            'resizableColumns'=>true,
+            'panel'=>['type'=>'primary', 'heading'=>$this->title],
+            'responsiveWrap' => false,        
+            'toolbar' => [
+                [
+                    // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
+                ],
+            ],       
+            'pager' => [
+                'firstPageLabel' => 'Awal',
+                'lastPageLabel'  => 'Akhir'
             ],
-        ],       
-        'pager' => [
-            'firstPageLabel' => 'Awal',
-            'lastPageLabel'  => 'Akhir'
-        ],
-        'pjax'=>true,
-        'pjaxSettings'=>[
-            'options' => ['id' => 'ta-spj-pjax', 'timeout' => 5000],
-        ],             
-        // 'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'kartik\grid\SerialColumn'],
+            'pjax'=>true,
+            'pjaxSettings'=>[
+                'options' => ['id' => 'ta-spj-pjax', 'timeout' => 5000],
+            ],             
+            // 'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'kartik\grid\SerialColumn'],
 
-            'tahun',
-            'no_spj',
-            'keterangan',
-            'tgl_spj',
-            'sekolah.nama_sekolah',
-            [
-                'label' => '[]',
-                'format' => 'raw',
-                'value' => function($model) use ($sp3b, $status) {
-                    IF(cekspj($model->tahun, $model->sekolah_id, $model->no_spj) === NULL){
-                        return Html::a('<span class="fa fa-square-o"></span>', ['assign', 'kd' => 1, 'tahun' => $model->tahun, 'no_sp3b' => $sp3b,  'no_spj' => $model->no_spj ],
-                        [  
-                            'title' => Yii::t('yii', 'Tambah SPJ ini'),
-                            // 'data-toggle'=>"modal",
-                            // 'data-target'=>"#myModalubah",
-                            // 'data-title'=> "Ubah SPJ ".$model->no_spj,                                 
-                            // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                            'data-method' => 'POST',
-                            'data-pjax' => 0
-                        ]);
-                    }ELSE{
-                        return Html::a('<span class="fa fa-check-square-o"></span>', ['assign', 'kd' => 0, 'tahun' => $model->tahun, 'no_sp3b' => $sp3b,  'no_spj' => $model->no_spj ],
-                        [  
-                            'title' => Yii::t('yii', 'Tambah SPJ ini'),
-                            // 'data-toggle'=>"modal",
-                            // 'data-target'=>"#myModalubah",
-                            // 'data-title'=> "Ubah SPJ ".$model->no_spj,                                 
-                            // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                            'data-method' => 'POST',
-                            'data-pjax' => 0
-                        ]);
+                'tahun',
+                'no_spj',
+                'keterangan',
+                'tgl_spj',
+                'sekolah.nama_sekolah',
+                [
+                    'label' => '[]',
+                    'format' => 'raw',
+                    'value' => function($model) use ($sp3b, $status) {
+                        IF(cekspj($model->tahun, $model->sekolah_id, $model->no_spj) === NULL){
+                            return Html::a('<span class="fa fa-square-o"></span>', ['assign', 'kd' => 1, 'tahun' => $model->tahun, 'no_sp3b' => $sp3b,  'no_spj' => $model->no_spj ],
+                            [  
+                                'title' => Yii::t('yii', 'Tambah SPJ ini'),
+                                // 'data-toggle'=>"modal",
+                                // 'data-target'=>"#myModalubah",
+                                // 'data-title'=> "Ubah SPJ ".$model->no_spj,                                 
+                                // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                'data-method' => 'POST',
+                                'data-pjax' => 0
+                            ]);
+                        }ELSE{
+                            return Html::a('<span class="fa fa-check-square-o"></span>', ['assign', 'kd' => 0, 'tahun' => $model->tahun, 'no_sp3b' => $sp3b,  'no_spj' => $model->no_spj ],
+                            [  
+                                'title' => Yii::t('yii', 'Tambah SPJ ini'),
+                                // 'data-toggle'=>"modal",
+                                // 'data-target'=>"#myModalubah",
+                                // 'data-title'=> "Ubah SPJ ".$model->no_spj,                                 
+                                // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                'data-method' => 'POST',
+                                'data-pjax' => 0
+                            ]);
+                        }
                     }
-                }
+                ],
             ],
-            // [
-            //     'label' => 'Cek',
-            //     'format' => 'raw',
-            //     'value' => function($model) use ($sp3b) {
-            //         IF(cekspj($model->tahun, $model->sekolah_id, $model->no_spj) === NULL){
-            //             return 'null';
-            //         }
-            //     }
-            // ],
-            // [
-            //     'class' => 'kartik\grid\ActionColumn',
-            //     'template' => '{print} {view} {update} {delete} {spjbukti}',
-            //     'noWrap' => true,
-            //     'vAlign'=>'top',
-            //     'buttons' => [
-            //             'print' => function($url, $model){
-            //                 return  Html::a('<i class="glyphicon glyphicon-print bg-white"></i>', $url, ['onClick' => "return !window.open(this.href, 'SPJ', 'width=1024,height=768')"]);
-            //             },
-            //             'update' => function ($url, $model) {
-            //               IF($model->status == 1 ){
-            //                   return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
-            //                     [  
-            //                         'title' => Yii::t('yii', 'ubah'),
-            //                         'data-toggle'=>"modal",
-            //                         'data-target'=>"#myModalubah",
-            //                         'data-title'=> "Ubah SPJ ".$model->no_spj,                                 
-            //                         // 'data-confirm' => "Yakin menghapus sasaran ini?",
-            //                         // 'data-method' => 'POST',
-            //                         // 'data-pjax' => 1
-            //                     ]);
-            //               }
-            //             },
-            //             'view' => function ($url, $model) {
-            //               return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,
-            //                   [  
-            //                      'title' => Yii::t('yii', 'lihat'),
-            //                      'data-toggle'=>"modal",
-            //                      'data-target'=>"#myModalubah",
-            //                      'data-title'=> "SPJ ".$model->no_spj,
-            //                   ]);
-            //             },
-            //             'spjbukti' => function ($url, $model) {
-            //               return Html::a('Daftar SPJ <i class="glyphicon glyphicon-menu-right"></i>', $url,
-            //                   [  
-            //                      'title' => Yii::t('yii', 'Rincian SP3B'),
-            //                      'class'=>"btn btn-xs btn-default",                                 
-            //                      // 'data-confirm' => "Yakin menghapus sasaran ini?",
-            //                      // 'data-method' => 'POST',
-            //                      'data-pjax' => 0
-            //                   ]);
-            //             },                                               
-            //     ]
-            // ],
-        ],
-    ]);
+        ]);
+    }ELSE{
+        echo GridView::widget([
+            'id' => 'ta-spj',    
+            'dataProvider' => $dataProvider,
+            'export' => false, 
+            'responsive'=>true,
+            'hover'=>true,     
+            'resizableColumns'=>true,
+            'panel'=>['type'=>'primary', 'heading'=>$this->title],
+            'responsiveWrap' => false,        
+            'toolbar' => [
+                [
+                    // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
+                ],
+            ],       
+            'pager' => [
+                'firstPageLabel' => 'Awal',
+                'lastPageLabel'  => 'Akhir'
+            ],
+            'pjax'=>true,
+            'pjaxSettings'=>[
+                'options' => ['id' => 'ta-spj-pjax', 'timeout' => 5000],
+            ],             
+            // 'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'kartik\grid\SerialColumn'],
+
+                'tahun',
+                'no_spj',
+                'spj.keterangan',
+                // 'tgl_spj',
+                'sekolah.nama_sekolah',
+            ],
+        ]);        
+    }
     ?>
     <?php
 //     IF($model->kd_sah == 1){
