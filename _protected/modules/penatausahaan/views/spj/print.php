@@ -181,7 +181,7 @@ $pdf->Image('images/logo.jpg',15,15,25,30,'');
 
 $pdf->SetXY(40,18);
 $pdf->SetFont('Arial','B',14); 
-$pdf->MultiCell(275,6,'PEMERINTAH KABUPATEN BANYUASIN', '', 'C', 0);
+$pdf->MultiCell(275,6, strtoupper(\app\models\TaTh::dokudoku('bulat', $ref['set_10'])), '', 'C', 0);
 
 $pdf->SetXY(40,24);
 $pdf->SetFont('Arial','B',12); 
@@ -573,7 +573,7 @@ $pdf->Image('images/logo.jpg',15,15,25,30,'');
 
 $pdf->SetXY(40,18);
 $pdf->SetFont('Arial','B',14); 
-$pdf->MultiCell(160,6,'PEMERINTAH KABUPATEN BANYUASIN', '', 'C', 0);
+$pdf->MultiCell(160,6, strtoupper(\app\models\TaTh::dokudoku('bulat', $ref['set_10'])), '', 'C', 0);
 
 $pdf->SetXY(40,24);
 $pdf->SetFont('Arial','B',12); 

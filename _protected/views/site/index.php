@@ -23,7 +23,6 @@ function angka($n) {
 $this->title = Yii::t('app', Yii::$app->name);
 ?>
 <div class="site-index">
-
     <div class="well">
         <?php
           echo ListView::widget([

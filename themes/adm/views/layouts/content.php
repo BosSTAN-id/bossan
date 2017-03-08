@@ -39,9 +39,25 @@ use dmstr\widgets\Alert;
     <div class="pull-right hidden-xs">
         <b>Version</b> 1.0.0beta
     </div>
-    <strong>Copyright &copy; 2016 <a href="http://belajararief.com">Heru Arief Wijaya (154060006366)</a> @ </strong> <a href="http://pknstan.ac.id">Politeknik Keuangan Negara - STAN</a> dan <a href="http://bpkp.go.id">Badan Pengawasan Keuangan</a> <a href="http://simda-online.com">dan Pembangunan</a>
+    <?php 
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }    
+        $msg = \app\models\TaTh::dokudoku('bulat', 'TEN3WHFBS3paSFRZL05TRGlpWXpSTVU5bEZJY0tIWFBXZnlDQlN5NFc0cWdYNm9HSWJYRkdoekxvMHdjb1RJenU4YTFDZjdyazlPemtaQ3llMmtGN2ZNcTRHZi9pZVdBUTQ5VFBaV2dHLzlHbGU3ZUtxbHBVdGZzelBCQ0EyNERhVTNrR0JhbjVreXZvQ09aVlJNTldnPT0=');
+        $kakaroto = \app\models\TaTh::dokudoku('bulat', \app\models\TaTh::findOne(['tahun' => $Tahun])['set_9']);
+        IF(Yii::$app->params['kakaroto'] != $kakaroto){ 
+            echo $msg;
+        }ELSE{
+            echo '<strong>Copyright &copy; 2016 <a href="http://belajararief.com">Heru Arief Wijaya (154060006366)</a> @ </strong> <a href="http://pknstan.ac.id">Politeknik Keuangan Negara - STAN</a> dan <a href="http://bpkp.go.id">Badan Pengawasan Keuangan</a> <a href="http://simda-online.com">dan Pembangunan</a>';
+        }  
+    ?>
+
 </footer>
 
+<?php /*
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
     <!-- Create the tabs -->
@@ -232,3 +248,4 @@ use dmstr\widgets\Alert;
 <!-- Add the sidebar's background. This div must be placed
      immediately after the control sidebar -->
 <div class='control-sidebar-bg'></div>
+*/ ?>

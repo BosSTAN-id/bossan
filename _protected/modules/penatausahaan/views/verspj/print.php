@@ -82,33 +82,33 @@ $pdf->setModel($model);
 //Menambahkan halaman, untuk menambahkan halaman tambahkan command ini. 
 //P artinya potrait dan L artinya Landscape
 function bulan($bulan){
-	Switch ($bulan){
-	    case 1 : $bulan="Januari";
-	        Break;
-	    case 2 : $bulan="Februari";
-	        Break;
-	    case 3 : $bulan="Maret";
-	        Break;
-	    case 4 : $bulan="April";
-	        Break;
-	    case 5 : $bulan="Mei";
-	        Break;
-	    case 6 : $bulan="Juni";
-	        Break;
-	    case 7 : $bulan="Juli";
-	        Break;
-	    case 8 : $bulan="Agustus";
-	        Break;
-	    case 9 : $bulan="September";
-	        Break;
-	    case 10 : $bulan="Oktober";
-	        Break;
-	    case 11 : $bulan="November";
-	        Break;
-	    case 12 : $bulan="Desember";
-	        Break;
-	    }
-	return $bulan;
+    Switch ($bulan){
+        case 1 : $bulan="Januari";
+            Break;
+        case 2 : $bulan="Februari";
+            Break;
+        case 3 : $bulan="Maret";
+            Break;
+        case 4 : $bulan="April";
+            Break;
+        case 5 : $bulan="Mei";
+            Break;
+        case 6 : $bulan="Juni";
+            Break;
+        case 7 : $bulan="Juli";
+            Break;
+        case 8 : $bulan="Agustus";
+            Break;
+        case 9 : $bulan="September";
+            Break;
+        case 10 : $bulan="Oktober";
+            Break;
+        case 11 : $bulan="November";
+            Break;
+        case 12 : $bulan="Desember";
+            Break;
+        }
+    return $bulan;
 }
 
 
@@ -181,7 +181,7 @@ $pdf->Image('images/logo.jpg',15,15,25,30,'');
 
 $pdf->SetXY(40,18);
 $pdf->SetFont('Arial','B',14); 
-$pdf->MultiCell(275,6,'PEMERINTAH KABUPATEN BANYUASIN', '', 'C', 0);
+$pdf->MultiCell(275,6, strtoupper(\app\models\TaTh::dokudoku('bulat', $ref['set_10'])), '', 'C', 0);
 
 $pdf->SetXY(40,24);
 $pdf->SetFont('Arial','B',12); 
@@ -252,19 +252,19 @@ $totalsisap = 0;
 
 foreach($data as $data){
 
-	IF($y2 > 196 || $y1 + (5*(strlen($data['Nm_Rek_5'])/35)) > 196 ){ //cek pagebreak
-		$ylst = 207 - $yst; //207 batas margin bawah dikurang dengan y pertama
-		//setiap selesai page maka buat rectangle
-		$pdf->Rect($x, $yst, $w['0'] ,$ylst);
-		$pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
-		$pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
-		$pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
-		$pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
-		$pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
-		$pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
-		
-		//setelah buat rectangle baru kemudian addPage
-		$pdf->AddPage();
+    IF($y2 > 196 || $y1 + (5*(strlen($data['Nm_Rek_5'])/35)) > 196 ){ //cek pagebreak
+        $ylst = 207 - $yst; //207 batas margin bawah dikurang dengan y pertama
+        //setiap selesai page maka buat rectangle
+        $pdf->Rect($x, $yst, $w['0'] ,$ylst);
+        $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
+        $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
+        $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
+        $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
+        $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
+        $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
+        
+        //setelah buat rectangle baru kemudian addPage
+        $pdf->AddPage();
         $pdf->SetFont('Times','B',10);
         $pdf->SetXY(15,15);
         $pdf->Cell($w['0'],6,'KODE','LBT',0,'C');
@@ -282,14 +282,14 @@ foreach($data as $data){
         $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
         $ysisa = $y1;
 
-	}
+    }
 
 
     $y = max($y1, $y2);
 
     IF($rek1 == 4 && $data['Kd_Rek_1'] == 5){
         $pdf->SetFont('Times','U',10);
-        //new data		
+        //new data      
         $pdf->SetXY($x, $y);
         $xcurrent= $x;
         $pdf->MultiCell($w['0'],6, '','BLT','R');
@@ -325,7 +325,7 @@ foreach($data as $data){
             switch ($data['Kd_Rek_1']) {
                 case 4:
                     $pdf->SetFont('Times','BU',10);
-                    //new data		
+                    //new data      
                     $pdf->SetXY($x, $y);
                     $xcurrent= $x;
                     $pdf->MultiCell($w['0'],6,'' ,'','L');
@@ -340,7 +340,7 @@ foreach($data as $data){
                     break;
                 case 5:
                     $pdf->SetFont('Times','BU',10);
-                    //new data		
+                    //new data      
                     $pdf->SetXY($x, $y);
                     $xcurrent= $x;
                     $pdf->MultiCell($w['0'],6,'' ,'','L');
@@ -355,7 +355,7 @@ foreach($data as $data){
                     break;
                 default:
                     $pdf->SetFont('Times','BU',10);
-                    //new data		
+                    //new data      
                     $pdf->SetXY($x, $y);
                     $xcurrent= $x;
                     $pdf->MultiCell($w['0'],6,'' ,'','L');
@@ -375,7 +375,7 @@ foreach($data as $data){
             IF($program <> $data['kd_program'].'.'.$data['Kd_Rek_1']){
                 //code goes here
                 $pdf->SetFont('Times','B',10);
-                //new data		
+                //new data      
                 $pdf->SetXY($x, $y);
                 $xcurrent= $x;
                 $pdf->MultiCell($w['0'],6,$data['kd_program'] ,'','L');
@@ -390,7 +390,7 @@ foreach($data as $data){
             }
             //code goes here
             $pdf->SetFont('Times','B',10);
-            //new data		
+            //new data      
             $pdf->SetXY($x, $y);
             $xcurrent= $x;
             $pdf->MultiCell($w['0'],6,$data['kd_program'].'.'.substr('0'.$data['kd_sub_program'],-2) ,'','L');
@@ -405,7 +405,7 @@ foreach($data as $data){
         }
         //code goes here
         $pdf->SetFont('Times','',10);
-        //new data		
+        //new data      
         $pdf->SetXY($x, $y);
         $xcurrent= $x;
         $pdf->MultiCell($w['0'],6,$data['kd_program'].'.'.substr('0'.$data['kd_sub_program'],-2).'.'.substr('0'.$data['kd_kegiatan'],-2) ,'','L');
@@ -420,34 +420,34 @@ foreach($data as $data){
     }
 
     $pdf->SetFont('Times','',10);
-	//new data		
-	$pdf->SetXY($x, $y);
-	$xcurrent= $x;
+    //new data      
+    $pdf->SetXY($x, $y);
+    $xcurrent= $x;
     $pdf->MultiCell($w['0'],6,$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'],-2).'.'.substr('0'.$data['Kd_Rek_5'],-2) ,'','R');
-	$xcurrent = $xcurrent+$w['0'];
-	$pdf->SetXY($xcurrent+15, $y);
-	$pdf->MultiCell($w['1']-15,6,$data['Nm_Rek_5'],'','L');
-	$xcurrent = $xcurrent+$w['1'];
- 	$pdf->SetXY($xcurrent, $y);
-	$pdf->MultiCell($w['2'],6,number_format($data['anggaran'],0,',','.'),'','R');
-	$xcurrent = $xcurrent+$w['2'];
-	$y1 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
-	$pdf->SetXY($xcurrent, $y);
+    $xcurrent = $xcurrent+$w['0'];
+    $pdf->SetXY($xcurrent+15, $y);
+    $pdf->MultiCell($w['1']-15,6,$data['Nm_Rek_5'],'','L');
+    $xcurrent = $xcurrent+$w['1'];
+    $pdf->SetXY($xcurrent, $y);
+    $pdf->MultiCell($w['2'],6,number_format($data['anggaran'],0,',','.'),'','R');
+    $xcurrent = $xcurrent+$w['2'];
+    $y1 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
+    $pdf->SetXY($xcurrent, $y);
     $pdf->MultiCell($w['3'],6,number_format($data['spjlalu'],0,',','.'),'','R');
-	$xcurrent = $xcurrent+$w['3'];
-	$pdf->SetXY($xcurrent, $y);
-	$pdf->MultiCell($w['4'],6,number_format($data['spjini'],0,',','.'),'','R');
-	$y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
-	$xcurrent = $xcurrent+$w['4'];
-	$pdf->SetXY($xcurrent, $y);
-	$pdf->MultiCell($w['5'],6,number_format($data['sdspjini'],0,',','.'),'','R');
-	$xcurrent = $xcurrent+$w['5'];
-	$pdf->SetXY($xcurrent, $y);
-	$pdf->MultiCell($w['6'],6,number_format($data['sisa_anggaran'],0,',','.'),'','R');
-	$xcurrent = $xcurrent+$w['6'];
-	$pdf->SetXY($xcurrent, $y);
+    $xcurrent = $xcurrent+$w['3'];
+    $pdf->SetXY($xcurrent, $y);
+    $pdf->MultiCell($w['4'],6,number_format($data['spjini'],0,',','.'),'','R');
+    $y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
+    $xcurrent = $xcurrent+$w['4'];
+    $pdf->SetXY($xcurrent, $y);
+    $pdf->MultiCell($w['5'],6,number_format($data['sdspjini'],0,',','.'),'','R');
+    $xcurrent = $xcurrent+$w['5'];
+    $pdf->SetXY($xcurrent, $y);
+    $pdf->MultiCell($w['6'],6,number_format($data['sisa_anggaran'],0,',','.'),'','R');
+    $xcurrent = $xcurrent+$w['6'];
+    $pdf->SetXY($xcurrent, $y);
 
-	IF($data['Kd_Rek_1'] == 5){
+    IF($data['Kd_Rek_1'] == 5){
         $totalanggaran = $totalanggaran+$data['anggaran'];
         $totallalu = $totallalu+$data['spjlalu'];
         $totalini = $totalini+$data['spjini'];
@@ -455,7 +455,7 @@ foreach($data as $data){
         $totalsisa = $totalsisa+$data['sisa_anggaran'];
         
     }
-	IF($data['Kd_Rek_1'] == 4){
+    IF($data['Kd_Rek_1'] == 4){
         $totalanggaranp = $totalanggaranp+$data['anggaran'];
         $totallalup = $totallalup+$data['spjlalu'];
         $totalinip = $totalinip+$data['spjini'];
@@ -463,11 +463,11 @@ foreach($data as $data){
         $totalsisap = $totalsisap+$data['sisa_anggaran'];
         
     }    
-	
-	$ysisa = $y;
+    
+    $ysisa = $y;
 
-	$i++; //Untuk urutan nomor
-	$pdf->ln();
+    $i++; //Untuk urutan nomor
+    $pdf->ln();
 
     //simpan untuk cek kegiatan/program
     $kegiatan = $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['kd_kegiatan'].'.'.$data['Kd_Rek_1'];
@@ -480,7 +480,7 @@ foreach($data as $data){
 $y = max($y1, $y2);
 //subtotal
 $pdf->SetFont('Times','U',10);
-//new data		
+//new data      
 $pdf->SetXY($x, $y);
 $xcurrent= $x;
 $pdf->MultiCell($w['0'],6, '','BLT','R');
@@ -573,7 +573,7 @@ $pdf->Image('images/logo.jpg',15,15,25,30,'');
 
 $pdf->SetXY(40,18);
 $pdf->SetFont('Arial','B',14); 
-$pdf->MultiCell(160,6,'PEMERINTAH KABUPATEN BANYUASIN', '', 'C', 0);
+$pdf->MultiCell(160,6, strtoupper(\app\models\TaTh::dokudoku('bulat', $ref['set_10'])), '', 'C', 0);
 
 $pdf->SetXY(40,24);
 $pdf->SetFont('Arial','B',12); 
@@ -610,17 +610,17 @@ $ysisa = $y1;
 
 foreach($bukti as $data){
 
-	IF($y2 > 196 || $y1 + (5*(strlen($data['uraian'])/35)) > 196 ){ //cek pagebreak
-		$ylst = 207 - $yst; //207 batas margin bawah dikurang dengan y pertama
-		//setiap selesai page maka buat rectangle
-		$pdf->Rect($x, $yst, $w['0'] ,$ylst);
-		$pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
-		$pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
-		$pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
-		$pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
-		$pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
-		
-		//setelah buat rectangle baru kemudian addPage
+    IF($y2 > 196 || $y1 + (5*(strlen($data['uraian'])/35)) > 196 ){ //cek pagebreak
+        $ylst = 207 - $yst; //207 batas margin bawah dikurang dengan y pertama
+        //setiap selesai page maka buat rectangle
+        $pdf->Rect($x, $yst, $w['0'] ,$ylst);
+        $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
+        $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
+        $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
+        $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
+        $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
+        
+        //setelah buat rectangle baru kemudian addPage
 
         $pdf->SetFont('Times','B',10);
         $pdf->SetXY(15,55);
@@ -639,50 +639,50 @@ foreach($bukti as $data){
 
         $ysisa = $y1;
 
-	}
+    }
 
 
     $y = max($y1, $y2);
 
 
     $pdf->SetFont('Times','',10);
-	//new data		
-	$pdf->SetXY($x, $y);
-	$xcurrent= $x;
+    //new data      
+    $pdf->SetXY($x, $y);
+    $xcurrent= $x;
     $pdf->MultiCell($w['0'],6,$i ,'','C');
-	$xcurrent = $xcurrent+$w['0'];
-	$pdf->SetXY($xcurrent, $y);
-	$pdf->MultiCell($w['1'],6,$data['kd_program'].'.'.$data['kd_sub_program'].'.'.substr('0'.$data['kd_kegiatan'],-2).'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'],-2).'.'.substr('0'.$data['Kd_Rek_5'],-2),'','R');
-	$xcurrent = $xcurrent+$w['1'];
- 	$pdf->SetXY($xcurrent, $y);
+    $xcurrent = $xcurrent+$w['0'];
+    $pdf->SetXY($xcurrent, $y);
+    $pdf->MultiCell($w['1'],6,$data['kd_program'].'.'.$data['kd_sub_program'].'.'.substr('0'.$data['kd_kegiatan'],-2).'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'],-2).'.'.substr('0'.$data['Kd_Rek_5'],-2),'','R');
+    $xcurrent = $xcurrent+$w['1'];
+    $pdf->SetXY($xcurrent, $y);
     $pdf->MultiCell($w['2'],6,$data['no_bukti'],'','L');
-	$xcurrent = $xcurrent+$w['2'];
-	$y1 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
-	$pdf->SetXY($xcurrent, $y);
+    $xcurrent = $xcurrent+$w['2'];
+    $y1 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
+    $pdf->SetXY($xcurrent, $y);
     $pdf->MultiCell($w['3'],6,date('d/m/y', strtotime($data['tgl_bukti'])),'','R');
-	$xcurrent = $xcurrent+$w['3'];
-	$pdf->SetXY($xcurrent, $y);
+    $xcurrent = $xcurrent+$w['3'];
+    $pdf->SetXY($xcurrent, $y);
     $pdf->MultiCell($w['4'],6,$data['uraian'],'','L');
-	$y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
-	$xcurrent = $xcurrent+$w['4'];
-	$pdf->SetXY($xcurrent, $y);
+    $y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
+    $xcurrent = $xcurrent+$w['4'];
+    $pdf->SetXY($xcurrent, $y);
     $pdf->MultiCell($w['5'],6,$data['Kd_Rek_1'] == 4 ? number_format($data['nilai'],0,',','.') : '('.number_format($data['nilai'],0,',','.').')','','R');
 
-	IF($data['Kd_Rek_1'] == 5){
+    IF($data['Kd_Rek_1'] == 5){
         $data['nilai'] = -($data['nilai']);
         $totaljumlah = $totaljumlah+$data['nilai'];
         
     }
-	IF($data['Kd_Rek_1'] == 4){
+    IF($data['Kd_Rek_1'] == 4){
         $data['nilai'] = ($data['nilai']);
         $totaljumlah = $totaljumlah+$data['nilai'];
         
     }    
-	
-	$ysisa = $y;
+    
+    $ysisa = $y;
 
-	$i++; //Untuk urutan nomor
-	$pdf->ln();
+    $i++; //Untuk urutan nomor
+    $pdf->ln();
 
     //simpan untuk cek kegiatan/program
     $kode = $data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'],-2).'.'.substr('0'.$data['Kd_Rek_5'],-2);

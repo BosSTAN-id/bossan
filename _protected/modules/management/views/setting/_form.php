@@ -22,7 +22,9 @@ use yii\widgets\ActiveForm;
         echo $form->field($model, 'set_4')->textInput(['maxlength' => true]) ;
         echo $form->field($model, 'set_6')->textInput(['maxlength' => true]) ;
         echo $form->field($model, 'set_5')->textInput(['maxlength' => true]) ;
-        echo $form->field($model, 'set_8')->textInput(['maxlength' => true]) ;        
+        echo $form->field($model, 'set_8')->textInput(['maxlength' => true]) ;
+        echo $form->field($model, 'set_11')->textInput(['maxlength' => true]) ;
+        echo $form->field($model, 'set_12')->textInput(['maxlength' => true]) ;       
     }ELSE{
         echo $form->field($model, 'set_2')->textInput(['maxlength' => true]);
         echo $form->field($model, 'set_3')->textInput(['maxlength' => true,['placeholder' => 'Kosongkan Bila Tidak Berubah']]) ;
@@ -32,6 +34,8 @@ use yii\widgets\ActiveForm;
         echo $form->field($model, 'set_6')->textInput([ 'maxlength' => true,['placeholder' => 'Kosongkan Bila Tidak Berubah']]) ;
         echo $form->field($model, 'set_5')->textInput([/*'value' => '',*/'maxlength' => true,['placeholder' => 'Kosongkan Bila Tidak Berubah']]) ;
         echo $form->field($model, 'set_8')->textInput(['maxlength' => true,['placeholder' => 'Kosongkan Bila Tidak Berubah']]) ;
+        echo $form->field($model, 'set_11')->textInput(['maxlength' => true,['placeholder' => 'Kosongkan Bila Tidak Berubah']]) ;
+        echo $form->field($model, 'set_12')->textInput(['maxlength' => true,['placeholder' => 'Kosongkan Bila Tidak Berubah']]) ;
     }
     ?>
 

@@ -174,11 +174,11 @@ $pdf->Image('images/logo.jpg',15,15,25,28,'');
 
 $pdf->SetXY(40,10);
 $pdf->SetFont('Arial','B',15); 
-$pdf->MultiCell(160,18,'PEMERINTAH KABUPATEN BANYUASIN', '', 'C', 0);
+$pdf->MultiCell(160,18, strtoupper(\app\models\TaTh::dokudoku('bulat', $ref['set_10'])), '', 'C', 0);
 
 $pdf->SetXY(40,25);
 $pdf->SetFont('Arial','B',17); 
-$pdf->MultiCell(160,7,strtoupper('BADANG PENGELOLA KEUANGAN DAN ASET DAERAH'), '', 'C', 0);
+$pdf->MultiCell(160,7,strtoupper(\app\models\TaTh::dokudoku('bulat', $ref['set_12'])), '', 'C', 0);
 
 IF($pdf->GetY() <= 35){
     $y = 35;
@@ -187,7 +187,7 @@ IF($pdf->GetY() <= 35){
 }
 $pdf->SetXY(40,$y);
 $pdf->SetFont('Arial','B',10); 
-$pdf->MultiCell(160,4,'Komplek Perkantoran Pemkab. Banyuasin - Sekojo No. 11 Pangkalan Balai 30753', '', 'C', 0);
+$pdf->MultiCell(160,4, \app\models\TaTh::dokudoku('bulat', $ref['set_7']), '', 'C', 0);
 
 IF($pdf->GetY() <= 40){
     $y = 40;
@@ -202,18 +202,18 @@ $y = $pdf->GetY()+4;
 //bagian tanggal
 $pdf->SetXY(130,$y);
 $pdf->SetFont('Arial','',11); 
-$pdf->MultiCell(70,8,'Pangkalan Balai, '.DATE('j', strtotime($model['tgl_sp2b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp2b']))).' '.DATE('Y', strtotime($model['tgl_sp2b'])), '', 'L', 0);
+$pdf->MultiCell(70,8, \app\models\TaTh::dokudoku('bulat', $ref['set_6']).', '.DATE('j', strtotime($model['tgl_sp2b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp2b']))).' '.DATE('Y', strtotime($model['tgl_sp2b'])), '', 'L', 0);
 
 $ykepada = $pdf->GetY();
 $pdf->SetXY(130,$ykepada);
 $pdf->MultiCell(70,6,'Kepada Yth.', '', 'L', 0);
 
 $pdf->SetXY(130,$pdf->GetY());
-$pdf->MultiCell(70,6,'Kepala Dinas Pendidikan Kabupaten Banyuasin', '', 'L', 0);
+$pdf->MultiCell(70,6,'Kepala '.\app\models\TaTh::dokudoku('bulat', $ref['set_11']), '', 'L', 0);
 $pdf->SetXY(130,$pdf->GetY());
 $pdf->MultiCell(70,6,'di-', '', 'L', 0);
 $pdf->SetXY(140,$pdf->GetY());
-$pdf->MultiCell(70,6,'Pangkalan Balai', '', 'L', 0);
+$pdf->MultiCell(70,6, \app\models\TaTh::dokudoku('bulat', $ref['set_4']), '', 'L', 0);
 $y2 = $pdf->GetY();
 
 //bagian nomor surat
@@ -278,7 +278,7 @@ $pdf->MultiCell(185,6,'Rincian atas pengesahan pendapatan dan belanja tersebut t
 $y = $pdf->GetY()+8;
 $pdf->SetXY(130,$y);
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,'Pangkalan Balai, '.DATE('j', strtotime($model['tgl_sp2b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp2b']))).' '.DATE('Y', strtotime($model['tgl_sp2b'])), '', 'C', 0);
+$pdf->MultiCell(70,6,\app\models\TaTh::dokudoku('bulat', $ref['set_6']).', '.DATE('j', strtotime($model['tgl_sp2b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp2b']))).' '.DATE('Y', strtotime($model['tgl_sp2b'])), '', 'C', 0);
 
 
 $pdf->SetXY(130,$pdf->GetY());
@@ -593,7 +593,7 @@ $pdf->ln();
 $y = $pdf->GetY()+8;
 $pdf->SetXY(130,$y);
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,'Pangkalan Balai, '.DATE('j', strtotime($model['tgl_sp2b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp2b']))).' '.DATE('Y', strtotime($model['tgl_sp2b'])), '', 'C', 0);
+$pdf->MultiCell(70,6, \app\models\TaTh::dokudoku('bulat', $ref['set_6']).', '.DATE('j', strtotime($model['tgl_sp2b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp2b']))).' '.DATE('Y', strtotime($model['tgl_sp2b'])), '', 'C', 0);
 
 $pdf->SetXY(130,$pdf->GetY());
 $pdf->SetFont('Arial','',11);

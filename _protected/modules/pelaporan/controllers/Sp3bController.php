@@ -96,6 +96,7 @@ class Sp3bController extends Controller
             $Tahun = DATE('Y');
         }
 
+        $references = \app\models\TaTh::findOne(['tahun' => $tahun]);
         $model = $this->findModel($tahun, $no_sp3b);
         $spjdata = \Yii::$app->db->createCommand("
 SELECT
@@ -149,6 +150,7 @@ ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, 
             'data' => $data,
             'bukti' => $bukti,
             'saldoawal' => $saldoawal,
+            'ref' => $references,
         ]);
     }    
 

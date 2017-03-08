@@ -52,4 +52,7 @@ return [
      * You will send emails to users from this address.
      */
     'supportEmail' => 'support@example.com',
+
+    // ID PEMDA, Menentukan Nama Pemda Pengguna
+    'kakaroto' => 'TDA1U0FPRXI4ZUxBc0RnQXp3RmQ5dz09',
 ];

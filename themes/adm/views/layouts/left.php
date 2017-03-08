@@ -86,7 +86,7 @@ function akses($menu){
                     ['label' => 'Dashboard', 'icon' => 'fa fa-dashboard', 'url' => ['/'],],
                     ['label' => 'Pengaturan', 'icon' => 'fa fa-circle-o','url' => '#', 'visible' => 1,'items'  =>
                         [
-                            ['label' => 'Pengaturan Global', 'icon' => 'fa fa-circle-o', 'url' => ['/globalsetting/setting'], 'visible' => akses(202)],
+                            ['label' => 'Pengaturan Global', 'icon' => 'fa fa-circle-o', 'url' => ['/management/setting'], 'visible' => akses(405)],
                             ['label' => 'User Management', 'icon' => 'fa fa-circle-o', 'url' => ['/user/index'], 'visible' => akses(102)],
                             ['label' => 'Akses Grup', 'icon' => 'fa fa-circle-o', 'url' => ['/management/menu'], 'visible' => akses(401)],
                             // ['label' => 'Mapping Komponen', 'icon' => 'fa fa-circle-o', 'url' => ['/globalsetting/mappingkomponen'], 'visible' => akses(104)],

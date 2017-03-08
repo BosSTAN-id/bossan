@@ -94,6 +94,7 @@ class SpjController extends Controller
         }
 
         $model = $this->findModel($tahun, $no_spj);
+        $references = \app\models\TaTh::findOne(['tahun' => $tahun]);
         //query untuk halaman SPJ
         $sekolah = $model->sekolah_id;
         $tgl_spj = $model->tgl_spj;
@@ -174,6 +175,7 @@ class SpjController extends Controller
             'model' => $model,
             'data' => $data,
             'bukti' => $bukti,
+            'ref' => $references,
         ]);
     }    
 

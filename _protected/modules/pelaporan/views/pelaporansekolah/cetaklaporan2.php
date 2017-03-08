@@ -145,7 +145,7 @@ $pdf->ln();
 $pdf->SetFont('Arial','B',10);
 $pdf->SetXY(15,$pdf->GetY());
 $pdf->Cell(40,5,'Provinsi/Kabupaten','',0,'L');
-$pdf->Cell(110,5,': Sumatera Selatan / Banyuasin','',0,'L');
+$pdf->Cell(110,5,': '.\app\models\TaTh::dokudoku('bulat', $ref['set_8']),'',0,'L');
 $pdf->SetFont('Arial','',10);
 $pdf->Cell(140,5,'Dikirim ke Tim Manajemen BOS','LRB',0,'C');
 $pdf->ln();

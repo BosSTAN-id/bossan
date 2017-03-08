@@ -2366,7 +2366,7 @@ class PelaporansekolahController extends Controller
                             'perubahan_id' => $getparam['Laporan']['perubahan_id'],
                             'sekolah_id' => Yii::$app->user->identity->sekolah_id,
                             ]);
-
+        $references = \app\models\TaTh::findOne(['tahun' => $Tahun]);
 
         return $this->render($render, [
             'get' => $get,
@@ -2382,6 +2382,7 @@ class PelaporansekolahController extends Controller
             'getparam' => $getparam,
             'Tahun' => $Tahun,
             'peraturan' => $peraturan,
+            'ref' => $references
         ]);
     }
 

@@ -74,6 +74,7 @@ class Sp2bController extends Controller
             $Tahun = DATE('Y');
         }
 
+        $references = \app\models\TaTh::findOne(['tahun' => $tahun]);
         $model = $this->findModel($tahun, $no_sp3b);
         $spjdata = \Yii::$app->db->createCommand("
             SELECT
@@ -127,6 +128,7 @@ class Sp2bController extends Controller
             'data' => $data,
             'bukti' => $bukti,
             'saldoawal' => $saldoawal,
+            'ref' => $references,
         ]);
     }    
 
@@ -143,6 +145,7 @@ class Sp2bController extends Controller
             $Tahun = DATE('Y');
         }
 
+        $references = \app\models\TaTh::findOne(['tahun' => $tahun]);
         $model = \app\models\TaSP2B::findOne(['tahun' => $tahun, 'no_sp3b' => $no_sp3b]);
         $sp3b = $this->findModel($tahun, $no_sp3b);
         $tgl_sp3b = $sp3b->tgl_sp3b;
@@ -240,6 +243,7 @@ class Sp2bController extends Controller
             'bukti' => $bukti,
             'sp3b' => $sp3b,
             'saldoawal' => $saldoawal,
+            'ref' => $references,
         ]);
     }        
 

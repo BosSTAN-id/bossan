@@ -145,7 +145,7 @@ $pdf->ln();
 $pdf->SetFont('Arial','B',10);
 $pdf->SetXY(15,$pdf->GetY());
 $pdf->Cell(40,5,'Provinsi/Kabupaten','',0,'L');
-$pdf->Cell(110,5,': Sumatera Selatan / Banyuasin','',0,'L');
+$pdf->Cell(110,5,': '.\app\models\TaTh::dokudoku('bulat', $ref['set_8']),'',0,'L');
 $pdf->SetFont('Arial','',10);
 $pdf->Cell(140,5,'Dikirim ke Tim Manajemen BOS','LRB',0,'C');
 $pdf->ln();
@@ -416,6 +416,7 @@ foreach($data as $model){
 		$yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
 		$x = 15;
 		$ysisa = $y1;
+        $y = max($y1, $y2);  
 
 	}
 
@@ -562,7 +563,7 @@ $pdf->Cell($w['8'],6,number_format($totallainp - $totallain,0,',','.'),1,0,'R');
 IF(($pdf->gety()+6) >= 175) $pdf->AddPage();
 $pdf->SetXY(215,$pdf->gety()+10);
 $pdf->SetFont('Arial','B',10);
-$pdf->MultiCell(100,5,$peraturan->sekolah->refKecamatan->Nm_Kecamatan.', '.DATE('j', strtotime($peraturan['tgl_peraturan'])).' '.bulan(DATE('m', strtotime($peraturan['tgl_peraturan']))).' '.DATE('Y', strtotime($peraturan['tgl_peraturan'])), '', 'J', 0);
+$pdf->MultiCell(100,5,$peraturan->sekolah->refKecamatan->Nm_Kecamatan.', '.DATE('j', strtotime($getparam['Laporan']['Tgl_Laporan'])).' '.bulan(DATE('m', strtotime($getparam['Laporan']['Tgl_Laporan']))).' '.DATE('Y', strtotime($getparam['Laporan']['Tgl_Laporan'])), '', 'J', 0);
 $y = $pdf->getY();
 $pdf->SetXY(215,$pdf->gety());
 $pdf->SetFont('Arial','B',10);

@@ -94,6 +94,7 @@ class VerspjController extends Controller
             $Tahun = DATE('Y');
         }
 
+        $references = \app\models\TaTh::findOne(['tahun' => $tahun]);
         $model = $this->findModel($tahun, $no_spj);
         //query untuk halaman SPJ
         $sekolah = $model->sekolah_id;
@@ -175,6 +176,7 @@ class VerspjController extends Controller
             'model' => $model,
             'data' => $data,
             'bukti' => $bukti,
+            'ref' => $references,
         ]);
     }     
 

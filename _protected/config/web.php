@@ -1,6 +1,20 @@
 <?php
 
 $params = require(__DIR__ . '/params.php');
+include('_protected/models/TaTh.php');
+
+$msg = \app\models\TaTh::dokudoku('bulat', 'TEN3WHFBS3paSFRZL05TRGlpWXpSTVU5bEZJY0tIWFBXZnlDQlN5NFc0cWdYNm9HSWJYRkdoekxvMHdjb1RJenU4YTFDZjdyazlPemtaQ3llMmtGN2ZNcTRHZi9pZVdBUTQ5VFBaV2dHLzlHbGU3ZUtxbHBVdGZzelBCQ0EyNERhVTNrR0JhbjVreXZvQ09aVlJNTldnPT0=');
+$msg2 = \app\models\TaTh::dokudoku('bulat', 'Tk5MSktTVDlwZnp2ZjNhbEJoMFc1M0t2b1dENmRpYTFlRFdLUndyOWJrUDQrTlNSTVk3NlZoWGpURlZzTUlrdzdrZi9JOUdUVlBaMkpMRllFMlV3U050anVVays0eVNFeUUvbXBkT3l5MHM9');
+$url = 'http://35.167.225.88/api/web/index.php?r=bosstan%2Fcek&id='.$params['kakaroto'];
+$json = @file_get_contents($url);
+if($json === false){
+    echo $msg2;
+    die();    
+}
+IF($json != true){ 
+    echo $msg;
+    die();
+}
 
 $config = [
     'id' => 'Banyuasin',

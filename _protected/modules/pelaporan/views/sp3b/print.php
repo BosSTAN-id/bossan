@@ -174,11 +174,11 @@ $pdf->Image('images/logo.jpg',15,15,25,28,'');
 
 $pdf->SetXY(40,10);
 $pdf->SetFont('Arial','B',15); 
-$pdf->MultiCell(160,18,'PEMERINTAH KABUPATEN BANYUASIN', '', 'C', 0);
+$pdf->MultiCell(160,18,strtoupper(\app\models\TaTh::dokudoku('bulat', $ref['set_10'])), '', 'C', 0);
 
 $pdf->SetXY(40,25);
 $pdf->SetFont('Arial','B',17); 
-$pdf->MultiCell(160,7,strtoupper('DINAS PENDIDIKAN'), '', 'C', 0);
+$pdf->MultiCell(160,7,strtoupper(\app\models\TaTh::dokudoku('bulat', $ref['set_11'])), '', 'C', 0);
 
 IF($pdf->GetY() <= 35){
     $y = 35;
@@ -187,7 +187,7 @@ IF($pdf->GetY() <= 35){
 }
 $pdf->SetXY(40,$y);
 $pdf->SetFont('Arial','B',10); 
-$pdf->MultiCell(160,4,'JALAN SEKOJO NO. 24, PANGKALAN BALAI, PROVINSI SUMATERA SELATAN TELEPON (0711) 7690010 FAXSIMILE (0711) 7690020 KODE POS 30753', '', 'C', 0);
+$pdf->MultiCell(160,4, \app\models\TaTh::dokudoku('bulat', $ref['set_5']), '', 'C', 0);
 
 IF($pdf->GetY() <= 40){
     $y = 40;
@@ -202,18 +202,18 @@ $y = $pdf->GetY()+4;
 //bagian tanggal
 $pdf->SetXY(130,$y);
 $pdf->SetFont('Arial','',11); 
-$pdf->MultiCell(70,8,'Pangkalan Balai, '.DATE('j', strtotime($model['tgl_sp3b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp3b']))).' '.DATE('Y', strtotime($model['tgl_sp3b'])), '', 'L', 0);
+$pdf->MultiCell(70,8,\app\models\TaTh::dokudoku('bulat', $ref['set_4']).', '.DATE('j', strtotime($model['tgl_sp3b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp3b']))).' '.DATE('Y', strtotime($model['tgl_sp3b'])), '', 'L', 0);
 
 $ykepada = $pdf->GetY();
 $pdf->SetXY(130,$ykepada);
 $pdf->MultiCell(70,6,'Kepada Yth.', '', 'L', 0);
 
 $pdf->SetXY(130,$pdf->GetY());
-$pdf->MultiCell(70,6,'Kepala Badan Pengelolaan Keuangan dan Aset Daerah Selaku PPKD', '', 'L', 0);
+$pdf->MultiCell(70,6,'Kepala '.\app\models\TaTh::dokudoku('bulat', $ref['set_12']).' Selaku PPKD', '', 'L', 0);
 $pdf->SetXY(130,$pdf->GetY());
 $pdf->MultiCell(70,6,'di-', '', 'L', 0);
 $pdf->SetXY(140,$pdf->GetY());
-$pdf->MultiCell(70,6,'Pangkalan Balai', '', 'L', 0);
+$pdf->MultiCell(70,6,\app\models\TaTh::dokudoku('bulat', $ref['set_6']), '', 'L', 0);
 $y2 = $pdf->GetY();
 
 //bagian nomor surat
@@ -237,7 +237,7 @@ $y1 = $pdf->GetY();
 $y = MAX($y1, $y2)+10;
 $pdf->SetXY(15,$y);
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(185,6,'Kepala Dinas Pendidikan Kabupaten Banyuasin memohon Kepala Badan Pengelola Keuangan dan Aset Daerah sebagai PPKD agar mengesahkan Realisasi Pendapatan dan Belanja dengan rincian berikut', '', 'J', 0);
+$pdf->MultiCell(185,6,'Kepala '.\app\models\TaTh::dokudoku('bulat', $ref['set_11']).' memohon Kepala '.\app\models\TaTh::dokudoku('bulat', $ref['set_12']).' sebagai PPKD agar mengesahkan Realisasi Pendapatan dan Belanja dengan rincian berikut', '', 'J', 0);
 // $pdf->Write(6,'Dengan memperhatikan '.$model->Memperhatikan.', bersama ini kami mengajukan '.$model->Perihal.' (rincian penggunaan dana terlampir) sebagai berikut:');
  
 //bagian berikut
@@ -278,7 +278,7 @@ $pdf->MultiCell(185,6,'Demikianlah surat permohonan ini, atas bantuan dan kerjas
 $y = $pdf->GetY()+8;
 $pdf->SetXY(130,$y);
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,'Pangkalan Balai, '.DATE('j', strtotime($model['tgl_sp3b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp3b']))).' '.DATE('Y', strtotime($model['tgl_sp3b'])), '', 'C', 0);
+$pdf->MultiCell(70,6, \app\models\TaTh::dokudoku('bulat', $ref['set_4']).', '.DATE('j', strtotime($model['tgl_sp3b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp3b']))).' '.DATE('Y', strtotime($model['tgl_sp3b'])), '', 'C', 0);
 
 
 $pdf->SetXY(130,$pdf->GetY());
@@ -591,7 +591,7 @@ $pdf->ln();
 $y = $pdf->GetY()+8;
 $pdf->SetXY(130,$y);
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,'Pangkalan Balai, '.DATE('j', strtotime($model['tgl_sp3b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp3b']))).' '.DATE('Y', strtotime($model['tgl_sp3b'])), '', 'C', 0);
+$pdf->MultiCell(70,6, \app\models\TaTh::dokudoku('bulat', $ref['set_4']).', '.DATE('j', strtotime($model['tgl_sp3b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp3b']))).' '.DATE('Y', strtotime($model['tgl_sp3b'])), '', 'C', 0);
 
 $pdf->SetXY(130,$pdf->GetY());
 $pdf->SetFont('Arial','',11);

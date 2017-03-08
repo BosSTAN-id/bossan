@@ -174,11 +174,11 @@ $pdf->Image('images/logo.jpg',15,15,25,28,'');
 
 $pdf->SetXY(40,10);
 $pdf->SetFont('Arial','B',15); 
-$pdf->MultiCell(160,18,'PEMERINTAH KABUPATEN BANYUASIN', '', 'C', 0);
+$pdf->MultiCell(160,18,strtoupper(\app\models\TaTh::dokudoku('bulat', $ref['set_10'])), '', 'C', 0);
 
 $pdf->SetXY(40,25);
 $pdf->SetFont('Arial','B',17); 
-$pdf->MultiCell(160,7,strtoupper('DINAS PENDIDIKAN'), '', 'C', 0);
+$pdf->MultiCell(160,7,strtoupper(\app\models\TaTh::dokudoku('bulat', $ref['set_11'])), '', 'C', 0);
 
 IF($pdf->GetY() <= 35){
     $y = 35;
@@ -187,7 +187,7 @@ IF($pdf->GetY() <= 35){
 }
 $pdf->SetXY(40,$y);
 $pdf->SetFont('Arial','B',10); 
-$pdf->MultiCell(160,4,'JALAN SEKOJO NO. 24, PANGKALAN BALAI, PROVINSI SUMATERA SELATAN TELEPON (0711) 7690010 FAXSIMILE (0711) 7690020 KODE POS 30753', '', 'C', 0);
+$pdf->MultiCell(160,4, \app\models\TaTh::dokudoku('bulat', $ref['set_5']), '', 'C', 0);
 
 IF($pdf->GetY() <= 40){
     $y = 40;
@@ -202,18 +202,18 @@ $y = $pdf->GetY()+4;
 //bagian tanggal
 $pdf->SetXY(130,$y);
 $pdf->SetFont('Arial','',11); 
-$pdf->MultiCell(70,8,'Pangkalan Balai, '.DATE('j', strtotime($model['tgl_sp3b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp3b']))).' '.DATE('Y', strtotime($model['tgl_sp3b'])), '', 'L', 0);
+$pdf->MultiCell(70,8,\app\models\TaTh::dokudoku('bulat', $ref['set_4']).', '.DATE('j', strtotime($model['tgl_sp3b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp3b']))).' '.DATE('Y', strtotime($model['tgl_sp3b'])), '', 'L', 0);
 
 $ykepada = $pdf->GetY();
 $pdf->SetXY(130,$ykepada);
 $pdf->MultiCell(70,6,'Kepada Yth.', '', 'L', 0);
 
 $pdf->SetXY(130,$pdf->GetY());
-$pdf->MultiCell(70,6,'Kepala Badan Pengelolaan Keuangan dan Aset Daerah Selaku PPKD', '', 'L', 0);
+$pdf->MultiCell(70,6,'Kepala '.\app\models\TaTh::dokudoku('bulat', $ref['set_12']).' Selaku PPKD', '', 'L', 0);
 $pdf->SetXY(130,$pdf->GetY());
 $pdf->MultiCell(70,6,'di-', '', 'L', 0);
 $pdf->SetXY(140,$pdf->GetY());
-$pdf->MultiCell(70,6,'Pangkalan Balai', '', 'L', 0);
+$pdf->MultiCell(70,6,\app\models\TaTh::dokudoku('bulat', $ref['set_6']), '', 'L', 0);
 $y2 = $pdf->GetY();
 
 //bagian nomor surat
@@ -237,7 +237,7 @@ $y1 = $pdf->GetY();
 $y = MAX($y1, $y2)+10;
 $pdf->SetXY(15,$y);
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(185,6,'Kepala Dinas Pendidikan Kabupaten Banyuasin memohon Kepala Badan Pengelola Keuangan dan Aset Daerah sebagai PPKD agar mengesahkan Realisasi Pendapatan dan Belanja dengan rincian berikut', '', 'J', 0);
+$pdf->MultiCell(185,6,'Kepala '.\app\models\TaTh::dokudoku('bulat', $ref['set_11']).' memohon Kepala '.\app\models\TaTh::dokudoku('bulat', $ref['set_12']).' sebagai PPKD agar mengesahkan Realisasi Pendapatan dan Belanja dengan rincian berikut', '', 'J', 0);
 // $pdf->Write(6,'Dengan memperhatikan '.$model->Memperhatikan.', bersama ini kami mengajukan '.$model->Perihal.' (rincian penggunaan dana terlampir) sebagai berikut:');
  
 //bagian berikut
@@ -278,7 +278,7 @@ $pdf->MultiCell(185,6,'Demikianlah surat permohonan ini, atas bantuan dan kerjas
 $y = $pdf->GetY()+8;
 $pdf->SetXY(130,$y);
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,'Pangkalan Balai, '.DATE('j', strtotime($model['tgl_sp3b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp3b']))).' '.DATE('Y', strtotime($model['tgl_sp3b'])), '', 'C', 0);
+$pdf->MultiCell(70,6, \app\models\TaTh::dokudoku('bulat', $ref['set_4']).', '.DATE('j', strtotime($model['tgl_sp3b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp3b']))).' '.DATE('Y', strtotime($model['tgl_sp3b'])), '', 'C', 0);
 
 
 $pdf->SetXY(130,$pdf->GetY());
@@ -361,21 +361,21 @@ $kegiatanlama = NULL;
 
 foreach($data as $data){
 
-	//hitung karakter dari masing-masing record terlebih dahulu
-	$kegiatanbaru = $data['kd_program'].'.'.$data['kd_sub_program'].'.'.substr('0'.$data['kd_kegiatan'], -2);
-	$uraiankegiatan = $data['uraian_program'].' / '.$data['uraian_kegiatan'];
-	// $data['kd_program'].'.'.substr('0'.$data['kd_kegiatan'], -2).' '.$data['Ket_Program'].' / '.$data['Ket_Kegiatan'];
-	$uraianrekening = $data['Nm_Rek_5'];
-	// $data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'], -2).'.'.substr('0'.$data['Kd_Rek_5'], -2).' '.$data['Nm_Rek_5'];
-	$charkegiatan = strlen($data['uraian_program'].' / '.$data['uraian_kegiatan']); //35 menampung 23 char
-	$charrekening = strlen($data['Nm_Rek_5']); //35 widht menampung 23 char
+    //hitung karakter dari masing-masing record terlebih dahulu
+    $kegiatanbaru = $data['kd_program'].'.'.$data['kd_sub_program'].'.'.substr('0'.$data['kd_kegiatan'], -2);
+    $uraiankegiatan = $data['uraian_program'].' / '.$data['uraian_kegiatan'];
+    // $data['kd_program'].'.'.substr('0'.$data['kd_kegiatan'], -2).' '.$data['Ket_Program'].' / '.$data['Ket_Kegiatan'];
+    $uraianrekening = $data['Nm_Rek_5'];
+    // $data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'], -2).'.'.substr('0'.$data['Kd_Rek_5'], -2).' '.$data['Nm_Rek_5'];
+    $charkegiatan = strlen($data['uraian_program'].' / '.$data['uraian_kegiatan']); //35 menampung 23 char
+    $charrekening = strlen($data['Nm_Rek_5']); //35 widht menampung 23 char
 
-	IF($kegiatanlama <> $kegiatanbaru){
-	    $y = MAX($y1, $y2, $y3);
+    IF($kegiatanlama <> $kegiatanbaru){
+        $y = MAX($y1, $y2, $y3);
 
-	    IF($y1 + (4*(strlen($uraiankegiatan)/23)) > 160){ //cek pagebreak
-	        $ylst = 190 - $yst; //207 batas margin bawah dikurang dengan y pertama
-	        //setiap selesai page maka buat rectangle
+        IF($y1 + (4*(strlen($uraiankegiatan)/23)) > 160){ //cek pagebreak
+            $ylst = 190 - $yst; //207 batas margin bawah dikurang dengan y pertama
+            //setiap selesai page maka buat rectangle
             $pdf->Rect($x, $yst, $w['0'] ,$ylst);
             $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
             $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
@@ -383,9 +383,9 @@ foreach($data as $data){
             $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
             $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
             // $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
-	        
-	        //setelah buat rectangle baru kemudian addPage
-	        $pdf->AddPage();
+            
+            //setelah buat rectangle baru kemudian addPage
+            $pdf->AddPage();
 
             $pdf->SetFont('Arial','B',10);
             $pdf->SetXY($left,35);
@@ -422,45 +422,45 @@ foreach($data as $data){
             $pdf->ln();
 
 
-	        $y1 = $pdf->GetY(); // Untuk baris berikutnya
-	        $y2 = $pdf->GetY(); //untuk baris berikutnya
-	        $y3 = $pdf->GetY(); //untuk baris berikutnya
-	        $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
-	        $x = 15;
-	        $ysisa = $y1;
+            $y1 = $pdf->GetY(); // Untuk baris berikutnya
+            $y2 = $pdf->GetY(); //untuk baris berikutnya
+            $y3 = $pdf->GetY(); //untuk baris berikutnya
+            $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
+            $x = 15;
+            $ysisa = $y1;
 
-	    }
+        }
 
-	    //new data
-	    $pdf->SetFont('Arial','B',8);    
-	    $pdf->SetXY($x, $y);
-	    $xcurrent= $x;
-	    $pdf->MultiCell($w['0'],4,'','T','C');
-	    $xcurrent = $xcurrent+$w['0'];
-	    $pdf->SetXY($xcurrent, $y);
+        //new data
+        $pdf->SetFont('Arial','B',8);    
+        $pdf->SetXY($x, $y);
+        $xcurrent= $x;
+        $pdf->MultiCell($w['0'],4,'','T','C');
+        $xcurrent = $xcurrent+$w['0'];
+        $pdf->SetXY($xcurrent, $y);
         $pdf->MultiCell($w['1'],4,$data['kd_program'].'.'.$data['kd_sub_program'].'.'.substr('0'.$data['kd_kegiatan'], -2),'T','L');
-	    $xcurrent = $xcurrent+$w['1'];
-	    $pdf->SetXY($xcurrent, $y);
-	    $pdf->MultiCell($w['2'],4,$data['uraian_program'].' / '.$data['uraian_kegiatan'],'T','L');
+        $xcurrent = $xcurrent+$w['1'];
+        $pdf->SetXY($xcurrent, $y);
+        $pdf->MultiCell($w['2'],4,$data['uraian_program'].' / '.$data['uraian_kegiatan'],'T','L');
         $y1 = $pdf->GetY();
-	    $xcurrent = $xcurrent+$w['2'];  
-	    $pdf->SetXY($xcurrent, $y);
-	    $pdf->MultiCell($w['3'],4,'','T','R');
-	    $xcurrent = $xcurrent+$w['3'];
-	    $pdf->SetXY($xcurrent, $y);
-	    $pdf->MultiCell($w['4'],4,'','T','L');
-	    $y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
-	    $xcurrent = $xcurrent+$w['4'];
-	    $pdf->SetXY($xcurrent, $y);
-	    $pdf->MultiCell($w['5'],4,'','T','L');
-	    $y3 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
-	    $xcurrent = $xcurrent+$w['5'];
-	    $pdf->SetXY($xcurrent, $y);
-	    
-	    $ysisa = $y;
+        $xcurrent = $xcurrent+$w['2'];  
+        $pdf->SetXY($xcurrent, $y);
+        $pdf->MultiCell($w['3'],4,'','T','R');
+        $xcurrent = $xcurrent+$w['3'];
+        $pdf->SetXY($xcurrent, $y);
+        $pdf->MultiCell($w['4'],4,'','T','L');
+        $y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
+        $xcurrent = $xcurrent+$w['4'];
+        $pdf->SetXY($xcurrent, $y);
+        $pdf->MultiCell($w['5'],4,'','T','L');
+        $y3 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
+        $xcurrent = $xcurrent+$w['5'];
+        $pdf->SetXY($xcurrent, $y);
+        
+        $ysisa = $y;
 
-	    $pdf->ln();
-	}
+        $pdf->ln();
+    }
 
     IF($y2 > 160 || $y1 + (4*(strlen($uraianrekening)/23)) > 160 || $y3 > 160  ){ //cek pagebreak
         $ylst = 190 - $yst; //207 batas margin bawah dikurang dengan y pertama
@@ -591,7 +591,7 @@ $pdf->ln();
 $y = $pdf->GetY()+8;
 $pdf->SetXY(130,$y);
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,'Pangkalan Balai, '.DATE('j', strtotime($model['tgl_sp3b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp3b']))).' '.DATE('Y', strtotime($model['tgl_sp3b'])), '', 'C', 0);
+$pdf->MultiCell(70,6, \app\models\TaTh::dokudoku('bulat', $ref['set_4']).', '.DATE('j', strtotime($model['tgl_sp3b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp3b']))).' '.DATE('Y', strtotime($model['tgl_sp3b'])), '', 'C', 0);
 
 $pdf->SetXY(130,$pdf->GetY());
 $pdf->SetFont('Arial','',11);

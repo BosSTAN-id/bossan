@@ -1,9 +1,16 @@
 <?php
 use yii\helpers\Html;
+
 $connection = \Yii::$app->db;           
 $tahun = $connection->createCommand('SELECT Tahun FROM ta_th GROUP BY Tahun')->queryAll();
 /* @var $this \yii\web\View */
 /* @var $content string */
+IF(Yii::$app->session->get('tahun'))
+{
+    $Tahun = Yii::$app->session->get('tahun');
+}ELSE{
+    $Tahun = DATE('Y');
+}
 ?>
 
 <header class="main-header">
@@ -15,7 +22,7 @@ $tahun = $connection->createCommand('SELECT Tahun FROM ta_th GROUP BY Tahun')->q
         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
             <!--<img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/> -->
-            <span class"pull-left"><B>  <?= Yii::$app->user->identity->sekolah_id == NULL ? 'PEMERINTAH KABUPATEN BANYUASIN' : strtoupper(Yii::$app->user->identity->refSekolah->nama_sekolah) ?></B></span>
+            <span class"pull-left"><B>  <?= Yii::$app->user->identity->sekolah_id == NULL ? strtoupper(\app\models\TaTh::dokudoku('bulat', \app\models\TaTh::findOne(['tahun' => $Tahun])['set_10'])) : strtoupper(Yii::$app->user->identity->refSekolah->nama_sekolah) ?></B></span>
         </a>
 
         <div class="navbar-custom-menu">

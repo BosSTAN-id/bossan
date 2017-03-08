@@ -171,7 +171,7 @@ $pdf->ln();
 $pdf->SetFont('Times','',10);
 $pdf->SetXY(15,$pdf->GetY());
 $pdf->Cell(33,5,'Provinsi/Kabupaten','',0,'L');
-$pdf->Cell(60,5,': Sumatera Selatan / Banyuasin','',0,'L');
+$pdf->Cell(60,5,': '.\app\models\TaTh::dokudoku('bulat', $ref['set_8']),'',0,'L');
 $pdf->Cell(92,5,'Dikirim ke Tim Manajemen BOS','LRB',0,'C');
 $pdf->ln();
 
@@ -390,7 +390,7 @@ IF(($pdf->gety()+6) >= 175) $pdf->AddPage();
 $y = $pdf->getY()+10;
 $pdf->SetXY(125,$y);
 $pdf->SetFont('Times','',10);
-$pdf->MultiCell(100,5,$peraturan->sekolah->refKecamatan->Nm_Kecamatan.', '.DATE('j', strtotime($peraturan['tgl_peraturan'])).' '.bulan(DATE('m', strtotime($peraturan['tgl_peraturan']))).' '.DATE('Y', strtotime($peraturan['tgl_peraturan'])), '', 'J', 0);
+$pdf->MultiCell(100,5,$peraturan->sekolah->refKecamatan->Nm_Kecamatan.', '.DATE('j', strtotime($getparam['Laporan']['Tgl_Laporan'])).' '.bulan(DATE('m', strtotime($getparam['Laporan']['Tgl_Laporan']))).' '.DATE('Y', strtotime($getparam['Laporan']['Tgl_Laporan'])), '', 'J', 0);
 $pdf->SetXY(125,$pdf->gety());
 $pdf->SetFont('Times','',10);
 $pdf->MultiCell(100,5,$bendahara['jabatan'], '', 'j', 0);

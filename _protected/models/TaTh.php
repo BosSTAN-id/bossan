@@ -39,7 +39,7 @@ class TaTh extends \yii\db\ActiveRecord
     {
         return [
             [['tahun'], 'safe'],
-            [['set_1', 'set_2', 'set_3', 'set_4', 'set_5', 'set_6', 'set_7', 'set_8', 'set_9', 'set_10', 'set_11', 'set_12'], 'string', 'max' => 100],
+            [['set_1', 'set_2', 'set_3', 'set_4', 'set_5', 'set_6', 'set_7', 'set_8', 'set_9', 'set_10', 'set_11', 'set_12'], 'string', 'max' => 255],
         ];
     }
 
@@ -54,15 +54,15 @@ class TaTh extends \yii\db\ActiveRecord
             'set_1' => Yii::t('app', 'Pwd Keu'),
             'set_2' => Yii::t('app', 'Server Keu'),
             'set_3' => Yii::t('app', 'Un Keu'),
-            'set_4' => Yii::t('app', 'Server BMD'),
-            'set_5' => Yii::t('app', 'Pwd BMD'),
-            'set_6' => Yii::t('app', 'Un BMD'),
-            'set_7' => Yii::t('app', 'Db Keu'),
-            'set_8' => Yii::t('app', 'Db BMD'),
+            'set_4' => Yii::t('app', 'Kelurahan Diknas'),
+            'set_5' => Yii::t('app', 'Alamat Diknas'),
+            'set_6' => Yii::t('app', 'Kelurahan PPKD'),
+            'set_7' => Yii::t('app', 'Alamat PPKD'),
+            'set_8' => Yii::t('app', 'Provinsi / (Kota/Kabupaten)'),
             'set_9' => Yii::t('app', 'Set 9'),
             'set_10' => Yii::t('app', 'Set 10'),
-            'set_11' => Yii::t('app', 'Set 11'),
-            'set_12' => Yii::t('app', 'Set 12'),
+            'set_11' => Yii::t('app', 'Nama Dinas Pengelola Pendidikan'),
+            'set_12' => Yii::t('app', 'Nama Dinas Pengelola Keuangan'),
         ];
     }
 
