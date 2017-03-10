@@ -37,7 +37,7 @@ use dmstr\widgets\Alert;
 
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
-        <b>Version</b> 1.0.0beta
+        <b>Version</b> 1.0.0
     </div>
     <?php 
         IF(Yii::$app->session->get('tahun'))

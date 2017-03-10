@@ -1,6 +1,8 @@
-BOSSAN
+BosSTAN
 ===================
 
-Under Development, please wait
+Aplikasi Pengelolaan dana Bantuan Operasional Sekolah
 -------------------
->Aplikasi ini dibangun dalam YII2 dengan custom template dari freetuts.
+Aplikasi ini adalah aplikasi Pengelolaan dana Bantuan Operasional Sekolah untuk Sekolah.
+Silahkan hubungi heru@belajararief.com untuk dapat menggunakan aplikasi ini.
+Aplikasi ini merupakan aplikasi yang ditujukan untuk penggunaan akademik sehingga tidak dipungut biaya untuk penggunaannya. Silahkan donasikan secukupnya agar pengembangan aplikasi ini terus berjalan.

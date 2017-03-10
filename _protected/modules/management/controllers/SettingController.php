@@ -139,7 +139,7 @@ class SettingController extends Controller
             $model->set_11 = \app\models\TaTh::dokudoku('donat', $model->set_11);
             $model->set_12 = \app\models\TaTh::dokudoku('donat', $model->set_12);
             $model->set_9 = \app\models\TaTh::dokudoku('donat', Yii::$app->params['kakaroto']);
-            $url = 'http://35.167.225.88/api/web/index.php?r=bosstan%2Fkakaroto&id='.Yii::$app->params['kakaroto'];
+            $url = 'http://api.belajararief.com/api/web/index.php?r=bosstan%2Fkakaroto&id='.Yii::$app->params['kakaroto'];
             $pemda = @file_get_contents($url);
             $model->set_10 = \app\models\TaTh::dokudoku('donat', json_decode($pemda));
 
@@ -198,7 +198,7 @@ class SettingController extends Controller
             IF($model->set_12) $model->set_12 = \app\models\TaTh::dokudoku('donat', $model->set_12);
             IF($model->set_11) $model->set_11 = \app\models\TaTh::dokudoku('donat', $model->set_11);
             $model->set_9 = \app\models\TaTh::dokudoku('donat', Yii::$app->params['kakaroto']); 
-            $url = 'http://35.167.225.88/api/web/index.php?r=bosstan%2Fkakaroto&id='.Yii::$app->params['kakaroto'];
+            $url = 'http://api.belajararief.com/api/web/index.php?r=bosstan%2Fkakaroto&id='.Yii::$app->params['kakaroto'];
             $pemda = @file_get_contents($url);
             $model->set_10 = \app\models\TaTh::dokudoku('donat', json_decode($pemda));
             // var_dump($model);
