@@ -2361,7 +2361,7 @@ class PelaporansekolahController extends Controller
 
         }
 
-        $peraturan = \app\models\TaRKASPeraturan::findOne([
+        $peraturan = \app\models\TaRkasPeraturan::findOne([
                             'tahun' => $Tahun,
                             'perubahan_id' => $getparam['Laporan']['perubahan_id'],
                             'sekolah_id' => Yii::$app->user->identity->sekolah_id,
