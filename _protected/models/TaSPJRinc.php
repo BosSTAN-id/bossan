@@ -32,7 +32,7 @@ use Yii;
  * @property TaSpjPot[] $taSpjPots
  * @property RefPotongan[] $kdPotongans
  */
-class TaSpjRinc extends \yii\db\ActiveRecord
+class TaSPJRinc extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
