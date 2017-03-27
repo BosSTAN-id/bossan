@@ -35,6 +35,11 @@ if (Yii::$app->controller->action->id === 'login') {
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
+        <style type="text/css">
+            .form-control{
+                border-radius:4px !important;
+            }
+        </style>
     </head>
     <?php
     /**/

@@ -38,8 +38,23 @@ class BuktiController extends Controller
      */
     public function actionIndex()
     {    
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
         $searchModel = new TaSPJRincSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['tahun' => $Tahun, 'Kd_Rek_1' => 5]);
+        IF(Yii::$app->user->identity->sekolah_id && $sekolah_id = Yii::$app->user->identity->sekolah_id){
+            $dataProvider->query->andWhere(['sekolah_id' => $sekolah_id]);
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -57,6 +72,17 @@ class BuktiController extends Controller
      */
     public function actionView($tahun, $no_bukti, $tgl_bukti)
     {   
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
         $request = Yii::$app->request;
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -83,8 +109,21 @@ class BuktiController extends Controller
      */
     public function actionCreate()
     {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
         $request = Yii::$app->request;
-        $model = new TaSPJRinc();  
+        $model = new TaSPJRinc();
+        $model->tahun = $Tahun;
+        $model->sekolah_id = Yii::$app->user->identity->sekolah_id;
 
         if($request->isAjax){
             /*
@@ -96,6 +135,7 @@ class BuktiController extends Controller
                     'title'=> "Create new TaSPJRinc",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
+                        'Tahun' => $Tahun,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -115,6 +155,7 @@ class BuktiController extends Controller
                     'title'=> "Create new TaSPJRinc",
                     'content'=>$this->renderAjax('create', [
                         'model' => $model,
+                        'Tahun' => $Tahun,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
                                 Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
@@ -130,6 +171,7 @@ class BuktiController extends Controller
             } else {
                 return $this->render('create', [
                     'model' => $model,
+                    'Tahun' => $Tahun,
                 ]);
             }
         }
@@ -147,6 +189,17 @@ class BuktiController extends Controller
      */
     public function actionUpdate($tahun, $no_bukti, $tgl_bukti)
     {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
         $request = Yii::$app->request;
         $model = $this->findModel($tahun, $no_bukti, $tgl_bukti);       
 
@@ -209,6 +262,17 @@ class BuktiController extends Controller
      */
     public function actionDelete($tahun, $no_bukti, $tgl_bukti)
     {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
         $request = Yii::$app->request;
         $this->findModel($tahun, $no_bukti, $tgl_bukti)->delete();
 
@@ -238,7 +302,18 @@ class BuktiController extends Controller
      * @return mixed
      */
     public function actionBulkDelete()
-    {        
+    {   
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
         $request = Yii::$app->request;
         $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
         foreach ( $pks as $pk ) {
@@ -261,6 +336,98 @@ class BuktiController extends Controller
        
     }
 
+    // for modals belanja
+    public function actionList()
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $request = Yii::$app->request;
+        $searchModel = new \app\modules\anggaran\models\TaRkasKegiatanSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['tahun' => $Tahun]);
+        IF(Yii::$app->user->identity->sekolah_id && $sekolah_id = Yii::$app->user->identity->sekolah_id){
+            $dataProvider->query->andWhere(['sekolah_id' => $sekolah_id]);
+        }
+
+        if($request->isAjax){
+            return $this->renderAjax('kamuskegiatan', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'Tahun' => $Tahun,
+            ]);
+        }
+
+    }    
+
+    public function actionListbelanja($id)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        list($kd_program, $kd_sub_program, $kd_kegiatan) = explode('.', $id);
+        $request = Yii::$app->request;
+                        // $totalCount = Yii::$app->db->createCommand("
+                        // asdasd
+                        //     ", [
+                        //         ':tahun' => $Tahun,
+                        //         ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                        //         ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
+                        //         ':kd_penerimaan_1' => $kd_penerimaan_1,
+                        //         ':kd_penerimaan_2' => $kd_penerimaan_2,
+                        //     ])->queryScalar();
+
+                        // $data = new SqlDataProvider([
+                        //     'sql' => "
+                        //             asdasd
+                        //             ",
+                        //     'params' => [
+                        //         ':tahun' => $Tahun,
+                        //         ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                        //         ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
+                        //         ':kd_penerimaan_1' => $kd_penerimaan_1,
+                        //         ':kd_penerimaan_2' => $kd_penerimaan_2,
+                        //     ],
+                        //     'totalCount' => $totalCount,
+                        //     //'sort' =>false, to remove the table header sorting
+                        //     'pagination' => [
+                        //         'pageSize' => 50,
+                        //     ],
+                        // ]);                                          
+        $searchModel = new \app\modules\anggaran\models\RefRek5Search();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['Kd_Rek_1' => 5, 'Kd_Rek_2' => 2]);
+        $dataProvider->pagination->pageSize=100;
+
+        // if($request->isAjax){
+            return $this->renderAjax('kamusbelanja', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'Tahun' => $Tahun,
+                'kd_program' => $kd_program,
+                'kd_sub_program' => $kd_sub_program,
+                'kd_kegiatan' => $kd_kegiatan,
+            ]);
+        // }
+
+    }    
+
     /**
      * Finds the TaSPJRinc model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -278,4 +445,17 @@ class BuktiController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    protected function cekakses(){
+        IF(Yii::$app->user->identity){
+            $akses = \app\models\RefUserMenu::find()->where(['kd_user' => Yii::$app->user->identity->kd_user, 'menu' => 506])->one();
+            IF($akses){
+                return true;
+            }else{
+                return false;
+            }
+        }ELSE{
+            return false;
+        }
+    }     
 }
