@@ -86,15 +86,15 @@ use yii\bootstrap\Modal;
     <div class="row">
 
         <div class="col-md-1 col-sm-1 col-xs-1">
-            <?= $form->field($model, 'kd_program')->textInput(['readonly' => true])->label(false) ?>
+            <?= $form->field($model, 'kd_program')->textInput(['readonly' => true, 'class' => 'form-control input-sm'])->label(false) ?>
         </div> <!--col-->
 
         <div class="col-md-1 col-sm-1 col-xs-1">
-            <?= $form->field($model, 'kd_sub_program')->textInput(['readonly' => true])->label(false) ?>
+            <?= $form->field($model, 'kd_sub_program')->textInput(['readonly' => true, 'class' => 'form-control input-sm'])->label(false) ?>
         </div> <!--col-->
 
         <div class="col-md-1 col-sm-1 col-xs-1">
-            <?= $form->field($model, 'kd_kegiatan')->textInput(['readonly' => true])->label(false) ?>
+            <?= $form->field($model, 'kd_kegiatan')->textInput(['readonly' => true, 'class' => 'form-control input-sm'])->label(false) ?>
         </div> <!--col-->
 
         <div class="col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-md-7 col-sm-7 col-xs-7">
@@ -105,23 +105,23 @@ use yii\bootstrap\Modal;
     <div class="row">    
 
         <div class="col-md-1 col-sm-1 col-xs-1">
-            <?= $form->field($model, 'Kd_Rek_1')->textInput(['readonly' => true])->label(false) ?>
+            <?= $form->field($model, 'Kd_Rek_1')->textInput(['readonly' => true, 'class' => 'form-control input-sm'])->label(false) ?>
         </div> <!--col-->
 
         <div class="col-md-1 col-sm-1 col-xs-1">
-            <?= $form->field($model, 'Kd_Rek_2')->textInput(['readonly' => true])->label(false) ?>
+            <?= $form->field($model, 'Kd_Rek_2')->textInput(['readonly' => true, 'class' => 'form-control input-sm'])->label(false) ?>
         </div> <!--col-->
 
         <div class="col-md-1 col-sm-1 col-xs-1">
-            <?= $form->field($model, 'Kd_Rek_3')->textInput(['readonly' => true])->label(false) ?>
+            <?= $form->field($model, 'Kd_Rek_3')->textInput(['readonly' => true, 'class' => 'form-control input-sm'])->label(false) ?>
         </div> <!--col-->
 
         <div class="col-md-1 col-sm-1 col-xs-1">
-            <?= $form->field($model, 'Kd_Rek_4')->textInput(['readonly' => true])->label(false) ?>
+            <?= $form->field($model, 'Kd_Rek_4')->textInput(['readonly' => true, 'class' => 'form-control input-sm'])->label(false) ?>
         </div> <!--col-->
 
         <div class="col-md-1 col-sm-1 col-xs-1">
-            <?= $form->field($model, 'Kd_Rek_5')->textInput(['readonly' => true])->label(false) ?>
+            <?= $form->field($model, 'Kd_Rek_5')->textInput(['readonly' => true, 'class' => 'form-control input-sm'])->label(false) ?>
         </div> <!--col-->
 
         <div class="col-md-7 col-sm-7 col-xs-7">
@@ -143,7 +143,7 @@ use yii\bootstrap\Modal;
   
 	<?php if (!Yii::$app->request->isAjax){ ?>
 	  	<div class="form-group">
-	        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+	        <?= Html::submitButton($model->isNewRecord ? 'Simpan' : 'Simpan', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 	    </div>
 	<?php } ?>
 

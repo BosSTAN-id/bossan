@@ -137,6 +137,8 @@ function akses($menu){
                             ],
                             ['label' => 'Belanja', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/belanja'], 'visible' => akses(506)
                             ],
+                            ['label' => 'Belanja2', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/bukti'], 'visible' => akses(506)
+                            ],
                             ['label' => 'SPJ', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/spj'], 'visible' => akses(502)
                             ],
 

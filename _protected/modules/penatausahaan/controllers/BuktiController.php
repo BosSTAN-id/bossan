@@ -10,6 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
+use yii\data\ActiveDataProvider;
+use yii\data\SqlDataProvider;
 
 /**
  * BuktiController implements the CRUD actions for TaSPJRinc model.
@@ -87,12 +89,11 @@ class BuktiController extends Controller
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
-                    'title'=> "TaSPJRinc #".$tahun, $no_bukti, $tgl_bukti,
+                    'title'=> "Bukti Belanja #".$no_bukti,
                     'content'=>$this->renderAjax('view', [
                         'model' => $this->findModel($tahun, $no_bukti, $tgl_bukti),
                     ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','tahun, $no_bukti, $tgl_bukti'=>$tahun, $no_bukti, $tgl_bukti],['class'=>'btn btn-primary','role'=>'modal-remote'])
+                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-right','data-dismiss'=>"modal"])
                 ];    
         }else{
             return $this->render('view', [
@@ -124,56 +125,145 @@ class BuktiController extends Controller
         $model = new TaSPJRinc();
         $model->tahun = $Tahun;
         $model->sekolah_id = Yii::$app->user->identity->sekolah_id;
-
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
-                return [
-                    'title'=> "Create new TaSPJRinc",
-                    'content'=>$this->renderAjax('create', [
-                        'model' => $model,
-                        'Tahun' => $Tahun,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
-            }else if($model->load($request->post()) && $model->save()){
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "Create new TaSPJRinc",
-                    'content'=>'<span class="text-success">Create TaSPJRinc success</span>',
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Create More',['create'],['class'=>'btn btn-primary','role'=>'modal-remote'])
-        
-                ];         
-            }else{           
-                return [
-                    'title'=> "Create new TaSPJRinc",
-                    'content'=>$this->renderAjax('create', [
-                        'model' => $model,
-                        'Tahun' => $Tahun,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-        
-                ];         
+        if ($model->load(Yii::$app->request->post())) {
+            // list($model->Kd_Rek_1, $model->Kd_Rek_2, $model->Kd_Rek_3, $model->Kd_Rek_4, $model->Kd_Rek_5) = explode('.', $model->rek5);
+            $model->nilai = str_replace(',', '.', $model->nilai);
+            $query = \Yii::$app->db->createCommand("
+                SELECT
+                CONCAT(a.Kd_Rek_1, '.', a.Kd_Rek_2, '.', a.Kd_Rek_3, '.', a.Kd_Rek_4, '.', a.Kd_Rek_5) AS kd,
+                CONCAT(a.Kd_Rek_1, '.', a.Kd_Rek_2, '.', a.Kd_Rek_3, '.', a.Kd_Rek_4, '.', a.Kd_Rek_5
+                ,' ', c.Nm_Rek_3,'-',d.Nm_Rek_4,'-', e.Nm_Rek_5
+                ) AS rekening,
+                a.kd_penerimaan_1, a.kd_penerimaan_2,
+                (a.total - IFNULL(b.nilai,0)) AS sisa_anggaran
+                FROM
+                (
+                    SELECT
+                        kd_program,
+                        kd_sub_program,
+                        kd_kegiatan,
+                        Kd_Rek_1,
+                        Kd_Rek_2,
+                        Kd_Rek_3,
+                        Kd_Rek_4,
+                        Kd_Rek_5,
+                        kd_penerimaan_1,
+                        kd_penerimaan_2,
+                        SUM(total) AS total
+                    FROM
+                        ta_rkas_history
+                    WHERE
+                        sekolah_id = ".$model->sekolah_id."
+                    AND tahun = ".$model->tahun."
+                    AND kd_program = ".$model->kd_program."
+                    AND kd_sub_program = ".$model->kd_sub_program."
+                    AND kd_kegiatan = ".$model->kd_kegiatan."
+                    AND Kd_Rek_1 = ".$model->Kd_Rek_1."
+                    AND Kd_Rek_2 = ".$model->Kd_Rek_2."
+                    AND Kd_Rek_3 = ".$model->Kd_Rek_3."
+                    AND Kd_Rek_4 = ".$model->Kd_Rek_4."
+                    AND Kd_Rek_5 = ".$model->Kd_Rek_5."
+                    AND perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE sekolah_id = ".$model->sekolah_id." AND tahun = ".$model->tahun." AND tgl_peraturan <= '".$model->tgl_bukti."'
+                    )
+                    GROUP BY
+                        kd_program,
+                        kd_sub_program,
+                        kd_kegiatan,
+                        Kd_Rek_1,
+                        Kd_Rek_2,
+                        Kd_Rek_3,
+                        Kd_Rek_4,
+                        Kd_Rek_5,
+                        kd_penerimaan_1,
+                        kd_penerimaan_2                        
+                )a LEFT JOIN
+                (
+                    SELECT
+                        kd_program,
+                        kd_sub_program,
+                        kd_kegiatan,
+                        Kd_Rek_1,
+                        Kd_Rek_2,
+                        Kd_Rek_3,
+                        Kd_Rek_4,
+                        Kd_Rek_5,
+                        SUM(nilai) AS nilai
+                    FROM
+                        ta_spj_rinc
+                    WHERE
+                        sekolah_id = ".$model->sekolah_id."
+                    AND tahun = ".$model->tahun."
+                    AND kd_program = ".$model->kd_program."
+                    AND kd_sub_program = ".$model->kd_sub_program."
+                    AND kd_kegiatan = ".$model->kd_kegiatan."
+                    AND Kd_Rek_1 = ".$model->Kd_Rek_1."
+                    AND Kd_Rek_2 = ".$model->Kd_Rek_2."
+                    AND Kd_Rek_3 = ".$model->Kd_Rek_3."
+                    AND Kd_Rek_4 = ".$model->Kd_Rek_4."
+                    AND Kd_Rek_5 = ".$model->Kd_Rek_5."
+                    AND tgl_bukti <=  '".$model->tgl_bukti."'
+                    GROUP BY
+                        kd_program,
+                        kd_sub_program,
+                        kd_kegiatan,
+                        Kd_Rek_1,
+                        Kd_Rek_2,
+                        Kd_Rek_3,
+                        Kd_Rek_4,
+                        Kd_Rek_5
+                ) b ON a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                AND a.Kd_Rek_1 = b.Kd_Rek_1
+                AND a.Kd_Rek_2 = b.Kd_Rek_2
+                AND a.Kd_Rek_3 = b.Kd_Rek_3
+                AND a.Kd_Rek_4 = b.Kd_Rek_4
+                AND a.Kd_Rek_5 = b.Kd_Rek_5
+                LEFT JOIN ref_rek_3 c ON a.Kd_Rek_1 = c.Kd_Rek_1 AND a.Kd_Rek_2 = c.Kd_Rek_2 AND a.Kd_Rek_3 = c.Kd_Rek_3
+                LEFT JOIN ref_rek_4 d ON a.Kd_Rek_1 = d.Kd_Rek_1 AND a.Kd_Rek_2 = d.Kd_Rek_2 AND a.Kd_Rek_3 = d.Kd_Rek_3 AND a.Kd_Rek_4 = d.Kd_Rek_4
+                LEFT JOIN ref_rek_5 e ON a.Kd_Rek_1 = e.Kd_Rek_1 AND a.Kd_Rek_2 = e.Kd_Rek_2 AND a.Kd_Rek_3 = e.Kd_Rek_3 AND a.Kd_Rek_4 = e.Kd_Rek_4 AND a.Kd_Rek_5 = e.Kd_Rek_5
+                ");            
+            $sisa_anggaran = $query->queryOne();
+            $result = 1;
+            IF($sisa_anggaran['sisa_anggaran'] < $model->nilai){
+                $result = 0;
+                Yii::$app->getSession()->setFlash('warning',  'Sisa Anggaran tidak mencukupi! Sisa anggaran '.number_format($sisa_anggaran['sisa_anggaran'], 0, ',', '.').' pembayaran diajukan senilai '.number_format($model->nilai, 0, ',', '.'));
+                return $this->redirect(['create']);       
+            }
+            $query = \Yii::$app->db->createCommand("call sisa_kas($Tahun, ".$model->sekolah_id.",".$model->pembayaran.",'".$model->tgl_bukti."')");
+            $sisa_kas = $query->queryOne();
+            IF($sisa_kas['nilai'] < $model->nilai){
+                IF($model->pembayaran == 1){
+                    $metode = 'Bank';
+                }ELSE{
+                    $metode = 'Tunai';
+                }
+                $result = 0;
+                Yii::$app->getSession()->setFlash('warning',  'Sisa Kas tidak mencukupi! Sisa Kas Untuk pembayaran '.$metode.' '.number_format($sisa_kas['nilai'], 0, ',', '.').' pembayaran diajukan senilai '.number_format($model->nilai, 0, ',', '.'));
+                return $this->redirect(['create']);           
+            }
+            $komponen_id = \app\models\TaRkasHistory::find()->where("perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE sekolah_id = ".$model->sekolah_id." AND tahun = $Tahun AND tgl_peraturan <= '".$model->tgl_bukti."')")->andWhere([
+                    'tahun' => $model->tahun,
+                    'sekolah_id' => $model->sekolah_id,
+                    'kd_program' => $model->kd_program,
+                    'kd_sub_program' => $model->kd_sub_program,
+                    'kd_kegiatan' => $model->kd_kegiatan,
+                    'Kd_Rek_1' => $model->Kd_Rek_1,
+                    'Kd_Rek_2' => $model->Kd_Rek_2,
+                    'Kd_Rek_3' => $model->Kd_Rek_3,
+                    'Kd_Rek_4' => $model->Kd_Rek_4,
+                    'Kd_Rek_5' => $model->Kd_Rek_5,
+                ])->one();
+            $model->komponen_id = $komponen_id['komponen_id'];
+            IF($model->save() && $result == 1){
+                return $this->redirect(['index']);
+            }ELSE{
+                Yii::$app->getSession()->setFlash('warning', 'Terjadi masalah, penyimpanan gagal.' );
+                return $this->redirect(['create']);
             }
         }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'tahun' => $model->tahun, 'no_bukti' => $model->no_bukti, 'tgl_bukti' => $model->tgl_bukti]);
-            } else {
                 return $this->render('create', [
                     'model' => $model,
                     'Tahun' => $Tahun,
                 ]);
-            }
         }
        
     }
@@ -202,52 +292,145 @@ class BuktiController extends Controller
 
         $request = Yii::$app->request;
         $model = $this->findModel($tahun, $no_bukti, $tgl_bukti);       
-
-        if($request->isAjax){
-            /*
-            *   Process for ajax request
-            */
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            if($request->isGet){
-                return [
-                    'title'=> "Update TaSPJRinc #".$tahun, $no_bukti, $tgl_bukti,
-                    'content'=>$this->renderAjax('update', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-                ];         
-            }else if($model->load($request->post()) && $model->save()){
-                return [
-                    'forceReload'=>'#crud-datatable-pjax',
-                    'title'=> "TaSPJRinc #".$tahun, $no_bukti, $tgl_bukti,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                            Html::a('Edit',['update','tahun, $no_bukti, $tgl_bukti'=>$tahun, $no_bukti, $tgl_bukti],['class'=>'btn btn-primary','role'=>'modal-remote'])
-                ];    
-            }else{
-                 return [
-                    'title'=> "Update TaSPJRinc #".$tahun, $no_bukti, $tgl_bukti,
-                    'content'=>$this->renderAjax('update', [
-                        'model' => $model,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-left','data-dismiss'=>"modal"]).
-                                Html::button('Save',['class'=>'btn btn-primary','type'=>"submit"])
-                ];        
+        if ($model->load(Yii::$app->request->post())) {
+            // list($model->Kd_Rek_1, $model->Kd_Rek_2, $model->Kd_Rek_3, $model->Kd_Rek_4, $model->Kd_Rek_5) = explode('.', $model->rek5);
+            $model->nilai = str_replace(',', '.', $model->nilai);
+            $query = \Yii::$app->db->createCommand("
+                SELECT
+                CONCAT(a.Kd_Rek_1, '.', a.Kd_Rek_2, '.', a.Kd_Rek_3, '.', a.Kd_Rek_4, '.', a.Kd_Rek_5) AS kd,
+                CONCAT(a.Kd_Rek_1, '.', a.Kd_Rek_2, '.', a.Kd_Rek_3, '.', a.Kd_Rek_4, '.', a.Kd_Rek_5
+                ,' ', c.Nm_Rek_3,'-',d.Nm_Rek_4,'-', e.Nm_Rek_5
+                ) AS rekening,
+                a.kd_penerimaan_1, a.kd_penerimaan_2,
+                (a.total - IFNULL(b.nilai,0)) AS sisa_anggaran
+                FROM
+                (
+                    SELECT
+                        kd_program,
+                        kd_sub_program,
+                        kd_kegiatan,
+                        Kd_Rek_1,
+                        Kd_Rek_2,
+                        Kd_Rek_3,
+                        Kd_Rek_4,
+                        Kd_Rek_5,
+                        kd_penerimaan_1,
+                        kd_penerimaan_2,
+                        SUM(total) AS total
+                    FROM
+                        ta_rkas_history
+                    WHERE
+                        sekolah_id = ".$model->sekolah_id."
+                    AND tahun = ".$model->tahun."
+                    AND kd_program = ".$model->kd_program."
+                    AND kd_sub_program = ".$model->kd_sub_program."
+                    AND kd_kegiatan = ".$model->kd_kegiatan."
+                    AND Kd_Rek_1 = ".$model->Kd_Rek_1."
+                    AND Kd_Rek_2 = ".$model->Kd_Rek_2."
+                    AND Kd_Rek_3 = ".$model->Kd_Rek_3."
+                    AND Kd_Rek_4 = ".$model->Kd_Rek_4."
+                    AND Kd_Rek_5 = ".$model->Kd_Rek_5."
+                    AND perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE sekolah_id = ".$model->sekolah_id." AND tahun = ".$model->tahun." AND tgl_peraturan <= '".$model->tgl_bukti."'
+                    )
+                    GROUP BY
+                        kd_program,
+                        kd_sub_program,
+                        kd_kegiatan,
+                        Kd_Rek_1,
+                        Kd_Rek_2,
+                        Kd_Rek_3,
+                        Kd_Rek_4,
+                        Kd_Rek_5,
+                        kd_penerimaan_1,
+                        kd_penerimaan_2                        
+                )a LEFT JOIN
+                (
+                    SELECT
+                        kd_program,
+                        kd_sub_program,
+                        kd_kegiatan,
+                        Kd_Rek_1,
+                        Kd_Rek_2,
+                        Kd_Rek_3,
+                        Kd_Rek_4,
+                        Kd_Rek_5,
+                        SUM(nilai) AS nilai
+                    FROM
+                        ta_spj_rinc
+                    WHERE
+                        sekolah_id = ".$model->sekolah_id."
+                    AND tahun = ".$model->tahun."
+                    AND kd_program = ".$model->kd_program."
+                    AND kd_sub_program = ".$model->kd_sub_program."
+                    AND kd_kegiatan = ".$model->kd_kegiatan."
+                    AND Kd_Rek_1 = ".$model->Kd_Rek_1."
+                    AND Kd_Rek_2 = ".$model->Kd_Rek_2."
+                    AND Kd_Rek_3 = ".$model->Kd_Rek_3."
+                    AND Kd_Rek_4 = ".$model->Kd_Rek_4."
+                    AND Kd_Rek_5 = ".$model->Kd_Rek_5."
+                    AND tgl_bukti <=  '".$model->tgl_bukti."'
+                    GROUP BY
+                        kd_program,
+                        kd_sub_program,
+                        kd_kegiatan,
+                        Kd_Rek_1,
+                        Kd_Rek_2,
+                        Kd_Rek_3,
+                        Kd_Rek_4,
+                        Kd_Rek_5
+                ) b ON a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                AND a.Kd_Rek_1 = b.Kd_Rek_1
+                AND a.Kd_Rek_2 = b.Kd_Rek_2
+                AND a.Kd_Rek_3 = b.Kd_Rek_3
+                AND a.Kd_Rek_4 = b.Kd_Rek_4
+                AND a.Kd_Rek_5 = b.Kd_Rek_5
+                LEFT JOIN ref_rek_3 c ON a.Kd_Rek_1 = c.Kd_Rek_1 AND a.Kd_Rek_2 = c.Kd_Rek_2 AND a.Kd_Rek_3 = c.Kd_Rek_3
+                LEFT JOIN ref_rek_4 d ON a.Kd_Rek_1 = d.Kd_Rek_1 AND a.Kd_Rek_2 = d.Kd_Rek_2 AND a.Kd_Rek_3 = d.Kd_Rek_3 AND a.Kd_Rek_4 = d.Kd_Rek_4
+                LEFT JOIN ref_rek_5 e ON a.Kd_Rek_1 = e.Kd_Rek_1 AND a.Kd_Rek_2 = e.Kd_Rek_2 AND a.Kd_Rek_3 = e.Kd_Rek_3 AND a.Kd_Rek_4 = e.Kd_Rek_4 AND a.Kd_Rek_5 = e.Kd_Rek_5
+                ");            
+            $sisa_anggaran = $query->queryOne();
+            $result = 1;
+            IF($sisa_anggaran['sisa_anggaran'] < $model->nilai){
+                $result = 0;
+                Yii::$app->getSession()->setFlash('warning',  'Sisa Anggaran tidak mencukupi! Sisa anggaran '.number_format($sisa_anggaran['sisa_anggaran'], 0, ',', '.').' pembayaran diajukan senilai '.number_format($model->nilai, 0, ',', '.'));
+                return $this->redirect(['create']);       
+            }
+            $query = \Yii::$app->db->createCommand("call sisa_kas($Tahun, ".$model->sekolah_id.",".$model->pembayaran.",'".$model->tgl_bukti."')");
+            $sisa_kas = $query->queryOne();
+            IF($sisa_kas['nilai'] < $model->nilai){
+                IF($model->pembayaran == 1){
+                    $metode = 'Bank';
+                }ELSE{
+                    $metode = 'Tunai';
+                }
+                $result = 0;
+                Yii::$app->getSession()->setFlash('warning',  'Sisa Kas tidak mencukupi! Sisa Kas Untuk pembayaran '.$metode.' '.number_format($sisa_kas['nilai'], 0, ',', '.').' pembayaran diajukan senilai '.number_format($model->nilai, 0, ',', '.'));
+                return $this->redirect(['create']);           
+            }
+            $komponen_id = \app\models\TaRkasHistory::find()->where("perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE sekolah_id = ".$model->sekolah_id." AND tahun = $Tahun AND tgl_peraturan <= '".$model->tgl_bukti."')")->andWhere([
+                    'tahun' => $model->tahun,
+                    'sekolah_id' => $model->sekolah_id,
+                    'kd_program' => $model->kd_program,
+                    'kd_sub_program' => $model->kd_sub_program,
+                    'kd_kegiatan' => $model->kd_kegiatan,
+                    'Kd_Rek_1' => $model->Kd_Rek_1,
+                    'Kd_Rek_2' => $model->Kd_Rek_2,
+                    'Kd_Rek_3' => $model->Kd_Rek_3,
+                    'Kd_Rek_4' => $model->Kd_Rek_4,
+                    'Kd_Rek_5' => $model->Kd_Rek_5,
+                ])->one();
+            $model->komponen_id = $komponen_id['komponen_id'];
+            IF($model->save() && $result == 1){
+                return $this->redirect(['index']);
+            }ELSE{
+                Yii::$app->getSession()->setFlash('warning', 'Terjadi masalah, penyimpanan gagal.' );
+                return $this->redirect(['create']);
             }
         }else{
-            /*
-            *   Process for non-ajax request
-            */
-            if ($model->load($request->post()) && $model->save()) {
-                return $this->redirect(['view', 'tahun' => $model->tahun, 'no_bukti' => $model->no_bukti, 'tgl_bukti' => $model->tgl_bukti]);
-            } else {
                 return $this->render('update', [
                     'model' => $model,
+                    'Tahun' => $Tahun,
                 ]);
-            }
         }
     }
 
@@ -274,7 +457,12 @@ class BuktiController extends Controller
         }
 
         $request = Yii::$app->request;
-        $this->findModel($tahun, $no_bukti, $tgl_bukti)->delete();
+        $model = $this->findModel($tahun, $no_bukti, $tgl_bukti);
+        IF($model->no_spj == NULL){
+            $model->delete();
+        }ELSE{
+            Yii::$app->getSession()->setFlash('warning',  'Sudah di SPJ kan, tidak dapat dihapus.');
+        }
 
         if($request->isAjax){
             /*
@@ -382,50 +570,208 @@ class BuktiController extends Controller
         }
 
         list($kd_program, $kd_sub_program, $kd_kegiatan) = explode('.', $id);
+        $kegiatan = \app\models\RefKegiatanSekolah::findOne(['kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan]);
         $request = Yii::$app->request;
-                        // $totalCount = Yii::$app->db->createCommand("
-                        // asdasd
-                        //     ", [
-                        //         ':tahun' => $Tahun,
-                        //         ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
-                        //         ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
-                        //         ':kd_penerimaan_1' => $kd_penerimaan_1,
-                        //         ':kd_penerimaan_2' => $kd_penerimaan_2,
-                        //     ])->queryScalar();
+        $totalCount = Yii::$app->db->createCommand("
+                    SELECT
+                    COUNT(a.Kd_Rek_1)
+                    FROM
+                    (
+                        SELECT
+                            kd_program,
+                            kd_sub_program,
+                            kd_kegiatan,
+                            Kd_Rek_1,
+                            Kd_Rek_2,
+                            Kd_Rek_3,
+                            Kd_Rek_4,
+                            Kd_Rek_5,
+                            SUM(total) AS total
+                        FROM
+                            ta_rkas_history
+                        WHERE
+                            sekolah_id = :sekolah_id
+                        AND tahun = :tahun
+                        AND kd_program = :kd_program
+                        AND kd_sub_program = :kd_sub_program
+                        AND kd_kegiatan = :kd_kegiatan
+                        AND Kd_Rek_1 = :Kd_Rek_1
+                        AND perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE sekolah_id = :sekolah_id AND tahun = :tahun AND tgl_peraturan <= NOW()
+                        )
+                        GROUP BY
+                            kd_program,
+                            kd_sub_program,
+                            kd_kegiatan,
+                            Kd_Rek_1,
+                            Kd_Rek_2,
+                            Kd_Rek_3,
+                            Kd_Rek_4,
+                            Kd_Rek_5
+                    )a LEFT JOIN
+                    (
+                        SELECT
+                            kd_program,
+                            kd_sub_program,
+                            kd_kegiatan,
+                            Kd_Rek_1,
+                            Kd_Rek_2,
+                            Kd_Rek_3,
+                            Kd_Rek_4,
+                            Kd_Rek_5,
+                            SUM(nilai) AS nilai
+                        FROM
+                            ta_spj_rinc
+                        WHERE
+                            sekolah_id = :sekolah_id
+                        AND tahun = :tahun
+                        AND kd_program = :kd_program
+                        AND kd_sub_program = :kd_sub_program
+                        AND kd_kegiatan = :kd_kegiatan
+                        AND Kd_Rek_1 = :Kd_Rek_1
+                        AND tgl_bukti <= NOW()
+                        GROUP BY
+                            kd_program,
+                            kd_sub_program,
+                            kd_kegiatan,
+                            Kd_Rek_1,
+                            Kd_Rek_2,
+                            Kd_Rek_3,
+                            Kd_Rek_4,
+                            Kd_Rek_5
+                    ) b ON a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                    AND a.Kd_Rek_1 = b.Kd_Rek_1
+                    AND a.Kd_Rek_2 = b.Kd_Rek_2
+                    AND a.Kd_Rek_3 = b.Kd_Rek_3
+                    AND a.Kd_Rek_4 = b.Kd_Rek_4
+                    AND a.Kd_Rek_5 = b.Kd_Rek_5
+                    LEFT JOIN ref_rek_3 c ON a.Kd_Rek_1 = c.Kd_Rek_1 AND a.Kd_Rek_2 = c.Kd_Rek_2 AND a.Kd_Rek_3 = c.Kd_Rek_3
+                    LEFT JOIN ref_rek_4 d ON a.Kd_Rek_1 = d.Kd_Rek_1 AND a.Kd_Rek_2 = d.Kd_Rek_2 AND a.Kd_Rek_3 = d.Kd_Rek_3 AND a.Kd_Rek_4 = d.Kd_Rek_4
+                    LEFT JOIN ref_rek_5 e ON a.Kd_Rek_1 = e.Kd_Rek_1 AND a.Kd_Rek_2 = e.Kd_Rek_2 AND a.Kd_Rek_3 = e.Kd_Rek_3 AND a.Kd_Rek_4 = e.Kd_Rek_4 AND a.Kd_Rek_5 = e.Kd_Rek_5
+            ", [
+                ':tahun' => $Tahun,
+                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                ':kd_program' => $kd_program,
+                ':kd_sub_program' => $kd_sub_program,
+                ':kd_kegiatan' => $kd_kegiatan,
+                ':Kd_Rek_1' => 5,
+            ])->queryScalar();
 
-                        // $data = new SqlDataProvider([
-                        //     'sql' => "
-                        //             asdasd
-                        //             ",
-                        //     'params' => [
-                        //         ':tahun' => $Tahun,
-                        //         ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
-                        //         ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
-                        //         ':kd_penerimaan_1' => $kd_penerimaan_1,
-                        //         ':kd_penerimaan_2' => $kd_penerimaan_2,
-                        //     ],
-                        //     'totalCount' => $totalCount,
-                        //     //'sort' =>false, to remove the table header sorting
-                        //     'pagination' => [
-                        //         'pageSize' => 50,
-                        //     ],
-                        // ]);                                          
-        $searchModel = new \app\modules\anggaran\models\RefRek5Search();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['Kd_Rek_1' => 5, 'Kd_Rek_2' => 2]);
-        $dataProvider->pagination->pageSize=100;
+        $data = new SqlDataProvider([
+            'sql' => "
+                    SELECT
+                    a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, 
+                    c.Nm_Rek_3, d.Nm_Rek_4, e.Nm_Rek_5,
+                    CONCAT(a.Kd_Rek_1, '.', a.Kd_Rek_2, '.', a.Kd_Rek_3, '.', a.Kd_Rek_4, '.', a.Kd_Rek_5
+                    ,' ', e.Nm_Rek_5,  ' (Sisa Pagu Rp ', CONVERT(FORMAT((a.total - IFNULL(b.nilai,0)),0, 'id_ID') using utf8) , ' ) '
+                    ) AS name,
+                    (a.total - IFNULL(b.nilai, 0)) AS sisa_anggaran
+                    FROM
+                    (
+                        SELECT
+                            kd_program,
+                            kd_sub_program,
+                            kd_kegiatan,
+                            Kd_Rek_1,
+                            Kd_Rek_2,
+                            Kd_Rek_3,
+                            Kd_Rek_4,
+                            Kd_Rek_5,
+                            SUM(total) AS total
+                        FROM
+                            ta_rkas_history
+                        WHERE
+                            sekolah_id = :sekolah_id
+                        AND tahun = :tahun
+                        AND kd_program = :kd_program
+                        AND kd_sub_program = :kd_sub_program
+                        AND kd_kegiatan = :kd_kegiatan
+                        AND Kd_Rek_1 = :Kd_Rek_1
+                        AND perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE sekolah_id = :sekolah_id AND tahun = :tahun AND tgl_peraturan <= NOW()
+                        )
+                        GROUP BY
+                            kd_program,
+                            kd_sub_program,
+                            kd_kegiatan,
+                            Kd_Rek_1,
+                            Kd_Rek_2,
+                            Kd_Rek_3,
+                            Kd_Rek_4,
+                            Kd_Rek_5
+                    )a LEFT JOIN
+                    (
+                        SELECT
+                            kd_program,
+                            kd_sub_program,
+                            kd_kegiatan,
+                            Kd_Rek_1,
+                            Kd_Rek_2,
+                            Kd_Rek_3,
+                            Kd_Rek_4,
+                            Kd_Rek_5,
+                            SUM(nilai) AS nilai
+                        FROM
+                            ta_spj_rinc
+                        WHERE
+                            sekolah_id = :sekolah_id
+                        AND tahun = :tahun
+                        AND kd_program = :kd_program
+                        AND kd_sub_program = :kd_sub_program
+                        AND kd_kegiatan = :kd_kegiatan
+                        AND Kd_Rek_1 = :Kd_Rek_1
+                        AND tgl_bukti <= NOW()
+                        GROUP BY
+                            kd_program,
+                            kd_sub_program,
+                            kd_kegiatan,
+                            Kd_Rek_1,
+                            Kd_Rek_2,
+                            Kd_Rek_3,
+                            Kd_Rek_4,
+                            Kd_Rek_5
+                    ) b ON a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                    AND a.Kd_Rek_1 = b.Kd_Rek_1
+                    AND a.Kd_Rek_2 = b.Kd_Rek_2
+                    AND a.Kd_Rek_3 = b.Kd_Rek_3
+                    AND a.Kd_Rek_4 = b.Kd_Rek_4
+                    AND a.Kd_Rek_5 = b.Kd_Rek_5
+                    LEFT JOIN ref_rek_3 c ON a.Kd_Rek_1 = c.Kd_Rek_1 AND a.Kd_Rek_2 = c.Kd_Rek_2 AND a.Kd_Rek_3 = c.Kd_Rek_3
+                    LEFT JOIN ref_rek_4 d ON a.Kd_Rek_1 = d.Kd_Rek_1 AND a.Kd_Rek_2 = d.Kd_Rek_2 AND a.Kd_Rek_3 = d.Kd_Rek_3 AND a.Kd_Rek_4 = d.Kd_Rek_4
+                    LEFT JOIN ref_rek_5 e ON a.Kd_Rek_1 = e.Kd_Rek_1 AND a.Kd_Rek_2 = e.Kd_Rek_2 AND a.Kd_Rek_3 = e.Kd_Rek_3 AND a.Kd_Rek_4 = e.Kd_Rek_4 AND a.Kd_Rek_5 = e.Kd_Rek_5
+                    ",
+            'params' => [
+                ':tahun' => $Tahun,
+                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                ':kd_program' => $kd_program,
+                ':kd_sub_program' => $kd_sub_program,
+                ':kd_kegiatan' => $kd_kegiatan,
+                ':Kd_Rek_1' => 5,
+            ],
+            'totalCount' => $totalCount,
+            //'sort' =>false, to remove the table header sorting
+            'pagination' => [
+                'pageSize' => 50,
+            ],
+        ]);                                          
+        // $searchModel = new \app\modules\anggaran\models\RefRek5Search();
+        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        // $dataProvider->query->andWhere(['Kd_Rek_1' => 5, 'Kd_Rek_2' => 2]);
+        // $dataProvider->pagination->pageSize=100;
 
-        // if($request->isAjax){
+        if($request->isAjax){
             return $this->renderAjax('kamusbelanja', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
+                'data' => $data,
+                // 'searchModel' => $searchModel,
+                // 'dataProvider' => $dataProvider,
                 'Tahun' => $Tahun,
                 'kd_program' => $kd_program,
                 'kd_sub_program' => $kd_sub_program,
                 'kd_kegiatan' => $kd_kegiatan,
+                'kegiatan' => $kegiatan,
             ]);
-        // }
-
+        }ELSE{
+            Yii::$app->getSession()->setFlash('warning',  'Koneksi Timeout');
+            return $this->redirect(['index']);
+        }
     }    
 
     /**
