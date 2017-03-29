@@ -25,7 +25,9 @@ return [
     [
         'class'=>'\kartik\grid\DataColumn',
         'filter' => Select2::widget([
-                    'name' => 'ObjectSearch[type]',
+                    // 'model' => $model,
+                    // 'attribute' => 'pembayaran',
+                    'name' => 'TaSPJRincSearch[pembayaran]',
                     'data' => [1 => 'Bank', 2 => 'Tunai'],
                     'theme' => Select2::THEME_BOOTSTRAP,
                     'options' => ['placeholder' => 'Metode...'],
@@ -35,7 +37,7 @@ return [
                 ]),
         'attribute'=>'pembayaran',
         'value' => function($model){
-            return $model->pembayaran == 1 ? 'Tunai' : 'Bank';
+            return $model->pembayaran == 1 ? 'Bank' : 'Tunai';
         }
     ],
     [

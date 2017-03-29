@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ref-rek5-index">
 <div class="row">
-    <div class="col-md-2">
+    <div class="col-sm-4 col-xs-6 col-md-2">
         <div class="box box-primary">
             <div class="box-body box-profile">
                 <?= Html::img('@web/images/logo.jpg', ['alt'=>'Image', 'class'=>'profile-user-img img-responsive img-circle']);?> 
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <!-- /.box-body -->
         </div>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-4 col-xs-6 col-md-2">
         <div class="box box-danger">
             <div class="box-body box-profile">
                 <?= Html::img('@web/images/logo.jpg', ['alt'=>'Image', 'class'=>'profile-user-img img-responsive img-circle']);?> 
@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <!-- /.box-body -->
         </div>
     </div>
-    <div class="col-md-2">
+    <div class="col-sm-4 col-xs-6 col-md-2">
         <div class="box box-info">
             <div class="box-body box-profile">
                 <?= Html::img('@web/images/logo.jpg', ['alt'=>'Image', 'class'=>'profile-user-img img-responsive img-circle']);?> 

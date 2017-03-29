@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     'class' => 'btn btn-xs btn-success',
                                                     'data-toggle'=>"modal",
                                                     'data-target'=>"#myModal",
-                                                    'data-title'=>"Tambah Referensi Transfer",
+                                                    'data-title'=>"Tambah Sekolah",
                                                     ]) ?>
     </p>
     <?= GridView::widget([
@@ -60,10 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'update' => function ($url, $model) {
                           return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
                               [  
-                                 'title' => Yii::t('yii', 'hapus'),
+                                 'title' => Yii::t('yii', 'Ubah'),
                                  'data-toggle'=>"modal",
                                  'data-target'=>"#myModalubah",
-                                 'data-title'=> "Ubah Unit",                                 
+                                 'data-title'=> "Ubah Sekolah",                                 
                                  // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                  // 'data-method' => 'POST',
                                  // 'data-pjax' => 1

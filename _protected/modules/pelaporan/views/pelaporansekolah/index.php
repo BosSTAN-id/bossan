@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = 'Pelaporan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
-<?php echo $this->render('_search', ['model' => $get]); ?>
+<?php echo $this->render('_search', ['model' => $get, 'Tahun' => $Tahun]); ?>
 </div>
 <?php IF($Kd_Laporan <> NULL) : ?>
 

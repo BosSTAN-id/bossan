@@ -57,6 +57,7 @@ class BuktiController extends Controller
         IF(Yii::$app->user->identity->sekolah_id && $sekolah_id = Yii::$app->user->identity->sekolah_id){
             $dataProvider->query->andWhere(['sekolah_id' => $sekolah_id]);
         }
+        $dataProvider->query->orderBy('tgl_bukti DESC, no_bukti DESC');
 
         return $this->render('index', [
             'searchModel' => $searchModel,

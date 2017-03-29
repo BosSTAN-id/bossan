@@ -106,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'title' => Yii::t('yii', 'ubah'),
                                     'data-toggle'=>"modal",
                                     'data-target'=>"#myModalubah",
-                                    'data-title'=> "Ubah SPJ ".$model->no_sp3b,                                 
+                                    'data-title'=> "Ubah SP3B ".$model->no_sp3b,                                 
                                     // 'data-confirm' => "Yakin menghapus sasaran ini?",
                                     // 'data-method' => 'POST',
                                     // 'data-pjax' => 1
@@ -119,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                  'title' => Yii::t('yii', 'lihat'),
                                  'data-toggle'=>"modal",
                                  'data-target'=>"#myModalubah",
-                                 'data-title'=> "SPJ ".$model->no_sp3b,
+                                 'data-title'=> "SP3B ".$model->no_sp3b,
                               ]);
                         },
                         'spjbukti' => function ($url, $model) {

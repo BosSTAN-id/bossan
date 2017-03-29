@@ -44,7 +44,8 @@ use kartik\widgets\DatePicker;
     </div>
     <div class="col-md-3">
         <?php
-
+            $sumberDanaList = \app\models\RefPenerimaanSekolah2::find()->select(['kd_penerimaan_2', 'uraian'])->where(['sekolah' => 1])->all();
+            // var_dump($sumberDanaList);
             $model->Kd_Sumber = isset(Yii::$app->request->queryParams['Laporan']['Kd_Sumber']) ? Yii::$app->request->queryParams['Laporan']['Kd_Sumber'] : '';
             echo $form->field($model, 'Kd_Sumber')->widget(Select2::classname(), [
                 'data' => [
@@ -72,6 +73,9 @@ use kartik\widgets\DatePicker;
             if(isset(Yii::$app->request->queryParams['Laporan']['Tgl_1'])){
                 $model->Tgl_1 = Yii::$app->request->queryParams['Laporan']['Tgl_1'];
                 $model->Tgl_2 = Yii::$app->request->queryParams['Laporan']['Tgl_2'];                
+            }ELSE{
+                $model->Tgl_1 = $Tahun.'-01-01';
+                $model->Tgl_2 = $Tahun.'-12-31';
             }
 
             echo DatePicker::widget([
@@ -94,6 +98,8 @@ use kartik\widgets\DatePicker;
         <?php
             if(isset(Yii::$app->request->queryParams['Laporan']['Tgl_Laporan'])){
                 $model->Tgl_Laporan = Yii::$app->request->queryParams['Laporan']['Tgl_Laporan'];             
+            }ELSE{
+                $model->Tgl_Laporan = $Tahun.'-12-31';
             }
 
             echo DatePicker::widget([
@@ -118,13 +124,7 @@ use kartik\widgets\DatePicker;
                 'data' => [
                     3 => 'Rancangan RKAS/APBS',
                     4 => 'RKAS/APBS Induk',
-                    6 => 'RKAS/APBS Perubahan I',               
-                    // '3' => 'BOS-K3 Buku Kas Umum',
-                    // '4' => 'BOS-K4 Buku Pembantu Kas Tunai',
-                    // '5' => 'BOS-K5 Buku Pembantu Kas Bank',
-                    // '6' => 'BOS-K7 Realisasi Penggunaan Dana Tiap Jenis Anggaran',
-                    // '7' => 'BOS-K7A Realisasi Penggunaan Dana Tiap Komponen BOS',
-                    // '8' => 'BOS-03 Rencana Penggunaan dana BOS per Periode',                 
+                    6 => 'RKAS/APBS Perubahan I',                 
                 ],
                 'options' => ['class' =>'form-control input-sm' ,'placeholder' => 'Pilih Riwayat ...', 
                 // 'onchange'=> 'this.form.submit()'
