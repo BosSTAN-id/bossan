@@ -56,6 +56,10 @@ class RefPenerimaanSekolah2 extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getKode() {
+        return $this->kd_penerimaan_1 . '.' . $this->kd_penerimaan_2;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

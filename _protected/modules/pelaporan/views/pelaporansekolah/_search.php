@@ -44,21 +44,12 @@ use kartik\widgets\DatePicker;
     </div>
     <div class="col-md-3">
         <?php
-            $sumberDanaList = \app\models\RefPenerimaanSekolah2::find()->select(['kd_penerimaan_2', 'uraian'])->where(['sekolah' => 1])->all();
-            // var_dump($sumberDanaList);
             $model->Kd_Sumber = isset(Yii::$app->request->queryParams['Laporan']['Kd_Sumber']) ? Yii::$app->request->queryParams['Laporan']['Kd_Sumber'] : '';
+            $dataSumber = ArrayHelper::map(\app\models\RefPenerimaanSekolah2::find()->where(['sekolah' => 1])->all(), 'kode', 'uraian');
+            $dataSumber['0.0'] = 'Semua Dana';
+            ksort($dataSumber);
             echo $form->field($model, 'Kd_Sumber')->widget(Select2::classname(), [
-                'data' => [
-                    '0.0' => 'Semua Dana',
-                    '3.2' => 'Dana BOS',
-                    '4.5' => 'Program Sekolah Gratis Provinsi',               
-                    // '3' => 'BOS-K3 Buku Kas Umum',
-                    // '4' => 'BOS-K4 Buku Pembantu Kas Tunai',
-                    // '5' => 'BOS-K5 Buku Pembantu Kas Bank',
-                    // '6' => 'BOS-K7 Realisasi Penggunaan Dana Tiap Jenis Anggaran',
-                    // '7' => 'BOS-K7A Realisasi Penggunaan Dana Tiap Komponen BOS',
-                    // '8' => 'BOS-03 Rencana Penggunaan dana BOS per Periode',                 
-                ],
+                'data' => $dataSumber,
                 'options' => ['class' =>'form-control input-sm' ,'placeholder' => 'Pilih Sumber Dana ...', 
                 // 'onchange'=> 'this.form.submit()'
                 ],

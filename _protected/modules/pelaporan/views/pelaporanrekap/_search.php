@@ -44,20 +44,12 @@ use kartik\widgets\DatePicker;
     </div>
     <div class="col-md-3">
         <?php
-
             $model->Kd_Sumber = isset(Yii::$app->request->queryParams['Laporan']['Kd_Sumber']) ? Yii::$app->request->queryParams['Laporan']['Kd_Sumber'] : '';
+            $dataSumber = ArrayHelper::map(\app\models\RefPenerimaanSekolah2::find()->where(['sekolah' => 1])->all(), 'kode', 'uraian');
+            $dataSumber['0.0'] = 'Semua Dana';
+            ksort($dataSumber);
             echo $form->field($model, 'Kd_Sumber')->widget(Select2::classname(), [
-                'data' => [
-                    '0.0' => 'Semua Dana',
-                    '3.2' => 'Dana BOS',
-                    '4.5' => 'Program Sekolah Gratis Provinsi',               
-                    // '3' => 'BOS-K3 Buku Kas Umum',
-                    // '4' => 'BOS-K4 Buku Pembantu Kas Tunai',
-                    // '5' => 'BOS-K5 Buku Pembantu Kas Bank',
-                    // '6' => 'BOS-K7 Realisasi Penggunaan Dana Tiap Jenis Anggaran',
-                    // '7' => 'BOS-K7A Realisasi Penggunaan Dana Tiap Komponen BOS',
-                    // '8' => 'BOS-03 Rencana Penggunaan dana BOS per Periode',                 
-                ],
+                'data' => $dataSumber,
                 'options' => ['class' =>'form-control input-sm' ,'placeholder' => 'Pilih Sumber Dana ...', 
                 // 'onchange'=> 'this.form.submit()'
                 ],
@@ -72,6 +64,9 @@ use kartik\widgets\DatePicker;
             if(isset(Yii::$app->request->queryParams['Laporan']['Tgl_1'])){
                 $model->Tgl_1 = Yii::$app->request->queryParams['Laporan']['Tgl_1'];
                 $model->Tgl_2 = Yii::$app->request->queryParams['Laporan']['Tgl_2'];                
+            }ELSE{
+                $model->Tgl_1 = $Tahun.'-01-01';
+                $model->Tgl_2 = $Tahun.'-12-31';
             }
 
             echo DatePicker::widget([
@@ -94,6 +89,8 @@ use kartik\widgets\DatePicker;
         <?php
             if(isset(Yii::$app->request->queryParams['Laporan']['Tgl_Laporan'])){
                 $model->Tgl_Laporan = Yii::$app->request->queryParams['Laporan']['Tgl_Laporan'];             
+            }ELSE{
+                $model->Tgl_Laporan = $Tahun.'-12-31';
             }
 
             echo DatePicker::widget([
