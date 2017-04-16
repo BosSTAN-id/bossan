@@ -31,7 +31,7 @@ use kartik\widgets\DatePicker;
                     '5' => 'BOS-K5 Buku Pembantu Kas Bank',
                     '6' => 'BOS-K7 Realisasi Penggunaan Dana Tiap Jenis Anggaran',
                     '7' => 'BOS-K7A Realisasi Penggunaan Dana Tiap Komponen BOS',
-                    // '8' => 'BOS-03 Rencana Penggunaan dana BOS per Periode',                 
+                    '8' => 'BOS-03 Rencana Penggunaan dana BOS per Periode',                 
                 ],
                 'options' => ['class' =>'form-control input-sm' ,'placeholder' => 'Pilih Jenis Laporan ...', 
                 // 'onchange'=> 'this.form.submit()'
