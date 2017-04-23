@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "636cfa21139bfbd5d6e6aef1982be61f",
-    "content-hash": "ed12ea7728225e91b686afa331cfb7ea",
+    "hash": "be45eac475c15f39431eca9d900d6d2a",
+    "content-hash": "3efd082d50df20642174419b45f86f4f",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -1989,7 +1989,7 @@
         },
         {
             "name": "kartik-v/yii2-tabs-x",
-            "version": "dev-master",
+            "version": "v1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-tabs-x.git",
@@ -6661,7 +6661,6 @@
         "kartik-v/yii2-dynagrid": 20,
         "kartik-v/yii2-krajee-base": 20,
         "kartik-v/yii2-mpdf": 20,
-        "kartik-v/yii2-tabs-x": 20,
         "execut/yii2-widget-bootstraptreeview": 20,
         "kartik-v/yii2-tree-manager": 20,
         "kartik-v/yii2-builder": 20

@@ -27,7 +27,7 @@
         "wbraganca/yii2-dynamicform": "*",
         "kartik-v/yii2-mpdf": "dev-master",
         "2amigos/yii2-chartjs-widget": "~2.0",
-        "kartik-v/yii2-tabs-x": "@dev",
+        "kartik-v/yii2-tabs-x": "*",
         "kartik-v/yii2-detail-view": "*",
         "softcommerce/yii2-knob": "*",
         "yiisoft/yii2-jui": "^2.0",

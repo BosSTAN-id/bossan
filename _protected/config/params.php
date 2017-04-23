@@ -36,6 +36,9 @@ return [
      * Set the list of usernames that we do not want to allow to users to take upon registration or profile change.
      */
     'user.spamNames' => 'admin|superadmin|creator|thecreator|username',
+    
+    // key for user Auth
+    'kakaroto' => 'TDA1U0FPRXI4ZUxBc0RnQXp3RmQ5dz09',
 
     //------------------------//
     // EMAILS
@@ -54,5 +57,5 @@ return [
     'supportEmail' => 'support@example.com',
 
     // ID PEMDA, Menentukan Nama Pemda Pengguna
-    'kakaroto' => 'TDA1U0FPRXI4ZUxBc0RnQXp3RmQ5dz09',
+    'kode_pemda' => [7, 9],
 ];

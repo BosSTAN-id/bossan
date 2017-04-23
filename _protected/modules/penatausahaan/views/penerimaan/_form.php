@@ -88,15 +88,6 @@ use yii\widgets\MaskedInput;
             ],
     ]) ?>
 
-    <?= $form->field($model, 'bank_id')->widget(Select2::classname(), [
-            'data' => ArrayHelper::map(\app\models\RefBank::find()->where(['tahun' => $Tahun, 'sekolah_id' => $model->sekolah_id])->all(), 'id','no_rekening'),
-            // 'value' => $model->kd_penerimaan_1.'.'.$model->kd_penerimaan_2,
-            'options' => ['placeholder' => 'Sumber Dana ...'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]); ?>
-
     <?= $form->field($model, 'uraian')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">

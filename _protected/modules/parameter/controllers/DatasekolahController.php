@@ -54,9 +54,14 @@ class DatasekolahController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['Tahun' => $Tahun, 'sekolah_id' => $sekolah_id]);
 
-        if ($model && $model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('kv-detail-success', 'Perubahan disimpan');
-            return $this->redirect(['index']);
+        if ($model && $model->load(Yii::$app->request->post())) {
+            if(isset($model->kecamatanKelurahan) && $model->kecamatanKelurahan != NULL){
+                list($model->kecamatan_id, $model->kelurahan_id) = explode('.', $model->kecamatanKelurahan);
+            }
+            if($model->save()){
+                Yii::$app->session->setFlash('kv-detail-success', 'Perubahan disimpan');
+                return $this->redirect(['index']);
+            }
         } else {
             return $this->render('index', [
                 'model' => $model,

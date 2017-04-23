@@ -7,6 +7,8 @@ use kartik\detail\DetailView;
 use kartik\select2\Select2;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\management\models\TaSubUnitSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -52,6 +54,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 'nip',
                 'rekening_sekolah',
                 'nama_bank',
+                [
+                    'attribute'=>'kecamatanKelurahan', 
+                    'value'=> $model->lokasi,
+                    // 'displayOnly' => true,
+                    'type'=> DetailView::INPUT_SELECT2,
+                    'widgetOptions'=>[
+                        'data'=> ArrayHelper::map(\app\models\RefDesa::find()->select(['CONCAT(Kd_Kecamatan, ".", Kd_Desa) AS kode', 'Nm_Desa'])->asArray()->all(), 'kode', 'Nm_Desa'),
+                        'options' => ['placeholder' => 'Pilih Kecamatan/Kelurahan ...'],
+                        'pluginOptions' => ['allowClear'=>true, 'width'=>'100%'],
+                    ],
+                    // 'widgetOptions' => [
+                    //     'pluginOptions' => [
+                    //         'onText' => 'Yes',
+                    //         'offText' => 'No',
+                    //     ]
+                    // ],
+                    // 'valueColOptions'=>['style'=>'width:30%']
+                ],                
             ],
         ]);
     }

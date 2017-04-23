@@ -102,6 +102,7 @@ function akses($menu){
                             ],
                             ['label' => 'Data Sekolah', 'icon' => 'fa fa-circle-o', 'url' => ['/parameter/datasekolah'], 'visible' => akses(202)
                             ],
+                            ['label' => 'Wilayah (Kec-Kel)', 'icon' => 'fa fa-circle-o', 'url' => ['/parameter/wilayah'], 'visible' => akses(204)],
                         ],
                     ],                    
                     ['label' => 'Batch Process', 'icon' => 'fa fa-circle-o', 'url' => ['/management/batchprocess'], 'visible' => akses(301)

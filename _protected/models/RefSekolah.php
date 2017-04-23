@@ -31,6 +31,8 @@ class RefSekolah extends \yii\db\ActiveRecord
         return 'ref_sekolah';
     }
 
+    public $kecamatanKelurahan;
+
     /**
      * @inheritdoc
      */
@@ -39,7 +41,7 @@ class RefSekolah extends \yii\db\ActiveRecord
         return [
             [['pendidikan_id', 'jenis_id'], 'required'],
             [['pendidikan_id', 'jenis_id', 'kecamatan_id', 'kelurahan_id', 'negeri'], 'integer'],
-            [['nama_sekolah', 'kepala_sekolah', 'rekening_sekolah', 'nama_bank', 'alamat_cabang'], 'string', 'max' => 100],
+            [['nama_sekolah', 'kepala_sekolah', 'rekening_sekolah', 'nama_bank', 'alamat_cabang', 'kecamatanKelurahan'], 'string', 'max' => 100],
             [['alamat'], 'string', 'max' => 255],
             [['nip'], 'string', 'max' => 18],
             [['jenis_id'], 'exist', 'skipOnError' => true, 'targetClass' => RefJenisSekolah::className(), 'targetAttribute' => ['jenis_id' => 'id']],
@@ -65,6 +67,7 @@ class RefSekolah extends \yii\db\ActiveRecord
             'kecamatan_id' => Yii::t('app', 'Kecamatan ID'),
             'kelurahan_id' => Yii::t('app', 'Kelurahan ID'),
             'negeri' => Yii::t('app', 'Negeri'),
+            'kecamatanKelurahan' => 'Desa/Kelurahan',
         ];
     }
 
@@ -81,5 +84,10 @@ class RefSekolah extends \yii\db\ActiveRecord
     public function getRefDesa()
     {
         return $this->hasOne(\app\models\RefDesa::className(), ['Kd_Kecamatan' => 'kecamatan_id', 'Kd_Desa' => 'kelurahan_id']);
-    }        
+    }     
+
+    public function getLokasi()
+    {
+        return $this->refKecamatan['Nm_Kecamatan'].' / '. $this->refDesa['Nm_Desa'];
+    }   
 }

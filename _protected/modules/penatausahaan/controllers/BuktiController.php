@@ -597,7 +597,7 @@ class BuktiController extends Controller
                         AND kd_sub_program = :kd_sub_program
                         AND kd_kegiatan = :kd_kegiatan
                         AND Kd_Rek_1 = :Kd_Rek_1
-                        AND perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE sekolah_id = :sekolah_id AND tahun = :tahun AND tgl_peraturan <= NOW()
+                        AND perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE perubahan_id IN (4,6) AND sekolah_id = :sekolah_id AND tahun = :tahun AND tgl_peraturan <= NOW()
                         )
                         GROUP BY
                             kd_program,
@@ -687,7 +687,7 @@ class BuktiController extends Controller
                         AND kd_sub_program = :kd_sub_program
                         AND kd_kegiatan = :kd_kegiatan
                         AND Kd_Rek_1 = :Kd_Rek_1
-                        AND perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE sekolah_id = :sekolah_id AND tahun = :tahun AND tgl_peraturan <= NOW()
+                        AND perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE perubahan_id IN (4,6) AND sekolah_id = :sekolah_id AND tahun = :tahun AND tgl_peraturan <= NOW()
                         )
                         GROUP BY
                             kd_program,
@@ -753,6 +753,7 @@ class BuktiController extends Controller
                 'pageSize' => 50,
             ],
         ]);                                          
+        // $posisiAnggaran =\app\models\TaRkasPeraturan::find()->select('MAX(perubahan_id) AS perubahan_id')->where(['sekolah_id' => $sekolah_id])->andWhere('perubahan_id IN (4,6)')->one();
         // $searchModel = new \app\modules\anggaran\models\RefRek5Search();
         // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         // $dataProvider->query->andWhere(['Kd_Rek_1' => 5, 'Kd_Rek_2' => 2]);

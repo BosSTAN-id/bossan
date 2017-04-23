@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     'class' => 'btn btn-xs btn-success',
                                                     'data-toggle'=>"modal",
                                                     'data-target'=>"#myModal",
-                                                    'data-title'=>"Tambah Referensi Transfer",
+                                                    'data-title'=>"Tambah <?= $generator->generateString('Tambah ' . Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>",
                                                     ]) ?>
     </p>
 <?php if ($generator->indexWidgetType === 'grid'): ?>
@@ -98,9 +98,9 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
                               [  
                                  'title' => Yii::t('yii', 'ubah'),
                                  'data-toggle'=>"modal",
-                                 'data-target'=>"#myModalubah",
+                                 'data-target'=>"#myModal",
                                  'data-title'=> "Ubah",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                 // 'data-confirm' => "Yakin menghapus ini?",
                                  // 'data-method' => 'POST',
                                  // 'data-pjax' => 1
                               ]);
@@ -110,7 +110,7 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
                               [  
                                  'title' => Yii::t('yii', 'lihat'),
                                  'data-toggle'=>"modal",
-                                 'data-target'=>"#myModalubah",
+                                 'data-target'=>"#myModal",
                                  'data-title'=> "Lihat",
                               ]);
                         },                        
@@ -140,19 +140,6 @@ Modal::begin([
 echo '...';
  
 Modal::end();
-
-Modal::begin([
-    'id' => 'myModalubah',
-    'header' => '<h4 class="modal-title">Lihat lebih...</h4>',
-        'options' => [
-            'tabindex' => false // important for Select2 to work properly
-        ], 
-]);
- 
-echo '...';
- 
-Modal::end();
-
 $this->registerJs("
     $('#myModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
@@ -166,20 +153,5 @@ $this->registerJs("
                 modal.find('.modal-body').html(data)
             });
         })
-");
-$this->registerJs("
-    $('#myModalubah').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var modal = $(this)
-        var title = button.data('title') 
-        var href = button.attr('href') 
-        modal.find('.modal-title').html(title)
-        modal.find('.modal-body').html('<i class=\"fa fa-spinner fa-spin\"></i>')
-        $.post(href)
-            .done(function( data ) {
-                modal.find('.modal-body').html(data)
-            });
-        })
-       
 ");
 ?>

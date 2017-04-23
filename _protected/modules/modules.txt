@@ -15,7 +15,7 @@
 	01 => sekolah
 	02 => datasekolah(alamat-jabatan) 
 	03 => dataaplikasi
-	04 => 
+	04 => Wilayah (Kecamatan/Desa)
 	05 => 
 	06 => 
 	07 => 
