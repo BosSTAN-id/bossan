@@ -39,6 +39,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         case 7:
                             $heading = 'BOS-K7A Realisasi Penggunaan Dana Tiap Komponen BOS '.$Tahun;
                             break;
+                        case 8:
+                            $heading = 'RENCANA PENGGUNAAN DANA BOS PERIODE '.$Tahun;
+                            break;
 	                    default:
 	                        # code...
 	                        break;

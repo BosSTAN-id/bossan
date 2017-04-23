@@ -1369,6 +1369,53 @@ class PelaporansekolahController extends Controller
 
                         $render = 'laporan7';
                         break;
+                    case 8:
+                        $totalCount = Yii::$app->db->createCommand("
+                            SELECT COUNT(a.tahun) FROM(
+                                SELECT
+                                a.tahun, a.sekolah_id, IFNULL(a.komponen_id, 0) AS komponen_id, IFNULL(b.komponen, 'Non-Komponen BOS') AS komponen, a.Kd_Rek_1, SUM(a.total) AS anggaran
+                                FROM
+                                ta_rkas_history a
+                                LEFT JOIN ref_komponen_bos b ON a.komponen_id = b.id
+                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = :perubahan_id
+                                AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.Kd_Rek_1 = 5
+                                GROUP BY a.tahun, a.sekolah_id, a.komponen_id, a.Kd_Rek_1
+                            ) a
+                            ", [
+                                ':tahun' => $Tahun,
+                                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                                ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
+                                ':kd_penerimaan_1' => $kd_penerimaan_1,
+                                ':kd_penerimaan_2' => $kd_penerimaan_2,
+                            ])->queryScalar();
+
+                        $data = new SqlDataProvider([
+                            'sql' => "                                
+                                SELECT
+                                a.tahun, a.sekolah_id, IFNULL(a.komponen_id, 0) AS komponen_id, IFNULL(b.komponen, 'Non-Komponen BOS') AS komponen, a.Kd_Rek_1, SUM(a.total) AS anggaran
+                                FROM
+                                ta_rkas_history a
+                                LEFT JOIN ref_komponen_bos b ON a.komponen_id = b.id
+                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = :perubahan_id
+                                AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.Kd_Rek_1 = 5
+                                GROUP BY a.tahun, a.sekolah_id, a.komponen_id, a.Kd_Rek_1
+                                    ",
+                            'params' => [
+                                ':tahun' => $Tahun,
+                                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                                ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
+                                ':kd_penerimaan_1' => $kd_penerimaan_1,
+                                ':kd_penerimaan_2' => $kd_penerimaan_2
+                            ],
+                            'totalCount' => $totalCount,
+                            //'sort' =>false, to remove the table header sorting
+                            'pagination' => [
+                                'pageSize' => 50,
+                            ],
+                        ]);   
+
+                        $render = 'laporan8';
+                        break;
                     default:
                         # code...
                         break;
@@ -2353,6 +2400,26 @@ class PelaporansekolahController extends Controller
                         $data = $searchModel->search(Yii::$app->request->queryParams);
                         $render = 'laporan5';
                         break;
+                    case 8:
+                        $data =  Yii::$app->db->createCommand("  
+                            SELECT
+                            a.tahun, a.sekolah_id, IFNULL(a.komponen_id, 0) AS komponen_id, IFNULL(b.komponen, 'Non-Komponen BOS') AS komponen, a.Kd_Rek_1, SUM(a.total) AS anggaran
+                            FROM
+                            ta_rkas_history a
+                            LEFT JOIN ref_komponen_bos b ON a.komponen_id = b.id
+                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = :perubahan_id
+                            AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.Kd_Rek_1 = 5
+                            GROUP BY a.tahun, a.sekolah_id, a.komponen_id, a.Kd_Rek_1                                      
+                        ")->bindValues([
+                                ':tahun' => $Tahun,
+                                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                                ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
+                                ':kd_penerimaan_1' => $kd_penerimaan_1,
+                                ':kd_penerimaan_2' => $kd_penerimaan_2,
+                        ])->queryAll();
+
+                        $render = 'cetaklaporan8';
+                        break;                            
                     default:
                         # code...
                         break;
