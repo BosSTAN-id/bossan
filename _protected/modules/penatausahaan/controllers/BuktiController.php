@@ -87,18 +87,22 @@ class BuktiController extends Controller
         }
 
         $request = Yii::$app->request;
+        $model = $this->findModel($tahun, $no_bukti, $tgl_bukti);
+        $potongan = NULL; //(Take Potongan Query Here)
         if($request->isAjax){
             Yii::$app->response->format = Response::FORMAT_JSON;
             return [
                     'title'=> "Bukti Belanja #".$no_bukti,
                     'content'=>$this->renderAjax('view', [
-                        'model' => $this->findModel($tahun, $no_bukti, $tgl_bukti),
+                        'model' => $model,
+                        'potongan' => $potongan,
                     ]),
                     'footer'=> Html::button('Close',['class'=>'btn btn-default pull-right','data-dismiss'=>"modal"])
                 ];    
         }else{
             return $this->render('view', [
-                'model' => $this->findModel($tahun, $no_bukti, $tgl_bukti),
+                'model' => $model,
+                'potongan' => $potongan,
             ]);
         }
     }
@@ -255,7 +259,7 @@ class BuktiController extends Controller
                 ])->one();
             $model->komponen_id = $komponen_id['komponen_id'];
             IF($model->save() && $result == 1){
-                return $this->redirect(['index']);
+                return $this->redirect(['view', 'tahun' => $model->tahun, 'no_bukti' => $model->no_bukti, 'tgl_bukti' => $model->tgl_bukti]);
             }ELSE{
                 Yii::$app->getSession()->setFlash('warning', 'Terjadi masalah, penyimpanan gagal.' );
                 return $this->redirect(['create']);
@@ -422,7 +426,7 @@ class BuktiController extends Controller
                 ])->one();
             $model->komponen_id = $komponen_id['komponen_id'];
             IF($model->save() && $result == 1){
-                return $this->redirect(['index']);
+                return $this->redirect(['view', 'tahun' => $model->tahun, 'no_bukti' => $model->no_bukti, 'tgl_bukti' => $model->tgl_bukti]);
             }ELSE{
                 Yii::$app->getSession()->setFlash('warning', 'Terjadi masalah, penyimpanan gagal.' );
                 return $this->redirect(['create']);

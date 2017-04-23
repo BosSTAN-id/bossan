@@ -98,71 +98,37 @@ function akses($menu){
                     ],                    
                     ['label' => 'Parameter', 'icon' => 'fa fa-circle-o','url' => '#', 'visible' => 1,'items'  =>
                         [
-                            ['label' => 'Sekolah', 'icon' => 'fa fa-circle-o', 'url' => ['/parameter/sekolah'], 'visible' => akses(201)
-                            ],
-                            ['label' => 'Data Sekolah', 'icon' => 'fa fa-circle-o', 'url' => ['/parameter/datasekolah'], 'visible' => akses(202)
-                            ],
+                            ['label' => 'Sekolah', 'icon' => 'fa fa-circle-o', 'url' => ['/parameter/sekolah'], 'visible' => akses(201)],
+                            ['label' => 'Data Sekolah', 'icon' => 'fa fa-circle-o', 'url' => ['/parameter/datasekolah'], 'visible' => akses(202)],
                             ['label' => 'Wilayah (Kec-Kel)', 'icon' => 'fa fa-circle-o', 'url' => ['/parameter/wilayah'], 'visible' => akses(204)],
                         ],
                     ],                    
-                    ['label' => 'Batch Process', 'icon' => 'fa fa-circle-o', 'url' => ['/management/batchprocess'], 'visible' => akses(301)
-                    ],
+                    ['label' => 'Batch Process', 'icon' => 'fa fa-circle-o', 'url' => ['/management/batchprocess'], 'visible' => akses(301)],
                     ['label' => 'Anggaran', 'icon' => 'fa fa-edit', 'url' => '#', 'visible' => !Yii::$app->user->isGuest, 'items' => 
                         [
-                            ['label' => 'RKAS', 'icon' => 'fa fa-circle-o', 'url' => ['/anggaran/rkas'], 'visible' => akses(402)
-                            ],
-                            ['label' => 'Anggaran Kas', 'icon' => 'fa fa-circle-o', 'url' => ['/anggaran/rencana'], 'visible' => akses(404)
-                            ],
-                            ['label' => 'Posting Anggaran', 'icon' => 'fa fa-circle-o', 'url' => ['/anggaran/posting'], 'visible' => akses(403)
-                            ],
-                            // ['label' => 'Dana Transfer', 'icon' => 'fa fa-edit','url' => '#','items' => 
-                            //     [
-                            //         ['label' => 'Klasifikasi Transfer', 'icon' => 'fa fa-table', 'url' => ['/controltransfer/klasifikasi'], 'visible' => akses(209)],
-                            //         ['label' => 'Pagu Dana Transfer', 'icon' => 'fa fa-table', 'url' => ['/controltransfer/referensi'], 'visible' => akses(204)],
-                            //         ['label' => 'Penyesuaian Dana Transfer', 'icon' => 'fa fa-table', 'url' => ['/controltransfer/penyesuaian'], 'visible' => akses(208)],
-                            //         // ['label' => 'Pembagian Pagu', 'icon' => 'fa fa-table', 'url' => ['/controltransfer/referensi'], 'visible' => $skpkd],
-                            //         ['label' => 'Control Anggaran', 'icon' => 'fa fa-table', 'url' => ['/controltransfer/belanja'], 'visible' => akses(201)],
-                            //         ['label' => 'Dana Talangan', 'icon' => 'fa fa-table', 'url' => '#', 'visible' => $skpkd],
-                            //         ['label' => 'Pelaporan', 'icon' => 'fa fa-circle-o', 'url' =>  ['/controltransfer/laporananggaran'], 'visible' => akses(203)],
-                            //     ],
-                            // ],
+                            ['label' => 'RKAS', 'icon' => 'fa fa-circle-o', 'url' => ['/anggaran/rkas'], 'visible' => akses(402)],
+                            ['label' => 'Anggaran Kas', 'icon' => 'fa fa-circle-o', 'url' => ['/anggaran/rencana'], 'visible' => akses(404)],
+                            ['label' => 'Posting Anggaran', 'icon' => 'fa fa-circle-o', 'url' => ['/anggaran/posting'], 'visible' => akses(403)],
                         ],
                     ],
                     ['label' => 'Penatausahaan', 'icon' => 'fa fa-edit', 'url' => '#', 'visible' => !Yii::$app->user->isGuest, 'items' => 
                         [
-                            ['label' => 'Saldo Awal', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/saldoawal'], 'visible' => akses(507)
-                            ],
-                            ['label' => 'Penerimaan', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/penerimaan'], 'visible' => akses(501)
-                            ],
-                            ['label' => 'Mutasi Kas', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/mutasikas'], 'visible' => akses(508)
-                            ],
-                            ['label' => 'Belanja', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/belanja'], 'visible' => akses(506)
-                            ],
-                            ['label' => 'Belanja2', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/bukti'], 'visible' => akses(506)
-                            ],
-                            ['label' => 'SPJ', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/spj'], 'visible' => akses(502)
-                            ],
-
-                            ['label' => 'Verifikasi SPJ', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/verspj'], 'visible' => akses(503)
-                            ],
-                            // ['label' => 'Pengadaan Aset Tetap', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/pengadaanaset'], 'visible' => akses(504)
-                            // ],
-                            // ['label' => 'Daftar Aset Tetap', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/asettetap'], 'visible' => akses(505)
-                            // ],
+                            ['label' => 'Saldo Awal', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/saldoawal'], 'visible' => akses(507)],
+                            ['label' => 'Penerimaan', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/penerimaan'], 'visible' => akses(501)],
+                            ['label' => 'Mutasi Kas', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/mutasikas'], 'visible' => akses(508)],
+                            // ['label' => 'Belanja', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/belanja'], 'visible' => akses(506)],
+                            ['label' => 'Belanja', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/bukti'], 'visible' => akses(506)],
+                            ['label' => 'SPJ', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/spj'], 'visible' => akses(502)],
+                            ['label' => 'Verifikasi SPJ', 'icon' => 'fa fa-circle-o', 'url' => ['/penatausahaan/verspj'], 'visible' => akses(503)],
                         ],
                     ],                   
                     ['label' => 'Pelaporan', 'icon' => 'fa fa-edit', 'url' => '#', 'visible' => !Yii::$app->user->isGuest, 'items' => 
                         [
-                            ['label' => 'Pelaporan', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/pelaporansekolah'], 'visible' => akses(601)
-                            ],
-                            ['label' => 'Pelaporan', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/pelaporanrekap'], 'visible' => akses(602)
-                            ],
-                            ['label' => 'SP3B', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/sp3b'], 'visible' => akses(604)
-                            ],
-                            ['label' => 'SP2B', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/sp2b'], 'visible' => akses(605)
-                            ],
-                            ['label' => 'Verifikasi SPJ', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/verpemda'], 'visible' => akses(603)
-                            ],                           
+                            ['label' => 'Pelaporan', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/pelaporansekolah'], 'visible' => akses(601)],
+                            ['label' => 'Pelaporan', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/pelaporanrekap'], 'visible' => akses(602)],
+                            ['label' => 'SP3B', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/sp3b'], 'visible' => akses(604)],
+                            ['label' => 'SP2B', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/sp2b'], 'visible' => akses(605)],
+                            ['label' => 'Verifikasi SPJ', 'icon' => 'fa fa-circle-o', 'url' => ['/pelaporan/verpemda'], 'visible' => akses(603)],                           
                         ],
                     ],
                 ],
