@@ -33,7 +33,7 @@ class TaSPJPot extends \yii\db\ActiveRecord
         return [
             [['tahun', 'no_bukti', 'kd_potongan', 'nilai'], 'required'],
             [['tahun'], 'safe'],
-            [['kd_potongan'], 'integer'],
+            [['kd_potongan', 'sekolah_id'], 'integer'],
             [['nilai'], 'number'],
             [['no_bukti'], 'string', 'max' => 50],
             [['tahun', 'no_bukti'], 'exist', 'skipOnError' => true, 'targetClass' => TaSpjRinc::className(), 'targetAttribute' => ['tahun' => 'tahun', 'no_bukti' => 'no_bukti']],
@@ -57,7 +57,7 @@ class TaSPJPot extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTahun0()
+    public function getBukti()
     {
         return $this->hasOne(TaSpjRinc::className(), ['tahun' => 'tahun', 'no_bukti' => 'no_bukti']);
     }

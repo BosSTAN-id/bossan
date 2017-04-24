@@ -57,7 +57,11 @@ return [
                 // return Url::to([$action,'tahun, $no_bukti, $tgl_bukti'=>$key]);
                 return Url::to([$action, 'tahun' => $model->tahun, 'no_bukti' => $model->no_bukti, 'tgl_bukti' => $model->tgl_bukti]);
         },
-        'viewOptions'=>['role'=>'modal-remote','title'=>'View','data-toggle'=>'tooltip'],
+        'viewOptions'=>[
+            // 'role'=>'modal-remote',
+            'title'=>'View',
+            // 'data-toggle'=>'tooltip'
+        ],
         'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
         'deleteOptions'=>['role'=>'modal-remote','title'=>'Delete', 
                           'data-confirm'=>false, 'data-method'=>false,// for overide yii data api

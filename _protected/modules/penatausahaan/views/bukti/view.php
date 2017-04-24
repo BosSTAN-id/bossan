@@ -3,6 +3,12 @@
 use kartik\detail\DetailView;
 use yii\helpers\Html;
 use kartik\tabs\TabsX;
+use yii\bootstrap\ActiveForm;
+use yii\helpers\ArrayHelper;
+use kartik\select2\Select2;
+use yii\widgets\MaskedInput;
+use yii\bootstrap\Collapse;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\TaSPJRinc */
@@ -14,7 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ta-spjrinc-view">
  
-    <?php 
+    <?php
+    // Grid Bukti
     $buktiContent = DetailView::widget([
         'model' => $model,
         'condensed'=>true,
@@ -23,9 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'enableEditMode' => false,
         'hideIfEmpty' => false, //sembunyikan row ketika kosong
         'panel'=>[
-            'heading'=> Html::a('<i class="glyphicon glyphicon-pencil"></i> Ubah Bukti', ['update', 'tahun' => $model->tahun, 'no_bukti' => $model->no_bukti, 'tgl_bukti' => $model->tgl_bukti], [
+            'heading'=> $model->no_spj == NULL ? Html::a('<i class="glyphicon glyphicon-pencil"></i> Ubah Bukti', ['update', 'tahun' => $model->tahun, 'no_bukti' => $model->no_bukti, 'tgl_bukti' => $model->tgl_bukti], [
                                 'class' => 'btn btn-xs btn-success pull-right',
-                                ]).'<i class="fa fa-tag"></i> '.$this->title.'</h3>',
+                                ]).'<i class="fa fa-tag"></i> '.$this->title.'</h3>'
+                        : '<i class="fa fa-tag"></i> '.$this->title.'</h3>',
             'type'=>'primary',
             'headingOptions' => [
                 'tag' => 'h3', //tag untuk heading
@@ -81,20 +89,102 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]);
 
-    $potonganContent = '
-        <div class="panel panel-default">
-            <div class="panel-heading">Form Potongan</div>
-            <div class="panel-body">
-                Ini Form Potongan
-            </div>
-        </div>    
-        <div class="panel panel-default">
-            <div class="panel-heading">Grid Potongan</div>
-            <div class="panel-body">
-                Gridview Poto
-            </div>
-        </div>            
-    ';
+    // Form Potongan object
+    $formPotongan = '';
+    ob_start();
+    $form = ActiveForm::begin(['id' => $modelPotongan->formName()]);
+    echo $form->field($modelPotongan, 'kd_potongan')->widget(Select2::classname(), [
+            'data' => ArrayHelper::map(
+                \app\models\RefPotongan::find()
+                // ->select(['Kd_Rek_3', 'CONCAT(Kd_Rek_3,\' \',Nm_Rek_3) AS Nm_Rek_3'])
+                // ->where(['Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2])
+                ->all()
+                ,'kd_potongan','nm_potongan'),
+            'options' => ['placeholder' => 'Pilih Jenis Potongan ...'],
+            'pluginOptions' => [
+                'allowClear' => true
+            ],
+        ]);
+    echo $form->field($modelPotongan, 'nilai', ['enableClientValidation' => false])->widget(MaskedInput::classname(), [
+                'clientOptions' => [
+                    'alias' =>  'decimal',
+                    // 'groupSeparator' => ',',
+                    'groupSeparator' => '.',
+                    'radixPoint'=>',',                
+                    'autoGroup' => true,
+                    'removeMaskOnSubmit' => true,
+                ],
+        ]);
+    echo Html::submitButton($modelPotongan->isNewRecord ? 'Simpan' : 'Simpan', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']);
+    ActiveForm::end();
+    if($model->no_spj == NULL) $formPotongan = ob_get_contents();
+    ob_end_clean();
+
+    // grid potongan
+    $gridPotongan = GridView::widget([
+        'id'=>'potongan-datatable',
+        'dataProvider' => $dataProvider,
+        // 'filterModel' => $searchModel,
+        'pjax'=>true,
+        'columns' => [
+            ['class' => 'kartik\grid\SerialColumn'],
+            'kdPotongan.nm_potongan',
+            'nilai:decimal',
+            [
+                'class' => 'kartik\grid\ActionColumn',
+                'template' => '{delete}',
+                'noWrap' => true,
+                'vAlign'=>'top',
+                'buttons' => [
+                        'update' => function ($url, $model) {
+                          IF($model->no_spj == NULL)
+                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
+                              [  
+                                 'title' => Yii::t('yii', 'ubah'),
+                                 'data-toggle'=>"modal",
+                                 'data-target'=>"#myModal",
+                                 'data-title'=> "Ubah Bukti",                                 
+                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                 // 'data-method' => 'POST',
+                                 // 'data-pjax' => 1
+                              ]);
+                        },
+                        'delete' => function ($url, $model) {
+                          if ($model->bukti->no_spj == NULL) return Html::a('<span class="glyphicon glyphicon-trash"></span>', ['deletepotongan', 'tahun' => $model->tahun, 'no_bukti' => $model->no_bukti, 'tgl_bukti' => $model->bukti->tgl_bukti, 'kd_potongan' => $model->kd_potongan],
+                              [  
+                                 'title' => Yii::t('yii', 'hapus'),
+                                //  'data-toggle'=>"modal",
+                                //  'data-target'=>"#myModal",
+                                //  'data-title'=> "Bukti".$model->no_bukti,                                 
+                                 'data-confirm' => "Yakin menghapus potongan ini?",
+                                 'data-method' => 'POST',
+                                 'data-pjax' => 1
+                              ]);
+                      }
+                ]
+            ],            
+        ],          
+        'striped' => true,
+        'condensed' => true,
+        'responsive' => true,          
+        'panel' => [
+            'type' => 'primary', 
+            'heading' => '<i class="glyphicon glyphicon-list"></i> Daftar Potongan',
+        ]
+    ]);
+    
+    // tab potongan
+    $potonganContent = 
+    Collapse::widget([
+        'items' => [
+            [
+                'label' => '<i class="glyphicon glyphicon-plus"></i> Tambah Potongan',
+                'encode' => false,
+                'content' => $formPotongan,
+                'options' => ['class' => 'panel panel-danger'],
+            ],
+        ]
+    ]).$gridPotongan;
 
     // tab navigation
     echo TabsX::widget([
@@ -124,3 +214,30 @@ $this->params['breadcrumbs'][] = $this->title;
      ?>
 
 </div>
+<?php
+$script = <<<JS
+$('form#{$modelPotongan->formName()}').on('beforeSubmit',function(e)
+{
+    var \$form = $(this);
+    $.post(
+        \$form.attr("action"), //serialize Yii2 form 
+        \$form.serialize()
+    )
+        .done(function(result){
+            if(result == 1)
+            {
+                $(\$form).trigger("reset"); //reset form to reuse it to input
+                $.pjax.reload({container:'#potongan-datatable-pjax'});
+            }else
+            {
+                $("#message").html(result);
+            }
+        }).fail(function(){
+            console.log("server error");
+        });
+    return false;
+});
+
+JS;
+$this->registerJs($script);
+?>

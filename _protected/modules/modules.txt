@@ -59,7 +59,7 @@
 	06 => belanja
 	07 => saldoawal
 	08 => Mutasi Kas
-	09 => 
+	09 => Potongan
 	10 => 
 	11 => 
 	12 => 

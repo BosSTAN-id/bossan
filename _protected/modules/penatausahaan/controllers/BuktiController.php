@@ -28,6 +28,7 @@ class BuktiController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
+                    'deletepotongan' => ['post'],
                     'bulk-delete' => ['post'],
                 ],
             ],
@@ -88,23 +89,30 @@ class BuktiController extends Controller
 
         $request = Yii::$app->request;
         $model = $this->findModel($tahun, $no_bukti, $tgl_bukti);
-        $potongan = NULL; //(Take Potongan Query Here)
-        if($request->isAjax){
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return [
-                    'title'=> "Bukti Belanja #".$no_bukti,
-                    'content'=>$this->renderAjax('view', [
-                        'model' => $model,
-                        'potongan' => $potongan,
-                    ]),
-                    'footer'=> Html::button('Close',['class'=>'btn btn-default pull-right','data-dismiss'=>"modal"])
-                ];    
-        }else{
+        $dataProvider = new ActiveDataProvider([
+            'query' => \app\models\TaSPJPot::find()->where(['tahun' => $tahun, 'no_bukti' => $no_bukti]),
+        ]);
+        $modelPotongan = new \app\models\TaSPJPot();
+        $modelPotongan->tahun = $tahun;
+        $modelPotongan->no_bukti = $no_bukti;
+        $modelPotongan->sekolah_id = Yii::$app->user->identity->sekolah_id;
+
+        if ($modelPotongan->load(Yii::$app->request->post())) {
+            $modelPotongan->nilai = str_replace(',', '.', $model->nilai);
+            if($modelPotongan->save()){
+                echo 1;
+                // return $this->redirect(Yii::$app->request->referrer);
+            }else{
+                echo 0;
+            }
+        } else {            
             return $this->render('view', [
                 'model' => $model,
-                'potongan' => $potongan,
+                'modelPotongan' => $modelPotongan,
+                'dataProvider' => $dataProvider
             ]);
         }
+    
     }
 
     /**
@@ -439,15 +447,7 @@ class BuktiController extends Controller
         }
     }
 
-    /**
-     * Delete an existing TaSPJRinc model.
-     * For ajax request will return json object
-     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $tahun
-     * @param string $no_bukti
-     * @param string $tgl_bukti
-     * @return mixed
-     */
+
     public function actionDelete($tahun, $no_bukti, $tgl_bukti)
     {
         IF($this->cekakses() !== true){
@@ -481,19 +481,9 @@ class BuktiController extends Controller
             */
             return $this->redirect(['index']);
         }
-
-
     }
 
-     /**
-     * Delete multiple existing TaSPJRinc model.
-     * For ajax request will return json object
-     * and for non-ajax request if deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $tahun
-     * @param string $no_bukti
-     * @param string $tgl_bukti
-     * @return mixed
-     */
+
     public function actionBulkDelete()
     {   
         IF($this->cekakses() !== true){
@@ -527,6 +517,36 @@ class BuktiController extends Controller
             return $this->redirect(['index']);
         }
        
+    }
+
+    public function actionDeletepotongan($tahun, $no_bukti, $tgl_bukti, $kd_potongan)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $request = Yii::$app->request;
+        $model = $this->findModel($tahun, $no_bukti, $tgl_bukti);
+        $modelPotongan = \app\models\TaSPJPot::find()->where(['tahun' => $tahun, 'no_bukti' => $no_bukti, 'kd_potongan' => $kd_potongan]);
+        IF($model->no_spj == NULL){
+            $modelPotongan->delete();
+        }ELSE{
+            Yii::$app->getSession()->setFlash('warning',  'Sudah di SPJ kan, tidak dapat dihapus.');
+        }
+
+        // if($request->isAjax){
+        //     Yii::$app->response->format = Response::FORMAT_JSON;
+        //     return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+        // }else{
+            return $this->redirect(Yii::$app->request->referrer);
+        // }
     }
 
     // for modals belanja

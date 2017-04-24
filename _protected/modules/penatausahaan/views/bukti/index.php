@@ -67,6 +67,9 @@ CrudAsset::register($this);
 <?php Modal::begin([
     "id"=>"ajaxCrudModal",
     'size' => 'modal-lg',
+    'options' => [
+        'tabindex' => false // important for Select2 to work properly
+    ],     
     "footer"=>"",// always need it for jquery plugin
 ])?>
 <?php Modal::end(); ?>
