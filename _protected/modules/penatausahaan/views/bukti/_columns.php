@@ -52,6 +52,14 @@ return [
     [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
+        'visibleButtons' => [
+            'delete' => function ($model, $key, $index) {
+                return $model->no_spj == NULL ? true : false;
+             },
+             'update' => function ($model, $key, $index) {
+                return $model->no_spj == NULL ? true : false;
+             }
+        ], 
         'vAlign'=>'middle',
         'urlCreator' => function($action, $model, $key, $index) { 
                 // return Url::to([$action,'tahun, $no_bukti, $tgl_bukti'=>$key]);

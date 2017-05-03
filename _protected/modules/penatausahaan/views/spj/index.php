@@ -73,6 +73,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{print} {view} {update} {delete} {spjbukti}',
+                'visibleButtons' => [
+                    'delete' => function ($model, $key, $index) {
+                        return $model->kd_sah == 1 ? true : false;
+                     }
+                ], 
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [

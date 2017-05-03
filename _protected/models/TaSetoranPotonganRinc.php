@@ -66,4 +66,9 @@ class TaSetoranPotonganRinc extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TaSetoranPotongan::className(), ['tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'no_setoran' => 'no_setoran']);
     }
+
+    public function getKdPotongan()
+    {
+        return $this->hasOne(RefPotongan::className(), ['kd_potongan' => 'kd_potongan']);
+    }    
 }
