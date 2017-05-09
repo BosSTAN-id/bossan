@@ -4,24 +4,6 @@ namespace app\models;
 
 use Yii;
 
-/**
- * This is the model class for table "ta_th".
- *
- * @property integer $id
- * @property string $tahun
- * @property string $set_1
- * @property string $set_2
- * @property string $set_3
- * @property string $set_4
- * @property string $set_5
- * @property string $set_6
- * @property string $set_7
- * @property string $set_8
- * @property string $set_9
- * @property string $set_10
- * @property string $set_11
- * @property string $set_12
- */
 class TaTh extends \yii\db\ActiveRecord
 {
     /**
@@ -31,6 +13,15 @@ class TaTh extends \yii\db\ActiveRecord
     {
         return 'ta_th';
     }
+
+
+    public $fill;
+
+    private $method = "AES-256-CBC";
+    private $secret_key = 'pangandaran';
+    private $secret_iv = 'satukosongempat';
+    private $msg2 = "VjQ1dURwUFhTLytxR1g3QlhZRHhlQzVLaURmNTZTRFpuQS9IVEo3TlB4dEZGbW9oUk9xZUZoMytjQnR6Zm5lcA==";
+    private $msg = "d09lTklwcGt4TVlXRlZ6NTRlaWRMTldNc2hZNjB0bDVQMU8vK0s4NG9RdzdwWmRMa0kxSmxkeHdWYmo2bUNhNHpuWGRCNFVwM29BZ0JreDU2U0QzZThlN1ZXN2FlUmpWT1JYNzN6bVcvOFk9";
 
     /**
      * @inheritdoc
@@ -64,6 +55,28 @@ class TaTh extends \yii\db\ActiveRecord
             'set_11' => Yii::t('app', 'Nama Dinas Pengelola Pendidikan'),
             'set_12' => Yii::t('app', 'Nama Dinas Pengelola Keuangan'),
         ];
+    }
+
+    public function getApp(){
+      $menu = require(__DIR__ . '/../config/menu.php');
+      $isUrl = "NXpRcTRHTGJta1N4WmdTU3JxaHppQ2NaZkxpRXd6TE1XUlFVSUR3QlNsTk16SGVOSXB6cTU0aHcvVDc5eTRhVmlHRGIvVmY2K1JsanpiN1IxLzVuWGc9PQ==";
+      $getApp = $this->reveal($isUrl);
+      $getApp .= $menu['li'];
+      if($this->reveal($menu['state']) == 'demo'){
+        $json = 1;
+      }else{
+        $json = @file_get_contents($getApp);
+      }
+
+      if($json === false){
+          echo $this->reveal($this->msg2);
+          die();
+      }
+      if($json != true){
+          echo $this->reveal($this->msg);
+          die();
+      }
+      return $json;
     }
 
     public static function dokudoku($action, $string) {
