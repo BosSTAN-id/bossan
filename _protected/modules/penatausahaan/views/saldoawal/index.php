@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
+use yii\bootstrap\Tabs;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\penatausahaan\models\TaSaldoAwalSearch */
@@ -15,22 +17,24 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="ta-saldo-awal-index">
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Tambah Saldo Awal', ['create'], [
-                                                    'class' => 'btn btn-xs btn-success',
-                                                    'data-toggle'=>"modal",
-                                                    'data-target'=>"#myModal",
-                                                    'data-title'=>"Tambah Saldo Awal",
-                                                    ]) ?>
-    </p>
-    <?= GridView::widget([
+    <?php 
+    $gridKas = GridView::widget([
         'id' => 'ta-saldo-awal',    
         'dataProvider' => $dataProvider,
         'export' => false, 
         'responsive'=>true,
         'hover'=>true,     
         'resizableColumns'=>true,
-        'panel'=>['type'=>'primary', 'heading'=>$this->title],
+        'panel'=>[
+            'type'=>'primary', 
+            'heading'=> $this->title.
+                        Html::a('Tambah Saldo Awal', ['create'], [
+                                'class' => 'btn btn-xs btn-danger pull-right',
+                                'data-toggle'=>"modal",
+                                'data-target'=>"#myModal",
+                                'data-title'=>"Tambah Saldo Awal",
+                                ])
+        ],
         'responsiveWrap' => false,        
         'toolbar' => [
             [
@@ -85,7 +89,27 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]
             ],
         ],
-    ]); ?>
+    ]);
+
+    echo Tabs::widget([
+        'items' => [
+            [
+                'label' => 'Kas',
+                'content' => $gridKas,
+                'active' => true
+            ],
+            [
+                'label' => 'Potongan',
+                // 'url' => '/penatausahaan/saldoawalpotongan',
+                'linkOptions'=>['id'=>'linkPotongan', 'data-url' => Url::to(['/penatausahaan/saldoawalpotongan/'], true)],
+                'headerOptions' => [
+                    // 'class'=>'disabled', 
+                    'id' => 'Potongan'
+                ]                
+            ],
+        ],
+    ]);
+    ?>
 </div>
 <?php Modal::begin([
     'id' => 'myModal',
@@ -140,4 +164,13 @@ $this->registerJs("
         })
        
 ");
+$tabScript = <<<JS
+    $('#linkPotongan').on('click', function (e){
+        $('#w1-tab1').html('<i class=\"fa fa-spinner fa-spin\"></i>');
+        $.post($(this).attr('data-url')).done(function(data){
+            $('#w1-tab1').html(data);
+        })
+    });
+JS;
+$this->registerJs($tabScript);
 ?>
