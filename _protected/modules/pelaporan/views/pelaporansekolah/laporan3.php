@@ -73,7 +73,7 @@ echo GridView::widget([
             // 'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
         ],        
         [
-            'label' => 'Urian',
+            'label' => 'Uraian',
             // 'width'=>'20%',
             'value' =>function($model){
                 return $model['keterangan'];

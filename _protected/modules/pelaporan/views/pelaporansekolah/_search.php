@@ -29,6 +29,7 @@ use kartik\widgets\DatePicker;
                     '3' => 'BOS-K3 Buku Kas Umum',
                     '4' => 'BOS-K4 Buku Pembantu Kas Tunai',
                     '5' => 'BOS-K5 Buku Pembantu Kas Bank',
+                    '9' => 'BOS-K6 Buku Pembantu Pajak',   
                     '6' => 'BOS-K7 Realisasi Penggunaan Dana Tiap Jenis Anggaran',
                     '7' => 'BOS-K7A Realisasi Penggunaan Dana Tiap Komponen BOS',
                     '8' => 'BOS-03 Rencana Penggunaan dana BOS per Periode',                 

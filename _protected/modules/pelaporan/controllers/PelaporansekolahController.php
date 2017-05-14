@@ -1669,6 +1669,109 @@ class PelaporansekolahController extends Controller
 
                         $render = 'laporan8';
                         break;
+                    case 9:
+                        $totalCount = Yii::$app->db->createCommand("
+                                SELECT COUNT(a.tahun) FROM
+                                (
+                                    #Saldo Awal
+                                    SELECT a.tahun, a.sekolah_id, a.kd_potongan AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, CONCAT('Saldo Awal ',b.nm_potongan) AS keterangan, a.nilai
+                                    FROM ta_saldo_awal_potongan a
+                                    INNER JOIN ref_potongan b ON a.kd_potongan = b.kd_potongan
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
+                                    #akumulasi transaksi
+                                    UNION ALL
+                                    SELECT a.tahun, a.sekolah_id, a.kd_potongan, '' AS no_bukti, :tgl_1, CONCAT('Saldo Akumulasi ', b.nm_potongan) AS uraian, SUM(nilai) AS nilai
+                                    FROM (
+                                        SELECT a.tahun, a.sekolah_id, a.kd_potongan, b.no_bukti, b.tgl_bukti, b.uraian, a.nilai
+                                        FROM ta_spj_pot a
+                                        INNER JOIN ta_spj_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_bukti = b.no_bukti
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND b.tgl_bukti <= :tgl_1
+                                        UNION ALL
+                                        SELECT a.tahun, a.sekolah_id, a.kd_potongan, b.no_setoran, b.tgl_setoran, a.keterangan, -(a.nilai) AS nilai
+                                        FROM ta_setoran_potongan_rinc a
+                                        INNER JOIN ta_setoran_potongan b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
+                                        INNER JOIN ref_potongan c ON a.kd_potongan = c.kd_potongan
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND b.tgl_setoran <= :tgl_1
+                                    ) a
+                                    INNER JOIN ref_potongan b ON a.kd_potongan = b.kd_potongan
+                                    GROUP BY a.tahun, a.sekolah_id, a.kd_potongan
+                                    #transaksi Potongan
+                                    UNION ALL
+                                    SELECT a.tahun, a.sekolah_id, a.kd_potongan, b.no_bukti, b.tgl_bukti, b.uraian, a.nilai
+                                    FROM ta_spj_pot a
+                                    INNER JOIN ta_spj_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_bukti = b.no_bukti
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND b.tgl_bukti <= :tgl_2 AND b.tgl_bukti >= :tgl_1
+                                    #transaksi setoran
+                                    UNION ALL
+                                    SELECT a.tahun, a.sekolah_id, a.kd_potongan, b.no_setoran, b.tgl_setoran, a.keterangan, -(a.nilai) AS nilai
+                                    FROM ta_setoran_potongan_rinc a
+                                    INNER JOIN ta_setoran_potongan b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
+                                    INNER JOIN ref_potongan c ON a.kd_potongan = c.kd_potongan
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND b.tgl_setoran <= :tgl_2 AND b.tgl_setoran >= :tgl_1
+                                ) a ORDER BY a.tgl_bukti
+                            ", [
+                                ':tahun' => $Tahun,
+                                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                                ':tgl_1' => $getparam['Laporan']['Tgl_1'],
+                                ':tgl_2' => $getparam['Laporan']['Tgl_2'],
+                            ])->queryScalar();
+
+                        $data = new SqlDataProvider([
+                            'sql' => "                                
+                                SELECT * FROM
+                                (
+                                    #Saldo Awal
+                                    SELECT a.tahun, a.sekolah_id, a.kd_potongan AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, CONCAT('Saldo Awal ',b.nm_potongan) AS keterangan, a.nilai
+                                    FROM ta_saldo_awal_potongan a
+                                    INNER JOIN ref_potongan b ON a.kd_potongan = b.kd_potongan
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
+                                    #akumulasi transaksi
+                                    UNION ALL
+                                    SELECT a.tahun, a.sekolah_id, a.kd_potongan, '' AS no_bukti, :tgl_1, CONCAT('Saldo Akumulasi ', b.nm_potongan) AS uraian, SUM(nilai) AS nilai
+                                    FROM (
+                                        SELECT a.tahun, a.sekolah_id, a.kd_potongan, b.no_bukti, b.tgl_bukti, b.uraian, a.nilai
+                                        FROM ta_spj_pot a
+                                        INNER JOIN ta_spj_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_bukti = b.no_bukti
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND b.tgl_bukti <= :tgl_1
+                                        UNION ALL
+                                        SELECT a.tahun, a.sekolah_id, a.kd_potongan, b.no_setoran, b.tgl_setoran, a.keterangan, -(a.nilai) AS nilai
+                                        FROM ta_setoran_potongan_rinc a
+                                        INNER JOIN ta_setoran_potongan b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
+                                        INNER JOIN ref_potongan c ON a.kd_potongan = c.kd_potongan
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND b.tgl_setoran <= :tgl_1
+                                    ) a
+                                    INNER JOIN ref_potongan b ON a.kd_potongan = b.kd_potongan
+                                    GROUP BY a.tahun, a.sekolah_id, a.kd_potongan
+                                    #transaksi Potongan
+                                    UNION ALL
+                                    SELECT a.tahun, a.sekolah_id, a.kd_potongan, b.no_bukti, b.tgl_bukti, b.uraian, a.nilai
+                                    FROM ta_spj_pot a
+                                    INNER JOIN ta_spj_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_bukti = b.no_bukti
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND b.tgl_bukti <= :tgl_2 AND b.tgl_bukti >= :tgl_1
+                                    #transaksi setoran
+                                    UNION ALL
+                                    SELECT a.tahun, a.sekolah_id, a.kd_potongan, b.no_setoran, b.tgl_setoran, a.keterangan, -(a.nilai) AS nilai
+                                    FROM ta_setoran_potongan_rinc a
+                                    INNER JOIN ta_setoran_potongan b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
+                                    INNER JOIN ref_potongan c ON a.kd_potongan = c.kd_potongan
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND b.tgl_setoran <= :tgl_2 AND b.tgl_setoran >= :tgl_1
+                                ) a ORDER BY a.tgl_bukti
+                                    ",
+                            'params' => [
+                                ':tahun' => $Tahun,
+                                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                                ':tgl_1' => $getparam['Laporan']['Tgl_1'],
+                                ':tgl_2' => $getparam['Laporan']['Tgl_2'],
+                            ],
+                            'totalCount' => $totalCount,
+                            //'sort' =>false, to remove the table header sorting
+                            'pagination' => [
+                                'pageSize' => 50,
+                            ],
+                        ]);   
+
+                        $render = 'laporan3';
+                        break;                        
                     default:
                         # code...
                         break;
@@ -2822,12 +2925,6 @@ class PelaporansekolahController extends Controller
 
                         $render = 'cetaklaporan7';
                         break;                                         
-                    case 5:
-                        $searchModel = new \app\modules\controlhutang\models\BelanjakontrolSearch();
-                        // $searchModel->search->andWhere(['Tahun' => $Tahun]);
-                        $data = $searchModel->search(Yii::$app->request->queryParams);
-                        $render = 'laporan5';
-                        break;
                     case 8:
                         $data =  Yii::$app->db->createCommand("  
                             SELECT
@@ -2847,7 +2944,56 @@ class PelaporansekolahController extends Controller
                         ])->queryAll();
 
                         $render = 'cetaklaporan8';
-                        break;                            
+                        break; 
+                    case 9:
+                        $data =  Yii::$app->db->createCommand("  
+                                SELECT * FROM
+                                (
+                                    #Saldo Awal
+                                    SELECT a.tahun, a.sekolah_id, a.kd_potongan AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, CONCAT('Saldo Awal ',b.nm_potongan) AS keterangan, a.nilai
+                                    FROM ta_saldo_awal_potongan a
+                                    INNER JOIN ref_potongan b ON a.kd_potongan = b.kd_potongan
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
+                                    #akumulasi transaksi
+                                    UNION ALL
+                                    SELECT a.tahun, a.sekolah_id, a.kd_potongan, '' AS no_bukti, :tgl_1, CONCAT('Saldo Akumulasi ', b.nm_potongan) AS uraian, SUM(nilai) AS nilai
+                                    FROM (
+                                        SELECT a.tahun, a.sekolah_id, a.kd_potongan, b.no_bukti, b.tgl_bukti, b.uraian, a.nilai
+                                        FROM ta_spj_pot a
+                                        INNER JOIN ta_spj_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_bukti = b.no_bukti
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND b.tgl_bukti <= :tgl_1
+                                        UNION ALL
+                                        SELECT a.tahun, a.sekolah_id, a.kd_potongan, b.no_setoran, b.tgl_setoran, a.keterangan, -(a.nilai) AS nilai
+                                        FROM ta_setoran_potongan_rinc a
+                                        INNER JOIN ta_setoran_potongan b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
+                                        INNER JOIN ref_potongan c ON a.kd_potongan = c.kd_potongan
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND b.tgl_setoran <= :tgl_1
+                                    ) a
+                                    INNER JOIN ref_potongan b ON a.kd_potongan = b.kd_potongan
+                                    GROUP BY a.tahun, a.sekolah_id, a.kd_potongan
+                                    #transaksi Potongan
+                                    UNION ALL
+                                    SELECT a.tahun, a.sekolah_id, a.kd_potongan, b.no_bukti, b.tgl_bukti, b.uraian, a.nilai
+                                    FROM ta_spj_pot a
+                                    INNER JOIN ta_spj_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_bukti = b.no_bukti
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND b.tgl_bukti <= :tgl_2 AND b.tgl_bukti >= :tgl_1
+                                    #transaksi setoran
+                                    UNION ALL
+                                    SELECT a.tahun, a.sekolah_id, a.kd_potongan, b.no_setoran, b.tgl_setoran, a.keterangan, -(a.nilai) AS nilai
+                                    FROM ta_setoran_potongan_rinc a
+                                    INNER JOIN ta_setoran_potongan b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
+                                    INNER JOIN ref_potongan c ON a.kd_potongan = c.kd_potongan
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND b.tgl_setoran <= :tgl_2 AND b.tgl_setoran >= :tgl_1
+                                ) a ORDER BY a.tgl_bukti                                      
+                        ")->bindValues([
+                                ':tahun' => $Tahun,
+                                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                                ':tgl_1' => $getparam['Laporan']['Tgl_1'],
+                                ':tgl_2' => $getparam['Laporan']['Tgl_2'],
+                        ])->queryAll();
+
+                        $render = 'cetaklaporan3';
+                        break;                                                    
                     default:
                         # code...
                         break;

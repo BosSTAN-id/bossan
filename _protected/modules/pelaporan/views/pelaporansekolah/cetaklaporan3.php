@@ -133,6 +133,9 @@ switch ($getparam['Laporan']['Kd_Laporan']) {
 	case 5:
 		$pdf->MultiCell(215-(2*$left),5,'BUKU PEMBANTU BANK', '', 'C', 0);
 		break;
+	case 9:
+		$pdf->MultiCell(215-(2*$left),5,'BUKU PEMBANTU PAJAK', '', 'C', 0);
+		break;
 	default:
 		$pdf->MultiCell(215-(2*$left),5,'BUKU KAS UMUM', '', 'C', 0);
 		break;
@@ -154,6 +157,9 @@ switch ($getparam['Laporan']['Kd_Laporan']) {
 		break;
 	case 5:
 		$pdf->Cell(92,5,'Formulir BOS-K5',1,0,'C');
+		break;
+	case 9:
+		$pdf->Cell(92,5,'Formulir BOS-K6',1,0,'C');
 		break;
 	default:
 		$pdf->Cell(92,5,'Formulir BOS-K3',1,0,'C');
