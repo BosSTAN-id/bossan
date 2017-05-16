@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="alert-warning alert fade in" id="w1-success">
         <button class="close" aria-hidden="true" type="button" data-dismiss="alert">×</button>
 
-        <i class="icon fa fa-info-circle"></i> Saat ini menu ini hanya akan mempengaruhi pendapatan. Hanya Pendapatan dan penerimaan pembiayaan saja yang akan berpengaruh terhadap akun yang dapat dipilih oleh sekolah.
+        <i class="icon fa fa-info-circle"></i> Anda akan menyeleksi rekening yang dapat dipilih oleh sekolah untuk penyusunan anggaran. Rekening mengacu pada Bagan Akun Standar yang tertuang dalam Kebijakan Akuntansi dan Sistem Akuntansi Pemerintah Daerah berkaitan dengan Kode Rekening Anggaran (Rekening Permendagri 13/2006).
 
     </div>
     <?= GridView::widget([

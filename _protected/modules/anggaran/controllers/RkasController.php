@@ -782,7 +782,7 @@ class RkasController extends Controller
         }
         $searchModel = new \app\modules\anggaran\models\RefRek5Search();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['Kd_Rek_1' => 5, 'Kd_Rek_2' => 2]);
+        $dataProvider->query->andWhere(['Kd_Rek_1' => 5, 'Kd_Rek_2' => 2, 'sekolah' => 1]);
         $dataProvider->pagination->pageSize=100;
 
         return $this->renderAjax('kamusbelanja', [
@@ -892,7 +892,7 @@ class RkasController extends Controller
                             'Kd_Rek_2' => $session['Kd_Rek_2'],
                             'Kd_Rek_3' => $Kd_Rek_3,
                             'Kd_Rek_4' => $Kd_Rek_4,
-                            // 'sekolah' => 1,
+                            'sekolah' => 1,
                             ])
                            ->select(['Kd_Rek_5 AS id','CONCAT(Kd_Rek_3,\'.\',Kd_Rek_4,\'.\',Kd_Rek_5,\' \',Nm_Rek_5) AS name'])->asArray()->all();
                 /**
