@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "be45eac475c15f39431eca9d900d6d2a",
-    "content-hash": "3efd082d50df20642174419b45f86f4f",
+    "hash": "95b4ebdb2bc7869a127946e6d6c64f67",
+    "content-hash": "24c059fa9a8e3f12b78b3541fe567456",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -1473,22 +1473,23 @@
         },
         {
             "name": "kartik-v/yii2-detail-view",
-            "version": "v1.7.5",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-detail-view.git",
-                "reference": "65e626c0b55e7cca0db0886410771cd304c1fbd2"
+                "reference": "16b7a94d56db8372e3c5e9c5e2dc96f94aa6a91e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-detail-view/zipball/65e626c0b55e7cca0db0886410771cd304c1fbd2",
-                "reference": "65e626c0b55e7cca0db0886410771cd304c1fbd2",
+                "url": "https://api.github.com/repos/kartik-v/yii2-detail-view/zipball/16b7a94d56db8372e3c5e9c5e2dc96f94aa6a91e",
+                "reference": "16b7a94d56db8372e3c5e9c5e2dc96f94aa6a91e",
                 "shasum": ""
             },
             "require": {
                 "kartik-v/yii2-dialog": "~1.0",
                 "kartik-v/yii2-helpers": ">=1.3.5",
-                "kartik-v/yii2-krajee-base": "~1.7"
+                "kartik-v/yii2-krajee-base": "~1.7",
+                "kartik-v/yii2-widget-activeform": "~1.4"
             },
             "type": "yii2-extension",
             "extra": {
@@ -1523,7 +1524,7 @@
                 "widget",
                 "yii2"
             ],
-            "time": "2016-06-22 01:29:56"
+            "time": "2017-05-05 05:14:12"
         },
         {
             "name": "kartik-v/yii2-dialog",
@@ -1995,16 +1996,16 @@
         },
         {
             "name": "kartik-v/yii2-tabs-x",
-            "version": "v1.2.3",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/yii2-tabs-x.git",
-                "reference": "1e35056b49d48d103459be13d812a5cc9bc83b1b"
+                "reference": "685eef44354194b36f6892de2f8288bcf12bc321"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/yii2-tabs-x/zipball/1e35056b49d48d103459be13d812a5cc9bc83b1b",
-                "reference": "1e35056b49d48d103459be13d812a5cc9bc83b1b",
+                "url": "https://api.github.com/repos/kartik-v/yii2-tabs-x/zipball/685eef44354194b36f6892de2f8288bcf12bc321",
+                "reference": "685eef44354194b36f6892de2f8288bcf12bc321",
                 "shasum": ""
             },
             "require": {
@@ -2044,7 +2045,7 @@
                 "tabs",
                 "tabs-x"
             ],
-            "time": "2016-09-09 11:33:18"
+            "time": "2017-05-04 12:30:21"
         },
         {
             "name": "kartik-v/yii2-tree-manager",
@@ -6668,6 +6669,8 @@
         "kartik-v/yii2-dynagrid": 20,
         "kartik-v/yii2-krajee-base": 20,
         "kartik-v/yii2-mpdf": 20,
+        "kartik-v/yii2-tabs-x": 20,
+        "kartik-v/yii2-detail-view": 20,
         "execut/yii2-widget-bootstraptreeview": 20,
         "kartik-v/yii2-tree-manager": 20,
         "kartik-v/yii2-builder": 20
