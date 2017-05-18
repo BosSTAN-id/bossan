@@ -27,6 +27,14 @@ $this->title = 'RKAS';
 $this->params['breadcrumbs'][] = 'Anggaran';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php
+// echo Yii::$app->controller->id.'<br>'; //the name of the current controller
+// //Yii::$app->controller get a controller as an object
+// echo Yii::$app->controller->action->id.'<br>'; //name of the current action
+// echo Yii::$app->controller->module->id.'<br>'; //the name of the current module
+// echo Yii::$app->controller->module->getUniqueId().'<br>';
+// echo Yii::$app->controller->getUniqueId().'<br>';
+?>
 <div class="ta-rkas-kegiatan-index">
     <div class="box box-primary">
         <div class="box-header with-border">

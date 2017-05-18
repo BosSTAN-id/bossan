@@ -17,6 +17,14 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung'];
 <!-- <h3 class="text-center">Rencana Kegiatan Anggaran Sekolah Tahun Ajaran <?= $Tahun.'-'.($Tahun+1) ?></h3>
 <h3 class="text-center"><?= Yii::$app->user->identity->refSekolah->nama_sekolah ?></h3> -->
     <p>
+<?php
+// echo Yii::$app->controller->id.'<br>'; //the name of the current controller
+// //Yii::$app->controller get a controller as an object
+// echo Yii::$app->controller->action->id.'<br>'; //name of the current action
+// echo Yii::$app->controller->module->id.'<br>'; //the name of the current module
+// echo Yii::$app->controller->module->getUniqueId().'<br>';
+// echo Yii::$app->controller->getUniqueId().'<br>';
+?>
         <?= Html::a('Tambah Kegiatan', ['create'], [
                                                     'class' => 'btn btn-xs btn-success',
                                                     'data-toggle'=>"modal",

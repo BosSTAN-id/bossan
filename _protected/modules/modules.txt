@@ -42,8 +42,8 @@
 	02 => rkas
 	03 => posting
 	04 => Anggaran Kas
-	05 => 
-	06 => 
+	05 => --Taken
+	06 => Verifikasi RKAS (baper)
 	07 => 
 	08 => 
 	09 => 
