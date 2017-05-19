@@ -40,13 +40,16 @@ $this->params['breadcrumbs'][] = $this->title;
             'firstPageLabel' => 'Awal',
             'lastPageLabel'  => 'Akhir'
         ],
+        'rowOptions'   => function ($model, $key, $index, $grid) {
+            return ['data-id' => $model->tahun.'^'.$model->no_ba.'^abc'];
+        },
         'pjax'=>true,
         'pjaxSettings'=>[
             'options' => ['id' => 'ta-baver-pjax', 'timeout' => 5000],
         ],        
         // 'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'kartik\grid\SerialColumn'],
 
             'tahun',
             'no_ba',
@@ -60,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {update} {delete}',
+                'template' => '{view} {update} {delete} {rincian}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
@@ -84,13 +87,32 @@ $this->params['breadcrumbs'][] = $this->title;
                                  'data-target'=>"#myModal",
                                  'data-title'=> "Lihat",
                               ]);
-                        },                        
+                        },
+                        'rincian' => function ($url, $model) {
+                          return Html::a('Lampiran RKAS <i class="glyphicon glyphicon-menu-right"></i>', $url,
+                              [  
+                                 'title' => Yii::t('yii', 'Daftar RKAS Terlampir'),
+                                 'class'=>"btn btn-xs btn-default",                                 
+                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                 // 'data-method' => 'POST',
+                                 'data-pjax' => 0
+                              ]);
+                        },
                 ]
             ],
         ],
     ]); ?>
 </div>
-<?php Modal::begin([
+<?php 
+//row click link
+$this->registerJs("
+    $('td').click(function (e) {
+        var id = $(this).closest('tr').data('id').split('^');
+        if(e.target == this)
+            location.href = '" . \Yii\helpers\Url::to(['rincian']) . "?tahun=' + id[0] +'&no_ba=' + id[1];
+    });
+");
+Modal::begin([
     'id' => 'myModal',
     'header' => '<h4 class="modal-title">Lihat lebih...</h4>',
         'options' => [

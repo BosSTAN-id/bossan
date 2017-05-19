@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung'];
         // 'filterModel' => $searchModel,
         'rowOptions'   => function ($model, $key, $index, $grid) {
             return ['data-id' => $model->tahun.'.'.$model->sekolah_id.'.'.$model->kd_program.'.'.$model->kd_sub_program.'.'.$model->kd_kegiatan];
-        },        
+        },    
         'columns' => [
             // 'sekolah_id',        
             [

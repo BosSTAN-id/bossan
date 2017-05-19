@@ -7,16 +7,18 @@ use johnitvn\ajaxcrud\CrudAsset;
 use johnitvn\ajaxcrud\BulkButtonWidget;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\anggaran\models\TaBaverRincSearch */
+/* @var $searchModel app\modules\anggaran\models\TaRkasPeraturanSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Ta Baver Rincs';
+$this->title = 'Daftar Lampiran BA '.$model->no_ba;
+$this->params['breadcrumbs'][] = 'Anggaran';
+$this->params['breadcrumbs'][] = ['label' => 'Berita Acara Verifikasi', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 CrudAsset::register($this);
 
 ?>
-<div class="ta-baver-rinc-index">
+<div class="ta-rkas-peraturan-index">
     <div id="ajaxCrudDatatable">
         <?=GridView::widget([
             'id'=>'crud-datatable',
@@ -26,8 +28,6 @@ CrudAsset::register($this);
             'columns' => require(__DIR__.'/_columns.php'),
             'toolbar'=> [
                 ['content'=>
-                    Html::a('<i class="glyphicon glyphicon-plus"></i>', ['create'],
-                    ['role'=>'modal-remote','title'=> 'Create new Ta Baver Rincs','class'=>'btn btn-default']).
                     Html::a('<i class="glyphicon glyphicon-repeat"></i>', [''],
                     ['data-pjax'=>1, 'class'=>'btn btn-default', 'title'=>'Reset Grid']).
                     '{toggleData}'.
@@ -39,18 +39,20 @@ CrudAsset::register($this);
             'responsive' => true,          
             'panel' => [
                 'type' => 'primary', 
-                'heading' => '<i class="glyphicon glyphicon-list"></i> Ta Baver Rincs listing',
-                'before'=>'<em>* Resize table columns just like a spreadsheet by dragging the column edges.</em>',
-                'after'=>BulkButtonWidget::widget([
-                            'buttons'=>Html::a('<i class="glyphicon glyphicon-trash"></i>&nbsp; Delete All',
-                                ["bulk-delete"] ,
+                'heading' => '<i class="glyphicon glyphicon-list"></i> Daftar RKAS/P',
+                // 'before'=>'<em>* Resize table columns just like a spreadsheet by dragging the column edges.</em>',
+                'after'=>
+                        Html::hiddenInput('no_ba', $model->no_ba).
+                        BulkButtonWidget::widget([
+                            'buttons'=>Html::a('<i class="glyphicon glyphicon-pencil"></i>&nbsp; Lampirkan pada BA ini',
+                                ["bulk-update"] ,
                                 [
                                     "class"=>"btn btn-danger btn-xs",
                                     'role'=>'modal-remote-bulk',
                                     'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
                                     'data-request-method'=>'post',
-                                    'data-confirm-title'=>'Are you sure?',
-                                    'data-confirm-message'=>'Are you sure want to delete this item'
+                                    'data-confirm-title'=>'Lampirkan pada BA ini?',
+                                    'data-confirm-message'=>'Yakin melampirkan?'
                                 ]),
                         ]).                        
                         '<div class="clearfix"></div>',

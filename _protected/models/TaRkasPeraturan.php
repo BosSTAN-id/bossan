@@ -66,8 +66,13 @@ class TaRkasPeraturan extends \yii\db\ActiveRecord
         return $this->hasOne(RefSekolah::className(), ['id' => 'sekolah_id']);
     }
 
-    // public function getPerubahan()
-    // {
-    //     return $this->hasOne(RefPerubahan::className(), ['id' => 'sekolah_id']);
-    // }       
+    public function getPerubahan()
+    {
+        return $this->hasOne(RefPerubahan::className(), ['id' => 'perubahan_id']);
+    }
+
+    public function getTerlampir()
+    {
+        return $this->hasOne(\app\models\TaBaverRinc::className(), ['tahun' => 'tahun', 'no_peraturan' => 'no_peraturan']);
+    }
 }

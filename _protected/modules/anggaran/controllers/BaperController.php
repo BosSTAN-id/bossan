@@ -4,10 +4,16 @@ namespace app\modules\anggaran\controllers;
 
 use Yii;
 use app\models\TaBaver;
+use app\models\TaBaverRinc;
 use app\modules\anggaran\models\TaBaverSearch;
+use app\modules\anggaran\models\TaBaverRincSearch;
+use app\models\TaRkasPeraturan;
+use app\modules\anggaran\models\TaRkasPeraturanSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use \yii\web\Response;
+use yii\helpers\Html;
 
 /**
  * BaperController implements the CRUD actions for TaBaver model.
@@ -24,6 +30,7 @@ class BaperController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'bulk-update' => ['POST'],
                 ],
             ],
         ];
@@ -78,6 +85,42 @@ class BaperController extends Controller
             'model' => $this->findModel($tahun, $no_ba),
         ]);
     }
+
+    public function actionRincian($tahun, $no_ba)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }   
+
+        // create session for bulk update
+        $session = Yii::$app->session;
+        IF($session['no_ba']){
+            $session->remove('no_ba');
+        }
+        $session->set('no_ba', $no_ba);        
+
+        $model = $this->findModel($tahun, $no_ba);
+        $searchModel = new TaRkasPeraturanSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['tahun' => $tahun]);
+        // $dataProvider->query->andWhere('perubahan_id > 3');
+        $dataProvider->query->orderBy('sekolah_id, tgl_peraturan DESC');
+
+        $view = '/baperrinc/index';
+        if($model->status == 1) $view = 'terlampir';
+        return $this->render($view, [
+            'model' => $this->findModel($tahun, $no_ba),
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,            
+        ]);
+    }    
 
     /**
      * Creates a new TaBaver model.
@@ -173,14 +216,41 @@ class BaperController extends Controller
         return $this->redirect(Yii::$app->request->referrer);
     }
 
-    /**
-     * Finds the TaBaver model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $tahun
-     * @param string $no_ba
-     * @return TaBaver the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    public function actionBulkUpdate()
+    {        
+        $request = Yii::$app->request;
+        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
+        foreach ( $pks as $pk ) {
+            // $tahun = $pk->tahun;
+            $peraturan = \app\models\TaRkasPeraturan::findOne($pk);
+            var_dump($peraturan);
+            // $model = TaBaverRinc::find()->where(['tahun' => $peraturan->tahun, 'no_peraturan' => $peraturan['no_peraturan']])->one();
+            // if($model == NULL) $model = new TaBaverRinc();
+            // $model->tahun = $tahun;
+            // $model->no_ba = Yii::$app->session->get('no_ba');
+            // $model->sekolah_id = $peraturan['sekolah_id'];
+            // $model->no_peraturan = $peraturan['no_peraturan'];
+            // if(!$model->save()){
+            //     return 'Penyimpanan Gagal, coba lagi refresh halaman ini';
+            // }
+            // $model->delete();
+        }
+
+        if($request->isAjax){
+            /*
+            *   Process for ajax request
+            */
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ['forceClose'=>true,'forceReload'=>'#crud-datatable-pjax'];
+        }else{
+            /*
+            *   Process for non-ajax request
+            */
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+       
+    }
+
     protected function findModel($tahun, $no_ba)
     {
         if (($model = TaBaver::findOne(['tahun' => $tahun, 'no_ba' => $no_ba])) !== null) {

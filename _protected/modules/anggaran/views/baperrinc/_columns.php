@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Url;
+use yii\helpers\Html;
 
 return [
     [
@@ -10,17 +11,13 @@ return [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
     ],
-        [
+    [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'tahun',
+        'attribute'=>'sekolah.nama_sekolah',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'no_ba',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'sekolah_id',
+        'attribute'=>'perubahan.riwayat',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -28,23 +25,59 @@ return [
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'keterangan',
+        'format' => 'date',
+        'attribute'=>'tgl_peraturan',
     ],
     [
+        'class'=>'\kartik\grid\DataColumn',
+        'format' => 'raw',
+        'label'=>'Terlampir',
+        'value' => function ($model){
+            if($model['terlampir']['no_peraturan'] != NULL) return '<i class="glyphicon glyphicon-ok"></i>';
+            if($model['terlampir']['no_peraturan'] == NULL) return '';
+        }
+    ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'penandatangan',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'nip',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'jabatan',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'komite_sekolah',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'jabatan_komite',
+    // ],
+    // [
+        // 'class'=>'\kartik\grid\DataColumn',
+        // 'attribute'=>'verifikasi',
+    // ],
+    [
         'class' => 'kartik\grid\ActionColumn',
+        'template' => '{preview}',
+        'controller' => 'baperrinc',
         'dropdown' => false,
         'vAlign'=>'middle',
-        'urlCreator' => function($action, $model, $key, $index) { 
-                return Url::to([$action,'tahun, $no_ba, $sekolah_id, $no_peraturan'=>$key]);
-        },
-        'viewOptions'=>['role'=>'modal-remote','title'=>'View','data-toggle'=>'tooltip'],
-        'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
-        'deleteOptions'=>['role'=>'modal-remote','title'=>'Delete', 
-                          'data-confirm'=>false, 'data-method'=>false,// for overide yii data api
-                          'data-request-method'=>'post',
-                          'data-toggle'=>'tooltip',
-                          'data-confirm-title'=>'Are you sure?',
-                          'data-confirm-message'=>'Are you sure want to delete this item'], 
+        'buttons' => [
+                'preview' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,
+                        [  
+                            'title' => Yii::t('yii', 'lihat RKAS'),
+                            'data-toggle'=>"modal",
+                            'data-target'=>"#myModal",
+                            'data-title'=> "RKAS ".$model->no_peraturan,
+                        ]);
+                },
+        ]
     ],
 
 ];   

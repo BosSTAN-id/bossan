@@ -3,18 +3,24 @@
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TaBaverRinc */
+/* @var $model app\models\TaRkasPeraturan */
 ?>
-<div class="ta-baver-rinc-view">
+<div class="ta-rkas-peraturan-view">
  
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'tahun',
-            'no_ba',
             'sekolah_id',
+            'perubahan_id',
             'no_peraturan',
-            'keterangan',
+            'tgl_peraturan',
+            'penandatangan',
+            'nip',
+            'jabatan',
+            'komite_sekolah',
+            'jabatan_komite',
+            'verifikasi',
         ],
     ]) ?>
 
