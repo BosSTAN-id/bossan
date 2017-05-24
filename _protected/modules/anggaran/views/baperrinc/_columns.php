@@ -32,8 +32,17 @@ return [
         'class'=>'\kartik\grid\DataColumn',
         'format' => 'raw',
         'label'=>'Terlampir',
-        'value' => function ($model){
-            if($model['terlampir']['no_peraturan'] != NULL) return '<i class="glyphicon glyphicon-ok"></i>';
+        'value' => function ($model) use($no_ba){
+            if($model['terlampir']['no_peraturan'] != NULL){
+                // return '<i class="glyphicon glyphicon-ok"></i>';
+                return Html::a('<span class="glyphicon glyphicon-ok"></span>', ['deleterinc', 'tahun' => $model->tahun, 'no_ba' => $no_ba, 'sekolah_id' => $model->sekolah_id, 'no_peraturan' => $model->no_peraturan],
+                [  
+                    'title' => Yii::t('yii', 'Hapus dari Rincian'),           
+                    'data-confirm' => "Yakin menghapus dari berita acara ini?",
+                    'data-method' => 'POST',
+                    'data-pjax' => 1
+                ]);
+            }
             if($model['terlampir']['no_peraturan'] == NULL) return '';
         }
     ],

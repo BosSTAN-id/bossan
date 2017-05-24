@@ -100,15 +100,6 @@ class BaperrincController extends Controller
        
     }
 
-    /**
-     * Finds the TaRkasPeraturan model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $tahun
-     * @param integer $sekolah_id
-     * @param integer $perubahan_id
-     * @return TaRkasPeraturan the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($tahun, $sekolah_id, $perubahan_id)
     {
         if (($model = TaRkasPeraturan::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'perubahan_id' => $perubahan_id])) !== null) {

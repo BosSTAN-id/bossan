@@ -31,6 +31,8 @@ class BaperController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                     'bulk-update' => ['POST'],
+                    'deleterinc' => ['POST'],
+                    'status' => ['POST'],
                 ],
             ],
         ];
@@ -110,7 +112,8 @@ class BaperController extends Controller
         $searchModel = new TaRkasPeraturanSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['tahun' => $tahun]);
-        // $dataProvider->query->andWhere('perubahan_id > 3');
+        $dataProvider->query->andWhere('perubahan_id > 3');
+        $dataProvider->query->andWhere("no_peraturan NOT IN(SELECT no_peraturan FROM ta_baver_rinc WHERE tahun = $tahun AND no_ba <> $no_ba) AND tgl_peraturan <= '".$model->tgl_ba."'");
         $dataProvider->query->orderBy('sekolah_id, tgl_peraturan DESC');
 
         $view = '/baperrinc/index';
@@ -118,7 +121,8 @@ class BaperController extends Controller
         return $this->render($view, [
             'model' => $this->findModel($tahun, $no_ba),
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,            
+            'dataProvider' => $dataProvider,
+            'no_ba' => $no_ba,
         ]);
     }    
 
@@ -191,13 +195,6 @@ class BaperController extends Controller
         }
     }
 
-    /**
-     * Deletes an existing TaBaver model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $tahun
-     * @param string $no_ba
-     * @return mixed
-     */
     public function actionDelete($tahun, $no_ba)
     {
         IF($this->cekakses() !== true){
@@ -216,23 +213,47 @@ class BaperController extends Controller
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    public function actionDeleterinc($tahun, $no_ba, $sekolah_id, $no_peraturan)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = \app\models\TaBaverRinc::findOne(['tahun' => $tahun, 'no_ba' => $no_ba, 'sekolah_id' => $sekolah_id, 'no_peraturan' => $no_peraturan]);
+        $model->delete();
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
     public function actionBulkUpdate()
-    {        
+    {
         $request = Yii::$app->request;
-        $pks = explode(',', $request->post( 'pks' )); // Array or selected records primary keys
+        $data = $request->post( 'pks' );
+        $data = str_replace('},', '}-', $data);
+        $pks = explode('-', $data); // Array or selected records primary keys
         foreach ( $pks as $pk ) {
-            // $tahun = $pk->tahun;
-            $peraturan = \app\models\TaRkasPeraturan::findOne($pk);
-            var_dump($peraturan);
-            // $model = TaBaverRinc::find()->where(['tahun' => $peraturan->tahun, 'no_peraturan' => $peraturan['no_peraturan']])->one();
-            // if($model == NULL) $model = new TaBaverRinc();
-            // $model->tahun = $tahun;
-            // $model->no_ba = Yii::$app->session->get('no_ba');
-            // $model->sekolah_id = $peraturan['sekolah_id'];
-            // $model->no_peraturan = $peraturan['no_peraturan'];
-            // if(!$model->save()){
-            //     return 'Penyimpanan Gagal, coba lagi refresh halaman ini';
-            // }
+            // var_dump(json_decode($pk)->perubahan_id);
+            $pk = json_decode($pk);
+            $tahun = $pk->tahun;
+            $sekolah_id = $pk->sekolah_id;
+            $perubahan_id = $pk->perubahan_id;
+            $peraturan = $this->findPeraturan($tahun, $sekolah_id, $perubahan_id);
+            $model = TaBaverRinc::find()->where(['tahun' => $peraturan->tahun, 'no_peraturan' => $peraturan['no_peraturan']])->one();
+            if($model == NULL) $model = new TaBaverRinc();
+            $model->tahun = $tahun;
+            $model->no_ba = Yii::$app->session->get('no_ba');
+            $model->sekolah_id = $peraturan['sekolah_id'];
+            $model->no_peraturan = $peraturan['no_peraturan'];
+            if(!$model->save()){
+                return 'Penyimpanan Gagal, coba lagi refresh halaman ini';
+            }
             // $model->delete();
         }
 
@@ -274,5 +295,14 @@ class BaperController extends Controller
             return false;
         }
     }  
+
+    protected function findPeraturan($tahun, $sekolah_id, $perubahan_id)
+    {
+        if (($model = TaRkasPeraturan::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'perubahan_id' => $perubahan_id])) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }    
 
 }

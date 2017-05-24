@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
+use yii\bootstrap\Button;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\anggaran\models\TaBaverSearch */
@@ -59,7 +61,33 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'penandatangan',
             // 'jabatan_penandatangan',
             // 'nip_penandatangan',
-            'status',
+            // 'status',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function($model){
+                    // '<i class="fa fa-refresh fa-spin"></i>' untuk spin loading
+                    if($model->status == 1){
+                        $status = 'Final';
+                    }else{
+                        $status = 'Draft';
+                    }
+                    return Button::widget([
+                        'id' => 'status-'.$model->no_ba,
+                        'label' => $status,
+                        'encodeLabel' => false,
+                        'options' => [
+                            'class' => 'btn-default btn-xs',
+                            'data-url' => Url::to(['baper/status', 'no_ba' => $model->no_ba], true),
+                        ],
+                    ])
+                    // .
+                    // '<div class="overlay">
+                    //     <i class="fa fa-refresh fa-spin"></i>
+                    // </div>'
+                    ;
+                }
+            ],
 
             [
                 'class' => 'kartik\grid\ActionColumn',
