@@ -72,20 +72,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     }else{
                         $status = 'Draft';
                     }
-                    return Button::widget([
-                        'id' => 'status-'.$model->no_ba,
-                        'label' => $status,
-                        'encodeLabel' => false,
-                        'options' => [
-                            'class' => 'btn-default btn-xs',
-                            'data-url' => Url::to(['baper/status', 'no_ba' => $model->no_ba], true),
-                        ],
-                    ])
-                    // .
-                    // '<div class="overlay">
-                    //     <i class="fa fa-refresh fa-spin"></i>
-                    // </div>'
-                    ;
+                    // return Button::widget([
+                    //     'id' => 'status^'.$model->no_ba,
+                    //     'label' => $status,
+                    //     'encodeLabel' => false,
+                    //     'options' => [
+                    //         'class' => 'btn-primary btn-xs',
+                    //         'data-url' => Url::to(['baper/status', 'no_ba' => $model->no_ba], true),
+                    //     ],
+                    // ]);
+                    return Html::a($status, ['status', 'tahun' => $model->tahun, 'no_ba' => $model->no_ba],
+                    [
+                        'class' => 'btn btn-xs btn-primary',
+                        'title' => Yii::t('yii', 'Ubah Status'),           
+                        'data-confirm' => "Yakin mengubah status dari berita acara ini?",
+                        'data-method' => 'POST',
+                        'data-pjax' => 1
+                    ]);
                 }
             ],
 
@@ -165,4 +168,13 @@ $this->registerJs("
             });
         })
 ");
+$this->registerJs(<<<JS
+    $("[id^='status^']").on('click', function () {
+        var btn = $(this).button('loading')
+        console.log('clicked')
+        // business logic...
+        btn.button('reset')
+    })    
+JS
+);
 ?>

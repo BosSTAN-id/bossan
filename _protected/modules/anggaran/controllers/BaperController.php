@@ -88,6 +88,23 @@ class BaperController extends Controller
         ]);
     }
 
+    public function actionPreview($tahun, $no_ba, $sekolah_id, $no_peraturan)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }   
+        return $this->renderAjax('view', [
+            'model' => $this->findModel($tahun, $no_ba),
+        ]);
+    }
+
     public function actionRincian($tahun, $no_ba)
     {
         IF($this->cekakses() !== true){
@@ -109,12 +126,18 @@ class BaperController extends Controller
         $session->set('no_ba', $no_ba);        
 
         $model = $this->findModel($tahun, $no_ba);
-        $searchModel = new TaRkasPeraturanSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['tahun' => $tahun]);
-        $dataProvider->query->andWhere('perubahan_id > 3');
-        $dataProvider->query->andWhere("no_peraturan NOT IN(SELECT no_peraturan FROM ta_baver_rinc WHERE tahun = $tahun AND no_ba <> $no_ba) AND tgl_peraturan <= '".$model->tgl_ba."'");
-        $dataProvider->query->orderBy('sekolah_id, tgl_peraturan DESC');
+        if($model->status == 1){
+            $searchModel = new TaBaverRincSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['tahun' => $tahun]);
+        }else{        
+            $searchModel = new TaRkasPeraturanSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $dataProvider->query->andWhere(['tahun' => $tahun]);
+            $dataProvider->query->andWhere('perubahan_id > 3');
+            $dataProvider->query->andWhere("no_peraturan NOT IN(SELECT no_peraturan FROM ta_baver_rinc WHERE tahun = $tahun AND no_ba <> '$no_ba') AND tgl_peraturan <= '".$model->tgl_ba."'");
+            $dataProvider->query->orderBy('sekolah_id, tgl_peraturan DESC');
+        }
 
         $view = '/baperrinc/index';
         if($model->status == 1) $view = 'terlampir';
@@ -193,6 +216,29 @@ class BaperController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionStatus($tahun, $no_ba)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = $this->findModel($tahun, $no_ba);
+        if($model->status == 1){
+            $model->status = 0;
+        }else{
+            $model->status = 1;
+        }
+        if($model->save()) return $this->redirect(Yii::$app->request->referrer);
+        
     }
 
     public function actionDelete($tahun, $no_ba)

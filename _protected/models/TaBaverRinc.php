@@ -57,8 +57,18 @@ class TaBaverRinc extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTahun0()
+    public function getBa()
     {
         return $this->hasOne(TaBaver::className(), ['tahun' => 'tahun', 'no_ba' => 'no_ba']);
     }
+
+    public function getPeraturan()
+    {
+        return $this->hasOne(\app\models\TaRkasPeraturan::className(), ['tahun' => 'tahun', 'sekolah_id' => 'sekolah_id', 'no_peraturan' => 'no_peraturan']);
+    }
+
+    public function getSekolah()
+    {
+        return $this->hasOne(RefSekolah::className(), ['id' => 'sekolah_id']);
+    }    
 }
