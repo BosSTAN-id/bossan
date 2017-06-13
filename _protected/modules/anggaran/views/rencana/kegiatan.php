@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung'];
             [
                 'label' => 'Sumber Dana',
                 'value' => function($model){
-                    return $model->penerimaan2->uraian;
+                    return $model['penerimaan2']['uraian'];
                 }
             ],
             'pagu_anggaran:decimal',
