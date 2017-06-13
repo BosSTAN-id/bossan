@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
             'attributes' => [
                 [
                     'label' => 'Sumber Dana',
-                    'value' => $kegiatan->penerimaan2->uraian,
+                    'value' => $kegiatan['penerimaan2']['uraian'],
                 ],
                 'pagu_anggaran:decimal',
             ],

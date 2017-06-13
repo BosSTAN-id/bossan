@@ -69,12 +69,12 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung'];
             'refProgram.uraian_program',
             'refSubProgram.uraian_sub_program',
             'refKegiatan.uraian_kegiatan',
-            [
-                'label' => 'Sumber Dana',
-                'value' => function($model){
-                    return $model['penerimaan2']['uraian'];
-                }
-            ],
+            // [
+            //     'label' => 'Sumber Dana',
+            //     'value' => function($model){
+            //         return $model['penerimaan2']['uraian'];
+            //     }
+            // ],
             'pagu_anggaran:decimal',
             // 'kd_penerimaan_1',
             // 'kd_penerimaan_2',
