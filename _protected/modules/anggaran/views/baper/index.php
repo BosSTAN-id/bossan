@@ -5,6 +5,7 @@ use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\bootstrap\Button;
 use yii\helpers\Url;
+use yii\bootstrap\ButtonDropdown;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\anggaran\models\TaBaverSearch */
@@ -94,21 +95,74 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {update} {delete} {rincian}',
+                'template' => '{print} {view} {update} {delete} {rincian}',
                 'noWrap' => true,
                 'vAlign'=>'top',
+                'visibleButtons' => [
+                    'delete' => function ($model, $key, $index) {
+                        return $model->status == 1 ? false : true;
+                    }
+                ],                
                 'buttons' => [
-                        'update' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
+                        'print' => function($url, $key, $model){
+                          return Html::a('<span class="glyphicon glyphicon-print"></span>', ['printrka1', 'tahun' => $model['tahun'], 'no_ba' => $model['no_ba']],
                               [  
-                                 'title' => Yii::t('yii', 'ubah'),
-                                 'data-toggle'=>"modal",
-                                 'data-target'=>"#myModal",
-                                 'data-title'=> "Ubah",                                 
-                                 // 'data-confirm' => "Yakin menghapus ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
+                                 'title' => Yii::t('yii', 'RKA 1'),
+                                 'onClick' => "return !window.open(this.href, 'RKA 1', 'width=1024,height=768')"
+                              ]).' '.
+                              Html::a('<span class="glyphicon glyphicon-print"></span>', ['printrka221', 'tahun' => $model['tahun'], 'no_ba' => $model['no_ba']],
+                              [  
+                                 'title' => Yii::t('yii', 'RKA 2.2.1'),
+                                 'onClick' => "return !window.open(this.href, 'RKA 2.2.1', 'width=1024,height=768')"
                               ]);
+                            // return ButtonDropdown::widget([
+                            //     'encodeLabel' => false, // if you're going to use html on the button label
+                            //     'label' => '<i class="fa fa-print"></i>',
+                            //     'dropdown' => [
+                            //         'encodeLabels' => false, // if you're going to use html on the items' labels
+                            //         'items' => [
+                            //             [
+                            //                 'label' => 'RKA 1',
+                            //                 'url' => ['view', 'id' => $key],
+                            //             ],
+                            //             [
+                            //                 'label' => 'RKA 2.2.1',
+                            //                 'url' => ['update', 'id' => $key],
+                            //                 // 'visible' => true,  // if you want to hide an item based on a condition, use this
+                            //             ],
+                            //             // [
+                            //             //     'label' => \Yii::t('yii', 'Delete'),
+                            //             //     'linkOptions' => [
+                            //             //         'data' => [
+                            //             //             'method' => 'post',
+                            //             //             'confirm' => \Yii::t('yii', 'Are you sure you want to delete this item?'),
+                            //             //         ],
+                            //             //     ],
+                            //             //     'url' => ['delete', 'id' => $key],
+                            //             //     'visible' => true,   // same as above
+                            //             // ],
+                            //         ],
+                            //         'options' => [
+                            //             'class' => 'dropdown-menu-right', // right dropdown
+                            //         ],
+                            //     ],
+                            //     'options' => [
+                            //         'class' => ' btn-xs btn-default',   // btn-success, btn-info, et cetera
+                            //     ],
+                            //     'split' => true,    // if you want a split button
+                            // ]);
+                        },
+                        'update' => function ($url, $model) {
+                            if($model->status != 1) return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
+                                [  
+                                    'title' => Yii::t('yii', 'ubah'),
+                                    'data-toggle'=>"modal",
+                                    'data-target'=>"#myModal",
+                                    'data-title'=> "Ubah",                                 
+                                    // 'data-confirm' => "Yakin menghapus ini?",
+                                    // 'data-method' => 'POST',
+                                    // 'data-pjax' => 1
+                                ]);
                         },
                         'view' => function ($url, $model) {
                           return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,

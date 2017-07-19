@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             $heading = 'Rekapitulasi Sisa dana BOS '.$Tahun;
                             break;
                         case 7:
-                            $heading = 'BOS-K7A Realisasi Penggunaan Dana Tiap Komponen BOS '.$Tahun;
+                            $heading = 'Rekapitulasi Penetapan RKAS-APBS - Display '.$Tahun;
                             break;
 	                    default:
 	                        # code...

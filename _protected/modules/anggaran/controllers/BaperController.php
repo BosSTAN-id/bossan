@@ -172,7 +172,91 @@ class BaperController extends Controller
             'model' => $this->findModel($tahun, $no_ba),
             'ref' => $references,
         ]);
-    }    
+    }
+
+
+    public function actionPrintrka221($tahun, $no_ba)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $data =  Yii::$app->db->createCommand("
+                SELECT
+                a.kd_program, b.uraian_program,
+                a.kd_sub_program, c.uraian_sub_program,
+                /* a.kd_kegiatan, d.uraian_kegiatan, */
+                a.Kd_Rek_1, j.Nm_Rek_1, a.Kd_Rek_2, e.Nm_Rek_2,
+                a.Kd_Rek_3, f.Nm_Rek_3,
+                a.Kd_Rek_4, g.Nm_Rek_4,
+                a.Kd_Rek_5, h.Nm_Rek_5,
+                a.sekolah_id, i.nama_sekolah,
+                a.keterangan, 
+                a.jml_satuan,
+                a.satuan123,
+                a.nilai_rp,
+                SUM(a.total) AS total
+                FROM (
+                    SELECT
+                    a.tahun,
+                    a.no_ba,
+                    a.tgl_ba,
+                    b.sekolah_id,
+                    b.no_peraturan,
+                    c.tgl_peraturan,
+                    c.perubahan_id,
+                    d.kd_program,
+                    d.kd_sub_program,
+                    d.kd_kegiatan,
+                    d.Kd_Rek_1,
+                    d.Kd_Rek_2,
+                    d.Kd_Rek_3,
+                    d.Kd_Rek_4,
+                    d.Kd_Rek_5,
+                    d.no_rinc,
+                    d.keterangan,
+                    d.satuan123,
+                    d.jml_satuan,
+                    d.nilai_rp,
+                    d.total
+                    FROM
+                    ta_baver AS a
+                    INNER JOIN ta_baver_rinc AS b ON b.tahun = a.tahun AND b.no_ba = a.no_ba
+                    INNER JOIN ta_rkas_peraturan AS c ON c.tahun = b.tahun AND c.no_peraturan = b.no_peraturan AND c.sekolah_id = b.sekolah_id
+                    INNER JOIN ta_rkas_history AS d ON d.tahun = c.tahun AND d.sekolah_id = c.sekolah_id AND d.perubahan_id = c.perubahan_id
+                    WHERE a.tahun = :tahun AND a.no_ba = :no_ba AND d.Kd_Rek_1 = 5 AND d.Kd_Rek_2 = 2 AND (d.kd_penerimaan_1, d.kd_penerimaan_2) IN (SELECT kd_penerimaan_1, kd_penerimaan_2 FROM ref_penerimaan_sekolah_2 WHERE pengesahan = 1)
+                ) a
+                INNER JOIN ref_program_sekolah b ON a.kd_program = b.kd_program
+                INNER JOIN ref_sub_program_sekolah c ON a.kd_program = c.kd_program AND a.kd_sub_program = c.kd_sub_program
+                INNER JOIN ref_kegiatan_sekolah d ON a.kd_program = d.kd_program AND a.kd_sub_program = d.kd_sub_program AND a.kd_kegiatan = d.kd_kegiatan
+                INNER JOIN ref_rek_1 j ON a.Kd_Rek_1 = j.Kd_Rek_1
+                INNER JOIN ref_rek_2 e ON a.Kd_Rek_1 = e.Kd_Rek_1 AND a.Kd_Rek_2 =  e.Kd_Rek_2
+                INNER JOIN ref_rek_3 f ON a.Kd_Rek_1 = f.Kd_Rek_1 AND a.Kd_Rek_2 =  f.Kd_Rek_2 AND a.Kd_Rek_3 = f.Kd_Rek_3
+                INNER JOIN ref_rek_4 g ON a.Kd_Rek_1 = g.Kd_Rek_1 AND a.Kd_Rek_2 =  g.Kd_Rek_2 AND a.Kd_Rek_3 = g.Kd_Rek_3 AND a.Kd_Rek_4 = g.Kd_Rek_4
+                INNER JOIN ref_rek_5 h ON a.Kd_Rek_1 = h.Kd_Rek_1 AND a.Kd_Rek_2 =  h.Kd_Rek_2 AND a.Kd_Rek_3 = h.Kd_Rek_3 AND a.Kd_Rek_4 = h.Kd_Rek_4 AND a.Kd_Rek_5 = h.Kd_Rek_5
+                INNER JOIN ref_sekolah i ON a.sekolah_id = i.id
+                GROUP BY a.kd_program, a.kd_sub_program, /* a.kd_kegiatan,*/  a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.sekolah_id,a.jml_satuan, a.satuan123, a.nilai_rp, a.keterangan
+                ORDER BY a.kd_program, a.kd_sub_program, /* a.kd_kegiatan,*/ a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.sekolah_id ASC                   
+        ")->bindValues([
+                ':tahun' => $tahun,
+                ':no_ba' => $no_ba,
+        ])->queryAll();
+
+        $references = \app\models\TaTh::findOne(['tahun' => $tahun]);
+
+        return $this->render('printrka221', [
+            'data' => $data,
+            'model' => $this->findModel($tahun, $no_ba),
+            'ref' => $references,
+        ]);
+    }        
 
     public function actionPreview($tahun, $no_ba, $sekolah_id, $no_peraturan)
     {

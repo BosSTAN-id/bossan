@@ -50,7 +50,7 @@ use yii\web\Controller;
                 'label' => 'Kode',
                 'width'=>'3%',
                 'value' =>function($model){
-                    return $model['kd_program'];
+                    return $model['id'];
                 },
                 // 'group'=>true,  // enable grouping,
                 // 'groupedRow'=>true,                    // move grouped column to a single grouped row
@@ -58,10 +58,10 @@ use yii\web\Controller;
                 // 'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
             ],            
             [
-                'label' => 'Program',
+                'label' => 'Sekolah',
                 'width'=>'20%',
                 'value' =>function($model){
-                    return $model['uraian_program'];
+                    return $model['nama_sekolah'];
                 },
                 // 'group'=>true,  // enable grouping,
                 // 'groupedRow'=>true,                    // move grouped column to a single grouped row
@@ -69,165 +69,26 @@ use yii\web\Controller;
                 // 'groupEvenCssClass'=>'kv-grouped-row', // configure even group cell css class
             ],
             [
-                'attribute'=>'anggaran',
-                'width'=>'5%',
-                'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Pengembangan Perpustakaan',
-                'attribute'=>'komponen1',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Penerimaan Siswa Baru',
-                'attribute'=>'komponen2',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Pembelajaran dan Eskul',
-                'attribute'=>'komponen3',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Kegiatan Ulangan dan Ujian',
-                'attribute'=>'komponen4',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Pembelian Bahan Pakai Habis',
-                'attribute'=>'komponen5',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Langganan Daya dan Jasa',
-                'attribute'=>'komponen6',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Perawatan Sekolah',
-                'attribute'=>'komponen7',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Honor',
-                'attribute'=>'komponen8',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Pengembangan Profesi Guru',
-                'attribute'=>'komponen9',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Membantu Siswa Miskin',
-                'attribute'=>'komponen10',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Pengelolaan BOS',
-                'attribute'=>'komponen11',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Perangkat Komputer',
-                'attribute'=>'komponen12',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Biaya Lain',
-                'attribute'=>'komponen13',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Tak Berkategori',
-                'attribute'=>'komponenlain',
-                'width'=>'5%',
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
-            ],
-            [
-                'label' => 'Jumlah Realisasi',
-                'width'=>'5%',
+                'label' => 'Rancangan',
+                'format' => 'raw',
                 'value' => function($model){
-                    return (
-                            $model['komponen1']+
-                            $model['komponen2']+
-                            $model['komponen3']+
-                            $model['komponen4']+
-                            $model['komponen5']+
-                            $model['komponen6']+
-                            $model['komponen7']+
-                            $model['komponen8']+
-                            $model['komponen9']+
-                            $model['komponen10']+
-                            $model['komponen11']+
-                            $model['komponen12']+
-                            $model['komponen13']+
-                            $model['komponenlain']
-                        );
-                },
-                //'noWrap' => true,
-                'hAlign'=>'right',
-                'format'=>['decimal', 0],
-                'pageSummary'=>true
+                    return $model['perubahan3'] == NULL ? '<span class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove bg-white"></i></span>' : '<span class="btn btn-xs btn-success"><i class="glyphicon glyphicon-ok bg-white"></i></span>';
+                }
             ],
+            [
+                'label' => 'Induk',
+                'format' => 'raw',
+                'value' => function($model){
+                    return $model['perubahan4'] == NULL ? '<span class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove bg-white"></i></span>' : '<span class="btn btn-xs btn-success"><i class="glyphicon glyphicon-ok bg-white"></i></span>';
+                }
+            ],
+            [
+                'label' => 'Perubahan I',
+                'format' => 'raw',
+                'value' => function($model){
+                    return $model['perubahan6'] == NULL ? '<span class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove bg-white"></i></span>' : '<span class="btn btn-xs btn-success"><i class="glyphicon glyphicon-ok bg-white"></i></span>';
+                }
+            ],                        
         ],
     ]); 
 ?>

@@ -25,6 +25,7 @@ use kartik\widgets\DatePicker;
             echo $form->field($model, 'Kd_Laporan')->widget(Select2::classname(), [
                 'data' => [
                     '1' => 'Rekapitulasi Penetapan RKAS-APBS',
+                    '7' => 'Rekapitulasi Penetapan RKAS-APBS - Display',
                     '2' => 'Rekapitulasi RKAS-APBS',               
                     '3' => 'Rekapitulasi Pembuatan SPJ',
                     '4' => 'Rekapitulasi Realisasi Pendapatan dan Belanja',
