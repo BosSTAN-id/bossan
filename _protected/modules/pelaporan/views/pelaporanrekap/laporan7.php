@@ -71,22 +71,25 @@ use yii\web\Controller;
             [
                 'label' => 'Rancangan',
                 'format' => 'raw',
+                'hAlign' => 'center',
                 'value' => function($model){
-                    return $model['perubahan3'] == NULL ? '<span class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove bg-white"></i></span>' : '<span class="btn btn-xs btn-success"><i class="glyphicon glyphicon-ok bg-white"></i></span>';
+                    return $model['perubahan3'] == NULL ? '<span class="label label-danger"><i class="glyphicon glyphicon-remove bg-white"></i></span>' : '<span class="label label-success"><i class="glyphicon glyphicon-ok bg-white"></i></span>';
                 }
             ],
             [
                 'label' => 'Induk',
                 'format' => 'raw',
+                'hAlign' => 'center',
                 'value' => function($model){
-                    return $model['perubahan4'] == NULL ? '<span class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove bg-white"></i></span>' : '<span class="btn btn-xs btn-success"><i class="glyphicon glyphicon-ok bg-white"></i></span>';
+                    return $model['perubahan4'] == NULL ? '<span class="label label-danger"><i class="glyphicon glyphicon-remove bg-white"></i></span>' : '<span class="label label-success"><i class="glyphicon glyphicon-ok bg-white"></i></span>';
                 }
             ],
             [
                 'label' => 'Perubahan I',
                 'format' => 'raw',
+                'hAlign' => 'center',
                 'value' => function($model){
-                    return $model['perubahan6'] == NULL ? '<span class="btn btn-xs btn-danger"><i class="glyphicon glyphicon-remove bg-white"></i></span>' : '<span class="btn btn-xs btn-success"><i class="glyphicon glyphicon-ok bg-white"></i></span>';
+                    return $model['perubahan6'] == NULL ? '<span class="label label-danger"><i class="glyphicon glyphicon-remove bg-white"></i></span>' : '<span class="label label-success"><i class="glyphicon glyphicon-ok bg-white"></i></span>';
                 }
             ],                        
         ],

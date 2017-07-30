@@ -567,6 +567,7 @@ class BuktiController extends Controller
         $searchModel = new \app\modules\anggaran\models\TaRkasKegiatanSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['tahun' => $Tahun]);
+        $dataProvider->pagination->pageSize = 1;
         IF(Yii::$app->user->identity->sekolah_id && $sekolah_id = Yii::$app->user->identity->sekolah_id){
             $dataProvider->query->andWhere(['sekolah_id' => $sekolah_id]);
         }

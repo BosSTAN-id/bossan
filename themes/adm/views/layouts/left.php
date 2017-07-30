@@ -133,6 +133,7 @@ function akses($menu){
                             ['label' => 'Verifikasi SPJ', 'icon' => 'circle-o', 'url' => ['/pelaporan/verpemda'], 'visible' => akses(603)],                           
                         ],
                     ],
+                    ['label' => 'Panduan Penggunaan', 'icon' => 'fa fa-edit', 'url' => ['/images/bosstan v1.1.0 documentation book.pdf'], 'visible' => !Yii::$app->user->isGuest, 'options' => ['onclick' => "return !window.open('".yii\helpers\Url::to('/images/bosstan v1.1.0 documentation book.pdf', true)."', 'SPJ', 'width=1024,height=768')"]] 
                 ],
             ]
         ) ?>

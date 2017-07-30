@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
+use fedemotta\datatables\DataTables;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\modules\anggaran\models\TaRkasKegiatan */
@@ -10,29 +12,10 @@ use yii\bootstrap\Modal;
 ?>
 <div class="ta-rkas-kegiatan-index">
 
-    <?= GridView::widget([
-        'id' => 'ta-rkas-kegiatan',    
+    <?php
+    echo DataTables::widget([
         'dataProvider' => $dataProvider,
-        'export' => false, 
-        'responsive'=>true,
-        'hover'=>true,     
-        'resizableColumns'=>true,
-        'panel'=>['type'=>'primary', 'heading'=>$this->title],
-        'responsiveWrap' => false,        
-        'toolbar' => [
-            [
-                // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
-            ],
-        ],       
-        'pager' => [
-            'firstPageLabel' => 'Awal',
-            'lastPageLabel'  => 'Akhir'
-        ],
-        'pjax'=>true,
-        'pjaxSettings'=>[
-            'options' => ['id' => 'kegiatan-pjax', 'timeout' => 5000],
-        ],        
-        // 'filterModel' => $searchModel,
+        'filterModel' => $searchModel,
         'columns' => [
             // 'sekolah_id',        
             [
@@ -56,31 +39,29 @@ use yii\bootstrap\Modal;
                 'format' => 'raw',
                 'value' => function($model){
                     return Html::a('<i class="glyphicon glyphicon-arrow-right"></i>', 
-                    ['listbelanja', 'id' => $model['kd_program'].'.'.substr('0'.$model['kd_sub_program'], -2).'.'.substr('0'.$model['kd_kegiatan'], -2)], [
+                    // ['listbelanja', 'id' => $model['kd_program'].'.'.substr('0'.$model['kd_sub_program'], -2).'.'.substr('0'.$model['kd_kegiatan'], -2)]
+                    '#'
+                    , [
                         // 'data-pjax' => 0,
                         'class'=>'btn btn-default',
                         'title' => Yii::t('yii', 'ubah'),
-                        // 'data-toggle'=>"modal",
-                        // 'data-target'=>"#myModal",
-                        // 'data-title'=> "Ubah Bukti",  
-                        'onclick' => "
-                                function (event) {
-                                    var button = $(event.relatedTarget)
-                                    var modal = $(this)
-                                    var title = button.data('title') 
-                                    var href = button.attr('href') 
-                                    modal.find('.modal-title').html(title)
-                                    modal.find('.modal-body').html('<i class=\"fa fa-spinner fa-spin\"></i>')
-                                    $.post(href)
-                                        .done(function( data ) {
-                                            modal.find('.modal-body').html(data)
-                                        });
-                                    })
-                                
-                                "
+                        'data-href' => Url::to(['listbelanja', 'id' => $model['kd_program'].'.'.substr('0'.$model['kd_sub_program'], -2).'.'.substr('0'.$model['kd_kegiatan'], -2)], true),
+                        'id' => 'belanja-'.$model->kd_program.'.'.$model->kd_sub_program.'.'.$model->kd_kegiatan,
                     ]);
                 }
-            ],
+            ],            
         ],
-    ]); ?>
+    ]);
+    ?>
 </div>
+<script>
+    $( "a[id^='belanja-']" ).on('click', function(event){
+        var button = $(event.relatedTarget);
+        var modal = $('#myModal');
+        var href = $(this).attr('data-href');
+        $.post(href)
+        .done(function( data ) {
+            modal.find('.modal-body').html(data)
+        }); 
+    }); 
+</script>
