@@ -25,7 +25,6 @@
         "xj/yii2-bootbox-widget": "*",
         "2amigos/yii2-date-picker-widget": "~1.0",
         "wbraganca/yii2-dynamicform": "*",
-        "kartik-v/yii2-mpdf": "dev-master",
         "2amigos/yii2-chartjs-widget": "~2.0",
         "kartik-v/yii2-tabs-x": "@dev",
         "kartik-v/yii2-detail-view": "@dev",
@@ -34,7 +33,8 @@
         "execut/yii2-widget-bootstraptreeview": "dev-master",
         "kartik-v/yii2-tree-manager": "@dev",
         "kartik-v/yii2-builder": "@dev",
-        "2amigos/yii2-ckeditor-widget": "^2.0"  
+        "2amigos/yii2-ckeditor-widget": "^2.0",
+        "fedemotta/yii2-widget-datatables": "*"
     },
     "require-dev": {
         "codeception/codeception": "*",

@@ -25,6 +25,7 @@ use kartik\grid\GridView;
             [
                 // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
             ],
+            '{toggleData}',
         ],       
         'pager' => [
             'firstPageLabel' => 'Awal',

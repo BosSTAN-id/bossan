@@ -233,6 +233,14 @@ class RkasController extends Controller
         }
         $session->set('Kd_Rek_1', 5);
         $session->set('Kd_Rek_2', 2);
+        
+        $kegiatan = \app\models\TaRkasKegiatan::findOne([
+                'tahun' => $tahun,
+                'sekolah_id' => $sekolah_id,
+                'kd_program' => $kd_program,
+                'kd_sub_program' => $kd_sub_program,
+                'kd_kegiatan' => $kd_kegiatan,
+                ]);
 
         $model = new \app\models\TaRkasBelanja();
         $model->tahun = $tahun;
@@ -242,6 +250,7 @@ class RkasController extends Controller
         $model->kd_kegiatan = $kd_kegiatan;
         $model->Kd_Rek_1 = $session['Kd_Rek_1'];
         $model->Kd_Rek_2 = $session['Kd_Rek_2'];
+        $model->penerimaan_2 = $kegiatan->kd_penerimaan_1.'.'.$kegiatan->kd_penerimaan_2;
         
 
         if ($model->load(Yii::$app->request->post())) {
