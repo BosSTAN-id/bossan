@@ -12,6 +12,37 @@ use yii\filters\VerbFilter;
 
 class PostingController extends \yii\web\Controller
 {
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'repost' => ['POST'],
+                ],
+            ],
+        ];
+    }
+
+    public function actionRepost($no_peraturan)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+        $model = \app\models\TaRkasPeraturan::findOne(['no_peraturan' => $no_peraturan]);
+        if($model->delete()){
+            Yii::$app->getSession()->setFlash('success',  'Posting telah dihapus! Silahkan posting kondisi terbaru!');
+            return $this->redirect(Yii::$app->request->referrer);   
+        }
+    }
+
     public function actionIndex()
     {
         IF($this->cekakses() !== true){

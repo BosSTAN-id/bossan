@@ -49,7 +49,7 @@ $fieldOptions2 = [
                         ->passwordInput(['class' => 'inputbox', 'placeholder' => $model->getAttributeLabel('password')]) ?>
                 </div>
                 <div class="control">
-                    <?= $form->field($model, 'rememberMe')->checkbox() ?>
+                    <?php // echo $form->field($model, 'rememberMe')->checkbox() ?>
                 </div>
                 <div class="buttonset">
                     <?= Html::submitButton('Sign in', ['class' => 'button', 'style' => 'background:#e14d24', 'name' => 'login-button']) ?>                

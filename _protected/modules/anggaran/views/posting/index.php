@@ -25,6 +25,19 @@ function angka($n) {
     return number_format($n);
 }
 
+function getBaRinc($no_peraturan){
+	$data = \app\models\TaBaverRinc::findOne(['no_peraturan' => $no_peraturan]);
+	return $data;
+}
+function getStatusBa($no_peraturan){
+	$ba = getBaRinc($no_peraturan);
+	if($ba != NULL){
+		$data = \app\models\TaBaver::findOne(['no_ba' => $ba->no_ba])->status;
+		if($data == 1) return true;
+	}
+	return false;
+}
+
 $this->title = 'Posting Anggaran';
 $this->params['breadcrumbs'][] = 'Anggaran';
 $this->params['breadcrumbs'][] = $this->title;
@@ -87,6 +100,17 @@ $this->params['breadcrumbs'][] = $this->title;
 		        </div>
 				<div class="col-md-5">
 		        	<?= date('d-m-Y', strtotime($rencana->tgl_peraturan)) ?>
+					<div class="pull-right">
+						<?php
+							if(getStatusBa($rencana->no_peraturan) == false) echo Html::a('<i class="fa fa-trash fa-fw"></i>', ['repost', 'no_peraturan' => $rencana->no_peraturan],
+                              [  
+                                 'title' => Yii::t('yii', 'Hapus Posting'),
+								 'class' => 'btn btn-xs btn-danger',                       
+                                 'data-confirm' => "Yakin mengubah anggaran yang sudah di posting?",
+                                 'data-method' => 'POST',
+                              ]);						
+						?>
+					</div>
 		        </div>
 	        </div>
 	    	<?php endif; ?>
@@ -149,6 +173,17 @@ $this->params['breadcrumbs'][] = $this->title;
 		        </div>
 				<div class="col-md-5">
 		        	<?= date('d-m-Y', strtotime($induk->tgl_peraturan)) ?>
+					<div class="pull-right">
+						<?php
+							if(getStatusBa($induk->no_peraturan) == false) echo Html::a('<i class="fa fa-trash fa-fw"></i>', ['repost', 'no_peraturan' => $induk->no_peraturan],
+                              [  
+                                 'title' => Yii::t('yii', 'Hapus Posting'),
+								 'class' => 'btn btn-xs btn-danger',                       
+                                 'data-confirm' => "Yakin mengubah anggaran yang sudah di posting?",
+                                 'data-method' => 'POST',
+                              ]);						
+						?>
+					</div>					
 		        </div>
 	        </div>
 	    	<?php endif; ?>
@@ -211,6 +246,17 @@ $this->params['breadcrumbs'][] = $this->title;
 		        </div>
 				<div class="col-md-5">
 		        	<?= date('d-m-Y', strtotime($perubahan1->tgl_peraturan)) ?>
+					<div class="pull-right">
+						<?php 
+							if(getStatusBa($perubahan1->no_peraturan) == false) echo Html::a('<i class="fa fa-trash fa-fw"></i>', ['repost', 'no_peraturan' => $perubahan1->no_peraturan],
+                              [  
+                                 'title' => Yii::t('yii', 'Hapus Posting'),
+								 'class' => 'btn btn-xs btn-danger',                       
+                                 'data-confirm' => "Yakin mengubah anggaran yang sudah di posting?",
+                                 'data-method' => 'POST',
+                              ]);						
+						?>
+					</div>					
 		        </div>
 	        </div>
 	    	<?php endif; ?>
