@@ -75,13 +75,21 @@ class MenuController extends Controller
             $model = new \app\models\RefUserMenu();
             $model->menu = $menu;
             $model->kd_user = $id;
-            $model->save();
+            if($model->save()){
+                echo 1;
+            }else{
+                echo 0;
+            }
         }ELSE{
             $model = \app\models\RefUserMenu::find()->where(['kd_user' => $id, 'menu' => $menu])->one();
-            $model->delete();
+            if($model->delete()){
+                echo 1;
+            }else{
+                echo 0;
+            }
         }
 
-        return $this->redirect(Yii::$app->request->referrer);
+        // return $this->redirect(Yii::$app->request->referrer);
     }      
 
     /**
