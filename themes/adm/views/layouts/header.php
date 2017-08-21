@@ -34,7 +34,7 @@ IF(Yii::$app->session->get('tahun'))
                 ?>
                 <li class="dropdown tahun user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <span class="hidden-xs">Tahun Anggaran: <?= Yii::$app->session->get('tahun') ? Yii::$app->session->get('tahun') : 'Pilih!' ?> </span>
+                        <i class="fa fa-flag"></i><span class="hidden-xs"> Tahun Anggaran:</span> <?= Yii::$app->session->get('tahun') ? Yii::$app->session->get('tahun') : 'Pilih!' ?>
                     </a>
                     <ul class="dropdown-menu">
                         <?php foreach($tahun as $tahun): ?>

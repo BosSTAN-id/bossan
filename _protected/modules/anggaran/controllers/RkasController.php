@@ -612,7 +612,7 @@ class RkasController extends Controller
         return $this->redirect(Yii::$app->request->referrer);
     }
 
-    //Bagian untuk RKAS Belanja-----------------------------------------------------------------------------------------
+    //Bagian untuk RKAS Pendapatan-----------------------------------------------------------------------------------------
     public function actionRkaspendapatan()
     {
         IF($this->cekakses() !== true){
@@ -634,7 +634,7 @@ class RkasController extends Controller
                 'sekolah_id' => $sekolah_id,
             ]);
 
-        return $this->render('pendapatan', [
+        return $this->render('pendapatan2', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'Tahun' => $Tahun,
@@ -654,49 +654,77 @@ class RkasController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $model = new \app\models\TaRkasPendapatanRinc();
-        $model->tahun = $tahun;
-        $model->sekolah_id = $sekolah_id;
+        // $model = new \app\models\TaRkasPendapatanRinc();
+        // $model->tahun = $tahun;
+        // $model->sekolah_id = $sekolah_id;
         
 
+        // if ($model->load(Yii::$app->request->post())) {
+        //     IF($model->penerimaan_2)
+        //         list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
+        //     $mapping = \app\models\RefRekPenerimaan::findOne(['kd_penerimaan_1' => $model->kd_penerimaan_1, 'kd_penerimaan_2' => $model->kd_penerimaan_2]);
+        //     IF($mapping){
+        //         //cek terlebih dahulu apakah sudah ada ta_rkas_pendapatan
+        //         $tabelpendapatan = \app\models\TaRkasPendapatan::findOne(['tahun' => $Tahun, 'sekolah_id' => $sekolah_id, 'kd_penerimaan_1' => $model->kd_penerimaan_1, 'kd_penerimaan_2' => $model->kd_penerimaan_2]);
+        //         IF(!$tabelpendapatan){
+        //             $pendapatan = new \app\models\TaRkasPendapatan();
+        //             $pendapatan->tahun = $model->tahun;
+        //             $pendapatan->sekolah_id = $model->sekolah_id;
+        //             $pendapatan->kd_penerimaan_1 = $model->kd_penerimaan_1;
+        //             $pendapatan->kd_penerimaan_2 = $model->kd_penerimaan_2;
+        //             $pendapatan->Kd_Rek_1 = $model->Kd_Rek_1 = $mapping->Kd_Rek_1;
+        //             $pendapatan->Kd_Rek_2 = $model->Kd_Rek_2 = $mapping->Kd_Rek_2;
+        //             $pendapatan->Kd_Rek_3 = $model->Kd_Rek_3 = $mapping->Kd_Rek_3;
+        //             $pendapatan->Kd_Rek_4 = $model->Kd_Rek_4 = $mapping->Kd_Rek_4;
+        //             $pendapatan->Kd_Rek_5 = $model->Kd_Rek_5 = $mapping->Kd_Rek_5;
+        //         }
+        //     }
+        //     $model->no_rinc = 1;
+        //     $model->total = $model->nilai_rp * $model->jml_satuan;
+        //     // var_dump($model->validate());
+        //     // var_dump($pendapatan->validate());
+        //     $model->validate();
+        //     IF($pendapatan->save() && $model->save()){
+        //         echo 1;
+        //     }ELSE{
+        //         echo 0;
+        //     }
+        // } else {
+        //     return $this->renderAjax('_formpendapatan', [
+        //         'model' => $model,
+        //     ]);
+        // }      
+
+        $model = new \app\models\TaRkasPendapatan();
+        $model->tahun = $tahun;
+        $model->sekolah_id = Yii::$app->user->identity->sekolah_id;        
+
         if ($model->load(Yii::$app->request->post())) {
+            // var_dump($model);
             IF($model->penerimaan_2)
                 list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
             $mapping = \app\models\RefRekPenerimaan::findOne(['kd_penerimaan_1' => $model->kd_penerimaan_1, 'kd_penerimaan_2' => $model->kd_penerimaan_2]);
             IF($mapping){
-                //cek terlebih dahulu apakah sudah ada ta_rkas_pendapatan
-                $tabelpendapatan = \app\models\TaRkasPendapatan::findOne(['tahun' => $Tahun, 'sekolah_id' => $sekolah_id, 'kd_penerimaan_1' => $model->kd_penerimaan_1, 'kd_penerimaan_2' => $model->kd_penerimaan_2]);
-                IF(!$tabelpendapatan){
-                    $pendapatan = new \app\models\TaRkasPendapatan();
-                    $pendapatan->tahun = $model->tahun;
-                    $pendapatan->sekolah_id = $model->sekolah_id;
-                    $pendapatan->kd_penerimaan_1 = $model->kd_penerimaan_1;
-                    $pendapatan->kd_penerimaan_2 = $model->kd_penerimaan_2;
-                    $pendapatan->Kd_Rek_1 = $model->Kd_Rek_1 = $mapping->Kd_Rek_1;
-                    $pendapatan->Kd_Rek_2 = $model->Kd_Rek_2 = $mapping->Kd_Rek_2;
-                    $pendapatan->Kd_Rek_3 = $model->Kd_Rek_3 = $mapping->Kd_Rek_3;
-                    $pendapatan->Kd_Rek_4 = $model->Kd_Rek_4 = $mapping->Kd_Rek_4;
-                    $pendapatan->Kd_Rek_5 = $model->Kd_Rek_5 = $mapping->Kd_Rek_5;
-                }
-            }
-            $model->no_rinc = 1;
-            $model->total = $model->nilai_rp * $model->jml_satuan;
-            // var_dump($model->validate());
-            // var_dump($pendapatan->validate());
+                $model->Kd_Rek_1 = $mapping->Kd_Rek_1;
+                $model->Kd_Rek_2 = $mapping->Kd_Rek_2;
+                $model->Kd_Rek_3 = $mapping->Kd_Rek_3;
+                $model->Kd_Rek_4 = $mapping->Kd_Rek_4;
+                $model->Kd_Rek_5 = $mapping->Kd_Rek_5;
+            }                
             $model->validate();
-            IF($pendapatan->save() && $model->save()){
+            IF($model->save()){
                 echo 1;
             }ELSE{
                 echo 0;
             }
         } else {
-            return $this->renderAjax('_formpendapatan', [
+            return $this->renderAjax('_formpendapatan2', [
                 'model' => $model,
             ]);
-        }
+        }        
     }
 
-    public function actionUpdatependapatan($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5)
+    public function actionUpdatependapatan($tahun, $sekolah_id, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -708,26 +736,43 @@ class RkasController extends Controller
         }ELSE{
             $Tahun = DATE('Y');
         }
-        $session = Yii::$app->session;
-        IF($session['Kd_Rek_1'] && $session['Kd_Rek_2']){
-            $session->remove('Kd_Rek_1');
-            $session->remove('Kd_Rek_2');
-        }
-        $session->set('Kd_Rek_1', 5);
-        $session->set('Kd_Rek_2', 2);        
 
-        $model = \app\models\TaRkasBelanja::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5]);
+        $model = \app\models\TaRkasPendapatan::find()->where([
+            'tahun' => $tahun,
+            'sekolah_id' => $sekolah_id,
+            'Kd_Rek_1' => $Kd_Rek_1,
+            'Kd_Rek_2' => $Kd_Rek_2,
+            'Kd_Rek_3' => $Kd_Rek_3,
+            'Kd_Rek_4' => $Kd_Rek_4,
+            'Kd_Rek_5' => $Kd_Rek_5,
+        ])->one();
+        $mapping1 = \app\models\RefRekPenerimaan::findOne([
+            'Kd_Rek_1' => $model->Kd_Rek_1,
+            'Kd_Rek_2' => $model->Kd_Rek_2,
+            'Kd_Rek_3' => $model->Kd_Rek_3,
+            'Kd_Rek_4' => $model->Kd_Rek_4,
+            'Kd_Rek_5' => $model->Kd_Rek_5,
+        ]);
+        if($mapping1) $model->penerimaan_2 = $mapping1->kd_penerimaan_1.'.'.$mapping1->kd_penerimaan_2;
 
         if ($model->load(Yii::$app->request->post())) {
             IF($model->penerimaan_2)
                 list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
+            $mapping = \app\models\RefRekPenerimaan::findOne(['kd_penerimaan_1' => $model->kd_penerimaan_1, 'kd_penerimaan_2' => $model->kd_penerimaan_2]);
+            IF($mapping){
+                $model->Kd_Rek_1 = $mapping->Kd_Rek_1;
+                $model->Kd_Rek_2 = $mapping->Kd_Rek_2;
+                $model->Kd_Rek_3 = $mapping->Kd_Rek_3;
+                $model->Kd_Rek_4 = $mapping->Kd_Rek_4;
+                $model->Kd_Rek_5 = $mapping->Kd_Rek_5;
+            }  
             IF($model->save()){
                 echo 1;
             }ELSE{
                 echo 0;
             }
         } else {
-            return $this->renderAjax('_formbelanja', [
+            return $this->renderAjax('_formpendapatan2', [
                 'model' => $model,
             ]);
         }
@@ -745,11 +790,102 @@ class RkasController extends Controller
         }ELSE{
             $Tahun = DATE('Y');
         }
-        \app\models\TaRkasPendapatanRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5, 'no_rinc' => 1])->delete();
+
         \app\models\TaRkasPendapatan::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5])->delete();
 
         return $this->redirect(Yii::$app->request->referrer);
     }
+
+
+    public function actionCreatependapatanrinci($tahun, $sekolah_id, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5, $kd_penerimaan_1, $kd_penerimaan_2)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = new \app\models\TaRkasPendapatanRinc();
+        $model->tahun = $tahun;
+        $model->sekolah_id = Yii::$app->user->identity->sekolah_id;
+        $model->Kd_Rek_1 = $Kd_Rek_1;
+        $model->Kd_Rek_2 = $Kd_Rek_2;
+        $model->Kd_Rek_3 = $Kd_Rek_3;
+        $model->Kd_Rek_4 = $Kd_Rek_4;
+        $model->Kd_Rek_5 = $Kd_Rek_5;
+        $model->kd_penerimaan_1 = $kd_penerimaan_1;
+        $model->kd_penerimaan_2 = $kd_penerimaan_2;
+        
+
+        if ($model->load(Yii::$app->request->post())) {
+            // var_dump($model);
+            $no_rinc = \app\models\TaRkasPendapatanRinc::find()->select('MAX(no_rinc) AS no_rinc')->where(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5])->one();
+            $model->no_rinc = ($no_rinc->no_rinc + 1); 
+            $model->total = $model->nilai_rp * $model->jml_satuan;
+            $model->validate();
+            IF($model->save()){
+                echo 1;
+            }ELSE{
+                echo 0;
+            }
+        } else {
+            return $this->renderAjax('_formpendapatanrinci', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionUpdatependapatanrinci($tahun, $sekolah_id, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5, $kd_penerimaan_1, $kd_penerimaan_2, $no_rinc)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = \app\models\TaRkasPendapatanRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5, 'kd_penerimaan_1' => $kd_penerimaan_1, 'kd_penerimaan_2' => $kd_penerimaan_2, 'no_rinc' => $no_rinc]);
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->total = $model->nilai_rp * $model->jml_satuan;
+            IF($model->save()){
+                echo 1;
+            }ELSE{
+                echo 0;
+            }
+        } else {
+            return $this->renderAjax('_formpendapatanrinci', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionDeletependapatanrinci($tahun, $sekolah_id, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5, $kd_penerimaan_1, $kd_penerimaan_2, $no_rinc)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        \app\models\TaRkasPendapatanRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5, 'kd_penerimaan_1' => $kd_penerimaan_1, 'kd_penerimaan_2' => $kd_penerimaan_2,'no_rinc' => $no_rinc])->delete();
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }          
 
 
     //Bagian untuk kamus-----------------------------------------------------------------------------------------

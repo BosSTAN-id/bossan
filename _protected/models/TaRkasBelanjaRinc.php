@@ -83,8 +83,8 @@ class TaRkasBelanjaRinc extends \yii\db\ActiveRecord
             'nilai_2' => Yii::t('app', 'Volume 2'),
             'sat_3' => Yii::t('app', 'Satuan 3'),
             'nilai_3' => Yii::t('app', 'Volume 3'),
-            'satuan123' => Yii::t('app', 'Volume Total'),
-            'jml_satuan' => Yii::t('app', 'Satuan Total'),
+            'satuan123' => Yii::t('app', 'Satuan Total'),
+            'jml_satuan' => Yii::t('app', 'Volume Total'),
             'nilai_rp' => Yii::t('app', 'Harga Satuan'),
             'total' => Yii::t('app', 'Total'),
         ];

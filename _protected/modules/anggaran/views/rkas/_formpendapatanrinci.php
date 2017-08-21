@@ -13,31 +13,11 @@ use kartik\widgets\DepDrop;
 ?>
 
 <div class="ta-rkas-belanja-form">
-    <?= Html::a('Kamus Belanja', ['kamusbelanja'], [
-                                                'class' => 'btn btn-xs btn-info',
-                                                'onClick' => "return !window.open(this.href, 'SPH', 'width=1024,height=600,scrollbars=1')"
-                                                ]) ?>
     <?php $form = ActiveForm::begin(['id' => $model->formName()
     // , 'layout' => 'horizontal'
     ]); ?>
 
-    <?php 
-            $connection = \Yii::$app->db;
-            $skpd = $connection->createCommand('SELECT CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2, CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian FROM ref_penerimaan_sekolah_2 WHERE sekolah = 1 AND kd_penerimaan_1 > 1');
-            $data = $skpd->queryAll();
-            // $data = \app\models\RefPenerimaanSekolah2::find()
-            //         ->select(['CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2', 'CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian'])
-            //         ->where(['sekolah' => 1])
-            //         ->all();     
-            echo $form->field($model, 'penerimaan_2')->widget(Select2::classname(), [
-                'data' => ArrayHelper::map($data, 'kd_penerimaan_2','uraian'),
-                // 'value' => $model->kd_penerimaan_1.'.'.$model->kd_penerimaan_2,
-                'options' => ['placeholder' => 'Jenis Pendapatan ...'],
-                'pluginOptions' => [
-                    'allowClear' => true
-                ],
-            ]);
-    ?>
+    <?= $form->field($model, 'keterangan')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'nilai_rp', ['enableClientValidation' => false])->widget(\yii\widgets\MaskedInput::classname(), [
             'clientOptions' => [
@@ -147,7 +127,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
         .done(function(result){
             if(result == 1)
             {
-                $("#myModal").modal('hide'); //hide modal after submit
+                $("#myModalrinci").modal('hide'); //hide modal after submit
                 //$(\$form).trigger("reset"); //reset form to reuse it to input
                 $.pjax.reload({container:'#belanja-pjax'});
             }else
@@ -175,7 +155,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
         .done(function(result){
             if(result == 1)
             {
-                $("#myModalubah").modal('hide'); //hide modal after submit
+                $("#myModalrinci").modal('hide'); //hide modal after submit
                 //$(\$form).trigger("reset"); //reset form to reuse it to input
                 $.pjax.reload({container:'#belanja-pjax'});
             }else
