@@ -724,7 +724,7 @@ class RkasController extends Controller
         }        
     }
 
-    public function actionUpdatependapatan($tahun, $sekolah_id, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5)
+    public function actionUpdatependapatan($tahun, $sekolah_id, $Kd_Rek_1, $Kd_Rek_2, $Kd_Rek_3, $Kd_Rek_4, $Kd_Rek_5, $kd_penerimaan_1, $kd_penerimaan_2)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -746,14 +746,7 @@ class RkasController extends Controller
             'Kd_Rek_4' => $Kd_Rek_4,
             'Kd_Rek_5' => $Kd_Rek_5,
         ])->one();
-        $mapping1 = \app\models\RefRekPenerimaan::findOne([
-            'Kd_Rek_1' => $model->Kd_Rek_1,
-            'Kd_Rek_2' => $model->Kd_Rek_2,
-            'Kd_Rek_3' => $model->Kd_Rek_3,
-            'Kd_Rek_4' => $model->Kd_Rek_4,
-            'Kd_Rek_5' => $model->Kd_Rek_5,
-        ]);
-        if($mapping1) $model->penerimaan_2 = $mapping1->kd_penerimaan_1.'.'.$mapping1->kd_penerimaan_2;
+        $model->penerimaan_2 = $kd_penerimaan_1.'.'.$kd_penerimaan_2;
 
         if ($model->load(Yii::$app->request->post())) {
             IF($model->penerimaan_2)
