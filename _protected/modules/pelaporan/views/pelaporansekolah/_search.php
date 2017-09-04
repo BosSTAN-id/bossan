@@ -32,7 +32,8 @@ use kartik\widgets\DatePicker;
                     '9' => 'BOS-K6 Buku Pembantu Pajak',   
                     '6' => 'BOS-K7 Realisasi Penggunaan Dana Tiap Jenis Anggaran',
                     '7' => 'BOS-K7A Realisasi Penggunaan Dana Tiap Komponen BOS',
-                    '8' => 'BOS-03 Rencana Penggunaan dana BOS per Periode',                 
+                    '8' => 'BOS-03 Rencana Penggunaan dana BOS per Periode',
+                    '10' => 'Form RKA OPD 2.2.1 (Rincian Pendapatan dan Belanja)',              
                 ],
                 'options' => ['class' =>'form-control input-sm' ,'placeholder' => 'Pilih Jenis Laporan ...', 
                 // 'onchange'=> 'this.form.submit()'

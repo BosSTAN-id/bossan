@@ -44,7 +44,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             break;
                         case 9:
                             $heading = 'BOS-K6 Buku Pembantu Pajak '.$Tahun;
-                            break;
+							break;
+						case 10:
+                            $heading = 'Form RKA OPD 2.2.1 (Rincian Pendapatan dan Belanja) '.$Tahun;
+							break;
 	                    default:
 	                        # code...
 	                        break;

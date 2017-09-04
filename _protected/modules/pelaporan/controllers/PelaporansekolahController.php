@@ -1771,7 +1771,138 @@ class PelaporansekolahController extends Controller
                         ]);   
 
                         $render = 'laporan3';
-                        break;                        
+                        break;
+                    case 10:
+                        $totalCount = Yii::$app->db->createCommand("
+                                SELECT COUNT(a.kd_program) FROM
+                                (
+                                    SELECT
+                                    a.kd_program, b.uraian_program,
+                                    a.kd_sub_program, c.uraian_sub_program,
+                                    a.kd_kegiatan, d.uraian_kegiatan,
+                                    a.Kd_Rek_1, j.Nm_Rek_1, a.Kd_Rek_2, e.Nm_Rek_2,
+                                    a.Kd_Rek_3, f.Nm_Rek_3,
+                                    a.Kd_Rek_4, g.Nm_Rek_4,
+                                    a.Kd_Rek_5, h.Nm_Rek_5,
+                                    a.keterangan, 
+                                    a.jml_satuan,
+                                    a.satuan123,
+                                    a.nilai_rp,
+                                    SUM(a.total) AS total
+                                    FROM (
+                                            SELECT
+                                            c.tahun,
+                                            c.sekolah_id,
+                                            c.no_peraturan,
+                                            c.tgl_peraturan,
+                                            c.perubahan_id,
+                                            d.kd_program,
+                                            d.kd_sub_program,
+                                            d.kd_kegiatan,
+                                            d.Kd_Rek_1,
+                                            d.Kd_Rek_2,
+                                            d.Kd_Rek_3,
+                                            d.Kd_Rek_4,
+                                            d.Kd_Rek_5,
+                                            d.no_rinc,
+                                            d.keterangan,
+                                            d.satuan123,
+                                            d.jml_satuan,
+                                            d.nilai_rp,
+                                            d.total
+                                            FROM
+                                            ta_rkas_peraturan AS c
+                                            INNER JOIN ta_rkas_history AS d ON d.tahun = c.tahun AND d.sekolah_id = c.sekolah_id AND d.perubahan_id = c.perubahan_id
+                                            WHERE c.tahun = :tahun AND c.sekolah_id = :sekolah_id AND c.perubahan_id = :perubahan_id AND
+                                            IFNULL(d.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(d.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                                    ) a
+                                    INNER JOIN ref_program_sekolah b ON a.kd_program = b.kd_program
+                                    INNER JOIN ref_sub_program_sekolah c ON a.kd_program = c.kd_program AND a.kd_sub_program = c.kd_sub_program
+                                    INNER JOIN ref_kegiatan_sekolah d ON a.kd_program = d.kd_program AND a.kd_sub_program = d.kd_sub_program AND a.kd_kegiatan = d.kd_kegiatan
+                                    INNER JOIN ref_rek_1 j ON a.Kd_Rek_1 = j.Kd_Rek_1
+                                    INNER JOIN ref_rek_2 e ON a.Kd_Rek_1 = e.Kd_Rek_1 AND a.Kd_Rek_2 =  e.Kd_Rek_2
+                                    INNER JOIN ref_rek_3 f ON a.Kd_Rek_1 = f.Kd_Rek_1 AND a.Kd_Rek_2 =  f.Kd_Rek_2 AND a.Kd_Rek_3 = f.Kd_Rek_3
+                                    INNER JOIN ref_rek_4 g ON a.Kd_Rek_1 = g.Kd_Rek_1 AND a.Kd_Rek_2 =  g.Kd_Rek_2 AND a.Kd_Rek_3 = g.Kd_Rek_3 AND a.Kd_Rek_4 = g.Kd_Rek_4
+                                    INNER JOIN ref_rek_5 h ON a.Kd_Rek_1 = h.Kd_Rek_1 AND a.Kd_Rek_2 =  h.Kd_Rek_2 AND a.Kd_Rek_3 = h.Kd_Rek_3 AND a.Kd_Rek_4 = h.Kd_Rek_4 AND a.Kd_Rek_5 = h.Kd_Rek_5
+                                    GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.jml_satuan, a.satuan123, a.nilai_rp, a.keterangan
+                                    ORDER BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5 ASC
+                                ) a
+                            ", [
+                                ':tahun' => $Tahun,
+                                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                                ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
+                                ':kd_penerimaan_1' => $kd_penerimaan_1,
+                                ':kd_penerimaan_2' => $kd_penerimaan_2
+                            ])->queryScalar();
+
+                        $data = new SqlDataProvider([
+                            'sql' => "
+                            SELECT
+                            a.kd_program, b.uraian_program,
+                            a.kd_sub_program, c.uraian_sub_program,
+                            a.kd_kegiatan, d.uraian_kegiatan,
+                            a.Kd_Rek_1, j.Nm_Rek_1, a.Kd_Rek_2, e.Nm_Rek_2,
+                            a.Kd_Rek_3, f.Nm_Rek_3,
+                            a.Kd_Rek_4, g.Nm_Rek_4,
+                            a.Kd_Rek_5, h.Nm_Rek_5,
+                            a.keterangan, 
+                            a.jml_satuan,
+                            a.satuan123,
+                            a.nilai_rp,
+                            SUM(a.total) AS total
+                            FROM (
+                                    SELECT
+                                    c.tahun,
+                                    c.sekolah_id,
+                                    c.no_peraturan,
+                                    c.tgl_peraturan,
+                                    c.perubahan_id,
+                                    d.kd_program,
+                                    d.kd_sub_program,
+                                    d.kd_kegiatan,
+                                    d.Kd_Rek_1,
+                                    d.Kd_Rek_2,
+                                    d.Kd_Rek_3,
+                                    d.Kd_Rek_4,
+                                    d.Kd_Rek_5,
+                                    d.no_rinc,
+                                    d.keterangan,
+                                    d.satuan123,
+                                    d.jml_satuan,
+                                    d.nilai_rp,
+                                    d.total
+                                    FROM
+                                    ta_rkas_peraturan AS c
+                                    INNER JOIN ta_rkas_history AS d ON d.tahun = c.tahun AND d.sekolah_id = c.sekolah_id AND d.perubahan_id = c.perubahan_id
+                                    WHERE c.tahun = :tahun AND c.sekolah_id = :sekolah_id AND c.perubahan_id = :perubahan_id AND
+                                    IFNULL(d.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(d.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                            ) a
+                            INNER JOIN ref_program_sekolah b ON a.kd_program = b.kd_program
+                            INNER JOIN ref_sub_program_sekolah c ON a.kd_program = c.kd_program AND a.kd_sub_program = c.kd_sub_program
+                            INNER JOIN ref_kegiatan_sekolah d ON a.kd_program = d.kd_program AND a.kd_sub_program = d.kd_sub_program AND a.kd_kegiatan = d.kd_kegiatan
+                            INNER JOIN ref_rek_1 j ON a.Kd_Rek_1 = j.Kd_Rek_1
+                            INNER JOIN ref_rek_2 e ON a.Kd_Rek_1 = e.Kd_Rek_1 AND a.Kd_Rek_2 =  e.Kd_Rek_2
+                            INNER JOIN ref_rek_3 f ON a.Kd_Rek_1 = f.Kd_Rek_1 AND a.Kd_Rek_2 =  f.Kd_Rek_2 AND a.Kd_Rek_3 = f.Kd_Rek_3
+                            INNER JOIN ref_rek_4 g ON a.Kd_Rek_1 = g.Kd_Rek_1 AND a.Kd_Rek_2 =  g.Kd_Rek_2 AND a.Kd_Rek_3 = g.Kd_Rek_3 AND a.Kd_Rek_4 = g.Kd_Rek_4
+                            INNER JOIN ref_rek_5 h ON a.Kd_Rek_1 = h.Kd_Rek_1 AND a.Kd_Rek_2 =  h.Kd_Rek_2 AND a.Kd_Rek_3 = h.Kd_Rek_3 AND a.Kd_Rek_4 = h.Kd_Rek_4 AND a.Kd_Rek_5 = h.Kd_Rek_5
+                            GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.jml_satuan, a.satuan123, a.nilai_rp, a.keterangan
+                            ORDER BY a.Kd_Rek_1, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5 ASC                            
+                                    ",
+                            'params' => [
+                                ':tahun' => $Tahun,
+                                ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                                ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
+                                ':kd_penerimaan_1' => $kd_penerimaan_1,
+                                ':kd_penerimaan_2' => $kd_penerimaan_2
+                            ],
+                            'totalCount' => $totalCount,
+                            //'sort' =>false, to remove the table header sorting
+                            'pagination' => [
+                                'pageSize' => 50,
+                            ],
+                        ]);  
+
+                        $render = 'laporan10';                              
                     default:
                         # code...
                         break;
@@ -2993,7 +3124,71 @@ class PelaporansekolahController extends Controller
                         ])->queryAll();
 
                         $render = 'cetaklaporan3';
-                        break;                                                    
+                        break;
+                    case 10:
+                        $data =  Yii::$app->db->createCommand("
+                        SELECT
+                        a.kd_program, b.uraian_program,
+                        a.kd_sub_program, c.uraian_sub_program,
+                        a.kd_kegiatan, d.uraian_kegiatan,
+                        a.Kd_Rek_1, j.Nm_Rek_1, a.Kd_Rek_2, e.Nm_Rek_2,
+                        a.Kd_Rek_3, f.Nm_Rek_3,
+                        a.Kd_Rek_4, g.Nm_Rek_4,
+                        a.Kd_Rek_5, h.Nm_Rek_5,
+                        a.sekolah_id, i.nama_sekolah,
+                        a.keterangan, 
+                        a.jml_satuan,
+                        a.satuan123,
+                        a.nilai_rp,
+                        SUM(a.total) AS total
+                        FROM (
+                                SELECT
+                                c.tahun,
+                                c.sekolah_id,
+                                c.no_peraturan,
+                                c.tgl_peraturan,
+                                c.perubahan_id,
+                                d.kd_program,
+                                d.kd_sub_program,
+                                d.kd_kegiatan,
+                                d.Kd_Rek_1,
+                                d.Kd_Rek_2,
+                                d.Kd_Rek_3,
+                                d.Kd_Rek_4,
+                                d.Kd_Rek_5,
+                                d.no_rinc,
+                                d.keterangan,
+                                d.satuan123,
+                                d.jml_satuan,
+                                d.nilai_rp,
+                                d.total
+                                FROM
+                                ta_rkas_peraturan AS c
+                                INNER JOIN ta_rkas_history AS d ON d.tahun = c.tahun AND d.sekolah_id = c.sekolah_id AND d.perubahan_id = c.perubahan_id
+                                WHERE c.tahun = :tahun AND c.sekolah_id = :sekolah_id AND c.perubahan_id = :perubahan_id AND
+                                IFNULL(d.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(d.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                        ) a
+                        INNER JOIN ref_program_sekolah b ON a.kd_program = b.kd_program
+                        INNER JOIN ref_sub_program_sekolah c ON a.kd_program = c.kd_program AND a.kd_sub_program = c.kd_sub_program
+                        INNER JOIN ref_kegiatan_sekolah d ON a.kd_program = d.kd_program AND a.kd_sub_program = d.kd_sub_program AND a.kd_kegiatan = d.kd_kegiatan
+                        INNER JOIN ref_rek_1 j ON a.Kd_Rek_1 = j.Kd_Rek_1
+                        INNER JOIN ref_rek_2 e ON a.Kd_Rek_1 = e.Kd_Rek_1 AND a.Kd_Rek_2 =  e.Kd_Rek_2
+                        INNER JOIN ref_rek_3 f ON a.Kd_Rek_1 = f.Kd_Rek_1 AND a.Kd_Rek_2 =  f.Kd_Rek_2 AND a.Kd_Rek_3 = f.Kd_Rek_3
+                        INNER JOIN ref_rek_4 g ON a.Kd_Rek_1 = g.Kd_Rek_1 AND a.Kd_Rek_2 =  g.Kd_Rek_2 AND a.Kd_Rek_3 = g.Kd_Rek_3 AND a.Kd_Rek_4 = g.Kd_Rek_4
+                        INNER JOIN ref_rek_5 h ON a.Kd_Rek_1 = h.Kd_Rek_1 AND a.Kd_Rek_2 =  h.Kd_Rek_2 AND a.Kd_Rek_3 = h.Kd_Rek_3 AND a.Kd_Rek_4 = h.Kd_Rek_4 AND a.Kd_Rek_5 = h.Kd_Rek_5
+                        INNER JOIN ref_sekolah i ON a.sekolah_id = i.id
+                        GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.jml_satuan, a.satuan123, a.nilai_rp, a.keterangan
+                        ORDER BY a.Kd_Rek_1, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5 ASC                                       
+                    ")->bindValues([
+                        ':tahun' => $Tahun,
+                        ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                        ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
+                        ':kd_penerimaan_1' => $kd_penerimaan_1,
+                        ':kd_penerimaan_2' => $kd_penerimaan_2
+                    ])->queryAll();
+
+                    $render = 'cetaklaporan10';                    
+                        break;                                                
                     default:
                         # code...
                         break;
