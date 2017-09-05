@@ -53,8 +53,6 @@ $this->params['breadcrumbs'][] = $this->title;
         // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'kartik\grid\SerialColumn'],
-
-            'tahun',
             'no_ba',
             'tgl_ba',
             // 'verifikatur',

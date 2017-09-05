@@ -268,8 +268,9 @@ foreach($data as $data){
 	// $charkegiatan = strlen($data['uraian_program'].' / '.$data['uraian_kegiatan']); //35 menampung 23 char
 	$charrekening = strlen($data['Nm_Rek_5']); //35 widht menampung 23 char
 
-    IF($y2 > 160 || $y1 + (4*(strlen($uraianrekening)/23)) > 160 || $y3 > 160  ){ //cek pagebreak
-        $ylst = 194 - $yst; //207 batas margin bawah dikurang dengan y pertama
+
+    IF($y2 > 285 || $y1 + (4*(strlen($uraianrekening)/23)) > 285 || $y3 > 285  ){ //cek pagebreak
+        $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
         //setiap selesai page maka buat rectangle
             $pdf->Rect($x, $yst, $w['0'] ,$ylst);
             $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
@@ -282,40 +283,32 @@ foreach($data as $data){
         //setelah buat rectangle baru kemudian addPage
         $pdf->AddPage();
 
-        $pdf->SetFont('Arial','B',10);
-        $pdf->SetXY($left,35);
-        $pdf->Cell($w['0'],11,'NO','LT',0,'C');
         $pdf->SetFont('Arial','B',9);
-        $pdf->Cell($w['1'],11,'Kode','LTR',0,'C');
-        $pdf->SetFont('Arial','B',10);
-        $pdf->Cell($w['2'],11,'Uraian ','LTR',0,'C');
-        $pdf->SetFont('Arial','B',9);
-        $pdf->Cell($w['3'],11,'Nilai','LTR',0,'C');
-        $pdf->SetFont('Arial','B',10);
-        $pdf->Cell($w['4'],11,'Sumber Dana','LTR',0,'C');
-        $pdf->Cell($w['5'],11,'Keterangan','LTR',0,'C');
+        $pdf->SetXY($left,$pdf->getY());
+        $pdf->Cell($w['0'],4,'KODE','LT',0,'C');
+        $pdf->Cell($w['1'],4,'URAIAN','LTR',0,'C');
+        $pdf->Cell($w['2']+$w['3']+$w['4'],4,'RINCIAN PERHITUNGAN','LTR',0,'C');
+        $pdf->Cell($w['5'],4,'Jumlah','LTR',0,'C');
         $pdf->ln();
-
-        $pdf->SetFont('Arial','B',10);
-        $pdf->SetXY($left,41);
-        $pdf->Cell($w['0'],6,'','L',0,'C');
-        $pdf->Cell($w['1'],6,'','LR',0,'C');
-        $pdf->Cell($w['2'],6,'','LR',0,'C');
-        $pdf->Cell($w['3'],6,'','LR',0,'C');
-        $pdf->Cell($w['4'],6,'','LR',0,'C');
-        $pdf->Cell($w['5'],6,'','LR',0,'C');
+        
+        $pdf->SetXY($left,$pdf->getY());
+        $pdf->Cell($w['0'],4,'REKENING','L',0,'C');
+        $pdf->Cell($w['1'],4,'','LR',0,'C');
+        $pdf->Cell($w['2'],4,'Volume','LTR',0,'C');
+        $pdf->Cell($w['3'],4,'Satuan','LTR',0,'C');
+        $pdf->Cell($w['4'],4,'Tarif','LTR',0,'C');
+        $pdf->Cell($w['5'],4,'(Rp)','LR',0,'C');
         $pdf->ln();
-
+        
         $pdf->SetFont('Arial','B',10);
-        $pdf->SetXY($left,46);
-        $pdf->Cell($w['0'],6,'1','LTB',0,'C');
-        $pdf->Cell($w['1'],6,'2','LTRB',0,'C');
-        $pdf->Cell($w['2'],6,'3','LTRB',0,'C');
-        $pdf->Cell($w['3'],6,'4','LTRB',0,'C');
-        $pdf->Cell($w['4'],6,'5','LTRB',0,'C');
-        $pdf->Cell($w['5'],6,'6','LTRB',0,'C');
+        $pdf->SetXY($left,$pdf->getY());
+        $pdf->Cell($w['0'],4,'1','LTB',0,'C');
+        $pdf->Cell($w['1'],4,'2','LTRB',0,'C');
+        $pdf->Cell($w['2'],4,'3','LTRB',0,'C');
+        $pdf->Cell($w['3'],4,'4','LTRB',0,'C');
+        $pdf->Cell($w['4'],4,'5','LTRB',0,'C');
+        $pdf->Cell($w['5'],4,'6','LTRB',0,'C');
         $pdf->ln();
-
 
         $y1 = $pdf->GetY(); // Untuk baris berikutnya
         $y2 = $pdf->GetY(); //untuk baris berikutnya
@@ -327,6 +320,56 @@ foreach($data as $data){
     }
 
     if($kd_rek_5 != $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'], -2).'.'.substr('0'.$data['Kd_Rek_5'], -2)){
+        IF($y2 > 285 || $y1 + (4*(strlen($uraianrekening)/23)) > 285 || $y3 > 285  ){ //cek pagebreak
+            $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
+            //setiap selesai page maka buat rectangle
+                $pdf->Rect($x, $yst, $w['0'] ,$ylst);
+                $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
+                // $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
+            
+            //setelah buat rectangle baru kemudian addPage
+            $pdf->AddPage();
+    
+            $pdf->SetFont('Arial','B',9);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'KODE','LT',0,'C');
+            $pdf->Cell($w['1'],4,'URAIAN','LTR',0,'C');
+            $pdf->Cell($w['2']+$w['3']+$w['4'],4,'RINCIAN PERHITUNGAN','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'Jumlah','LTR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'REKENING','L',0,'C');
+            $pdf->Cell($w['1'],4,'','LR',0,'C');
+            $pdf->Cell($w['2'],4,'Volume','LTR',0,'C');
+            $pdf->Cell($w['3'],4,'Satuan','LTR',0,'C');
+            $pdf->Cell($w['4'],4,'Tarif','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'(Rp)','LR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetFont('Arial','B',10);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'1','LTB',0,'C');
+            $pdf->Cell($w['1'],4,'2','LTRB',0,'C');
+            $pdf->Cell($w['2'],4,'3','LTRB',0,'C');
+            $pdf->Cell($w['3'],4,'4','LTRB',0,'C');
+            $pdf->Cell($w['4'],4,'5','LTRB',0,'C');
+            $pdf->Cell($w['5'],4,'6','LTRB',0,'C');
+            $pdf->ln();
+    
+            $y1 = $pdf->GetY(); // Untuk baris berikutnya
+            $y2 = $pdf->GetY(); //untuk baris berikutnya
+            $y3 = $pdf->GetY(); //untuk baris berikutnya
+            $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
+            $x = 15;
+            $ysisa = $y1;
+    
+        }
+
         $y = MAX($y1, $y2, $y3);
         if($totalbelanja > 0){
             // tampilkan total rek 5 terlebih dahulu
@@ -334,7 +377,9 @@ foreach($data as $data){
             $pdf->setxy($x,$y);
             $pdf->Cell($w['0'],4,'','L');
             $pdf->Cell($w['1'],4,'','',0,'C');
-            $pdf->Cell($w['2'],4,'Total Belanja','',0,'C');
+            $kodeRek1 = explode('.', $kd_rek_5);
+            $kodeRek1 = $kodeRek1[2];
+            $pdf->Cell($w['2'],4,$kodeRek1 == 4 ? 'Total Pdt' : 'Total Belanja','',0,'C');
             $pdf->Cell($w['3'],4,'','',0,'C');
             $pdf->Cell($w['4'],4,'','LR',0,'R');
             $pdf->Cell($w['5'],4,number_format($totalbelanja, 0, ',', '.'),'R',0,'R');
@@ -346,6 +391,56 @@ foreach($data as $data){
     }    
 
     if($kd_program != $data['kd_program']){
+        IF($y2 > 285 || $y1 + (4*(strlen($data['uraian_program'])/23)) > 285 || $y3 > 285  ){ //cek pagebreak
+            $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
+            //setiap selesai page maka buat rectangle
+                $pdf->Rect($x, $yst, $w['0'] ,$ylst);
+                $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
+                // $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
+            
+            //setelah buat rectangle baru kemudian addPage
+            $pdf->AddPage();
+    
+            $pdf->SetFont('Arial','B',9);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'KODE','LT',0,'C');
+            $pdf->Cell($w['1'],4,'URAIAN','LTR',0,'C');
+            $pdf->Cell($w['2']+$w['3']+$w['4'],4,'RINCIAN PERHITUNGAN','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'Jumlah','LTR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'REKENING','L',0,'C');
+            $pdf->Cell($w['1'],4,'','LR',0,'C');
+            $pdf->Cell($w['2'],4,'Volume','LTR',0,'C');
+            $pdf->Cell($w['3'],4,'Satuan','LTR',0,'C');
+            $pdf->Cell($w['4'],4,'Tarif','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'(Rp)','LR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetFont('Arial','B',10);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'1','LTB',0,'C');
+            $pdf->Cell($w['1'],4,'2','LTRB',0,'C');
+            $pdf->Cell($w['2'],4,'3','LTRB',0,'C');
+            $pdf->Cell($w['3'],4,'4','LTRB',0,'C');
+            $pdf->Cell($w['4'],4,'5','LTRB',0,'C');
+            $pdf->Cell($w['5'],4,'6','LTRB',0,'C');
+            $pdf->ln();
+    
+            $y1 = $pdf->GetY(); // Untuk baris berikutnya
+            $y2 = $pdf->GetY(); //untuk baris berikutnya
+            $y3 = $pdf->GetY(); //untuk baris berikutnya
+            $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
+            $x = 15;
+            $ysisa = $y1;
+    
+        }
+
         $y = MAX($y1, $y2, $y3);
         
         //new data
@@ -376,6 +471,56 @@ foreach($data as $data){
     }
 
     if($kd_sub_program != $data['kd_program'].'.'.$data['kd_sub_program']){
+        IF($y2 > 285 || $y1 + (4*(strlen($data['uraian_sub_program'])/23)) > 285 || $y3 > 285  ){ //cek pagebreak
+            $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
+            //setiap selesai page maka buat rectangle
+                $pdf->Rect($x, $yst, $w['0'] ,$ylst);
+                $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
+                // $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
+            
+            //setelah buat rectangle baru kemudian addPage
+            $pdf->AddPage();
+    
+            $pdf->SetFont('Arial','B',9);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'KODE','LT',0,'C');
+            $pdf->Cell($w['1'],4,'URAIAN','LTR',0,'C');
+            $pdf->Cell($w['2']+$w['3']+$w['4'],4,'RINCIAN PERHITUNGAN','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'Jumlah','LTR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'REKENING','L',0,'C');
+            $pdf->Cell($w['1'],4,'','LR',0,'C');
+            $pdf->Cell($w['2'],4,'Volume','LTR',0,'C');
+            $pdf->Cell($w['3'],4,'Satuan','LTR',0,'C');
+            $pdf->Cell($w['4'],4,'Tarif','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'(Rp)','LR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetFont('Arial','B',10);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'1','LTB',0,'C');
+            $pdf->Cell($w['1'],4,'2','LTRB',0,'C');
+            $pdf->Cell($w['2'],4,'3','LTRB',0,'C');
+            $pdf->Cell($w['3'],4,'4','LTRB',0,'C');
+            $pdf->Cell($w['4'],4,'5','LTRB',0,'C');
+            $pdf->Cell($w['5'],4,'6','LTRB',0,'C');
+            $pdf->ln();
+    
+            $y1 = $pdf->GetY(); // Untuk baris berikutnya
+            $y2 = $pdf->GetY(); //untuk baris berikutnya
+            $y3 = $pdf->GetY(); //untuk baris berikutnya
+            $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
+            $x = 15;
+            $ysisa = $y1;
+    
+        }
+
         $y = MAX($y1, $y2, $y3);
         
         //new data
@@ -406,6 +551,56 @@ foreach($data as $data){
     }
 
     if($kd_rek_1 != $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1']){
+        IF($y2 > 285 || $y1 + (4*(strlen($data['Nm_Rek_1'])/23)) > 285 || $y3 > 285  ){ //cek pagebreak
+            $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
+            //setiap selesai page maka buat rectangle
+                $pdf->Rect($x, $yst, $w['0'] ,$ylst);
+                $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
+                // $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
+            
+            //setelah buat rectangle baru kemudian addPage
+            $pdf->AddPage();
+    
+            $pdf->SetFont('Arial','B',9);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'KODE','LT',0,'C');
+            $pdf->Cell($w['1'],4,'URAIAN','LTR',0,'C');
+            $pdf->Cell($w['2']+$w['3']+$w['4'],4,'RINCIAN PERHITUNGAN','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'Jumlah','LTR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'REKENING','L',0,'C');
+            $pdf->Cell($w['1'],4,'','LR',0,'C');
+            $pdf->Cell($w['2'],4,'Volume','LTR',0,'C');
+            $pdf->Cell($w['3'],4,'Satuan','LTR',0,'C');
+            $pdf->Cell($w['4'],4,'Tarif','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'(Rp)','LR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetFont('Arial','B',10);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'1','LTB',0,'C');
+            $pdf->Cell($w['1'],4,'2','LTRB',0,'C');
+            $pdf->Cell($w['2'],4,'3','LTRB',0,'C');
+            $pdf->Cell($w['3'],4,'4','LTRB',0,'C');
+            $pdf->Cell($w['4'],4,'5','LTRB',0,'C');
+            $pdf->Cell($w['5'],4,'6','LTRB',0,'C');
+            $pdf->ln();
+    
+            $y1 = $pdf->GetY(); // Untuk baris berikutnya
+            $y2 = $pdf->GetY(); //untuk baris berikutnya
+            $y3 = $pdf->GetY(); //untuk baris berikutnya
+            $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
+            $x = 15;
+            $ysisa = $y1;
+    
+        }
+
         $y = MAX($y1, $y2, $y3);
         
         //new data
@@ -436,6 +631,56 @@ foreach($data as $data){
     }
 
     if($kd_rek_2 != $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2']){
+        IF($y2 > 285 || $y1 + (4*(strlen($data['Nm_Rek_2'])/23)) > 285 || $y3 > 285  ){ //cek pagebreak
+            $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
+            //setiap selesai page maka buat rectangle
+                $pdf->Rect($x, $yst, $w['0'] ,$ylst);
+                $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
+                // $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
+            
+            //setelah buat rectangle baru kemudian addPage
+            $pdf->AddPage();
+    
+            $pdf->SetFont('Arial','B',9);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'KODE','LT',0,'C');
+            $pdf->Cell($w['1'],4,'URAIAN','LTR',0,'C');
+            $pdf->Cell($w['2']+$w['3']+$w['4'],4,'RINCIAN PERHITUNGAN','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'Jumlah','LTR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'REKENING','L',0,'C');
+            $pdf->Cell($w['1'],4,'','LR',0,'C');
+            $pdf->Cell($w['2'],4,'Volume','LTR',0,'C');
+            $pdf->Cell($w['3'],4,'Satuan','LTR',0,'C');
+            $pdf->Cell($w['4'],4,'Tarif','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'(Rp)','LR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetFont('Arial','B',10);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'1','LTB',0,'C');
+            $pdf->Cell($w['1'],4,'2','LTRB',0,'C');
+            $pdf->Cell($w['2'],4,'3','LTRB',0,'C');
+            $pdf->Cell($w['3'],4,'4','LTRB',0,'C');
+            $pdf->Cell($w['4'],4,'5','LTRB',0,'C');
+            $pdf->Cell($w['5'],4,'6','LTRB',0,'C');
+            $pdf->ln();
+    
+            $y1 = $pdf->GetY(); // Untuk baris berikutnya
+            $y2 = $pdf->GetY(); //untuk baris berikutnya
+            $y3 = $pdf->GetY(); //untuk baris berikutnya
+            $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
+            $x = 15;
+            $ysisa = $y1;
+    
+        }
+
         $y = MAX($y1, $y2, $y3);
         
         //new data
@@ -466,6 +711,56 @@ foreach($data as $data){
     }
 
     if($kd_rek_3 != $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3']){
+        IF($y2 > 285 || $y1 + (4*(strlen($data['Nm_Rek_3'])/23)) > 285 || $y3 > 285  ){ //cek pagebreak
+            $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
+            //setiap selesai page maka buat rectangle
+                $pdf->Rect($x, $yst, $w['0'] ,$ylst);
+                $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
+                // $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
+            
+            //setelah buat rectangle baru kemudian addPage
+            $pdf->AddPage();
+    
+            $pdf->SetFont('Arial','B',9);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'KODE','LT',0,'C');
+            $pdf->Cell($w['1'],4,'URAIAN','LTR',0,'C');
+            $pdf->Cell($w['2']+$w['3']+$w['4'],4,'RINCIAN PERHITUNGAN','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'Jumlah','LTR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'REKENING','L',0,'C');
+            $pdf->Cell($w['1'],4,'','LR',0,'C');
+            $pdf->Cell($w['2'],4,'Volume','LTR',0,'C');
+            $pdf->Cell($w['3'],4,'Satuan','LTR',0,'C');
+            $pdf->Cell($w['4'],4,'Tarif','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'(Rp)','LR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetFont('Arial','B',10);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'1','LTB',0,'C');
+            $pdf->Cell($w['1'],4,'2','LTRB',0,'C');
+            $pdf->Cell($w['2'],4,'3','LTRB',0,'C');
+            $pdf->Cell($w['3'],4,'4','LTRB',0,'C');
+            $pdf->Cell($w['4'],4,'5','LTRB',0,'C');
+            $pdf->Cell($w['5'],4,'6','LTRB',0,'C');
+            $pdf->ln();
+    
+            $y1 = $pdf->GetY(); // Untuk baris berikutnya
+            $y2 = $pdf->GetY(); //untuk baris berikutnya
+            $y3 = $pdf->GetY(); //untuk baris berikutnya
+            $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
+            $x = 15;
+            $ysisa = $y1;
+    
+        }
+
         $y = MAX($y1, $y2, $y3);
         
         //new data
@@ -496,6 +791,56 @@ foreach($data as $data){
     }
 
     if($kd_rek_4 != $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'], -2)){
+        IF($y2 > 285 || $y1 + (4*(strlen($data['Nm_Rek_4'])/23)) > 285 || $y3 > 285  ){ //cek pagebreak
+            $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
+            //setiap selesai page maka buat rectangle
+                $pdf->Rect($x, $yst, $w['0'] ,$ylst);
+                $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
+                // $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
+            
+            //setelah buat rectangle baru kemudian addPage
+            $pdf->AddPage();
+    
+            $pdf->SetFont('Arial','B',9);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'KODE','LT',0,'C');
+            $pdf->Cell($w['1'],4,'URAIAN','LTR',0,'C');
+            $pdf->Cell($w['2']+$w['3']+$w['4'],4,'RINCIAN PERHITUNGAN','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'Jumlah','LTR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'REKENING','L',0,'C');
+            $pdf->Cell($w['1'],4,'','LR',0,'C');
+            $pdf->Cell($w['2'],4,'Volume','LTR',0,'C');
+            $pdf->Cell($w['3'],4,'Satuan','LTR',0,'C');
+            $pdf->Cell($w['4'],4,'Tarif','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'(Rp)','LR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetFont('Arial','B',10);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'1','LTB',0,'C');
+            $pdf->Cell($w['1'],4,'2','LTRB',0,'C');
+            $pdf->Cell($w['2'],4,'3','LTRB',0,'C');
+            $pdf->Cell($w['3'],4,'4','LTRB',0,'C');
+            $pdf->Cell($w['4'],4,'5','LTRB',0,'C');
+            $pdf->Cell($w['5'],4,'6','LTRB',0,'C');
+            $pdf->ln();
+    
+            $y1 = $pdf->GetY(); // Untuk baris berikutnya
+            $y2 = $pdf->GetY(); //untuk baris berikutnya
+            $y3 = $pdf->GetY(); //untuk baris berikutnya
+            $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
+            $x = 15;
+            $ysisa = $y1;
+    
+        }
+
         $y = MAX($y1, $y2, $y3);
         
         //new data
@@ -526,6 +871,56 @@ foreach($data as $data){
     }
 
     if($kd_rek_5 != $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'], -2).'.'.substr('0'.$data['Kd_Rek_5'], -2)){
+        IF($y2 > 285 || $y1 + (4*(strlen($data['Nm_Rek_5'])/23)) > 285 || $y3 > 285  ){ //cek pagebreak
+            $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
+            //setiap selesai page maka buat rectangle
+                $pdf->Rect($x, $yst, $w['0'] ,$ylst);
+                $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
+                // $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
+            
+            //setelah buat rectangle baru kemudian addPage
+            $pdf->AddPage();
+    
+            $pdf->SetFont('Arial','B',9);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'KODE','LT',0,'C');
+            $pdf->Cell($w['1'],4,'URAIAN','LTR',0,'C');
+            $pdf->Cell($w['2']+$w['3']+$w['4'],4,'RINCIAN PERHITUNGAN','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'Jumlah','LTR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'REKENING','L',0,'C');
+            $pdf->Cell($w['1'],4,'','LR',0,'C');
+            $pdf->Cell($w['2'],4,'Volume','LTR',0,'C');
+            $pdf->Cell($w['3'],4,'Satuan','LTR',0,'C');
+            $pdf->Cell($w['4'],4,'Tarif','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'(Rp)','LR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetFont('Arial','B',10);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'1','LTB',0,'C');
+            $pdf->Cell($w['1'],4,'2','LTRB',0,'C');
+            $pdf->Cell($w['2'],4,'3','LTRB',0,'C');
+            $pdf->Cell($w['3'],4,'4','LTRB',0,'C');
+            $pdf->Cell($w['4'],4,'5','LTRB',0,'C');
+            $pdf->Cell($w['5'],4,'6','LTRB',0,'C');
+            $pdf->ln();
+    
+            $y1 = $pdf->GetY(); // Untuk baris berikutnya
+            $y2 = $pdf->GetY(); //untuk baris berikutnya
+            $y3 = $pdf->GetY(); //untuk baris berikutnya
+            $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
+            $x = 15;
+            $ysisa = $y1;
+    
+        }
+                
         $y = MAX($y1, $y2, $y3);
         if($totalbelanja > 0){
             $y = $pdf->getY();
@@ -559,6 +954,55 @@ foreach($data as $data){
     }
 
     if($sekolah_id != $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'], -2).'.'.substr('0'.$data['Kd_Rek_5'], -2).'.'.$data['sekolah_id']){
+        IF($y2 > 285 || $y1 + (4*(strlen($data['nama_sekolah'])/23)) > 285 || $y3 > 285  ){ //cek pagebreak
+            $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
+            //setiap selesai page maka buat rectangle
+                $pdf->Rect($x, $yst, $w['0'] ,$ylst);
+                $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
+                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
+                // $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
+            
+            //setelah buat rectangle baru kemudian addPage
+            $pdf->AddPage();
+    
+            $pdf->SetFont('Arial','B',9);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'KODE','LT',0,'C');
+            $pdf->Cell($w['1'],4,'URAIAN','LTR',0,'C');
+            $pdf->Cell($w['2']+$w['3']+$w['4'],4,'RINCIAN PERHITUNGAN','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'Jumlah','LTR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'REKENING','L',0,'C');
+            $pdf->Cell($w['1'],4,'','LR',0,'C');
+            $pdf->Cell($w['2'],4,'Volume','LTR',0,'C');
+            $pdf->Cell($w['3'],4,'Satuan','LTR',0,'C');
+            $pdf->Cell($w['4'],4,'Tarif','LTR',0,'C');
+            $pdf->Cell($w['5'],4,'(Rp)','LR',0,'C');
+            $pdf->ln();
+            
+            $pdf->SetFont('Arial','B',10);
+            $pdf->SetXY($left,$pdf->getY());
+            $pdf->Cell($w['0'],4,'1','LTB',0,'C');
+            $pdf->Cell($w['1'],4,'2','LTRB',0,'C');
+            $pdf->Cell($w['2'],4,'3','LTRB',0,'C');
+            $pdf->Cell($w['3'],4,'4','LTRB',0,'C');
+            $pdf->Cell($w['4'],4,'5','LTRB',0,'C');
+            $pdf->Cell($w['5'],4,'6','LTRB',0,'C');
+            $pdf->ln();
+    
+            $y1 = $pdf->GetY(); // Untuk baris berikutnya
+            $y2 = $pdf->GetY(); //untuk baris berikutnya
+            $y3 = $pdf->GetY(); //untuk baris berikutnya
+            $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
+            $x = 15;
+            $ysisa = $y1;
+    
+        }
         $y = MAX($y1, $y2, $y3);
         
         //new data

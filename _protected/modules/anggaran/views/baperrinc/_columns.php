@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Url;
 use yii\helpers\Html;
+use yii\bootstrap\ButtonDropdown;
 
 return [
     [
@@ -74,17 +75,28 @@ return [
         'class' => 'kartik\grid\ActionColumn',
         'template' => '{preview}',
         'controller' => 'baperrinc',
-        'dropdown' => false,
+        'noWrap' => true,
+        'dropdown' => true,
         'vAlign'=>'middle',
         'buttons' => [
                 'preview' => function ($url, $model) {
-                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,
-                        [  
-                            'title' => Yii::t('yii', 'lihat RKAS'),
-                            'data-toggle'=>"modal",
-                            'data-target'=>"#myModal",
-                            'data-title'=> "RKAS ".$model->no_peraturan,
-                        ]);
+                    // return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,
+                    //     [  
+                    //         'title' => Yii::t('yii', 'lihat RKAS'),
+                    //         'data-toggle'=>"modal",
+                    //         'data-target'=>"#myModal",
+                    //         'data-title'=> "RKAS ".$model->no_peraturan,
+                    //     ]);
+                    return ButtonDropdown::widget([
+                        'split' => true,
+                        'label' => 'Action',
+                        'dropdown' => [
+                            'items' => [
+                                ['label' => 'DropdownA', 'url' => '/'],
+                                ['label' => 'DropdownB', 'url' => '#'],
+                            ],
+                        ],
+                    ]);
                 },
         ]
     ],
