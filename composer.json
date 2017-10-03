@@ -34,7 +34,8 @@
         "kartik-v/yii2-tree-manager": "@dev",
         "kartik-v/yii2-builder": "@dev",
         "2amigos/yii2-ckeditor-widget": "^2.0",
-        "fedemotta/yii2-widget-datatables": "*"
+        "fedemotta/yii2-widget-datatables": "*",
+        "2amigos/qrcode-library": "dev-master"
     },
     "require-dev": {
         "codeception/codeception": "*",
@@ -47,7 +48,13 @@
     },
     "config": {
         "vendor-dir": "_protected/vendor",
-        "process-timeout": 1800
+        "process-timeout": 1800,
+        "fxp-asset": {
+            "installer-paths":{
+                "npm-asset-library": "_protected/vendor/npm",
+                "bower-asset-library": "_protected/vendor/bower"
+            }
+        }
     },
     "scripts": {
         "post-create-project-cmd": [
@@ -69,10 +76,6 @@
             "generateCookieValidationKey": [
                 "_protected/config/web.php"
             ]
-        },
-        "asset-installer-paths": {
-            "npm-asset-library": "_protected/vendor/npm",
-            "bower-asset-library": "_protected/vendor/bower"
         }
     }
 }

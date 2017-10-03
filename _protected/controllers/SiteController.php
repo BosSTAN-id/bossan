@@ -16,6 +16,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\web\Response;
 
 /**
  * Site controller.
@@ -88,6 +89,19 @@ class SiteController extends Controller
 
         return $this->redirect(Yii::$app->request->referrer);
     }
+
+    //Untuk QRCODE
+    public function actionQr($url){
+        $qr = Yii::$app->get('qr');
+
+        Yii::$app->response->format = Response::FORMAT_RAW;
+        Yii::$app->response->headers->add('Content-Type', $qr->getContentType());
+
+        return $qr
+            ->setText($url)
+            ->setLabel('BosSTAN')
+            ->writeString();       
+    }      
 //------------------------------------------------------------------------------------------------//
 // STATIC PAGES
 //------------------------------------------------------------------------------------------------//

@@ -164,6 +164,10 @@ $config = [
             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
+        'qr' => [
+            'class' => '\Da\QrCode\Component\QrCodeComponent',
+            // ... you can configure more properties of the component here
+        ],        
     ],
     // this class use for force login to all controller. Usefull quiet enough
     // this function work only in login placed in site controller. FOr other login controller/action, change denyCallback access
@@ -172,7 +176,7 @@ $config = [
 			    'rules' => [
 			        [
 			            'allow' => true,
-			            'actions' => ['login'],
+			            'actions' => ['login', 'qr'],
 			        ],
 			        [
 			            'allow' => true,
@@ -189,7 +193,20 @@ $config = [
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
-    $config['modules']['debug'] = ['class' => 'yii\debug\Module'];
+    $config['modules']['debug'] = [
+        'class' => 'yii\debug\Module',
+        'panels' => [
+            'user' => [
+                'class'=>'yii\debug\panels\UserPanel',
+                'ruleUserSwitch' => [
+                    'allow' => true,
+                    'roles' => ['theCreator'],
+                ]
+            ]
+        ],
+        // uncomment and adjust the following to add your IP if you are not connecting from localhost.
+        //'allowedIPs' => ['127.0.0.1', '::1'],        
+    ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = ['class' => 'yii\gii\Module'];

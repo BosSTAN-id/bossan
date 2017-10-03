@@ -245,7 +245,7 @@ $kegiatan = NULL;
 $i = 1;
 
 $ysisa = $y1;
-$kd_program = $kd_sub_program = $kd_kegiatan = $kd_rek_1 = $kd_rek_2 = $kd_rek_3 = $kd_rek_4 = $kd_rek_5 = $sekolah_id = NULL;
+$kd_program = $kd_sub_program = $kd_kegiatan = $kd_rek_1 = $kd_rek_2 = $kd_rek_3 = $kd_rek_4 = $kd_rek_5 = $sekolah_id = $rek1 = NULL;
 
 $totalusulan = 0;
 $kegiatanlama = NULL;
@@ -307,6 +307,24 @@ foreach($data as $data){
 
     }
 
+    if(($data['Kd_Rek_1'] != $rek1) && $rek1 != NULL)
+    {
+        $y = MAX($y1, $y2, $y3);
+        // tampilkan total rek 5 terlebih dahulu
+        $pdf->SetFont('Arial','',8);
+        $pdf->setxy($x,$y);
+        $pdf->Cell($w['0'],4,'','TLB');
+        $pdf->Cell($w['1'],4,'','TB',0,'C');
+        $pdf->Cell($w['2'],4,'Total Pendapatan','TB',0,'C');
+        $pdf->Cell($w['3'],4,'','TB',0,'C');
+        $pdf->Cell($w['4'],4,'','BTR',0,'R');
+        $pdf->Cell($w['5'],4,number_format($totalbelanja, 0, ',', '.'),'TBR',0,'R');
+        $pdf->ln();
+        $totalpendapatan = $totalbelanja;
+        $totalbelanja = 0;
+        $y = $y1 = $y2 = $y3 = $pdf->getY();
+    }
+
     if($kd_rek_5 != $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'], -2).'.'.substr('0'.$data['Kd_Rek_5'], -2)){
         IF($y2 > 285 || $y1 + (4*(strlen($uraianrekening)/23)) > 285 || $y3 > 285  ){ //cek pagebreak
             $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
@@ -359,23 +377,23 @@ foreach($data as $data){
         }
 
         $y = MAX($y1, $y2, $y3);
-        if($totalbelanja > 0){
-            // tampilkan total rek 5 terlebih dahulu
-            $pdf->SetFont('Arial','',8);
-            $pdf->setxy($x,$y);
-            $pdf->Cell($w['0'],4,'','L');
-            $pdf->Cell($w['1'],4,'','',0,'C');
-            $kodeRek1 = explode('.', $kd_rek_5);
-            $kodeRek1 = $kodeRek1[2];
-            $pdf->Cell($w['2'],4,$kodeRek1 == 4 ? 'Total Pdt' : 'Total Belanja','',0,'C');
-            $pdf->Cell($w['3'],4,'','',0,'C');
-            $pdf->Cell($w['4'],4,'','LR',0,'R');
-            $pdf->Cell($w['5'],4,number_format($totalbelanja, 0, ',', '.'),'R',0,'R');
-            $pdf->ln();
-            $totalbelanja = 0;
+        // if($totalbelanja > 0){
+        //     // tampilkan total rek 5 terlebih dahulu
+        //     $pdf->SetFont('Arial','',8);
+        //     $pdf->setxy($x,$y);
+        //     $pdf->Cell($w['0'],4,'','L');
+        //     $pdf->Cell($w['1'],4,'','',0,'C');
+        //     $kodeRek1 = explode('.', $kd_rek_5);
+        //     $kodeRek1 = $kodeRek1[2];
+        //     $pdf->Cell($w['2'],4,$kodeRek1 == 4 ? 'Total Pdt' : 'Total Belanja','',0,'C');
+        //     $pdf->Cell($w['3'],4,'','',0,'C');
+        //     $pdf->Cell($w['4'],4,'','LR',0,'R');
+        //     $pdf->Cell($w['5'],4,number_format($totalbelanja, 0, ',', '.'),'R',0,'R');
+        //     $pdf->ln();
+        //     $totalbelanja = 0;
 
-            $y1 = $y2 = $y3 = $pdf->getY();
-        }
+        //     $y1 = $y2 = $y3 = $pdf->getY();
+        // }
     }    
 
     if($kd_program != $data['kd_program']){
@@ -587,7 +605,7 @@ foreach($data as $data){
             $x = 15;
             $ysisa = $y1;
     
-        }
+        }    
 
         $y = MAX($y1, $y2, $y3);
         
@@ -910,9 +928,9 @@ foreach($data as $data){
         }
                 
         $y = MAX($y1, $y2, $y3);
-        if($totalbelanja > 0){
-            $y = $pdf->getY();
-        }
+        // if($totalbelanja > 0){
+        //     $y = $pdf->getY();
+        // }
         
         //new data
         $pdf->SetFont('Arial','',8);    
@@ -1061,7 +1079,7 @@ foreach($data as $data){
     $kd_rek_4 = $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'], -2);
     $kd_rek_5 = $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'], -2).'.'.substr('0'.$data['Kd_Rek_5'], -2);
     $sekolah_id = $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'], -2).'.'.substr('0'.$data['Kd_Rek_5'], -2).'.'.$data['sekolah_id'];
-
+    $rek1 = $data['Kd_Rek_1'];
     
     $ysisa = $y;
 
@@ -1091,7 +1109,7 @@ $pdf->Cell($w['3'],4,'','B',0,'C');
 $pdf->Cell($w['4'],4,'','BR',0,'R');
 $pdf->Cell($w['5'],4,number_format($totalbelanja, 0, ',', '.'),'BR',0,'R');
 $pdf->ln();
-$totalbelanja = 0;
+// $totalbelanja = 0;
 
 $y = $pdf->getY();
 
@@ -1100,9 +1118,10 @@ $pdf->SetFont('Arial','B',8);
 $pdf->setxy($x,$y);
 $pdf->Cell($w['0'],4,'','LB');
 $pdf->Cell($w['1'],4,'','B',0,'C');
-$pdf->Cell($w['2'],4,'TOTAL','B',0,'C');
+$pdf->Cell($w['2'],4,'SILPA/SIKPA','B',0,'C');
 $pdf->Cell($w['3'],4,'','B',0,'C');
 $pdf->Cell($w['4'],4,'','BR',0,'R');
+$totalusulan = $totalpendapatan - $totalbelanja;
 $pdf->Cell($w['5'],4,number_format($totalusulan, 0, ',', '.'),'BR',0,'R');
 
 $pdf->ln();
