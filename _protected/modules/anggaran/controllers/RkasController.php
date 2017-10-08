@@ -138,6 +138,11 @@ class RkasController extends Controller
         $model = $this->findModel($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan);
 
         if ($model->load(Yii::$app->request->post())) {
+            $realisasi = \app\models\TaSpjRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan]);
+            if($realisasi && ($model->kd_program != $kd_program || $model->kd_sub_program != $kd_sub_program || $model->kd_kegiatan != $kd_kegiatan)){
+                Yii::$app->getSession()->setFlash('warning',  'Sudah ada realisasi atas Kegiatan ini.');
+                return $this->redirect(Yii::$app->request->referrer);
+            }
             IF($model->penerimaan_2)
                 list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
             IF($model->save()){
@@ -165,6 +170,11 @@ class RkasController extends Controller
             $Tahun = DATE('Y');
         }
 
+        $realisasi = \app\models\TaSpjRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan]);
+        if($realisasi){
+            Yii::$app->getSession()->setFlash('warning',  'Sudah ada realisasi atas Kegiatan ini.');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
         $this->findModel($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan)->delete();
 
         return $this->redirect(Yii::$app->request->referrer);
@@ -293,6 +303,23 @@ class RkasController extends Controller
         $model = \app\models\TaRkasBelanja::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5]);
 
         if ($model->load(Yii::$app->request->post())) {
+            $realisasi = \app\models\TaSpjRinc::findOne([
+                'tahun' => $tahun, 
+                'sekolah_id' => $sekolah_id, 
+                'kd_program' => $kd_program, 
+                'kd_sub_program' => $kd_sub_program, 
+                'kd_kegiatan' => $kd_kegiatan,
+                'Kd_Rek_1' => $Kd_Rek_1,
+                'Kd_Rek_2' => $Kd_Rek_2,
+                'Kd_Rek_3' => $Kd_Rek_3,
+                'Kd_Rek_4' => $Kd_Rek_4,
+                'Kd_Rek_5' => $Kd_Rek_5,
+            ]);
+            if($realisasi && ($model->kd_program != $kd_program || $model->kd_sub_program != $kd_sub_program || $model->kd_kegiatan != $kd_kegiatan || $model->Kd_Rek_1 != $Kd_Rek_1 || $model->Kd_Rek_2 != $Kd_Rek_2 || $model->Kd_Rek_3 != $Kd_Rek_3 || $model->Kd_Rek_4 != $Kd_Rek_4 || $model->Kd_Rek_5 != $Kd_Rek_5)){
+                Yii::$app->getSession()->setFlash('warning',  'Sudah ada realisasi atas belanja ini.');
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+
             IF($model->penerimaan_2)
                 list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
             IF($model->save()){
@@ -320,6 +347,23 @@ class RkasController extends Controller
             $Tahun = DATE('Y');
         }
 
+        $realisasi = \app\models\TaSpjRinc::findOne([
+            'tahun' => $tahun, 
+            'sekolah_id' => $sekolah_id, 
+            'kd_program' => $kd_program, 
+            'kd_sub_program' => $kd_sub_program, 
+            'kd_kegiatan' => $kd_kegiatan,
+            'Kd_Rek_1' => $Kd_Rek_1,
+            'Kd_Rek_2' => $Kd_Rek_2,
+            'Kd_Rek_3' => $Kd_Rek_3,
+            'Kd_Rek_4' => $Kd_Rek_4,
+            'Kd_Rek_5' => $Kd_Rek_5,
+        ]);
+        if($realisasi){
+            Yii::$app->getSession()->setFlash('warning',  'Sudah ada realisasi atas belanja ini.');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+
         \app\models\TaRkasBelanja::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5])->delete();
 
         return $this->redirect(Yii::$app->request->referrer);
@@ -328,8 +372,6 @@ class RkasController extends Controller
     //Bagian untuk RKAS Belanjarinci-----------------------------------------------------------------------------------------
     public function actionRkasbelanjarinci($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan)
     {
-        // NOT YET DURUNG----------------------------------------------------------------------------------
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
             return $this->redirect(Yii::$app->request->referrer);
@@ -432,6 +474,34 @@ class RkasController extends Controller
         $model = \app\models\TaRkasBelanjaRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5, 'no_rinc' => $no_rinc]);
 
         if ($model->load(Yii::$app->request->post())) {
+            $realisasi = \app\models\TaSpjRinc::find()->where([
+                'tahun' => $tahun, 
+                'sekolah_id' => $sekolah_id, 
+                'kd_program' => $kd_program, 
+                'kd_sub_program' => $kd_sub_program, 
+                'kd_kegiatan' => $kd_kegiatan,
+                'Kd_Rek_1' => $Kd_Rek_1,
+                'Kd_Rek_2' => $Kd_Rek_2,
+                'Kd_Rek_3' => $Kd_Rek_3,
+                'Kd_Rek_4' => $Kd_Rek_4,
+                'Kd_Rek_5' => $Kd_Rek_5,
+            ])->sum('nilai');
+            $budgeted = \app\models\TaRkasBelanjaRinc::find()->where([
+                'tahun' => $tahun, 
+                'sekolah_id' => $sekolah_id, 
+                'kd_program' => $kd_program, 
+                'kd_sub_program' => $kd_sub_program, 
+                'kd_kegiatan' => $kd_kegiatan,
+                'Kd_Rek_1' => $Kd_Rek_1,
+                'Kd_Rek_2' => $Kd_Rek_2,
+                'Kd_Rek_3' => $Kd_Rek_3,
+                'Kd_Rek_4' => $Kd_Rek_4,
+                'Kd_Rek_5' => $Kd_Rek_5,
+            ])->andWhere("no_rinc != $no_rinc")->sum('total');
+            if($realisasi > ($budgeted + $model->nilai)){
+                Yii::$app->getSession()->setFlash('warning',  'Sudah ada realisasi atas belanja ini yang melebihi perubahan yang diajukan.');
+                return $this->redirect(Yii::$app->request->referrer);
+            }
             $model->total = $model->nilai_rp * $model->jml_satuan;
             IF($model->save()){
                 echo 1;
@@ -456,6 +526,35 @@ class RkasController extends Controller
             $Tahun = Yii::$app->session->get('tahun');
         }ELSE{
             $Tahun = DATE('Y');
+        }
+
+        $realisasi = \app\models\TaSpjRinc::find()->where([
+            'tahun' => $tahun, 
+            'sekolah_id' => $sekolah_id, 
+            'kd_program' => $kd_program, 
+            'kd_sub_program' => $kd_sub_program, 
+            'kd_kegiatan' => $kd_kegiatan,
+            'Kd_Rek_1' => $Kd_Rek_1,
+            'Kd_Rek_2' => $Kd_Rek_2,
+            'Kd_Rek_3' => $Kd_Rek_3,
+            'Kd_Rek_4' => $Kd_Rek_4,
+            'Kd_Rek_5' => $Kd_Rek_5,
+        ])->sum('nilai');
+        $budgeted = \app\models\TaRkasBelanjaRinc::find()->where([
+            'tahun' => $tahun, 
+            'sekolah_id' => $sekolah_id, 
+            'kd_program' => $kd_program, 
+            'kd_sub_program' => $kd_sub_program, 
+            'kd_kegiatan' => $kd_kegiatan,
+            'Kd_Rek_1' => $Kd_Rek_1,
+            'Kd_Rek_2' => $Kd_Rek_2,
+            'Kd_Rek_3' => $Kd_Rek_3,
+            'Kd_Rek_4' => $Kd_Rek_4,
+            'Kd_Rek_5' => $Kd_Rek_5,
+        ])->andWhere("no_rinc != $no_rinc")->sum('total');
+        if($realisasi > $budgeted){
+            Yii::$app->getSession()->setFlash('warning',  'Sudah ada realisasi atas belanja ini yang melebihi perubahan yang diajukan.');
+            return $this->redirect(Yii::$app->request->referrer);
         }
 
         \app\models\TaRkasBelanjaRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5, 'no_rinc' => $no_rinc])->delete();

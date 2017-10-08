@@ -157,15 +157,11 @@ $this->registerJs("
             $('#kelurahan').attr('class', 'active');
 
             $('#linkKecamatan').click();
-            // if (typeof $('#linkKecamatan').onclick == \"function\") {
-            //     $('#linkKecamatan').onclick.apply($('#linkKecamatan'));
-            // }
             $('#w2-tab0').removeClass('active in');
             $('#w2-tab1').addClass('active in');
             $('#w2-tab1').html('<i class=\"fa fa-spinner fa-spin\"></i>');
             $.get(href).done(function(data){
                 $('#w2-tab1').html(data);
-                console.log('voila kelurahan');
             });
     });  
 

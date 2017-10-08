@@ -23,6 +23,127 @@ function angka($n) {
 $this->title = Yii::t('app', Yii::$app->name);
 ?>
 <div class="site-index">
+    <?php if($infoBos): ?>
+    <section>
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+                <div class="small-box bg-yellow">
+                    <div class="inner">
+                        <h3><?= $infoBos->jumlah_siswa ?></h3>
+
+                        <p>Jumlah Siswa</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-user"></i>
+                    </div>
+                    <?= Html::a('More info <i class="fa fa-arrow-circle-right"></i>', ['/parameter/datasekolah'], [
+                        'class' => 'small-box-footer'
+                    ]) ?> 
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                        <h3><?= $infoBos->jumlah_guru ?></h3>
+
+                        <p>Jumlah Guru</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-graduation-cap"></i>
+                    </div>
+                    <?= Html::a('More info <i class="fa fa-arrow-circle-right"></i>', ['/parameter/datasekolah'], [
+                        'class' => 'small-box-footer'
+                    ]) ?> 
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+                <div class="small-box bg-aqua">
+                    <div class="inner">
+                        <h3>
+                            <?= number_format((\app\models\TaRkasBelanjaRinc::find()->where([
+                                'tahun' => $infoBos->tahun_ajaran, 
+                                'sekolah_id' => $infoBos->sekolah_id,
+                                'Kd_Rek_1' => 5
+                            ])->sum('total')/1000000), 1, ',', '.').' Jt' ?>
+                        </h3>
+
+                        <p>Total Anggaran</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-pie-chart"></i>
+                    </div>
+                    <?= Html::a('More info <i class="fa fa-arrow-circle-right"></i>', ['/anggaran/rkas'], [
+                        'class' => 'small-box-footer'
+                    ]) ?> 
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+                <div class="small-box bg-red">
+                    <div class="inner">
+                        <h3>
+                            <?= number_format((\app\models\TaSpjRinc::find()->where([
+                                'tahun' => $infoBos->tahun_ajaran, 
+                                'sekolah_id' => $infoBos->sekolah_id,
+                                'Kd_Rek_1' => 5
+                            ])->sum('nilai')/1000000), 1, ',', '.').' Jt' ?>
+                        </h3>
+
+                        <p>Total Realisasi</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-shopping-cart"></i>
+                    </div>
+                    <?= Html::a('More info <i class="fa fa-arrow-circle-right"></i>', ['/penatausahaan/bukti'], [
+                        'class' => 'small-box-footer'
+                    ]) ?> 
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+        <?= ChartJs::widget([
+            'type' => 'bar',
+            'options' => [
+                'height' => 60,
+                'width' => 400
+            ],
+            'data' => [
+                'labels' => ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember" ],
+                'datasets' => [
+                    [
+                        'label' => "Sebaran Realisasi Pendapatan",
+                        'backgroundColor' => "rgba(179,181,198,0.2)",
+                        'borderColor' => "rgba(179,181,198,1)",
+                        'pointBackgroundColor' => "rgba(179,181,198,1)",
+                        'pointBorderColor' => "#fff",
+                        'pointHoverBackgroundColor' => "#fff",
+                        'pointHoverBorderColor' => "rgba(179,181,198,1)",
+                        'data' => $realisasiPendapatanGraph
+                    ],                    
+                    [
+                        'label' => "Sebaran Realisasi Belanja",
+                        'backgroundColor' => "rgba(255,99,132,0.2)",
+                        'borderColor' => "rgba(255,99,132,1)",
+                        'pointBackgroundColor' => "rgba(255,99,132,1)",
+                        'pointBorderColor' => "#fff",
+                        'pointHoverBackgroundColor' => "#fff",
+                        'pointHoverBorderColor' => "rgba(255,99,132,1)",
+                        'data' => $realisasiBelanjaGraph
+                    ]
+                ]
+            ]
+        ]);
+        ?>    
+    </section>
+    <?php endif; ?>
     <div class="well">
         <?php
           echo ListView::widget([
@@ -39,132 +160,10 @@ $this->title = Yii::t('app', Yii::$app->name);
                           </div>
                         
                       </div>
-                    ';                  
-                // }ELSE{
-                //   return '
-                //     <div class="panel panel-success">
-                //         <div class="panel-heading">
-                //             <h3 class="panel-title">'.Html::a($model->title, ['view', 'id' => $model->id], ['class' => '']).'</h3>
-                //         </div>
-                //         <div class="panel-body">
-                //         '.substr($model->content, 0, 1000).Html::a('read more...', ['view', 'id' => $model->id], ['class' => 'btn btn-xs btn-default']).'
-                //         </div>
-                      
-                //     </div>
-                //   ';                  
-                // }
+                    ';
               },
           ]);
         ?> 
     </div>
-<?php /*
-    <div class="body-content">
-    <div class ="row">
-    <div class ="col-md-6">
-        <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">Grafik Posisi Kas Harian 10 Hari Terakhir</h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body">
-              <div class="chart">
-                <?php
-                // $connection = \Yii::$app->db;           
-                // $skpd = $connection->createCommand('SELECT Tanggal, SUM(Jumlah) AS Saldo
-                // FROM Ta_Kas_Harian 
-                // GROUP BY Tanggal
-                // ORDER BY Tanggal ASC
-                // LIMIT 0, 10
-                // ');
-                // $query = $skpd->queryAll();
-                // foreach($query AS $query){
-                //     $labels[] = DATE('d-m', strtotime($query['Tanggal']));
-                //     $data[] = $query['Saldo'];
-                // }
-
-                // echo ChartJs::widget([
-                //     'type' => 'line',
-                //     'options' => [
-                //         'height' => 400,
-                //         'width' => 400
-                //     ],
-                //     'data' => [
-                //         'labels' => $labels,
-                //         'datasets' => [
-                //             [
-                //                 'label' => 'Realisasi',
-                //                 'fillColor' => "rgba(151,187,205,0.5)",
-                //                 'strokeColor' => "rgba(151,187,205,1)",
-                //                 'pointColor' => "rgba(151,187,205,1)",
-                //                 'pointStrokeColor' => "#fff",
-                //                 'data' => $data
-                //             ]
-                //         ]
-                //     ]
-                // ]);
-                ?>
-              </div>
-            </div>
-            <!-- /.box-body -->
-        </div>
-    </div>
-    <div class ="col-md-6">
-        <div class="box box-info">
-            <div class="box-header with-border">
-              <h3 class="box-title">Grafik Pelunasan Utang (Dalam Jutaan Rupiah)</h3>
-
-              <div class="box-tools pull-right">
-                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-              </div>
-            </div>
-            <div class="box-body">
-              <div class="chart">
-                <?php 
-                // echo ChartJs::widget([
-                //     'type' => 'bar',
-                //     'options' => [
-                //         'height' => 400,
-                //         'width' => 400
-                //     ],
-                //     'data' => [
-                //         'labels' => ["January", "February", "March", "April", "May", "June", "July"],
-                //         'datasets' => [
-                //             [
-                //                 'label' => 'Anggaran',
-                //                 'fillColor' => "rgba(220,220,220,0.5)",
-                //                 'strokeColor' => "rgba(220,220,220,1)",
-                //                 'pointColor' => "rgba(220,220,220,1)",
-                //                 'pointStrokeColor' => "#fff",
-                //                 'data' => [65, 59, 90, 81, 56, 55, 40]
-                //             ],
-                //             [
-                //                 'label' => 'Realisasi',
-                //                 'fillColor' => "rgba(151,187,205,0.5)",
-                //                 'strokeColor' => "rgba(151,187,205,1)",
-                //                 'pointColor' => "rgba(151,187,205,1)",
-                //                 'pointStrokeColor' => "#fff",
-                //                 'data' => [28, 48, 40, 19, 96, 27, 100]
-                //             ]
-                //         ]
-                //     ]
-                // ]);
-                ?>
-              </div>
-            </div>
-            <!-- /.box-body -->
-        </div>
-    </div>    
-    <!-- /.box -->
-
-    </div>
-    </div>
-*/ ?>
 </div>
 

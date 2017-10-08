@@ -97,6 +97,16 @@ class BuktiController extends Controller
         $modelPotongan->no_bukti = $no_bukti;
         $modelPotongan->sekolah_id = Yii::$app->user->identity->sekolah_id;
 
+        $asetTetap = new \app\models\TaAsetTetap();
+        $asetTetap->tahun = $Tahun;
+        if(Yii::$app->user->identity->sekolah_id){
+            $asetTetap->sekolah_id = Yii::$app->user->identity->sekolah_id;
+        }
+
+        $dataProviderAset = new ActiveDataProvider([
+            'query' => \app\models\TaAsetTetap::find()->where(['tahun' => $tahun, 'referensi_bukti' => $no_bukti]),
+        ]);
+
         if ($modelPotongan->load(Yii::$app->request->post())) {
             $modelPotongan->nilai = str_replace(',', '.', $model->nilai);
             if($modelPotongan->save()){
@@ -109,7 +119,9 @@ class BuktiController extends Controller
             return $this->render('view', [
                 'model' => $model,
                 'modelPotongan' => $modelPotongan,
-                'dataProvider' => $dataProvider
+                'dataProvider' => $dataProvider,
+                'asetTetap' => $asetTetap,
+                'dataProviderAset' => $dataProviderAset
             ]);
         }
     
@@ -235,6 +247,7 @@ class BuktiController extends Controller
                 LEFT JOIN ref_rek_5 e ON a.Kd_Rek_1 = e.Kd_Rek_1 AND a.Kd_Rek_2 = e.Kd_Rek_2 AND a.Kd_Rek_3 = e.Kd_Rek_3 AND a.Kd_Rek_4 = e.Kd_Rek_4 AND a.Kd_Rek_5 = e.Kd_Rek_5
                 ");            
             $sisa_anggaran = $query->queryOne();
+            // return var_dump($sisa_anggaran);
             $result = 1;
             IF($sisa_anggaran['sisa_anggaran'] < $model->nilai){
                 $result = 0;

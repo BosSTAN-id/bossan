@@ -35,7 +35,8 @@
         "kartik-v/yii2-builder": "@dev",
         "2amigos/yii2-ckeditor-widget": "^2.0",
         "fedemotta/yii2-widget-datatables": "*",
-        "2amigos/qrcode-library": "dev-master"
+        "2amigos/qrcode-library": "dev-master",
+        "thamtech/yii2-uuid": "^1.0"
     },
     "require-dev": {
         "codeception/codeception": "*",

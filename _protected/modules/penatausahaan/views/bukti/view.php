@@ -9,6 +9,7 @@ use kartik\select2\Select2;
 use yii\widgets\MaskedInput;
 use yii\bootstrap\Collapse;
 use kartik\grid\GridView;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\TaSPJRinc */
@@ -186,6 +187,75 @@ $this->params['breadcrumbs'][] = $this->title;
         ]
     ]).$gridPotongan;
 
+
+    // Form Aset object
+    $formAset = '';
+    ob_start();
+    echo $this->render('_aset-tetap-form', ['model' => $asetTetap, 'bukti' => $model]);
+    if($model->no_spj == NULL) $formAset = ob_get_contents();
+    ob_end_clean();
+    
+    $bukti = clone $model;
+    // grid Aset
+    $gridAset = GridView::widget([
+        'id'=>'aset-datatable',
+        'dataProvider' => $dataProviderAset,
+        'pjax'=>true,
+        'columns' => [
+            ['class' => 'kartik\grid\SerialColumn'],
+            'kdAset5.Nm_Aset5',
+            'nilai_perolehan:decimal',
+            [
+                'class' => 'kartik\grid\ActionColumn',
+                'template' => '{delete}', //
+                'controller' => '/asettetap/inventarisasi',
+                'noWrap' => true,
+                'visibleButtons' => [
+                    'delete' => function($model) use ($bukti){
+                        if($bukti->no_spj == null) return true;
+                        return false;
+                    }
+                ],
+                'vAlign'=>'top',
+                'buttons' => [
+                        'update' => function ($url, $model) {
+                          IF($model->no_spj == NULL)
+                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
+                              [  
+                                 'title' => Yii::t('yii', 'ubah'),
+                                 'data-toggle'=>"modal",
+                                 'data-target'=>"#myModal",
+                                 'data-title'=> "Ubah Bukti",                                 
+                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                 // 'data-method' => 'POST',
+                                 // 'data-pjax' => 1
+                              ]);
+                        },
+                ]
+            ],            
+        ],          
+        'striped' => true,
+        'condensed' => true,
+        'responsive' => true,          
+        'panel' => [
+            'type' => 'primary', 
+            'heading' => '<i class="glyphicon glyphicon-list"></i> Daftar Aset',
+        ]
+    ]);
+    
+    // tab potongan
+    $asetContent = 
+    Collapse::widget([
+        'items' => [
+            [
+                'label' => '<i class="glyphicon glyphicon-plus"></i> Tambah Aset',
+                'encode' => false,
+                'content' => $formAset,
+                'options' => ['class' => 'panel panel-danger'],
+            ],
+        ]
+    ]).$gridAset;    
+
     // tab navigation
     echo TabsX::widget([
         'items'=>[
@@ -203,6 +273,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => [
                     // 'class'=>'disabled', 
                     'id' => 'kelurahan'
+                ]
+            ], 
+            [
+                'label'=>'<i class="glyphicon glyphicon-home"></i> Aset Tetap',
+                'content'=> $asetContent,
+                'linkOptions'=>['id'=>'linkAset'],
+                'headerOptions' => [
+                    // 'class'=>'disabled', 
+                    'id' => 'asettetap'
                 ]
             ],            
         ],
@@ -240,4 +319,34 @@ $('form#{$modelPotongan->formName()}').on('beforeSubmit',function(e)
 
 JS;
 $this->registerJs($script);
+?>
+<?php 
+Modal::begin([
+    'id' => 'modalAset',
+    'header' => '<h4 class="modal-title">Daftar Klasifikasi Aset Tetap...</h4>',
+    'options' => [
+        'tabindex' => false // important for Select2 to work properly
+    ], 
+    'size' => 'modal-lg',
+]);
+ 
+echo '...';
+ 
+Modal::end();
+$this->registerJs(<<<JS
+    $('#modalAset').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var modal = $(this)
+        var title = button.data('title') 
+        var href = button.attr('href') 
+        modal.find('.modal-title').html(title)
+        modal.find('.modal-body').html('<i class=\"fa fa-spinner fa-spin\"></i>')
+        $.post(href)
+        .done(function( data ) {
+            modal.find('.modal-body').html(data)
+        });
+    })
+
+JS
+);
 ?>

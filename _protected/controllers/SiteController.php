@@ -132,11 +132,75 @@ class SiteController extends Controller
             'pagination' => [
                 'pageSize' => $sticky + 3,
             ],
-        ]);                
+        ]);
+
+        // if user sekolah
+        $infoBos = $realisasiGraphArray = null;
+        if(Yii::$app->user->identity->sekolah_id){
+            $sekolah_id = Yii::$app->user->identity->sekolah_id;
+            $infoBos = \app\models\TaInfoBos::find()->where([
+                'sekolah_id' => $sekolah_id,
+            ])->orderBy('id DESC')->one();
+            $realisasiBelanjaGraph = Yii::$app->db->createCommand("
+                SELECT 1 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-01-%'
+                UNION ALL
+                SELECT 2 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-02-%'
+                UNION ALL
+                SELECT 3 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-03-%'
+                UNION ALL
+                SELECT 4 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-04-%'
+                UNION ALL
+                SELECT 5 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-05-%'
+                UNION ALL
+                SELECT 6 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-06-%'
+                UNION ALL
+                SELECT 7 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-07-%'
+                UNION ALL
+                SELECT 8 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-08-%'
+                UNION ALL
+                SELECT 9 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-09-%'
+                UNION ALL
+                SELECT 10 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-10-%'
+                UNION ALL
+                SELECT 11 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-11-%'
+                UNION ALL
+                SELECT 12 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-12-%'            
+            ")->queryAll();
+            $realisasiBelanjaGraphArray = \yii\helpers\ArrayHelper::getColumn($realisasiBelanjaGraph, 'nilai');
+            $realisasiPendapatanGraph = Yii::$app->db->createCommand("
+            SELECT 1 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 4 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-01-%'
+            UNION ALL
+            SELECT 2 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 4 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-02-%'
+            UNION ALL
+            SELECT 3 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 4 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-03-%'
+            UNION ALL
+            SELECT 4 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 4 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-04-%'
+            UNION ALL
+            SELECT 5 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 4 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-05-%'
+            UNION ALL
+            SELECT 6 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 4 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-06-%'
+            UNION ALL
+            SELECT 7 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 4 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-07-%'
+            UNION ALL
+            SELECT 8 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 4 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-08-%'
+            UNION ALL
+            SELECT 9 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 4 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-09-%'
+            UNION ALL
+            SELECT 10 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 4 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-10-%'
+            UNION ALL
+            SELECT 11 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 4 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-11-%'
+            UNION ALL
+            SELECT 12 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 4 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-12-%'            
+        ")->queryAll();
+        $realisasiPendapatanGraphArray = \yii\helpers\ArrayHelper::getColumn($realisasiPendapatanGraph, 'nilai');            
+        }
         return $this->render('index',[
-                    'dataProvider' => $dataProvider,
-                ]);
-        
+            'dataProvider' => $dataProvider,
+            'infoBos' => $infoBos,
+            'realisasiBelanjaGraph' => $realisasiBelanjaGraphArray,
+            'realisasiPendapatanGraph' => $realisasiPendapatanGraphArray,
+        ]);
+
     }
 
     // Bagian ini untuk menampilkan pengumuman

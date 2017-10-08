@@ -6,6 +6,7 @@ use Yii;
 use app\models\TaSubUnit;
 use app\modules\management\models\TaSubUnitSearch;
 use app\modules\parameter\models\TaSekolahJabSearch;
+use app\modules\parameter\models\TaInfoBosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -53,6 +54,10 @@ class DatasekolahController extends Controller
         $searchModel = new TaSekolahJabSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['Tahun' => $Tahun, 'sekolah_id' => $sekolah_id]);
+        $searchModelInfo = new TaInfoBosSearch();
+        $dataProviderInfo = $searchModelInfo->search(Yii::$app->request->queryParams);
+        $dataProviderInfo->query->andWhere(['tahun_ajaran' => $Tahun, 'sekolah_id' => $sekolah_id]);
+        $dataProviderInfo->query->orderBy('id DESC');
 
         if ($model && $model->load(Yii::$app->request->post())) {
             if(isset($model->kecamatanKelurahan) && $model->kecamatanKelurahan != NULL){
@@ -67,6 +72,8 @@ class DatasekolahController extends Controller
                 'model' => $model,
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
+                'searchModelInfo' => $searchModelInfo,
+                'dataProviderInfo' => $dataProviderInfo,
             ]);
         }
     }

@@ -32,14 +32,18 @@ IF(Yii::$app->session->get('tahun'))
                 <?php 
                 IF(!Yii::$app->user->isGuest):
                 ?>
-                <li class="dropdown tahun user-menu">
+                <li class="dropdown notifications-menu tahun">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-flag"></i><span class="hidden-xs"> Tahun Anggaran:</span> <?= Yii::$app->session->get('tahun') ? Yii::$app->session->get('tahun') : 'Pilih!' ?>
                     </a>
                     <ul class="dropdown-menu">
-                        <?php foreach($tahun as $tahun): ?>
-                        <li><?= Html::a($tahun['Tahun'], ['/site/tahun', 'id' => $tahun['Tahun']]) ?></li>
-                        <?php endforeach;?>
+                        <li>
+                            <ul class="menu">
+                                <?php foreach($tahun as $tahun): ?>
+                                <li><?= Html::a($tahun['Tahun'], ['/site/tahun', 'id' => $tahun['Tahun']]) ?></li>
+                                <?php endforeach;?>
+                            </ul>
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown user user-menu">

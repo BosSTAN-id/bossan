@@ -14,8 +14,6 @@ use yii\helpers\ArrayHelper;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Data Sekolah');
-$this->params['breadcrumbs'][] = 'Parameter';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ta-sub-unit-index">
 
@@ -29,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'hideIfEmpty' => false, //sembunyikan row ketika kosong
             'panel'=>[
                 'heading'=>'<i class="fa fa-tag"></i> Data Umum Sekolah</h3>',
-                'type'=>'warning',
+                'type'=>'danger',
                 'headingOptions' => [
                     'tag' => 'h3', //tag untuk heading
                 ],
@@ -141,6 +139,10 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
+    <?= $this->render('/infobos/index', [
+        'dataProvider' => $dataProviderInfo
+    ]) ?>
 </div>
 <?php 
     Modal::begin([

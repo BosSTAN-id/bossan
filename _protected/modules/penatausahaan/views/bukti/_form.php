@@ -30,30 +30,6 @@ use yii\bootstrap\Modal;
 
     <div class="row">
         <div class="col-md-6 col-sm-6 col-xs-6">
-            <?= $form->field($model, 'nilai', ['enableClientValidation' => false])->widget(MaskedInput::classname(), [
-                    'clientOptions' => [
-                        'alias' =>  'decimal',
-                        // 'groupSeparator' => ',',
-                        'groupSeparator' => '.',
-                        'radixPoint'=>',',                
-                        'autoGroup' => true,
-                        'removeMaskOnSubmit' => true,
-                    ],
-            ]) ?>     
-        </div>
-
-        <div class="col-md-6 col-sm-6 col-xs-6">
-            <?= $form->field($model, 'pembayaran')->radioList([1 => 'Bank', 2 => 'Tunai'], [
-                'item' => function ($index, $label, $name, $checked, $value) {
-                    return '<label class="radio-inline">' . Html::radio($name, $checked, ['value'  => $value]) . $label . '</label>';
-                }
-            ]); ?>
-        </div> <!--col-->
-
-    </div> <!--row-->
-
-    <div class="row">
-        <div class="col-md-6 col-sm-6 col-xs-6">
             <?= $form->field($model, 'no_bukti')->textInput(['maxlength' => true]) ?>
         </div>
 
@@ -129,6 +105,31 @@ use yii\bootstrap\Modal;
         </div> <!--col-->
 
     </div> <!--row-->
+
+    <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-6">
+            <?= $form->field($model, 'nilai', ['enableClientValidation' => false])->widget(MaskedInput::classname(), [
+                    'clientOptions' => [
+                        'alias' =>  'decimal',
+                        // 'groupSeparator' => ',',
+                        'groupSeparator' => '.',
+                        'radixPoint'=>',',                
+                        'autoGroup' => true,
+                        'removeMaskOnSubmit' => true,
+                    ],
+            ]) ?>     
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-6">
+            <?= $form->field($model, 'pembayaran')->radioList([1 => 'Bank', 2 => 'Tunai'], [
+                'item' => function ($index, $label, $name, $checked, $value) {
+                    return '<label class="radio-inline">' . Html::radio($name, $checked, ['value'  => $value]) . $label . '</label>';
+                }
+            ]); ?>
+        </div> <!--col-->
+
+    </div> <!--row-->
+    
 
     <div class="row">
         <div class="col-md-6 col-sm-6 col-xs-6">

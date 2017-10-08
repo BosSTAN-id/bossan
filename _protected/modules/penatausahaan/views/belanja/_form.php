@@ -21,11 +21,11 @@ use yii\widgets\MaskedInput;
 
     <?= $form->field($model, 'no_bukti')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model, 'tgl_bukti')->widget(\yii\jui\DatePicker::classname(), [
-            'language' => 'id',
-            'dateFormat' => 'yyyy-MM-dd',
-            'options' => ['class' => 'form-control']
-        ]) ?>   
+    <?= $form->field($model, 'tgl_bukti')->widget(\yii\jui\DatePicker::classname(), [
+        'language' => 'id',
+        'dateFormat' => 'yyyy-MM-dd',
+        'options' => ['class' => 'form-control']
+    ]) ?>   
         
     <?php 
             echo $form->field($model, 'kd_program')->widget(Select2::classname(), [
