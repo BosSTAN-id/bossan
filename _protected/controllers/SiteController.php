@@ -135,7 +135,7 @@ class SiteController extends Controller
         ]);
 
         // if user sekolah
-        $infoBos = $realisasiGraphArray = null;
+        $infoBos = $realisasiPendapatanGraphArray = $realisasiBelanjaGraphArray = null;
         if(Yii::$app->user->identity->sekolah_id){
             $sekolah_id = Yii::$app->user->identity->sekolah_id;
             $infoBos = \app\models\TaInfoBos::find()->where([
