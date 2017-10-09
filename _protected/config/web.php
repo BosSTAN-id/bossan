@@ -47,19 +47,10 @@ $config = [
 
         'management' => [
             'class' => 'app\modules\management\management',
-        ],        
-        // 'controlhutang' => [
-        //     'class' => 'app\modules\controlhutang\controlhutang',
-        // ],    
-        // 'controltransfer' => [
-        //     'class' => 'app\modules\controltransfer\controltransfer',
-        // ],                 
-        // 'kasharian' => [
-        //     'class' => 'app\modules\kasharian\kasharian',
-        // ],  
-        // 'controlaset' => [
-        //     'class' => 'app\modules\controlaset\controlaset',
-        // ],              
+        ],
+        'asettetap' => [
+            'class' => 'app\modules\asettetap\Module',
+        ],             
     
     ],     
     'components' => [
