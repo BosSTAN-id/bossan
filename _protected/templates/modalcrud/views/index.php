@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     'class' => 'btn btn-xs btn-success',
                                                     'data-toggle'=>"modal",
                                                     'data-target'=>"#myModal",
-                                                    'data-title'=>"Tambah <?= $generator->generateString('Tambah ' . Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>",
+                                                    'data-title'=>"<?= $generator->generateString('Tambah ' . Inflector::camel2words(StringHelper::basename($generator->modelClass))) ?>",
                                                     ]) ?>
     </p>
 <?php if ($generator->indexWidgetType === 'grid'): ?>
