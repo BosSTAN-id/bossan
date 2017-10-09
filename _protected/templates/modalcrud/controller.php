@@ -60,6 +60,8 @@ class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->bas
         ];
     }
 
+    private $menu = 101;
+
     /**
      * Lists all <?= $modelClass ?> models.
      * @return mixed
@@ -240,7 +242,7 @@ if (count($pks) === 1) {
     protected function cekakses(){
 
         IF(Yii::$app->user->identity){
-            $akses = \app\models\RefUserMenu::find()->where(['kd_user' => Yii::$app->user->identity->kd_user, 'menu' => 401])->one();
+            $akses = \app\models\RefUserMenu::find()->where(['kd_user' => Yii::$app->user->identity->kd_user, 'menu' => $this->menu])->one();
             IF($akses){
                 return true;
             }else{
