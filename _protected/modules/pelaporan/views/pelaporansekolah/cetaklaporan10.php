@@ -40,19 +40,22 @@ class PDF_Rotate extends \fpdf\FPDF
 class PDF extends PDF_Rotate
 {
 
-    function Footer()
-    {
-        //ambil link
-        // $link = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];        
-        // $this->Image("http://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$link", 156, 320 ,5,0,'PNG');        
-        // Go to 1.5 cm from bottom
-        $this->SetY(-15);
-        // Select Arial italic 8
-        $this->SetFont('Arial','I',8);
-        // Print centered page number
-        $this->Cell(0,10,'Printed By BosSTAN '.$this->PageNo().'/{nb}',0,0,'R');
+    function setFooterSumberDana($footerSumberDana){
+        $this->footerSumberDana = $footerSumberDana;
     }
 
+    function Footer()
+    {
+
+        $this->SetY(-15);
+        $this->SetFont('Arial','I',8);
+        $this->Cell(0,10,'Printed By BosSTAN '.$this->PageNo().'/{nb}',0,0,'R');
+        $this->Image(\yii\helpers\Url::to(['/site/qr', 'url' => Yii::$app->request->absoluteUrl], true), $this->getX()+5, $this->getY()-5 , 15, 0,'PNG'); // 156, 320
+        if($this->footerSumberDana){
+            $this->SetX(15);
+            $this->Cell(0,10,'Laporan ini memuat Anggaran dari '.$this->footerSumberDana->kdPenerimaan1->uraian_penerimaan_1.' - '.$this->footerSumberDana->uraian,0,0,'L');
+        }
+    }
 
     function RotatedText($x, $y, $txt, $angle)
     {
@@ -148,6 +151,8 @@ function terbilang($x, $style=4) {
     }     
     return $hasil;
 }
+
+$pdf->setFooterSumberDana($footerSumberDana);
 
 //Menambahkan halaman, untuk menambahkan halaman tambahkan command ini. P artinya potrait dan L artinya Landscape
 $pdf->AddPage();
@@ -250,6 +255,7 @@ $kd_program = $kd_sub_program = $kd_kegiatan = $kd_rek_1 = $kd_rek_2 = $kd_rek_3
 $totalusulan = 0;
 $kegiatanlama = NULL;
 $totalbelanja = 0;
+$totalpendapatan = 0;
 
 foreach($data as $data){
 

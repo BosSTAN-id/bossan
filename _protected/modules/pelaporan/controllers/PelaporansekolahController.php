@@ -1960,6 +1960,7 @@ class PelaporansekolahController extends Controller
                 list($kd_penerimaan_1, $kd_penerimaan_2) = explode('.', $getparam['Laporan']['Kd_Sumber']);
                 IF($kd_penerimaan_1 == 0) $kd_penerimaan_1 = '%';
                 IF($kd_penerimaan_2 == 0) $kd_penerimaan_2 = '%';
+                $footerSumberDana = \app\models\RefPenerimaanSekolah2::find()->where(['kd_penerimaan_1' => $kd_penerimaan_1, 'kd_penerimaan_2' => $kd_penerimaan_2])->one();
             }
             IF($getparam['Laporan']['Kd_Laporan']){
                 $Kd_Laporan = Yii::$app->request->queryParams['Laporan']['Kd_Laporan'];
@@ -3218,7 +3219,8 @@ class PelaporansekolahController extends Controller
             'getparam' => $getparam,
             'Tahun' => $Tahun,
             'peraturan' => $peraturan,
-            'ref' => $references
+            'ref' => $references,
+            'footerSumberDana' => isset($footerSumberDana) ? $footerSumberDana : null,
         ]);
     }
 

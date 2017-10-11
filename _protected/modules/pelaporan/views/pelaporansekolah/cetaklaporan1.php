@@ -5,18 +5,22 @@ use yii\db\Expression;
 
 class PDF extends \fpdf\FPDF
 {
-	function Footer()
-	{
-		//ambil link
-		$link = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];		
-		// $this->Image("http://api.qrserver.com/v1/create-qr-code/?size=150x150&data=$link", 280, 203 ,5,0,'PNG');		
-	    // Go to 1.5 cm from bottom
-	    $this->SetY(-15);
-	    // Select Arial italic 8
-	    $this->SetFont('Arial','I',8);
-	    // Print centered page number
-	    $this->Cell(0,10,'Printed By BosSTAN | '.$this->PageNo().'/{nb}',0,0,'R');
-	}
+    function setFooterSumberDana($footerSumberDana){
+        $this->footerSumberDana = $footerSumberDana;
+    }
+
+    function Footer()
+    {
+
+        $this->SetY(-15);
+        $this->SetFont('Arial','I',8);
+        $this->Cell(0,10,'Printed By BosSTAN '.$this->PageNo().'/{nb}',0,0,'R');
+        $this->Image(\yii\helpers\Url::to(['/site/qr', 'url' => Yii::$app->request->absoluteUrl], true), $this->getX()-55, $this->getY()-5 , 15, 0,'PNG'); // 156, 320
+        if($this->footerSumberDana){
+            $this->SetX(15);
+            $this->Cell(0,10,'Laporan ini memuat Anggaran dari '.$this->footerSumberDana->kdPenerimaan1->uraian_penerimaan_1.' - '.$this->footerSumberDana->uraian,0,0,'L');
+        }
+    }
 
 }
 
@@ -115,6 +119,7 @@ function terbilang($x, $style=4) {
 
 // $pdf->SetRightMargin(180)
 
+$pdf->setFooterSumberDana($footerSumberDana);
 $border = 0;
 $pdf->AddPage();
 $pdf->SetAutoPageBreak(true,10);
@@ -429,6 +434,7 @@ $pdf->Cell($w['5'],6,number_format($jumlah_belanja, 0, ',', '.'),'BR',0,'C');
 $pdf->ln();
 
 //Menampilkan tanda tangan
+IF(($pdf->gety()+6) >= 160) $pdf->AddPage();
 $pdf->SetXY(215,$pdf->gety()+10);
 $pdf->SetFont('Arial','B',10);
 $pdf->MultiCell(100,5,$peraturan->sekolah->refKecamatan->Nm_Kecamatan.', '.DATE('j', strtotime($peraturan['tgl_peraturan'])).' '.bulan(DATE('m', strtotime($peraturan['tgl_peraturan']))).' '.DATE('Y', strtotime($peraturan['tgl_peraturan'])), '', 'J', 0);
