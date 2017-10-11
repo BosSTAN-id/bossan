@@ -134,7 +134,7 @@
                             ['label' => 'Verifikasi SPJ', 'icon' => 'circle-o', 'url' => ['/pelaporan/verpemda'], 'visible' => akses(603)],                           
                         ],
                     ],
-                    ['label' => 'Panduan Penggunaan', 'icon' => 'circle-o', 'url' => ['/images/bosstan v1.1.0 documentation book.pdf'], 'visible' => !Yii::$app->user->isGuest, 'options' => ['onclick' => "return !window.open('".yii\helpers\Url::to('/images/bosstan v1.1.0 documentation book.pdf', true)."', 'SPJ', 'width=1024,height=768')"]] 
+                    ['label' => 'Panduan Penggunaan', 'icon' => 'circle-o', 'url' => ['/images/bosstan_documentation_book.pdf'], 'visible' => !Yii::$app->user->isGuest, 'options' => ['onclick' => "return !window.open('".yii\helpers\Url::to('/images/bosstan_documentation_book.pdf', true)."', 'SPJ', 'width=1024,height=768')"]] 
                 ],
             ]
         ) ?>
