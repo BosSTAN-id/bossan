@@ -89,7 +89,7 @@ $this->title = Yii::t('app', Yii::$app->name);
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                            <?= number_format((\app\models\TaSpjRinc::find()->where([
+                            <?= number_format((\app\models\TaSPJRinc::find()->where([
                                 'tahun' => $infoBos->tahun_ajaran, 
                                 'sekolah_id' => $infoBos->sekolah_id,
                                 'Kd_Rek_1' => 5
