@@ -32,10 +32,11 @@ class TaAsetTetap extends \yii\db\ActiveRecord
         return [
             [['tahun', 'sekolah_id', 'Kd_Aset1', 'Kd_Aset2', 'Kd_Aset3', 'Kd_Aset4', 'Kd_Aset5', 'no_register'], 'required'],
             [['tahun', 'tgl_perolehan'], 'safe'],
-            [['jumlahBarang', 'sekolah_id', 'Kd_Aset1', 'Kd_Aset2', 'Kd_Aset3', 'Kd_Aset4', 'Kd_Aset5', 'no_urut', 'kepemilikan', 'sumber_perolehan', 'kondisi', 'created_at', 'updated_at'], 'integer'],
+            [['sekolah_id', 'Kd_Aset1', 'Kd_Aset2', 'Kd_Aset3', 'Kd_Aset4', 'Kd_Aset5', 'no_urut', 'kepemilikan', 'sumber_perolehan', 'kondisi', 'created_at', 'updated_at'], 'integer'],
             [['nilai_perolehan', 'masa_manfaat', 'nilai_sisa'], 'number'],
             [['no_register'], 'string', 'max' => 100],
             [['kode25'], 'string'],
+            [['jumlahBarang'], 'integer', 'max' => 500],
             [['referensi_bukti', 'keterangan', 'attr1', 'attr2', 'attr3', 'attr4', 'attr5', 'attr6', 'attr7', 'attr8', 'attr9', 'attr10'], 'string', 'max' => 255],
             [['tahun', 'sekolah_id', 'Kd_Aset1', 'Kd_Aset2', 'Kd_Aset3', 'Kd_Aset4', 'Kd_Aset5', 'no_register'], 'unique', 'targetAttribute' => ['tahun', 'sekolah_id', 'Kd_Aset1', 'Kd_Aset2', 'Kd_Aset3', 'Kd_Aset4', 'Kd_Aset5', 'no_register'], 'message' => 'The combination of Tahun, Sekolah ID, Kd  Aset1, Kd  Aset2, Kd  Aset3, Kd  Aset4, Kd  Aset5 and No Register has already been taken.'],
         ];
