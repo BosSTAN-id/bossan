@@ -474,6 +474,9 @@ class RkasController extends Controller
         $model = \app\models\TaRkasBelanjaRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5, 'no_rinc' => $no_rinc]);
 
         if ($model->load(Yii::$app->request->post())) {
+            $model->nilai_rp = str_replace(',', '.', $model->nilai_rp);
+            $model->jml_satuan = str_replace(',', '.', $model->jml_satuan);
+            $model->total = $model->nilai_rp * $model->jml_satuan;
             $realisasi = \app\models\TaSpjRinc::find()->where([
                 'tahun' => $tahun, 
                 'sekolah_id' => $sekolah_id, 
@@ -498,11 +501,11 @@ class RkasController extends Controller
                 'Kd_Rek_4' => $Kd_Rek_4,
                 'Kd_Rek_5' => $Kd_Rek_5,
             ])->andWhere("no_rinc != $no_rinc")->sum('total');
-            if($realisasi > ($budgeted + $model->nilai)){
+            if($realisasi > ($budgeted + $model->total)){
                 Yii::$app->getSession()->setFlash('warning',  'Sudah ada realisasi atas belanja ini yang melebihi perubahan yang diajukan.');
                 return $this->redirect(Yii::$app->request->referrer);
             }
-            $model->total = $model->nilai_rp * $model->jml_satuan;
+            // return var_dump($model->validate());
             IF($model->save()){
                 echo 1;
             }ELSE{

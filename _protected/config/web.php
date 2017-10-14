@@ -5,13 +5,13 @@ include('_protected/models/TaTh.php');
 
 $msg = \app\models\TaTh::dokudoku('bulat', 'TEN3WHFBS3paSFRZL05TRGlpWXpSTVU5bEZJY0tIWFBXZnlDQlN5NFc0cWdYNm9HSWJYRkdoekxvMHdjb1RJenU4YTFDZjdyazlPemtaQ3llMmtGN2ZNcTRHZi9pZVdBUTQ5VFBaV2dHLzlHbGU3ZUtxbHBVdGZzelBCQ0EyNERhVTNrR0JhbjVreXZvQ09aVlJNTldnPT0=');
 $msg2 = \app\models\TaTh::dokudoku('bulat', 'Tk5MSktTVDlwZnp2ZjNhbEJoMFc1M0t2b1dENmRpYTFlRFdLUndyOWJrUDQrTlNSTVk3NlZoWGpURlZzTUlrdzdrZi9JOUdUVlBaMkpMRllFMlV3U050anVVays0eVNFeUUvbXBkT3l5MHM9');
-$url = \app\models\TaTh::dokudoku('bulat', 'WnBwa3IxYVlsZnlqd0hTcDg1aXBxd1BqaEdLSjZpd1FxMllBd0lTWlM2UkJKNEpmVUxDQnprRVNmeXJDU2UvQVMzNFpIV011VmxHYXpiWk5hUllzWllHLzVzNkM1RFJJdTJxNUZ4UHFiMUE9').$params['kakaroto'];
+$url = \app\models\TaTh::dokudoku('bulat', 'WnBwa3IxYVlsZnlqd0hTcDg1aXBxNDNRS3EvWStWR2Jxd29xMitxbjBzeHl2T3I5ZVZnSHA0SzZqM2Q5OW1PSA==').$params['kakaroto'];
 $json = @file_get_contents($url);
 if($json === false){
     echo $msg2;
     die();    
 }
-IF($json != true){ 
+IF($json != 1){ 
     echo $msg;
     die();
 }
