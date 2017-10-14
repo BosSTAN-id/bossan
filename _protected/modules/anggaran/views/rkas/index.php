@@ -76,7 +76,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </a> 
                     <div class="info-box-content">
                         <?= Html::a('<span class="info-box-text">BELANJA TIDAK LANGSUNG</span>', ['rkasbtl'], []) ?>
-                        Anggaran Belanja Tidak Langsung diisi dengan rencana belanja tidak langsung (hanya apabila gaji dan tunjangan pegawai diserahkan kepada sekolah, jika tidak maka tidak perlu diisi.)
+                        Anggaran Belanja Tidak Langsung diisi dengan rencana belanja tidak langsung.
                         <span class="info-box-number"><?= angka($btl) ?></span>
                     </div><!-- /.info-box-content -->
                 </div><!-- /.info-box -->
