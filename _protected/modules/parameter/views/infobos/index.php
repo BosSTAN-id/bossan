@@ -35,8 +35,8 @@ use yii\bootstrap\Modal;
             'tahun_ajaran',
             'jumlah_guru',
             'jumlah_siswa',
-            'satuan_bos:currency',
-            'jumlah_dana_bos:currency',
+            'satuan_bos:decimal',
+            'jumlah_dana_bos:decimal',
 
             [
                 'class' => 'kartik\grid\ActionColumn',

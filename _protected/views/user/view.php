@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             </span>',
                 'format' => 'raw'
             ],
-            'refSubUnit.Nm_Sub_Unit',
+            // 'refSubUnit.Nm_Sub_Unit',
             //'auth_key',
             //'password_reset_token',
             //'account_activation_token',

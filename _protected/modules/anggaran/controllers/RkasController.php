@@ -138,7 +138,7 @@ class RkasController extends Controller
         $model = $this->findModel($tahun, $sekolah_id, $kd_program, $kd_sub_program, $kd_kegiatan);
 
         if ($model->load(Yii::$app->request->post())) {
-            $realisasi = \app\models\TaSpjRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan]);
+            $realisasi = \app\models\TaSPJRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan]);
             if($realisasi && ($model->kd_program != $kd_program || $model->kd_sub_program != $kd_sub_program || $model->kd_kegiatan != $kd_kegiatan)){
                 Yii::$app->getSession()->setFlash('warning',  'Sudah ada realisasi atas Kegiatan ini.');
                 return $this->redirect(Yii::$app->request->referrer);
@@ -170,7 +170,7 @@ class RkasController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $realisasi = \app\models\TaSpjRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan]);
+        $realisasi = \app\models\TaSPJRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan]);
         if($realisasi){
             Yii::$app->getSession()->setFlash('warning',  'Sudah ada realisasi atas Kegiatan ini.');
             return $this->redirect(Yii::$app->request->referrer);
@@ -303,7 +303,7 @@ class RkasController extends Controller
         $model = \app\models\TaRkasBelanja::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5]);
 
         if ($model->load(Yii::$app->request->post())) {
-            $realisasi = \app\models\TaSpjRinc::findOne([
+            $realisasi = \app\models\TaSPJRinc::findOne([
                 'tahun' => $tahun, 
                 'sekolah_id' => $sekolah_id, 
                 'kd_program' => $kd_program, 
@@ -347,7 +347,7 @@ class RkasController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $realisasi = \app\models\TaSpjRinc::findOne([
+        $realisasi = \app\models\TaSPJRinc::findOne([
             'tahun' => $tahun, 
             'sekolah_id' => $sekolah_id, 
             'kd_program' => $kd_program, 
@@ -477,7 +477,7 @@ class RkasController extends Controller
             $model->nilai_rp = str_replace(',', '.', $model->nilai_rp);
             $model->jml_satuan = str_replace(',', '.', $model->jml_satuan);
             $model->total = $model->nilai_rp * $model->jml_satuan;
-            $realisasi = \app\models\TaSpjRinc::find()->where([
+            $realisasi = \app\models\TaSPJRinc::find()->where([
                 'tahun' => $tahun, 
                 'sekolah_id' => $sekolah_id, 
                 'kd_program' => $kd_program, 
@@ -531,7 +531,7 @@ class RkasController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $realisasi = \app\models\TaSpjRinc::find()->where([
+        $realisasi = \app\models\TaSPJRinc::find()->where([
             'tahun' => $tahun, 
             'sekolah_id' => $sekolah_id, 
             'kd_program' => $kd_program, 
