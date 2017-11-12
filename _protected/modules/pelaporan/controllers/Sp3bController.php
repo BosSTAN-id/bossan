@@ -542,7 +542,7 @@ class Sp3bController extends Controller
         }ELSE{
             $Tahun = DATE('Y');
         }
-        $model = $this->findModel($tahun, $no_spj);
+        $model = $this->findModel($tahun, $no_sp3b);
         IF($model->status == 1){
             $model->delete();
         }ELSE{
