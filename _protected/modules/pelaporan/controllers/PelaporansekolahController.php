@@ -256,7 +256,7 @@ class PelaporansekolahController extends Controller
                                     GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                 ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                 AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
                                 GROUP BY a.tahun, a.sekolah_id
                                 /*Transaksi */
                                 UNION ALL
@@ -337,7 +337,7 @@ class PelaporansekolahController extends Controller
                                             GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                         ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                         AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
                                         GROUP BY a.tahun, a.sekolah_id
                                         /*Transaksi */
                                         UNION ALL
@@ -438,7 +438,7 @@ class PelaporansekolahController extends Controller
                                                 GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                             ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                             AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 2
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 2
                                             GROUP BY a.tahun, a.sekolah_id
                                             UNION ALL
                                             SELECT a.tahun, a.sekolah_id, '' AS kd_penerimaan_1, '' AS kd_penerimaan_2, '' AS kode, '' AS no_bukti, '' AS tgl_bukti, '' AS uraian,
@@ -589,7 +589,7 @@ class PelaporansekolahController extends Controller
                                                 GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                             ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                             AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 2
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 2
                                             GROUP BY a.tahun, a.sekolah_id
                                             UNION ALL
                                             SELECT a.tahun, a.sekolah_id, '' AS kd_penerimaan_1, '' AS kd_penerimaan_2, '' AS kode, '' AS no_bukti, '' AS tgl_bukti, '' AS uraian,
@@ -598,7 +598,7 @@ class PelaporansekolahController extends Controller
                                                 WHEN 2 THEN -(a.nilai)
                                             END) AS nilai
                                             FROM ta_mutasi_kas a 
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1
                                             GROUP BY a.tahun, a.sekolah_id
                                             /*Potongan */
                                             UNION ALL
@@ -627,7 +627,7 @@ class PelaporansekolahController extends Controller
                                             INNER JOIN
                                             ta_spj_pot c ON a.tahun = c.tahun AND a.sekolah_id = c.sekolah_id AND a.no_bukti = c.no_bukti
                                             INNER JOIN ref_potongan d ON c.kd_potongan =  d.kd_potongan
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <=  :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2  AND a.Kd_Rek_1 = 5 AND a.pembayaran = 2
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <  :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2  AND a.Kd_Rek_1 = 5 AND a.pembayaran = 2
                                             GROUP BY a.tahun, a.sekolah_id
 
                                             /*Setoran Potongan */
@@ -646,7 +646,7 @@ class PelaporansekolahController extends Controller
                                             INNER JOIN ta_setoran_potongan_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
                                             INNER JOIN ref_potongan c ON b.kd_potongan = c.kd_potongan
                                             WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
-                                            AND a.tgl_setoran <= :tgl_1 AND b.pembayaran = 2
+                                            AND a.tgl_setoran < :tgl_1 AND b.pembayaran = 2
                                             GROUP BY a.tahun, a.sekolah_id                                            
                                         ) a GROUP BY a.tahun, a.sekolah_id  
                                         /*Transaksi */
@@ -785,7 +785,7 @@ class PelaporansekolahController extends Controller
                                             GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                         ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                         AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 1
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 1
                                         GROUP BY a.tahun, a.sekolah_id
                                         /*Transaksi */
                                         UNION ALL
@@ -926,7 +926,7 @@ class PelaporansekolahController extends Controller
                                                 GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                             ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                             AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 1
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 1
                                             GROUP BY a.tahun, a.sekolah_id
                                             UNION ALL
                                             SELECT a.tahun, a.sekolah_id, '' AS kd_penerimaan_1, '' AS kd_penerimaan_2, '' AS kode, '' AS no_bukti, '' AS tgl_bukti, '' AS uraian,
@@ -935,7 +935,7 @@ class PelaporansekolahController extends Controller
                                                 WHEN 1 THEN -(a.nilai)
                                             END) AS nilai
                                             FROM ta_mutasi_kas a 
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1
                                             GROUP BY a.tahun, a.sekolah_id
                                             /*Potongan */
                                             UNION ALL
@@ -964,7 +964,7 @@ class PelaporansekolahController extends Controller
                                             INNER JOIN
                                             ta_spj_pot c ON a.tahun = c.tahun AND a.sekolah_id = c.sekolah_id AND a.no_bukti = c.no_bukti
                                             INNER JOIN ref_potongan d ON c.kd_potongan =  d.kd_potongan
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <=  :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2  AND a.Kd_Rek_1 = 5 AND a.pembayaran = 1
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <  :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2  AND a.Kd_Rek_1 = 5 AND a.pembayaran = 1
                                             GROUP BY a.tahun, a.sekolah_id
 
                                             /*Setoran Potongan */
@@ -983,7 +983,7 @@ class PelaporansekolahController extends Controller
                                             INNER JOIN ta_setoran_potongan_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
                                             INNER JOIN ref_potongan c ON b.kd_potongan = c.kd_potongan
                                             WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
-                                            AND a.tgl_setoran <= :tgl_1 AND b.pembayaran = 1
+                                            AND a.tgl_setoran < :tgl_1 AND b.pembayaran = 1
                                             GROUP BY a.tahun, a.sekolah_id                                               
                                         ) a GROUP BY a.tahun, a.sekolah_id
                                         /*Transaksi */
@@ -2127,7 +2127,7 @@ class PelaporansekolahController extends Controller
                                     GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                 ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                 AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
                                 GROUP BY a.tahun, a.sekolah_id
                                 /*Transaksi */
                                 UNION ALL
@@ -2222,7 +2222,7 @@ class PelaporansekolahController extends Controller
                                                 GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                             ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                             AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 2
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 2
                                             GROUP BY a.tahun, a.sekolah_id
                                             UNION ALL
                                             SELECT a.tahun, a.sekolah_id, '' AS kd_penerimaan_1, '' AS kd_penerimaan_2, '' AS kode, '' AS no_bukti, '' AS tgl_bukti, '' AS uraian,
@@ -2231,7 +2231,7 @@ class PelaporansekolahController extends Controller
                                                 WHEN 2 THEN -(a.nilai)
                                             END) AS nilai
                                             FROM ta_mutasi_kas a 
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1
                                             GROUP BY a.tahun, a.sekolah_id
                                             /*Potongan */
                                             UNION ALL
@@ -2260,7 +2260,7 @@ class PelaporansekolahController extends Controller
                                             INNER JOIN
                                             ta_spj_pot c ON a.tahun = c.tahun AND a.sekolah_id = c.sekolah_id AND a.no_bukti = c.no_bukti
                                             INNER JOIN ref_potongan d ON c.kd_potongan =  d.kd_potongan
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <=  :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2  AND a.Kd_Rek_1 = 5 AND a.pembayaran = 2
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <  :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2  AND a.Kd_Rek_1 = 5 AND a.pembayaran = 2
                                             GROUP BY a.tahun, a.sekolah_id
 
                                             /*Setoran Potongan */
@@ -2279,7 +2279,7 @@ class PelaporansekolahController extends Controller
                                             INNER JOIN ta_setoran_potongan_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
                                             INNER JOIN ref_potongan c ON b.kd_potongan = c.kd_potongan
                                             WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
-                                            AND a.tgl_setoran <= :tgl_1 AND b.pembayaran = 2
+                                            AND a.tgl_setoran < :tgl_1 AND b.pembayaran = 2
                                             GROUP BY a.tahun, a.sekolah_id                                            
                                         ) a GROUP BY a.tahun, a.sekolah_id  
                                         /*Transaksi */
@@ -2423,7 +2423,7 @@ class PelaporansekolahController extends Controller
                                                 GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                             ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                             AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 1
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 1
                                             GROUP BY a.tahun, a.sekolah_id
                                             UNION ALL
                                             SELECT a.tahun, a.sekolah_id, '' AS kd_penerimaan_1, '' AS kd_penerimaan_2, '' AS kode, '' AS no_bukti, '' AS tgl_bukti, '' AS uraian,
@@ -2432,7 +2432,7 @@ class PelaporansekolahController extends Controller
                                                 WHEN 1 THEN -(a.nilai)
                                             END) AS nilai
                                             FROM ta_mutasi_kas a 
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_1
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1
                                             GROUP BY a.tahun, a.sekolah_id
                                             /*Potongan */
                                             UNION ALL
@@ -2461,7 +2461,7 @@ class PelaporansekolahController extends Controller
                                             INNER JOIN
                                             ta_spj_pot c ON a.tahun = c.tahun AND a.sekolah_id = c.sekolah_id AND a.no_bukti = c.no_bukti
                                             INNER JOIN ref_potongan d ON c.kd_potongan =  d.kd_potongan
-                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <=  :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2  AND a.Kd_Rek_1 = 5 AND a.pembayaran = 1
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <  :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2  AND a.Kd_Rek_1 = 5 AND a.pembayaran = 1
                                             GROUP BY a.tahun, a.sekolah_id
 
                                             /*Setoran Potongan */
@@ -2480,7 +2480,7 @@ class PelaporansekolahController extends Controller
                                             INNER JOIN ta_setoran_potongan_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
                                             INNER JOIN ref_potongan c ON b.kd_potongan = c.kd_potongan
                                             WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
-                                            AND a.tgl_setoran <= :tgl_1 AND b.pembayaran = 1
+                                            AND a.tgl_setoran < :tgl_1 AND b.pembayaran = 1
                                             GROUP BY a.tahun, a.sekolah_id                                               
                                         ) a GROUP BY a.tahun, a.sekolah_id
                                         /*Transaksi */
