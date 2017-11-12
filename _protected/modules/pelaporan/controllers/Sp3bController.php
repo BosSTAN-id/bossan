@@ -440,7 +440,15 @@ class Sp3bController extends Controller
                 }
                 break;
             case 0: //hapus 
-                $status = 'Terverifikasi';
+                $spj = \app\models\TaSPJ::findOne(['tahun' => $tahun, 'no_spj' => $no_spj]);
+                $sp3brinc = \app\models\TaSP3BRinc::findOne(['tahun' => $tahun, 'no_sp3b' => $no_sp3b, 'no_spj' => $no_spj, 'sekolah_id' => $spj->sekolah_id]);
+                IF($sp3brinc->delete()){
+                    Yii::$app->getSession()->setFlash('success',  'SPJ Berhasil Dihapuskan dari lampiran.');
+                    return $this->redirect(Yii::$app->request->referrer);                        
+                }ELSE{
+                    Yii::$app->getSession()->setFlash('warning',  'SPJ gagal dikeluarkan dari lampiran.');
+                    return $this->redirect(Yii::$app->request->referrer);                                                
+                }
                 break;
             default:
                 // code goes here
