@@ -213,7 +213,7 @@ class SpjController extends Controller
             foreach ($_POST['selection'] as $value) {
                 //convert to array, array key tahun, no_bukti, tgl_bukti
                 $data = \yii\helpers\Json::decode($value);
-                $bukti = \app\models\TaSPJRinc::findOne(['tahun' => $data['tahun'], 'no_bukti' => $data['no_bukti'] ]);
+                $bukti = \app\models\TaSPJRinc::findOne(['tahun' => $data['tahun'], 'no_bukti' => $data['no_bukti'], 'tgl_bukti' => $data['tgl_bukti'] ]);
                 IF($bukti['no_spj'] == NULL){
                     $bukti->no_spj = $no_spj;
                 }ELSE{
