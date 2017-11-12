@@ -12,10 +12,10 @@ function angka($n) {
     if(!is_numeric($n)) return false;
     
     // now filter it;
-    if($n>1000000000000) return round(($n/1000000000000),1);
-    else if($n>1000000000) return round(($n/1000000000),1);
-    else if($n>1000000) return round(($n/1000000),1);
-    else if($n>1000) return round(($n/1000),1);
+    if($n>1000000000000) return round(($n/1000000000000),1).' T';
+    else if($n>1000000000) return round(($n/1000000000),1).' M';
+    else if($n>1000000) return round(($n/1000000),1).' juta';
+    else if($n>1000) return round(($n/1000),1).' ribu';
     
     return number_format($n);
 }
@@ -66,11 +66,11 @@ $this->title = Yii::t('app', Yii::$app->name);
                 <div class="small-box bg-aqua">
                     <div class="inner">
                         <h3>
-                            <?= number_format((\app\models\TaRkasBelanjaRinc::find()->where([
+                            <?= angka(\app\models\TaRkasBelanjaRinc::find()->where([
                                 'tahun' => $infoBos->tahun_ajaran, 
                                 'sekolah_id' => $infoBos->sekolah_id,
                                 'Kd_Rek_1' => 5
-                            ])->sum('total')/1000000), 1, ',', '.').' Jt' ?>
+                            ])->sum('total')) ?>
                         </h3>
 
                         <p>Total Anggaran</p>
@@ -89,11 +89,11 @@ $this->title = Yii::t('app', Yii::$app->name);
                 <div class="small-box bg-red">
                     <div class="inner">
                         <h3>
-                            <?= number_format((\app\models\TaSPJRinc::find()->where([
+                            <?= angka(\app\models\TaSPJRinc::find()->where([
                                 'tahun' => $infoBos->tahun_ajaran, 
                                 'sekolah_id' => $infoBos->sekolah_id,
                                 'Kd_Rek_1' => 5
-                            ])->sum('nilai')/1000000), 1, ',', '.').' Jt' ?>
+                            ])->sum('nilai')) ?>
                         </h3>
 
                         <p>Total Realisasi</p>

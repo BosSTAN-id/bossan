@@ -64,6 +64,7 @@ switch ($model->status) {
             'id'=>'crud-datatable',
             'dataProvider' => $dataProvider,
             'filterModel' => $searchModel,
+            'bootstrap' => true,
             'pjax'=>true,
             'columns' => require(__DIR__.'/_columns.php'),
             'toolbar'=> [
@@ -76,7 +77,8 @@ switch ($model->status) {
             ],          
             'striped' => true,
             'condensed' => true,
-            'responsive' => true,          
+            'responsive' => true, 
+            'responsiveWrap' => false,            
             'panel' => [
                 'type' => 'primary', 
                 'heading' => '<i class="glyphicon glyphicon-list"></i> Daftar RKAS/P',

@@ -3180,15 +3180,15 @@ class PelaporansekolahController extends Controller
                         INNER JOIN ref_sekolah i ON a.sekolah_id = i.id
                         GROUP BY a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.jml_satuan, a.satuan123, a.nilai_rp, a.keterangan
                         ORDER BY a.Kd_Rek_1, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5 ASC                                       
-                    ")->bindValues([
-                        ':tahun' => $Tahun,
-                        ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
-                        ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
-                        ':kd_penerimaan_1' => $kd_penerimaan_1,
-                        ':kd_penerimaan_2' => $kd_penerimaan_2
-                    ])->queryAll();
+                        ")->bindValues([
+                            ':tahun' => $Tahun,
+                            ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
+                            ':perubahan_id' => $getparam['Laporan']['perubahan_id'],
+                            ':kd_penerimaan_1' => $kd_penerimaan_1,
+                            ':kd_penerimaan_2' => $kd_penerimaan_2
+                        ])->queryAll();
 
-                    $render = 'cetaklaporan10';                    
+                        $render = 'cetaklaporan10';                    
                         break;                                                
                     default:
                         # code...

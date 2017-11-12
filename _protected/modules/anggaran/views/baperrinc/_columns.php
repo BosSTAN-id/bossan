@@ -29,24 +29,6 @@ return [
         'format' => 'date',
         'attribute'=>'tgl_peraturan',
     ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'format' => 'raw',
-        'label'=>'Terlampir',
-        'value' => function ($model) use($no_ba){
-            if($model['terlampir']['no_peraturan'] != NULL){
-                // return '<i class="glyphicon glyphicon-ok"></i>';
-                return Html::a('<span class="glyphicon glyphicon-ok"></span>', ['deleterinc', 'tahun' => $model->tahun, 'no_ba' => $no_ba, 'sekolah_id' => $model->sekolah_id, 'no_peraturan' => $model->no_peraturan],
-                [  
-                    'title' => Yii::t('yii', 'Hapus dari Rincian'),           
-                    'data-confirm' => "Yakin menghapus dari berita acara ini?",
-                    'data-method' => 'POST',
-                    'data-pjax' => 1
-                ]);
-            }
-            if($model['terlampir']['no_peraturan'] == NULL) return '';
-        }
-    ],
     // [
         // 'class'=>'\kartik\grid\DataColumn',
         // 'attribute'=>'penandatangan',
@@ -73,32 +55,57 @@ return [
     // ],
     [
         'class' => 'kartik\grid\ActionColumn',
-        'template' => '{preview}',
+        'template' => '<li>{k2all}</li> <li>{k2bos}</li> <li>{bos}</li>',
         'controller' => 'baperrinc',
         'noWrap' => true,
-        'dropdown' => true,
         'vAlign'=>'middle',
+        'dropdown' => true,
+        'dropdownOptions' => ['class' => 'dropdown pull-right'],
+        'dropdownMenu' => ['class'=>'text-left'],
+        'dropdownButton' => [
+            'class'=> 'btn btn-xs btn-info',
+            'label' => 'Preview'
+        ],
         'buttons' => [
-                'preview' => function ($url, $model) {
-                    // return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,
-                    //     [  
-                    //         'title' => Yii::t('yii', 'lihat RKAS'),
-                    //         'data-toggle'=>"modal",
-                    //         'data-target'=>"#myModal",
-                    //         'data-title'=> "RKAS ".$model->no_peraturan,
-                    //     ]);
-                    return ButtonDropdown::widget([
-                        'split' => true,
-                        'label' => 'Action',
-                        'dropdown' => [
-                            'items' => [
-                                ['label' => 'DropdownA', 'url' => '/'],
-                                ['label' => 'DropdownB', 'url' => '#'],
-                            ],
-                        ],
+                'k2all' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-print"></span> FORM-K2', $url,
+                    [  
+                       'title' => Yii::t('yii', 'FORM BOS K-2 Semua Dana'),
+                       'onClick' => "return !window.open(this.href, 'RKA 1', 'width=1024,height=768')"
+                    ]);
+                },
+                'k2bos' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-print"></span> FORM-K2 BOS', $url,
+                    [  
+                       'title' => Yii::t('yii', 'FORM BOS K-2 Sumber Dana BOS'),
+                       'onClick' => "return !window.open(this.href, 'RKA 1', 'width=1024,height=768')"
+                    ]);
+                },
+                'bos' => function ($url, $model) {
+                    return Html::a('<span class="glyphicon glyphicon-print"></span> BOS-03', $url,
+                    [  
+                       'title' => Yii::t('yii', 'FORM BOS-03 Sumber Dana BOS'),
+                       'onClick' => "return !window.open(this.href, 'RKA 1', 'width=1024,height=768')"
                     ]);
                 },
         ]
     ],
-
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'format' => 'raw',
+        'label'=>'Terlampir',
+        'value' => function ($model) use($no_ba){
+            if($model['terlampir']['no_peraturan'] != NULL){
+                // return '<i class="glyphicon glyphicon-ok"></i>';
+                return Html::a('<span class="glyphicon glyphicon-ok"></span>', ['deleterinc', 'tahun' => $model->tahun, 'no_ba' => $no_ba, 'sekolah_id' => $model->sekolah_id, 'no_peraturan' => $model->no_peraturan],
+                [  
+                    'title' => Yii::t('yii', 'Hapus dari Rincian'),           
+                    'data-confirm' => "Yakin menghapus dari berita acara ini?",
+                    'data-method' => 'POST',
+                    'data-pjax' => 1
+                ]);
+            }
+            if($model['terlampir']['no_peraturan'] == NULL) return '';
+        }
+    ],
 ];   
