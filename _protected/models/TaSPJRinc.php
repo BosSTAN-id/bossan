@@ -54,7 +54,18 @@ class TaSPJRinc extends \yii\db\ActiveRecord
             [['tahun', 'tgl_bukti'], 'safe'],
             [['no_urut', 'sekolah_id', 'kd_program', 'kd_sub_program', 'kd_kegiatan', 'Kd_Rek_1', 'Kd_Rek_2', 'Kd_Rek_3', 'Kd_Rek_4', 'Kd_Rek_5', 'komponen_id', 'pembayaran', 'bank_id'], 'integer'],
             [['nilai'], 'number'],
-            ['no_bukti', 'unique', 'message' => 'No Bukti ini sudah pernah ada'],
+            [['no_bukti'], 'unique', 'message' => 'No Bukti ini sudah pernah ada'],
+            // [
+            //     'no_bukti',
+            //     'unique',
+            //     'message' => 'No Bukti ini sudah pernah ada',
+            //     'when' => function ($model) {
+            //         return !empty($model->no_bukti);
+            //     },
+            //     'whenClient' => new JsExpression("function (attribute, value) {
+            //         return $('#taspjrinc-no_bukti').val().length > 0;
+            //     }")
+            // ],
             [['no_bukti', 'no_spj', 'rek5'], 'string', 'max' => 50],
             [['nm_penerima'], 'string', 'max' => 100],
             [['alamat_penerima', 'uraian'], 'string', 'max' => 255],
