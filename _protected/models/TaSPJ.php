@@ -49,6 +49,7 @@ class TaSPJ extends \yii\db\ActiveRecord
             [['sekolah_id', 'no_bku', 'kd_sah', 'created_at', 'updated_at', 'user_id', 'kd_verifikasi'], 'integer'],
             [['no_spj', 'no_pengesahan', 'nip_pengesahan', 'nm_bendahara'], 'string', 'max' => 50],
             [['keterangan', 'jbt_bendahara', 'jbt_pengesahan'], 'string', 'max' => 255],
+            ['no_spj', 'unique', 'message' => 'No SPJ ini sudah pernah ada'],
             [['disahkan_oleh'], 'string', 'max' => 100],
             [['nip_bendahara'], 'string', 'max' => 18],
         ];
