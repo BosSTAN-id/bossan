@@ -1129,11 +1129,11 @@ class PelaporansekolahController extends Controller
                                             a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                             FROM ta_rkas_history a 
                                             WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = 1)
-                                            AND (a.kd_penerimaan_1 = 2 OR a.kd_penerimaan_1 is null)
+                                            AND a.kd_penerimaan_1 = 2
                                             GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                         ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                         AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND (b.kd_penerimaan_1 = 2 OR b.kd_penerimaan_1 is null)
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND b.kd_penerimaan_1 = 2
                                         GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1
                                     ) f ON a.tahun = f.tahun AND a.sekolah_id = f.sekolah_id AND a.kd_program = f.kd_program AND a.kd_sub_program = f.kd_sub_program AND a.kd_kegiatan = f.kd_kegiatan AND a.Kd_Rek_1 = f.Kd_Rek_1
                                     -- Untuk realisasi BOS pusat 3-1
@@ -2599,11 +2599,11 @@ class PelaporansekolahController extends Controller
                                             a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                             FROM ta_rkas_history a 
                                             WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = 1)
-                                            AND (a.kd_penerimaan_1 = 2 OR a.kd_penerimaan_1 is null)
+                                            AND a.kd_penerimaan_1 = 2
                                             GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                         ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                         AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND (b.kd_penerimaan_1 = 2 OR b.kd_penerimaan_1 is null)
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND b.kd_penerimaan_1 = 2
                                         GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1
                                     ) f ON a.tahun = f.tahun AND a.sekolah_id = f.sekolah_id AND a.kd_program = f.kd_program AND a.kd_sub_program = f.kd_sub_program AND a.kd_kegiatan = f.kd_kegiatan AND a.Kd_Rek_1 = f.Kd_Rek_1
                                     -- Untuk realisasi BOS pusat 3-1
