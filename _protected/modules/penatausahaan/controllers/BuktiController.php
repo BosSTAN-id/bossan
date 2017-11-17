@@ -58,7 +58,7 @@ class BuktiController extends Controller
         IF(Yii::$app->user->identity->sekolah_id && $sekolah_id = Yii::$app->user->identity->sekolah_id){
             $dataProvider->query->andWhere(['sekolah_id' => $sekolah_id]);
         }
-        $dataProvider->query->orderBy('tgl_bukti DESC, no_bukti DESC');
+        $dataProvider->query->orderBy('tgl_bukti ASC, no_bukti ASC');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -108,7 +108,7 @@ class BuktiController extends Controller
         ]);
 
         if ($modelPotongan->load(Yii::$app->request->post())) {
-            $modelPotongan->nilai = str_replace(',', '.', $model->nilai);
+            $modelPotongan->nilai = str_replace(',', '.', $modelPotongan->nilai);
             if($modelPotongan->save()){
                 echo 1;
                 // return $this->redirect(Yii::$app->request->referrer);
@@ -317,7 +317,8 @@ class BuktiController extends Controller
         }
 
         $request = Yii::$app->request;
-        $model = $this->findModel($tahun, $no_bukti, $tgl_bukti);       
+        $model = $this->findModel($tahun, $no_bukti, $tgl_bukti);
+        $belanjaIni = $model->nilai;      
         if ($model->load(Yii::$app->request->post())) {
             // list($model->Kd_Rek_1, $model->Kd_Rek_2, $model->Kd_Rek_3, $model->Kd_Rek_4, $model->Kd_Rek_5) = explode('.', $model->rek5);
             $model->nilai = str_replace(',', '.', $model->nilai);
@@ -395,6 +396,7 @@ class BuktiController extends Controller
                     AND Kd_Rek_4 = ".$model->Kd_Rek_4."
                     AND Kd_Rek_5 = ".$model->Kd_Rek_5."
                     AND tgl_bukti <=  '".$model->tgl_bukti."'
+                    AND no_bukti != '".$no_bukti."'
                     GROUP BY
                         kd_program,
                         kd_sub_program,
@@ -419,11 +421,11 @@ class BuktiController extends Controller
             IF($sisa_anggaran['sisa_anggaran'] < $model->nilai){
                 $result = 0;
                 Yii::$app->getSession()->setFlash('warning',  'Sisa Anggaran tidak mencukupi! Sisa anggaran '.number_format($sisa_anggaran['sisa_anggaran'], 0, ',', '.').' pembayaran diajukan senilai '.number_format($model->nilai, 0, ',', '.'));
-                return $this->redirect(['create']);       
+                return $this->redirect(Yii::$app->request->referrer);      
             }
             $query = \Yii::$app->db->createCommand("call sisa_kas($Tahun, ".$model->sekolah_id.",".$model->pembayaran.",'".$model->tgl_bukti."')");
             $sisa_kas = $query->queryOne();
-            IF($sisa_kas['nilai'] < $model->nilai){
+            IF(($sisa_kas['nilai'] + $belanjaIni) < $model->nilai){
                 IF($model->pembayaran == 1){
                     $metode = 'Bank';
                 }ELSE{
@@ -459,7 +461,6 @@ class BuktiController extends Controller
                 ]);
         }
     }
-
 
     public function actionDelete($tahun, $no_bukti, $tgl_bukti)
     {
@@ -547,7 +548,7 @@ class BuktiController extends Controller
 
         $request = Yii::$app->request;
         $model = $this->findModel($tahun, $no_bukti, $tgl_bukti);
-        $modelPotongan = \app\models\TaSPJPot::find()->where(['tahun' => $tahun, 'no_bukti' => $no_bukti, 'kd_potongan' => $kd_potongan]);
+        $modelPotongan = \app\models\TaSPJPot::find()->where(['tahun' => $tahun, 'no_bukti' => $no_bukti, 'kd_potongan' => $kd_potongan])->one();
         IF($model->no_spj == NULL){
             $modelPotongan->delete();
         }ELSE{
@@ -788,7 +789,7 @@ class BuktiController extends Controller
             'totalCount' => $totalCount,
             //'sort' =>false, to remove the table header sorting
             'pagination' => [
-                'pageSize' => 50,
+                'pageSize' => 0,
             ],
         ]);                                          
         // $posisiAnggaran =\app\models\TaRkasPeraturan::find()->select('MAX(perubahan_id) AS perubahan_id')->where(['sekolah_id' => $sekolah_id])->andWhere('perubahan_id IN (4,6)')->one();

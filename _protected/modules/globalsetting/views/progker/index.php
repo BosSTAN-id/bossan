@@ -16,117 +16,135 @@ $this->registerJs("$('.select2').remove();", \yii\web\View::POS_END);
 $this->title = 'Kegiatan';
 $this->params['breadcrumbs'][] = 'Pengaturan';
 $this->params['breadcrumbs'][] = $this->title;
+$this->registerJs(<<<JS
+$("a[id*='sub-program-link-']").on('click', function(e){
+    e.preventDefault()
+    var target = e.target;
+    var href = $(this).attr('href');
+    $('#program-tab').removeClass('active');
+    // $('#program-tab').html('<a href=\"#program-content\"  data-toggle=\"tab\" role=\"tab\" title=\"program\"><i class=\"glyphicon glyphicon-program-content\"></i> Program</a>');
+    $('#sub-program-tab').attr('class', 'active');
+    $('#program-link').click();
+    $('#program-content').removeClass('active in');
+    $('#sub-program-content').addClass('active in');
+    $('#sub-program-content').html('<i class=\"fa fa-spinner fa-spin\"></i>');
+    $.get(href).done(function(data){
+        $('#sub-program-content').html(data);
+    });
+});
+JS
+);
 ?>
 <div class="ref-kegiatan-sekolah-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<div>
 
-    <p>
-        <?= Html::a('Tambah Kegiatan Sekolah', ['create'], [
-                                                    'class' => 'btn btn-xs btn-success',
-                                                    'data-toggle'=>"modal",
-                                                    'data-target'=>"#myModal",
-                                                    'data-title'=>"Tambah Kegiatan",
-                                                    ]) ?>
-    </p>
-    <?= GridView::widget([
-        'id' => 'ref-kegiatan-sekolah',    
-        'dataProvider' => $dataProvider,
-        // 'export' => false, 
-        'responsive'=>true,
-        'hover'=>true,     
-        'resizableColumns'=>true,
-        'panel'=>['type'=>'primary', 'heading'=>$this->title],
-        'responsiveWrap' => false,        
-        'toolbar' => [
-            '{toggleData}',
-            '{export}',
-            [
-                // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
-            ],
-        ],       
-        'pager' => [
-            'firstPageLabel' => 'Awal',
-            'lastPageLabel'  => 'Akhir'
-        ],
-        'pjax'=>true,
-        'pjaxSettings'=>[
-            'options' => ['id' => 'ref-kegiatan-sekolah-pjax', 'timeout' => 5000, 'enablePushState' => true],
-        ],        
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            [
-                'label' => 'Kode',
-                'attribute' => 'kode',
-                'value' => function($model){
-                    return $model->kd_program.'.'.substr('0'.$model->kd_sub_program, -2).'.'.substr('0'.$model->kd_kegiatan, -2);
-                }
-            ],
-            [
-                'label'=>'Program', 
-                'attribute' => 'kd_program',
-                'filter' => \kartik\select2\Select2::widget([
-                    'options' => ['placeholder' => 'Pilih Program ...'],
-                    'model' => $searchModel,
-                    'attribute' => 'kd_program',
-                    'data' => $programlist,
-                    'pluginOptions' => [
-                        'allowClear' => true
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li id="program-tab" role="presentation" class="active"><a href="#program-content" aria-controls="program-content" role="tab" data-toggle="tab">Program</a></li>
+        <li id="sub-program-tab" role="presentation"><a href="#sub-program-content" aria-controls="sub-program-content" role="tab" data-toggle="tab">Sub Program</a></li>
+        <li id="kegiatan-tab" role="presentation"><a href="#kegiatan-content" aria-controls="kegiatan-content" role="tab" data-toggle="tab">Kegiatan</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="program-content">
+            <?= GridView::widget([
+                'id' => 'ref-kegiatan-sekolah',    
+                'dataProvider' => $dataProgramProvider,
+                // 'export' => false, 
+                'responsive'=>true,
+                'hover'=>true,     
+                'resizableColumns'=>true,
+                'panel'=>['type'=>'primary', 'heading'=>$this->title],
+                'responsiveWrap' => false,        
+                'toolbar' => [
+                    '{toggleData}',
+                    '{export}',
+                    [
+                        // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
                     ],
-                ]),
-                'value'=>function ($model, $index, $widget) {
-                    return $model->refProgram->uraian_program;
-                }
-            ],
-            [
-                'label'=>'SubProgram', 
-                'attribute' => 'kd_sub_program',
-                'filter' => \kartik\select2\Select2::widget([
-                    'options' => ['placeholder' => 'Pilih Sub ...'],
-                    'model' => $searchModel,
-                    'attribute' => 'kd_sub_program_gb',
-                    'data' => $subprogramlist,
-                    'pluginOptions' => [
-                        'allowClear' => true
+                ],       
+                'pager' => [
+                    'firstPageLabel' => 'Awal',
+                    'lastPageLabel'  => 'Akhir'
+                ],
+                'pjax'=>true,
+                'pjaxSettings'=>[
+                    'options' => ['id' => 'ref-program-sekolah-pjax', 'timeout' => 5000, 'enablePushState' => true],
+                ],        
+                'filterModel' => $searchProgramModel,
+                'columns' => [
+                    [
+                        'label' => 'Kode',
+                        'attribute' => 'kode',
+                        'value' => function($model){
+                            return $model->kd_program;
+                        }
                     ],
-                ]),
-                'value'=>function ($model, $index, $widget) {
-                    return $model->refSubProgram->uraian_sub_program;
-                }
-            ],            
-            'uraian_kegiatan',
-            [
-                'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {update} {delete}',
-                'noWrap' => true,
-                'vAlign'=>'top',
-                'buttons' => [
-                        'update' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'ubah'),
-                                 'data-toggle'=>"modal",
-                                 'data-target'=>"#myModalubah",
-                                 'data-title'=> "Ubah",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
-                        },
-                        'view' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'lihat'),
-                                 'data-toggle'=>"modal",
-                                 'data-target'=>"#myModalubah",
-                                 'data-title'=> "Lihat",
-                              ]);
-                        },                        
-                ]
-            ],
-        ],
-    ]); ?>
+                    [
+                        'label'=>'Program', 
+                        'attribute' => 'kd_program',
+                        'filter' => \kartik\select2\Select2::widget([
+                            'options' => ['placeholder' => 'Pilih Program ...'],
+                            'model' => $searchModel,
+                            'attribute' => 'kd_program',
+                            'data' => $programlist,
+                            'pluginOptions' => [
+                                'allowClear' => true
+                            ],
+                        ]),
+                        'value'=>function ($model, $index, $widget) {
+                            return $model->uraian_program;
+                        }
+                    ],
+                    [
+                        'class' => 'kartik\grid\ActionColumn',
+                        'template' => '{subprogramtab}',
+                        'noWrap' => true,
+                        'vAlign'=>'top',
+                        'buttons' => [
+                                'update' => function ($url, $model) {
+                                    return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
+                                        [  
+                                            'title' => Yii::t('yii', 'ubah'),
+                                            'data-toggle'=>"modal",
+                                            'data-target'=>"#myModalubah",
+                                            'data-title'=> "Ubah",                                 
+                                            // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                            // 'data-method' => 'POST',
+                                            // 'data-pjax' => 1
+                                        ]);
+                                },
+                                'view' => function ($url, $model) {
+                                    return Html::a('<span class="glyphicon glyphicon-eye-open"></span>', $url,
+                                        [  
+                                            'title' => Yii::t('yii', 'lihat'),
+                                            'data-toggle'=>"modal",
+                                            'data-target'=>"#myModalubah",
+                                            'data-title'=> "Lihat",
+                                        ]);
+                                },
+                                'subprogramtab' => function ($url, $model) {
+                                    return Html::a('<i class="glyphicon glyphicon-menu-right"></i>', $url,
+                                        [
+                                            'id' => 'sub-program-link-'.$model->kd_program,
+                                           'title' => Yii::t('yii', 'Sub Program'),
+                                           'class'=>"btn btn-xs btn-default",
+                                           'data-pjax' => 0
+                                        ]);
+                                },                      
+                        ]
+                    ],
+                ],
+            ]); ?>        
+        </div>
+        <div role="tabpanel" class="tab-pane" id="sub-program-content">...</div>
+        <div role="tabpanel" class="tab-pane" id="kegiatan-content">...</div>
+    </div>
+
+</div>
+
 </div>
 
 <?php Modal::begin([

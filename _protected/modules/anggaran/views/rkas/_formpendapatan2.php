@@ -23,7 +23,7 @@ use kartik\widgets\DepDrop;
 
     <?php 
             $connection = \Yii::$app->db;
-            $skpd = $connection->createCommand('SELECT CONCAT(kd_penerimaan_1,".",kd_penerimaan_2) AS kd_penerimaan_2, CONCAT(kd_penerimaan_1,".",kd_penerimaan_2," ",uraian) AS uraian FROM ref_penerimaan_sekolah_2 WHERE sekolah = 1 AND kd_penerimaan_1 > 1');
+            $skpd = $connection->createCommand('SELECT CONCAT(a.kd_penerimaan_1,".",a.kd_penerimaan_2) AS kd_penerimaan_2, CONCAT(a.kd_penerimaan_1,".",a.kd_penerimaan_2," ", b.uraian_penerimaan_1,", ", a.uraian) AS uraian FROM ref_penerimaan_sekolah_2 a INNER JOIN ref_penerimaan_sekolah_1 b ON a.kd_penerimaan_1 = b.kd_penerimaan_1 WHERE a.sekolah = 1 AND a.kd_penerimaan_1 > 1');
             $data = $skpd->queryAll();    
             echo $form->field($model, 'penerimaan_2')->widget(Select2::classname(), [
                 'data' => ArrayHelper::map($data, 'kd_penerimaan_2','uraian'),

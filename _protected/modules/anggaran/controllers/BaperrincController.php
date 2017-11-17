@@ -134,7 +134,7 @@ class BaperrincController extends Controller
         $model = $this->findModel($tahun, $sekolah_id, $perubahan_id);
         $Tahun = $tahun;
         $kd_penerimaan_1 = 3;
-        $kd_penerimaan_2 = 2;
+        $kd_penerimaan_2 = 1;
         $data =  Yii::$app->db->createCommand("
             SELECT a.tahun, a.sekolah_id, a.kd_program, c.uraian_program, a.kd_sub_program, d.uraian_sub_program, a.kd_kegiatan, e.uraian_kegiatan, a.Kd_Rek_1, a.anggaran, b.TW1, b.TW2, b.TW3, b.TW4 FROM
             (
@@ -215,7 +215,7 @@ class BaperrincController extends Controller
         $model = $this->findModel($tahun, $sekolah_id, $perubahan_id);
         $Tahun = $tahun;
         $kd_penerimaan_1 = 3;
-        $kd_penerimaan_2 = 2;
+        $kd_penerimaan_2 = 1;
         $data =  Yii::$app->db->createCommand("  
             SELECT
             a.tahun, a.sekolah_id, IFNULL(a.komponen_id, 0) AS komponen_id, IFNULL(b.komponen, 'Non-Komponen BOS') AS komponen, a.Kd_Rek_1, SUM(a.total) AS anggaran

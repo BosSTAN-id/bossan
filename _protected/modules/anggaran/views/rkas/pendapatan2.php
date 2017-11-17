@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = ['label' => $this->title];
             [
                 'label' => 'Sumber Dana',
                 'value' => function($model){
-                    return $model['penerimaan2']['uraian'];
+                    return $model['penerimaan1']['uraian_penerimaan_1'] .', '.$model['penerimaan2']['uraian'];
                 }
             ],
             [

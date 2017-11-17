@@ -17,8 +17,8 @@
 	03 => dataaplikasi
 	04 => Wilayah (Kecamatan/Desa)
 	05 => Rekening Aset
-	06 => 
-	07 => 
+	06 => Komponen BOS
+	07 => Potongan Belanja
 	08 => 
 	09 => 
 	10 => 

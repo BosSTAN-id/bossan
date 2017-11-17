@@ -81,6 +81,7 @@ class VerspjController extends Controller
         ]);
     }
 
+
     public function actionPrint($tahun, $no_spj)
     {
         IF($this->cekakses() !== true){
@@ -94,8 +95,8 @@ class VerspjController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $references = \app\models\TaTh::findOne(['tahun' => $tahun]);
         $model = $this->findModel($tahun, $no_spj);
+        $references = \app\models\TaTh::findOne(['tahun' => $tahun]);
         //query untuk halaman SPJ
         $sekolah = $model->sekolah_id;
         $tgl_spj = $model->tgl_spj;
@@ -112,7 +113,7 @@ class VerspjController extends Controller
                     a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, SUM(a.total) AS anggaran
                     FROM
                     ta_rkas_history a
-                    WHERE a.tahun = $tahun AND a.sekolah_id = $sekolah AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = $tahun AND sekolah_id = 1 AND tgl_peraturan <= '$tgl_spj')
+                    WHERE a.tahun = $tahun AND a.sekolah_id = $sekolah AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = $tahun AND sekolah_id = $sekolah AND tgl_peraturan <= '$tgl_spj')
                     GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
                 )a INNER JOIN
                 (
@@ -178,7 +179,8 @@ class VerspjController extends Controller
             'bukti' => $bukti,
             'ref' => $references,
         ]);
-    }     
+    }    
+
 
     public function actionSpjbukti($tahun, $no_spj)
     {

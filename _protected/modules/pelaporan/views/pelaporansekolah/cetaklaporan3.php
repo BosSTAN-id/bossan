@@ -244,8 +244,8 @@ foreach($data as $model){
 
 	$y = MAX($y1, $y2, $y3);
 
-	IF($y2 > 196 || $y1 + (5*(strlen($model['keterangan'])/35)) > 180 ){ //cek pagebreak
-		$ylst = 190 - $yst; //207 batas margin bawah dikurang dengan y pertama
+	IF($y2 > 295 || $y1 + (5*(strlen($model['keterangan'])/35)) > 295 ){ //cek pagebreak
+		$ylst = 305 - $yst; //207 batas margin bawah dikurang dengan y pertama
 		//setiap selesai page maka buat rectangle
 		$pdf->Rect($x, $yst, $w['0'] ,$ylst);
 		$pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
@@ -290,7 +290,7 @@ foreach($data as $model){
 		$yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
 		$x = 15;
 		$ysisa = $y1;
-
+		$y = MAX($y1, $y2, $y3);
 	}
 
 

@@ -59,7 +59,7 @@ $('#tainfobos-jumlah_siswa').keyup(function(){
             
         satuanBos = satuanBos - 0;//convert to integer
         jumlahSiswa = jumlahSiswa - 0;//convert to integer
-        jumlahDanaBos = satuanBos * jumlahSiswa * 12;
+        jumlahDanaBos = satuanBos * jumlahSiswa;
         if(isNaN(jumlahDanaBos)) { var jumlahDanaBos = 0;}
         $('#tainfobos-jumlah_dana_bos').val(jumlahDanaBos);
 });

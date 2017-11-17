@@ -71,7 +71,7 @@ use yii\db\Expression;
                                 <td><b>Bantuan Operasional Sekolah</b></td>
                                 <td class="text-right"><?php $jumlah_bos = $bos->sum('total'); echo number_format($jumlah_bos, 0, '.', '.') ?></td>
                             </tr>
-                            <?php $bos = $bos->all(); foreach ($bos as $value): ?>
+                            <?php $bos = $bos->select(['kd_penerimaan_1', 'kd_penerimaan_2', 'SUM(total) as total'])->groupBy('kd_penerimaan_1, kd_penerimaan_2')->all(); foreach ($bos as $value): ?>
                             <tr>
                                 <td class="text-left"><?= $value->kd_penerimaan_1.'.'.$value->kd_penerimaan_2 ?></td>
                                 <td><?= $value->penerimaan2->uraian ?></td>
@@ -84,7 +84,7 @@ use yii\db\Expression;
                                 <td><b>Bantuan</b></td>
                                 <td class="text-right"><?php $jumlah_bantuan = $bantuan->sum('total'); echo number_format($jumlah_bantuan, 0, '.', '.') ?></td>
                             </tr>
-                            <?php $bantuan = $bantuan->all(); foreach ($bantuan as $value): ?>
+                            <?php $bantuan = $bantuan->select(['kd_penerimaan_1', 'kd_penerimaan_2', 'SUM(total) as total'])->groupBy('kd_penerimaan_1, kd_penerimaan_2')->all(); foreach ($bantuan as $value): ?>
                             <tr>
                                 <td class="text-left"><?= $value->kd_penerimaan_1.'.'.$value->kd_penerimaan_2 ?></td>
                                 <td><?= $value->penerimaan2->uraian ?></td>
@@ -97,7 +97,7 @@ use yii\db\Expression;
                                 <td><b>Pendapatan Lainnya</b></td>
                                 <td class="text-right"><?php $jumlah_lain = $lain->sum('total'); echo number_format($jumlah_lain, 0, '.', '.') ?></td>
                             </tr>
-                            <?php $lain = $lain->all(); foreach ($lain as $value): ?>
+                            <?php $lain = $lain->select(['kd_penerimaan_1', 'kd_penerimaan_2', 'SUM(total) as total'])->groupBy('kd_penerimaan_1, kd_penerimaan_2')->all(); foreach ($lain as $value): ?>
                             <tr>
                                 <td class="text-left"><?= $value->kd_penerimaan_1.'.'.$value->kd_penerimaan_2 ?></td>
                                 <td><?= $value->penerimaan2->uraian ?></td>

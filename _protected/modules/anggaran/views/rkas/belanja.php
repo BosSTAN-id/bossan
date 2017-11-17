@@ -227,40 +227,41 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
                         ->where(['tahun' => $Tahun, 'sekolah_id' => $kegiatan->sekolah_id, 'kd_program' => $treeprogram->kd_program])
                         // ->groupBy('tahun, sekolah_id, kd_program, kd_sub_program,)
                         ->all();
-                        foreach($listkegiatan as $listkegiatan){
-                            $subprogram = $listkegiatan->refSubProgram->uraian_sub_program;
-                            IF($subprogramawal != $subprogram){
-                                echo $subprogram;
-                                echo '<ol>';
-                                echo Html::a('<li>'.$listkegiatan->refKegiatan->uraian_kegiatan.'</li>', 
-                                    [
-                                        'rkasbelanja',
-                                        'tahun' => $listkegiatan->tahun,
-                                        'sekolah_id' => $listkegiatan->sekolah_id,
-                                        'kd_program' => $listkegiatan->kd_program,
-                                        'kd_sub_program' => $listkegiatan->kd_sub_program,
-                                        'kd_kegiatan' => $listkegiatan->kd_kegiatan,
-                                    ],
-                                    [
-                                        'class' => $listkegiatan->kd_sub_program.'.'.$listkegiatan->kd_kegiatan == $kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan ? 'text-bold' : '',
-                                    ]
-                                );
-                            }ELSE{
-                                echo Html::a('<li>'.$listkegiatan->refKegiatan->uraian_kegiatan.'</li>', 
-                                    [
-                                        'rkasbelanja',
-                                        'tahun' => $listkegiatan->tahun,
-                                        'sekolah_id' => $listkegiatan->sekolah_id,
-                                        'kd_program' => $listkegiatan->kd_program,
-                                        'kd_sub_program' => $listkegiatan->kd_sub_program,
-                                        'kd_kegiatan' => $listkegiatan->kd_kegiatan,
-                                    ],
-                                    [
-                                        'class' => $listkegiatan->kd_sub_program.'.'.$listkegiatan->kd_kegiatan == $kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan ? 'text-bold' : '',
-                                    ]
-                                );
-                            }
-                        }
+                    foreach($listkegiatan as $listkegiatan){
+                        $subprogram = $listkegiatan->refSubProgram->uraian_sub_program;
+                        // IF($subprogramawal != $subprogram){
+                        //     echo $subprogram;
+                        //     echo '<ol>';
+                        //     echo Html::a('<li>'.$listkegiatan->refKegiatan->uraian_kegiatan.'</li>', 
+                        //         [
+                        //             'rkasbelanja',
+                        //             'tahun' => $listkegiatan->tahun,
+                        //             'sekolah_id' => $listkegiatan->sekolah_id,
+                        //             'kd_program' => $listkegiatan->kd_program,
+                        //             'kd_sub_program' => $listkegiatan->kd_sub_program,
+                        //             'kd_kegiatan' => $listkegiatan->kd_kegiatan,
+                        //         ],
+                        //         [
+                        //             'class' => $listkegiatan->kd_sub_program.'.'.$listkegiatan->kd_kegiatan == $kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan ? 'text-bold' : '',
+                        //         ]
+                        //     );
+                        //     echo '</ol>';
+                        // }ELSE{
+                            echo Html::a('<li>'.$listkegiatan->refKegiatan->uraian_kegiatan.'</li>', 
+                                [
+                                    'rkasbelanja',
+                                    'tahun' => $listkegiatan->tahun,
+                                    'sekolah_id' => $listkegiatan->sekolah_id,
+                                    'kd_program' => $listkegiatan->kd_program,
+                                    'kd_sub_program' => $listkegiatan->kd_sub_program,
+                                    'kd_kegiatan' => $listkegiatan->kd_kegiatan,
+                                ],
+                                [
+                                    'class' => $listkegiatan->kd_sub_program.'.'.$listkegiatan->kd_kegiatan == $kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan ? 'text-bold' : '',
+                                ]
+                            );
+                        // }
+                    }
                     ?>
 <!--                     Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
                     <ol>

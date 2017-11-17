@@ -80,6 +80,7 @@ class RencanaController extends Controller
         IF(Yii::$app->user->identity->sekolah_id && $sekolah_id = Yii::$app->user->identity->sekolah_id){
             $dataProvider->query->andWhere(['sekolah_id' => $sekolah_id]);
         }
+        $dataProvider->query->orderBy('kd_program, kd_sub_program, kd_kegiatan ASC');
 
         return $this->render('kegiatan', [
             'searchModel' => $searchModel,

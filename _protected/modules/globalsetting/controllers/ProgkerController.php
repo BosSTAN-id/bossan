@@ -4,7 +4,11 @@ namespace app\modules\globalsetting\controllers;
 
 use Yii;
 use app\models\RefKegiatanSekolah;
+use app\models\RefProgramSekolah;
+use app\models\RefSubProgramSekolah;
 use app\modules\globalsetting\models\RefKegiatanSekolahSearch;
+use app\modules\globalsetting\models\RefSubProgramSekolahSearch;
+use app\modules\globalsetting\models\RefProgramSekolahSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -46,6 +50,11 @@ class ProgkerController extends Controller
         }ELSE{
             $Tahun = DATE('Y');
         }
+
+        $searchProgramModel = new RefProgramSekolahSearch(); 
+        $dataProgramProvider = $searchProgramModel->search(Yii::$app->request->queryParams);
+        $dataProgramProvider->pagination->pageSize = 0;
+
         $searchModel = new RefKegiatanSekolahSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->pagination->pageSize = 0;
@@ -53,15 +62,12 @@ class ProgkerController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'searchProgramModel' => $searchProgramModel,
+            'dataProgramProvider' => $dataProgramProvider,
             'Tahun' => $Tahun,
         ]);
     }
 
-    /**
-     * Displays a single RefKegiatanSekolah model.
-     * @param integer $id
-     * @return mixed
-     */
     public function actionView($id)
     {
         IF($this->cekakses() !== true){
@@ -100,6 +106,8 @@ class ProgkerController extends Controller
         $model = new RefKegiatanSekolah();
 
         if ($model->load(Yii::$app->request->post())) {
+            $subprogram = RefSubProgramSekolah::findOne(['kd_program' => $model->kd_program, 'kd_sub_program' => $model->kd_sub_program]);
+            $model->subprogram_id = $subprogram->id;
             IF($model->save()){
                 echo 1;
             }ELSE{
@@ -112,12 +120,69 @@ class ProgkerController extends Controller
         }
     }
 
-    /**
-     * Updates an existing RefKegiatanSekolah model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
+    public function actionCreatesubprogram()
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        // $query = RefSubProgramSekolah::find();
+        
+        // $dataProvider = new \yii\data\ActiveDataProvider([
+        //     'query' => $query,
+        // ]);
+
+        $model = new RefSubProgramSekolah();
+
+        if ($model->load(Yii::$app->request->post())) {
+            IF($model->save()){
+                echo 1;
+            }ELSE{
+                echo 0;
+            }
+        } else {
+            return $this->renderAjax('_formsubprogram', [
+                'model' => $model,
+                // 'dataProvider' => $dataProvider,
+            ]);
+        }
+    }
+
+    public function actionUpdatesubprogram($id)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = RefSubProgramSekolah::find()->where(['id' => $id])->one();
+
+        if ($model->load(Yii::$app->request->post())) {
+            IF($model->save()){
+                echo 1;
+            }ELSE{
+                echo 0;
+            }
+        } else {
+            return $this->renderAjax('_formsubprogram', [
+                'model' => $model,
+            ]);
+        }
+    }
+
     public function actionUpdate($id)
     {
         IF($this->cekakses() !== true){
@@ -134,6 +199,8 @@ class ProgkerController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
+            $subprogram = RefSubProgramSekolah::findOne(['kd_program' => $model->kd_program, 'kd_sub_program' => $model->kd_sub_program]);
+            $model->subprogram_id = $subprogram->id;
             IF($model->save()){
                 echo 1;
             }ELSE{
@@ -170,13 +237,214 @@ class ProgkerController extends Controller
         return $this->redirect(Yii::$app->request->referrer);
     }
 
-    /**
-     * Finds the RefKegiatanSekolah model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return RefKegiatanSekolah the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    /*
+    // part sub program
+    */
+    public function actionSubprogramtab($id)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = RefProgramSekolah::find()->where(['kd_program' => $id])->one();
+
+        $searchSubProgramModel = new RefSubProgramSekolahSearch();
+        $dataSubProgramProvider = $searchSubProgramModel->search(Yii::$app->request->queryParams);
+        $dataSubProgramProvider->query->andWhere(['kd_program' => $id]);
+        $dataSubProgramProvider->pagination->pageSize = 0;
+        
+        return $this->renderAjax('_subprogramtab', [
+            'model' => $model,
+            'searchSubProgramModel' => $searchSubProgramModel,
+            'dataSubProgramProvider' => $dataSubProgramProvider,
+        ]);
+    }
+
+    public function actionTambahsubprogram($id)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $program = RefProgramSekolah::find()->where(['kd_program' => $id])->one();
+
+        $model = new RefSubProgramSekolah();
+        $model->kd_program = $program->kd_program;
+
+        if ($model->load(Yii::$app->request->post())) {
+            IF($model->save()){
+                echo 1;
+            }ELSE{
+                echo 0;
+            }
+        } else {
+            return $this->renderAjax('_formsubprogram', [
+                'program' => $program,
+                'model' => $model,
+            ]);
+        }
+    }  
+
+    public function actionUbahsubprogram($id)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+        $model = RefSubProgramSekolah::find()->where(['id' => $id])->one();
+
+        $program = RefProgramSekolah::find()->where(['kd_program' => $model->refProgram->kd_program])->one();
+
+        $model->kd_program = $program->kd_program;
+
+        if ($model->load(Yii::$app->request->post())) {
+            IF($model->save()){
+                echo 1;
+            }ELSE{
+                echo 0;
+            }
+        } else {
+            return $this->renderAjax('_formsubprogram', [
+                'program' => $program,
+                'model' => $model,
+            ]);
+        }
+    }  
+
+    public function actionDeletesubprogram($id)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = RefSubProgramSekolah::find()->where(['id' => $id])->one();
+        $model->delete();
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    /*
+    // part kegiatan
+    */
+    public function actionKegiatantab($id)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = RefSubProgramSekolah::find()->where(['id' => $id])->one();
+
+        $searchKegiatanModel = new RefKegiatanSekolahSearch();
+        $dataKegiatanProvider = $searchKegiatanModel->search(Yii::$app->request->queryParams);
+        $dataKegiatanProvider->query->andWhere(['subprogram_id' => $id]);
+        $dataKegiatanProvider->pagination->pageSize = 0;
+        
+        return $this->renderAjax('_kegiatantab', [
+            'model' => $model,
+            'searchKegiatanModel' => $searchKegiatanModel,
+            'dataKegiatanProvider' => $dataKegiatanProvider,
+        ]);
+    }
+
+    public function actionTambahkegiatan($id)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $subProgram = RefSubProgramSekolah::find()->where(['id' => $id])->one();
+
+        $model = new RefKegiatanSekolah();
+        $model->kd_program = $subProgram->kd_program;
+        $model->subprogram_id = $subProgram->id;
+        $model->kd_sub_program = $subProgram->kd_sub_program;
+
+        if ($model->load(Yii::$app->request->post())) {
+            IF($model->save()){
+                echo 1;
+            }ELSE{
+                echo 0;
+            }
+        } else {
+            return $this->renderAjax('_form', [
+                'subProgram' => $subProgram,
+                'model' => $model,
+            ]);
+        }
+    }  
+    
+    public function actionUbahkegiatan($id)
+    {
+        IF($this->cekakses() !== true){
+            Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
+            return $this->redirect(Yii::$app->request->referrer);
+        }    
+        IF(Yii::$app->session->get('tahun'))
+        {
+            $Tahun = Yii::$app->session->get('tahun');
+        }ELSE{
+            $Tahun = DATE('Y');
+        }
+
+        $model = $this->findModel($id);
+
+        $subProgram = RefSubProgramSekolah::find()->where(['id' => $model->refSubProgram->id])->one();
+
+        if ($model->load(Yii::$app->request->post())) {
+            IF($model->save()){
+                echo 1;
+            }ELSE{
+                echo 0;
+            }
+        } else {
+            return $this->renderAjax('_form', [
+                'subProgram' => $subProgram,
+                'model' => $model,
+            ]);
+        }
+    }  
+
     protected function findModel($id)
     {
         if (($model = RefKegiatanSekolah::findOne($id)) !== null) {

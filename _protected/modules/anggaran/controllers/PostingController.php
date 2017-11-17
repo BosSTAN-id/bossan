@@ -483,28 +483,47 @@ class PostingController extends \yii\web\Controller
                     return $this->redirect(Yii::$app->request->referrer);                                
                 }
             }ELSE{
-                Yii::$app->getSession()->setFlash('danger',  'Posting gagal! Rincian belanja atau rencana pendapatan/belanja belum semua terisi.');
+                $returnBelanja = "";
+                if($cekbelanja){
+                    $returnBelanja .= "Belanja Tanpa Rincian: ";
+                    foreach($cekbelanja as $cekbelanjadata){
+                        $returnBelanja.= "(".$cekbelanjadata['kd_program'].".".$cekbelanjadata['kd_sub_program'].".".$cekbelanjadata['kd_kegiatan']
+                        .".".$cekbelanjadata['Kd_Rek_1']
+                        .".".$cekbelanjadata['Kd_Rek_2']
+                        .".".$cekbelanjadata['Kd_Rek_3']
+                        .".".$cekbelanjadata['Kd_Rek_3']
+                        .".".$cekbelanjadata['Kd_Rek_4']
+                        .")</br>";
+                    }
+                }
+                if($cekrencanabelanja){
+                    $returnBelanja .= "Rencana Belanja Belum Terisi: ";
+                    foreach($cekrencanabelanja as $cekrencanabelanjadata){
+                        $returnBelanja.= "(".$cekrencanabelanjadata['kd_program'].".".$cekrencanabelanjadata['kd_sub_program'].".".$cekrencanabelanjadata['kd_kegiatan']
+                        .".".$cekrencanabelanjadata['Kd_Rek_1']
+                        .".".$cekrencanabelanjadata['Kd_Rek_2']
+                        .".".$cekrencanabelanjadata['Kd_Rek_3']
+                        .".".$cekrencanabelanjadata['Kd_Rek_3']
+                        .".".$cekrencanabelanjadata['Kd_Rek_4']
+                        .")</br>";
+                    }
+                }
+                if($cekrencanapendapatan){
+                    $returnBelanja .= "Rencana Belanja Belum Terisi: ";
+                    foreach($cekrencanapendapatan as $cekrencanapendapatandata){
+                        $returnBelanja.= "(".$cekrencanapendapatandata['kd_program'].".".$cekrencanapendapatandata['kd_sub_program'].".".$cekrencanapendapatandata['kd_kegiatan']
+                        .".".$cekrencanapendapatandata['Kd_Rek_1']
+                        .".".$cekrencanapendapatandata['Kd_Rek_2']
+                        .".".$cekrencanapendapatandata['Kd_Rek_3']
+                        .".".$cekrencanapendapatandata['Kd_Rek_3']
+                        .".".$cekrencanapendapatandata['Kd_Rek_4']
+                        .")</br>";
+                    }
+                }
+                Yii::$app->getSession()->setFlash('danger',  "Posting gagal! Rincian belanja atau rencana pendapatan/belanja belum semua terisi.</br> $returnBelanja");
                 return $this->redirect(Yii::$app->request->referrer);              
             }
         }
-
-        // if($induk->load(Yii::$app->request->post())) {
-        //   var_dump($induk);
-        //     // IF($induk->save()){
-        //     //     echo 1;
-        //     // }ELSE{
-        //     //     echo 0;
-        //     // }
-        // }
-
-        // if($perubahan1->load(Yii::$app->request->post())) {
-        //   var_dump($perubahan1);
-        //     // IF($perubahan1->save()){
-        //     //     echo 1;
-        //     // }ELSE{
-        //     //     echo 0;
-        //     // }
-        // }
 
         return $this->render('index', [
             'Tahun' => $Tahun,

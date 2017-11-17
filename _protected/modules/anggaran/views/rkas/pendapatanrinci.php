@@ -75,6 +75,8 @@ use yii\widgets\DetailView;
             [
                 'label' => 'Volume',
                 'attribute' => 'jml_satuan',
+                'hAlign' => 'right',
+                'format' => 'decimal'
             ],            
             [
                 'label' => 'Total',

@@ -110,17 +110,29 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
                 'vAlign'=>'top',
                 'buttons' => [
                         'rencanabtl' => function ($url, $model) {
-                          return Html::a('<span class="fa fa-bar-chart"></span><small>Input Rencana</small>', $url,
-                              [  
-                                 'class' => 'btn btn-xs btn-default',
-                                 'title' => Yii::t('yii', 'Rencana'),
-                                 'data-toggle'=>"modal",
-                                 'data-target'=>"#myModal",
-                                 'data-title'=> "Rencana ".$model->refRek5->Nm_Rek_5,                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
-                              ]);
+                            $return = "";
+                            $rencana = \app\models\TaRkasBelanjaRencana::findOne(['tahun' => $model->tahun, 'sekolah_id' => $model->sekolah_id, 'Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2, 'Kd_Rek_3' => $model->Kd_Rek_3, 'Kd_Rek_4' => $model->Kd_Rek_4, 'Kd_Rek_5' => $model->Kd_Rek_5]);
+                            IF($rencana){
+                                $buttonColor = 'btn-success';
+                                $totalRencana =  $rencana['januari1'] + $rencana['februari1'] + $rencana['maret1'] + $rencana['april1'] + $rencana['mei1'] + $rencana['juni1'] + $rencana['juli'] + $rencana['agustus'] + $rencana['september'] + $rencana['oktober'] + $rencana['november'] + $rencana['desember'];
+                                if(totalbelanja($model->tahun, $model->sekolah_id, $model->kd_program, $model->kd_sub_program, $model->kd_kegiatan, $model->Kd_Rek_1, $model->Kd_Rek_2, $model->Kd_Rek_3, $model->Kd_Rek_4, $model->Kd_Rek_5) != $totalRencana) {
+                                    $return .= '<span class="badge" data-toggle="tooltip" data-placement="left" title="Terdapat perbedaan angka rencana dan total belanja pada rkas">?</span>' ;
+                                }
+                            }else{
+                                $buttonColor = 'btn-default';
+                            }
+                            $return .= Html::a('<span class="fa fa-bar-chart"></span><small>Input Rencana</small>', $url,
+                                [  
+                                    'class' => 'btn btn-xs '.$buttonColor,
+                                    'title' => Yii::t('yii', 'Rencana'),
+                                    'data-toggle'=>"modal",
+                                    'data-target'=>"#myModal",
+                                    'data-title'=> "Rencana ".$model->refRek5->Nm_Rek_5,                                 
+                                    // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                    // 'data-method' => 'POST',
+                                    // 'data-pjax' => 1
+                                ]);
+                            return $return;
                         },
                 ]
             ],            

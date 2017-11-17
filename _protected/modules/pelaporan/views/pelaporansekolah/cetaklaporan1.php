@@ -256,7 +256,7 @@ $ysisa = $y1;
     $y2 = $pdf->GetY();
     $pdf->ln();
 
-    $rutin = $rutin->all();
+    $rutin = $rutin->select(['kd_penerimaan_1', 'kd_penerimaan_2', 'SUM(total) as total'])->groupBy('kd_penerimaan_1, kd_penerimaan_2')->all();
     foreach($rutin as $value){
         $y = MAX($y1, $y2, $y3);
         $pdf->SetFont('Arial','',10);
@@ -292,7 +292,7 @@ $ysisa = $y1;
     $y2 = $pdf->GetY();
     $pdf->ln();
 
-    $bos = $bos->all();
+    $bos = $bos->select(['kd_penerimaan_1', 'kd_penerimaan_2', 'SUM(total) as total'])->groupBy('kd_penerimaan_1, kd_penerimaan_2')->all();
     foreach($bos as $value){
         $y = MAX($y1, $y2, $y3);
         $pdf->SetFont('Arial','',10);
@@ -328,7 +328,7 @@ $ysisa = $y1;
     $y2 = $pdf->GetY();
     $pdf->ln();
 
-    $bantuan = $bantuan->all();
+    $bantuan = $bantuan->select(['kd_penerimaan_1', 'kd_penerimaan_2', 'SUM(total) as total'])->groupBy('kd_penerimaan_1, kd_penerimaan_2')->all();
     foreach($bantuan as $value){
         $y = MAX($y1, $y2, $y3);
         $pdf->SetFont('Arial','',10);
@@ -364,7 +364,7 @@ $ysisa = $y1;
     $y2 = $pdf->GetY();
     $pdf->ln();
 
-    $lain = $lain->all();
+    $lain = $lain->select(['kd_penerimaan_1', 'kd_penerimaan_2', 'SUM(total) as total'])->groupBy('kd_penerimaan_1, kd_penerimaan_2')->all();
     foreach($lain as $value){
         $y = MAX($y1, $y2, $y3);
         $pdf->SetFont('Arial','',10);

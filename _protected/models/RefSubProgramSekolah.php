@@ -48,4 +48,9 @@ class RefSubProgramSekolah extends \yii\db\ActiveRecord
             'uraian_sub_program' => Yii::t('app', 'Uraian Sub Program'),
         ];
     }
+
+    public function getRefProgram()
+    {
+        return $this->hasOne(RefProgramSekolah::className(), ['kd_program' => 'kd_program']);
+    }  
 }

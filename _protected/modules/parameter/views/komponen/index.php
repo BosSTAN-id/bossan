@@ -5,27 +5,24 @@ use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\penatausahaan\models\TaSPJRincSearch */
+/* @var $searchModel app\modules\parameter\models\RefKomponenBosSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Penerimaan';
-$this->params['breadcrumbs'][] = 'Penatausahaan';
+$this->title = 'Komponen BOS';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="ta-spjrinc-index">
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<div class="ref-komponen-bos-index">
 
     <p>
-        <?= Html::a('Tambah Bukti Penerimaan', ['create'], [
+        <?= Html::a('Tambah Ref Komponen Bos', ['create'], [
                                                     'class' => 'btn btn-xs btn-success',
                                                     'data-toggle'=>"modal",
                                                     'data-target'=>"#myModal",
-                                                    'data-title'=>"Tambah Bukti Penerimaan",
+                                                    'data-title'=>"'Tambah Ref Komponen Bos'",
                                                     ]) ?>
     </p>
     <?= GridView::widget([
-        'id' => 'ta-spjrinc',    
+        'id' => 'ref-komponen-bos',    
         'dataProvider' => $dataProvider,
         'export' => false, 
         'responsive'=>true,
@@ -35,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'responsiveWrap' => false,        
         'toolbar' => [
             [
-                // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
+                'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
             ],
         ],       
         'pager' => [
@@ -44,46 +41,32 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'pjax'=>true,
         'pjaxSettings'=>[
-            'options' => ['id' => 'penerimaan-pjax', 'timeout' => 5000],
+            'options' => ['id' => 'ref-komponen-bos-pjax', 'timeout' => 5000],
         ],        
         // 'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'kartik\grid\SerialColumn'],  
+            ['class' => 'kartik\grid\SerialColumn'],
+
+            'id',
+            'komponen',
             [
-                'class'=>'\kartik\grid\DataColumn',
-                'format' => 'date',
-                'attribute'=>'tgl_bukti',
-                'group' => true,
+                'label' => 'Dapat dipilih sekolah',
+                'attribute' => 'bos_id',
             ],
-            [
-                'label' => 'Jenis Pendapatan',
-                'value' => function($model){
-                    return $model->refRek5->Nm_Rek_5;
-                }
-            ],           
-            'no_bukti',
-            'uraian',
-            'nilai:decimal',
             [
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{view} {update} {delete}',
-                'visibleButtons' => [
-                    'delete' => function ($model, $key, $index) {
-                        return $model->no_spj == NULL ? true : false;
-                     }
-                ],           
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
                         'update' => function ($url, $model) {
-                          IF($model->no_spj == NULL)
                           return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
                               [  
                                  'title' => Yii::t('yii', 'ubah'),
                                  'data-toggle'=>"modal",
                                  'data-target'=>"#myModal",
-                                 'data-title'=> "Ubah Bukti",                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
+                                 'data-title'=> "Ubah",                                 
+                                 // 'data-confirm' => "Yakin menghapus ini?",
                                  // 'data-method' => 'POST',
                                  // 'data-pjax' => 1
                               ]);
@@ -94,12 +77,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                  'title' => Yii::t('yii', 'lihat'),
                                  'data-toggle'=>"modal",
                                  'data-target'=>"#myModal",
-                                 'data-title'=> "Bukti".$model->no_bukti,                                 
-                                 // 'data-confirm' => "Yakin menghapus sasaran ini?",
-                                 // 'data-method' => 'POST',
-                                 // 'data-pjax' => 1
+                                 'data-title'=> "Lihat",
                               ]);
-                      }
+                        },                        
                 ]
             ],
         ],
@@ -116,19 +96,6 @@ $this->params['breadcrumbs'][] = $this->title;
 echo '...';
  
 Modal::end();
-
-Modal::begin([
-    'id' => 'myModalubah',
-    'header' => '<h4 class="modal-title">Lihat lebih...</h4>',
-        'options' => [
-            'tabindex' => false // important for Select2 to work properly
-        ], 
-]);
- 
-echo '...';
- 
-Modal::end();
-
 $this->registerJs("
     $('#myModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
@@ -142,20 +109,5 @@ $this->registerJs("
                 modal.find('.modal-body').html(data)
             });
         })
-");
-$this->registerJs("
-    $('#myModalubah').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var modal = $(this)
-        var title = button.data('title') 
-        var href = button.attr('href') 
-        modal.find('.modal-title').html(title)
-        modal.find('.modal-body').html('<i class=\"fa fa-spinner fa-spin\"></i>')
-        $.post(href)
-            .done(function( data ) {
-                modal.find('.modal-body').html(data)
-            });
-        })
-       
 ");
 ?>

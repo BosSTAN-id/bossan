@@ -86,6 +86,11 @@ class TaRkasPendapatan extends \yii\db\ActiveRecord
         return $this->hasOne(RefSekolah::className(), ['id' => 'sekolah_id']);
     }
 
+    public function getPenerimaan1()
+    {
+        return $this->hasOne(\app\models\RefPenerimaanSekolah1::className(), ['kd_penerimaan_1' => 'kd_penerimaan_1']);
+    }
+
     public function getPenerimaan2()
     {
         return $this->hasOne(\app\models\RefPenerimaanSekolah2::className(), ['kd_penerimaan_1' => 'kd_penerimaan_1', 'kd_penerimaan_2' => 'kd_penerimaan_2']);

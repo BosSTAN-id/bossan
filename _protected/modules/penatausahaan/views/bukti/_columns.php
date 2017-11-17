@@ -12,15 +12,32 @@ return [
     [
         'class' => 'kartik\grid\SerialColumn',
         'width' => '30px',
+    ],  
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'format' => 'date',
+        'attribute'=>'tgl_bukti',
+        'group' => true,
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
         'attribute'=>'no_bukti',
     ],
     [
+        'label' => 'Kegiatan',
+        'hAlign' => 'center',
+        'value' => function($model){
+            return $model->kd_program.'.'.substr('0'.$model->kd_sub_program, -2).'.'.substr('0'.$model->kd_kegiatan, -2);
+        }
+    ],
+    [
         'class'=>'\kartik\grid\DataColumn',
-        'format' => 'date',
-        'attribute'=>'tgl_bukti',
+        'attribute'=>'uraian',
+    ],
+    [
+        'class'=>'\kartik\grid\DataColumn',
+        'format' => 'decimal',
+        'attribute'=>'nilai',
     ],
     [
         'class'=>'\kartik\grid\DataColumn',
@@ -39,15 +56,6 @@ return [
         'value' => function($model){
             return $model->pembayaran == 1 ? 'Bank' : 'Tunai';
         }
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'format' => 'decimal',
-        'attribute'=>'nilai',
-    ],
-    [
-        'class'=>'\kartik\grid\DataColumn',
-        'attribute'=>'uraian',
     ],
     [
         'class' => 'kartik\grid\ActionColumn',

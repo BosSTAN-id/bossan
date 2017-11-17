@@ -111,7 +111,7 @@ class SpjController extends Controller
                     a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, SUM(a.total) AS anggaran
                     FROM
                     ta_rkas_history a
-                    WHERE a.tahun = $tahun AND a.sekolah_id = $sekolah AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = $tahun AND sekolah_id = 1 AND tgl_peraturan <= '$tgl_spj')
+                    WHERE a.tahun = $tahun AND a.sekolah_id = $sekolah AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = $tahun AND sekolah_id = $sekolah AND tgl_peraturan <= '$tgl_spj')
                     GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5
                 )a INNER JOIN
                 (
@@ -359,6 +359,7 @@ class SpjController extends Controller
         }
         $model = $this->findModel($tahun, $no_spj);
         IF($model->kd_sah == 1){
+            \app\models\TaSPJRinc::updateAll(['no_spj' => null], "no_spj = '$no_spj'");
             $model->delete();
         }ELSE{
             Yii::$app->getSession()->setFlash('warning',  'SPJ ini sudah diproses Tata Usaha, tidak dapat diubah atau dihapus.');

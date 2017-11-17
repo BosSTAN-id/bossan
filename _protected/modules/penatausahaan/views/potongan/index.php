@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{view} {update} {delete} {rincian}',
+                'template' => '{update} {delete} {rincian}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
@@ -80,11 +80,12 @@ $this->params['breadcrumbs'][] = $this->title;
                               ]);
                         },
                         'rincian' => function ($url, $model) {
-                          return Html::a('<span class="glyphicon glyphicon-menu-right"></span>', $url,
-                              [  
-                                 'title' => Yii::t('yii', 'Rincian'),
-                                 'data-pjax' => 0
-                              ]);
+                            return Html::a('Rincian <span class="glyphicon glyphicon-menu-right"></span>', $url,
+                                [
+                                    'class' => 'btn btn-xs btn-default',
+                                    'title' => Yii::t('yii', 'Rincian'),
+                                    'data-pjax' => 0
+                                ]);
                         },
                 ]
             ],

@@ -140,6 +140,7 @@ class SiteController extends Controller
             $sekolah_id = Yii::$app->user->identity->sekolah_id;
             $infoBos = \app\models\TaInfoBos::find()->where([
                 'sekolah_id' => $sekolah_id,
+                'tahun_ajaran' => $Tahun
             ])->orderBy('id DESC')->one();
             $realisasiBelanjaGraph = Yii::$app->db->createCommand("
                 SELECT 1 AS bulan, IFNULL(SUM(nilai),0) AS nilai FROM ta_spj_rinc WHERE Kd_Rek_1 = 5 AND tahun = $Tahun AND sekolah_id = $sekolah_id AND tgl_bukti LIKE '$Tahun-01-%'

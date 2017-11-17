@@ -3,7 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\SwitchInput;
-use kartik\widgets\Select2;
+use kartik\select2\Select2;
+use yii\helpers\ArrayHelper;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\RefRek5 */
@@ -14,9 +16,15 @@ use kartik\widgets\Select2;
 
     <?php $form = ActiveForm::begin(['id' => $model->formName()]); ?>
 
-    <?= $form->field($model, 'kd_penerimaan_1')->textInput() ?>
+    <?= $form->field($model, 'kd_penerimaan_1')->widget(Select2::classname(), [
+        'data' => ArrayHelper::map(\app\models\RefPenerimaanSekolah1::find()->select(['kd_penerimaan_1', "concat(kd_penerimaan_1, '. ', uraian_penerimaan_1) AS uraian_penerimaan_1"])->all(), 'kd_penerimaan_1', 'uraian_penerimaan_1'),
+        'options' => ['placeholder' => 'Pilih Akun ...'],
+        'pluginOptions' => [
+            'allowClear' => true
+        ],
+    ]); ?>
 
-    <?= $form->field($model, 'kd_penerimaan_2')->textInput() ?>
+    <?= $form->field($model, 'kd_penerimaan_2')->textInput()->label('Kode Penerimaan 2') ?>
 
     <?= $form->field($model, 'uraian')->textInput(['maxlength' => true]) ?>
     

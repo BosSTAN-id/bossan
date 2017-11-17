@@ -68,6 +68,8 @@
                             ['label' => 'Blog/Pengumuman', 'icon' => 'circle-o', 'url' => ['/management/pengumuman'], 'visible' => akses(106)],  
                             ['label' => 'Seleksi Rekening', 'icon' => 'circle-o', 'url' => ['/globalsetting/selection'], 'visible' => akses(107)], 
                             ['label' => 'Program dan Kegiatan', 'icon' => 'circle-o', 'url' => ['/globalsetting/progker'], 'visible' => akses(108)],                                                        
+                            ['label' => 'Komponen BOS', 'icon' => 'circle-o', 'url' => ['/parameter/komponen'], 'visible' => akses(206)],
+                            ['label' => 'Potongan Belanja', 'icon' => 'circle-o', 'url' => ['/parameter/potongan'], 'visible' => akses(207)],
                         ],
                     ],                    
                     ['label' => 'Parameter', 'icon' => 'chevron-circle-right','url' => '#', 'visible' => 1,'items'  =>
@@ -78,7 +80,7 @@
                             ['label' => 'Aset Tetap', 'icon' => 'circle-o', 'url' => ['/parameter/rekening-aset-tetap'], 'visible' => akses(205)],
                         ],
                     ],                    
-                    ['label' => 'Batch Process', 'icon' => 'circle-o', 'url' => ['/management/batchprocess'], 'visible' => akses(301)],
+                    // ['label' => 'Batch Process', 'icon' => 'circle-o', 'url' => ['/management/batchprocess'], 'visible' => akses(301)],
                     ['label' => 'Anggaran', 'icon' => 'chevron-circle-right', 'url' => '#', 'visible' => !Yii::$app->user->isGuest, 'items' => 
                         [
                             ['label' => 'RKAS', 'icon' => 'circle-o', 'url' => ['/anggaran/rkas'], 'visible' => akses(402)],

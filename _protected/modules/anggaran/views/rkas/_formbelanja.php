@@ -76,6 +76,7 @@ use kartik\widgets\DepDrop;
                 'data' => ArrayHelper::map(
                     \app\models\RefKomponenBos::find()
                     ->select(['id', 'CONCAT(id,\' \',komponen) AS komponen'])
+                    ->where(['bos_id' => 1])
                     // ->where(['Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2])
                     ->all()
                     ,'id','komponen'),

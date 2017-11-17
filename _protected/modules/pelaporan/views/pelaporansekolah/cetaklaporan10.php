@@ -965,85 +965,85 @@ foreach($data as $data){
         $pdf->SetXY($xcurrent, $y);
     }
 
-    if($sekolah_id != $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'], -2).'.'.substr('0'.$data['Kd_Rek_5'], -2).'.'.$data['sekolah_id']){
-        IF($y2 > 285 || $y1 + (4*(strlen($data['nama_sekolah'])/23)) > 285 || $y3 > 285  ){ //cek pagebreak
-            $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
-            //setiap selesai page maka buat rectangle
-                $pdf->Rect($x, $yst, $w['0'] ,$ylst);
-                $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
-                $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
-                $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
-                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
-                $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
-                // $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
+    // if($sekolah_id != $data['kd_program'].'.'.$data['kd_sub_program'].'.'.$data['Kd_Rek_1'].'.'.$data['Kd_Rek_2'].'.'.$data['Kd_Rek_3'].'.'.substr('0'.$data['Kd_Rek_4'], -2).'.'.substr('0'.$data['Kd_Rek_5'], -2).'.'.$data['sekolah_id']){
+    //     IF($y2 > 285 || $y1 + (4*(strlen($data['nama_sekolah'])/23)) > 285 || $y3 > 285  ){ //cek pagebreak
+    //         $ylst = 290 - $yst; //207 batas margin bawah dikurang dengan y pertama
+    //         //setiap selesai page maka buat rectangle
+    //             $pdf->Rect($x, $yst, $w['0'] ,$ylst);
+    //             $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
+    //             $pdf->Rect($x+$w['0']+$w['1'], $yst, $w['2'] ,$ylst);
+    //             $pdf->Rect($x+$w['0']+$w['1']+$w['2'], $yst, $w['3'] ,$ylst);
+    //             $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3'], $yst, $w['4'] ,$ylst);
+    //             $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
+    //             // $pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4']+$w['5'], $yst ,$w['6'],$ylst);
             
-            //setelah buat rectangle baru kemudian addPage
-            $pdf->AddPage();
+    //         //setelah buat rectangle baru kemudian addPage
+    //         $pdf->AddPage();
     
-            $pdf->SetFont('Arial','B',9);
-            $pdf->SetXY($left,$pdf->getY());
-            $pdf->Cell($w['0'],4,'KODE','LT',0,'C');
-            $pdf->Cell($w['1'],4,'URAIAN','LTR',0,'C');
-            $pdf->Cell($w['2']+$w['3']+$w['4'],4,'RINCIAN PERHITUNGAN','LTR',0,'C');
-            $pdf->Cell($w['5'],4,'Jumlah','LTR',0,'C');
-            $pdf->ln();
+    //         $pdf->SetFont('Arial','B',9);
+    //         $pdf->SetXY($left,$pdf->getY());
+    //         $pdf->Cell($w['0'],4,'KODE','LT',0,'C');
+    //         $pdf->Cell($w['1'],4,'URAIAN','LTR',0,'C');
+    //         $pdf->Cell($w['2']+$w['3']+$w['4'],4,'RINCIAN PERHITUNGAN','LTR',0,'C');
+    //         $pdf->Cell($w['5'],4,'Jumlah','LTR',0,'C');
+    //         $pdf->ln();
             
-            $pdf->SetXY($left,$pdf->getY());
-            $pdf->Cell($w['0'],4,'REKENING','L',0,'C');
-            $pdf->Cell($w['1'],4,'','LR',0,'C');
-            $pdf->Cell($w['2'],4,'Volume','LTR',0,'C');
-            $pdf->Cell($w['3'],4,'Satuan','LTR',0,'C');
-            $pdf->Cell($w['4'],4,'Tarif','LTR',0,'C');
-            $pdf->Cell($w['5'],4,'(Rp)','LR',0,'C');
-            $pdf->ln();
+    //         $pdf->SetXY($left,$pdf->getY());
+    //         $pdf->Cell($w['0'],4,'REKENING','L',0,'C');
+    //         $pdf->Cell($w['1'],4,'','LR',0,'C');
+    //         $pdf->Cell($w['2'],4,'Volume','LTR',0,'C');
+    //         $pdf->Cell($w['3'],4,'Satuan','LTR',0,'C');
+    //         $pdf->Cell($w['4'],4,'Tarif','LTR',0,'C');
+    //         $pdf->Cell($w['5'],4,'(Rp)','LR',0,'C');
+    //         $pdf->ln();
             
-            $pdf->SetFont('Arial','B',10);
-            $pdf->SetXY($left,$pdf->getY());
-            $pdf->Cell($w['0'],4,'1','LTB',0,'C');
-            $pdf->Cell($w['1'],4,'2','LTRB',0,'C');
-            $pdf->Cell($w['2'],4,'3','LTRB',0,'C');
-            $pdf->Cell($w['3'],4,'4','LTRB',0,'C');
-            $pdf->Cell($w['4'],4,'5','LTRB',0,'C');
-            $pdf->Cell($w['5'],4,'6','LTRB',0,'C');
-            $pdf->ln();
+    //         $pdf->SetFont('Arial','B',10);
+    //         $pdf->SetXY($left,$pdf->getY());
+    //         $pdf->Cell($w['0'],4,'1','LTB',0,'C');
+    //         $pdf->Cell($w['1'],4,'2','LTRB',0,'C');
+    //         $pdf->Cell($w['2'],4,'3','LTRB',0,'C');
+    //         $pdf->Cell($w['3'],4,'4','LTRB',0,'C');
+    //         $pdf->Cell($w['4'],4,'5','LTRB',0,'C');
+    //         $pdf->Cell($w['5'],4,'6','LTRB',0,'C');
+    //         $pdf->ln();
     
-            $y1 = $pdf->GetY(); // Untuk baris berikutnya
-            $y2 = $pdf->GetY(); //untuk baris berikutnya
-            $y3 = $pdf->GetY(); //untuk baris berikutnya
-            $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
-            $x = 15;
-            $ysisa = $y1;
+    //         $y1 = $pdf->GetY(); // Untuk baris berikutnya
+    //         $y2 = $pdf->GetY(); //untuk baris berikutnya
+    //         $y3 = $pdf->GetY(); //untuk baris berikutnya
+    //         $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
+    //         $x = 15;
+    //         $ysisa = $y1;
     
-        }
+    //     }
 
-        $y = MAX($y1, $y2, $y3);
+    //     $y = MAX($y1, $y2, $y3);
         
-        //new data
-        $pdf->SetFont('Arial','',8);    
-        $pdf->SetXY($x+2, $y);
-        $xcurrent= $x;
-        $pdf->MultiCell($w['0'],4,'','','L');
-        $xcurrent = $xcurrent+$w['0'];
-        $pdf->SetXY($xcurrent+14, $y);
-        $pdf->MultiCell($w['1']-14,4,'~ '.$data['nama_sekolah'],'','L');
-        $y1 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan  
-        $xcurrent = $xcurrent+$w['1'];
-        $pdf->SetXY($xcurrent, $y);
-        $pdf->MultiCell($w['2'],4,'','','L');  
-        $xcurrent = $xcurrent+$w['2'];
-        $pdf->SetXY($xcurrent, $y);
-        $pdf->MultiCell($w['3'],4,'','','R');
-        $xcurrent = $xcurrent+$w['3'];
-        $pdf->SetXY($xcurrent, $y);
-        $pdf->MultiCell($w['4'],4,'','','L');
-        $y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
-        $xcurrent = $xcurrent+$w['4'];
-        $pdf->SetXY($xcurrent, $y);
-        $pdf->MultiCell($w['5'],4,'','','L');
-        $y3 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
-        $xcurrent = $xcurrent+$w['5'];
-        $pdf->SetXY($xcurrent, $y);
-    }    
+    //     //new data
+    //     $pdf->SetFont('Arial','',8);    
+    //     $pdf->SetXY($x+2, $y);
+    //     $xcurrent= $x;
+    //     $pdf->MultiCell($w['0'],4,'','','L');
+    //     $xcurrent = $xcurrent+$w['0'];
+    //     $pdf->SetXY($xcurrent+14, $y);
+    //     $pdf->MultiCell($w['1']-14,4,'~ '.$data['nama_sekolah'],'','L');
+    //     $y1 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan  
+    //     $xcurrent = $xcurrent+$w['1'];
+    //     $pdf->SetXY($xcurrent, $y);
+    //     $pdf->MultiCell($w['2'],4,'','','L');  
+    //     $xcurrent = $xcurrent+$w['2'];
+    //     $pdf->SetXY($xcurrent, $y);
+    //     $pdf->MultiCell($w['3'],4,'','','R');
+    //     $xcurrent = $xcurrent+$w['3'];
+    //     $pdf->SetXY($xcurrent, $y);
+    //     $pdf->MultiCell($w['4'],4,'','','L');
+    //     $y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
+    //     $xcurrent = $xcurrent+$w['4'];
+    //     $pdf->SetXY($xcurrent, $y);
+    //     $pdf->MultiCell($w['5'],4,'','','L');
+    //     $y3 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
+    //     $xcurrent = $xcurrent+$w['5'];
+    //     $pdf->SetXY($xcurrent, $y);
+    // }    
 
     $y = MAX($y1, $y2, $y3);
     

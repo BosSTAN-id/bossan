@@ -44,15 +44,22 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Langsung'];
             return ['data-id' => $model->tahun.'.'.$model->sekolah_id.'.'.$model->kd_program.'.'.$model->kd_sub_program.'.'.$model->kd_kegiatan];
         },        
         'columns' => [
-            // 'sekolah_id',        
+            [
+                'label' => 'Program',
+                'attribute' => 'refProgram.uraian_program',
+                'group' => true,
+            ],
+            [
+                'label' => 'Sub Program',
+                'attribute' => 'refSubProgram.uraian_sub_program',
+                'group' => true,
+            ],
             [
                 'label' => 'Kd Kegiatan',
                 'value' => function($model){
                     return $model->kd_program.'.'.substr('0'.$model->kd_sub_program, -2).'.'.substr('0'.$model->kd_kegiatan, -2);
                 }
             ],
-            'refProgram.uraian_program',
-            'refSubProgram.uraian_sub_program',
             'refKegiatan.uraian_kegiatan',
             // [
             //     'label' => 'Sumber Dana',

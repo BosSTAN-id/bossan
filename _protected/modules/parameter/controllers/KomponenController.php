@@ -1,19 +1,18 @@
 <?php
 
-namespace app\modules\penatausahaan\controllers;
+namespace app\modules\parameter\controllers;
 
 use Yii;
-use app\models\TaSetoranPotongan;
-use app\models\TaSetoranPotonganRinc;
-use app\modules\penatausahaan\models\TaSetoranPotonganRincSearch;
+use app\models\RefKomponenBos;
+use app\modules\parameter\models\RefKomponenBosSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PotonganrincController implements the CRUD actions for TaSetoranPotonganRinc model.
+ * KomponenController implements the CRUD actions for RefKomponenBos model.
  */
-class PotonganrincController extends Controller
+class KomponenController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,8 +29,10 @@ class PotonganrincController extends Controller
         ];
     }
 
+    private $menu = 201; // 206
+
     /**
-     * Lists all TaSetoranPotonganRinc models.
+     * Lists all RefKomponenBos models.
      * @return mixed
      */
     public function actionIndex()
@@ -46,7 +47,7 @@ class PotonganrincController extends Controller
         }ELSE{
             $Tahun = DATE('Y');
         }
-        $searchModel = new TaSetoranPotonganRincSearch();
+        $searchModel = new RefKomponenBosSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -57,14 +58,11 @@ class PotonganrincController extends Controller
     }
 
     /**
-     * Displays a single TaSetoranPotonganRinc model.
-     * @param string $tahun
-     * @param integer $sekolah_id
-     * @param string $no_setoran
-     * @param integer $kd_potongan
+     * Displays a single RefKomponenBos model.
+     * @param integer $id
      * @return mixed
      */
-    public function actionView($tahun, $sekolah_id, $no_setoran, $kd_potongan)
+    public function actionView($id)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -77,16 +75,16 @@ class PotonganrincController extends Controller
             $Tahun = DATE('Y');
         }   
         return $this->renderAjax('view', [
-            'model' => $this->findModel($tahun, $sekolah_id, $no_setoran, $kd_potongan),
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new TaSetoranPotonganRinc model.
+     * Creates a new RefKomponenBos model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate($tahun, $sekolah_id, $no_setoran)
+    public function actionCreate()
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -99,16 +97,9 @@ class PotonganrincController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $setoran = TaSetoranPotongan::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'no_setoran' => $no_setoran]);
-
-        $model = new TaSetoranPotonganRinc();
-        $model->tahun = $tahun;
-        $model->sekolah_id = $sekolah_id;
-        $model->no_setoran = $no_setoran;
-        $model->keterangan = $setoran->keterangan;
+        $model = new RefKomponenBos();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->nilai = str_replace(',', '.', $model->nilai);
             IF($model->save()){
                 echo 1;
             }ELSE{
@@ -122,15 +113,12 @@ class PotonganrincController extends Controller
     }
 
     /**
-     * Updates an existing TaSetoranPotonganRinc model.
+     * Updates an existing RefKomponenBos model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $tahun
-     * @param integer $sekolah_id
-     * @param string $no_setoran
-     * @param integer $kd_potongan
+     * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($tahun, $sekolah_id, $no_setoran, $kd_potongan)
+    public function actionUpdate($id)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -143,10 +131,9 @@ class PotonganrincController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $model = $this->findModel($tahun, $sekolah_id, $no_setoran, $kd_potongan);
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->nilai = str_replace(',', '.', $model->nilai);
             IF($model->save()){
                 echo 1;
             }ELSE{
@@ -160,15 +147,12 @@ class PotonganrincController extends Controller
     }
 
     /**
-     * Deletes an existing TaSetoranPotonganRinc model.
+     * Deletes an existing RefKomponenBos model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $tahun
-     * @param integer $sekolah_id
-     * @param string $no_setoran
-     * @param integer $kd_potongan
+     * @param integer $id
      * @return mixed
      */
-    public function actionDelete($tahun, $sekolah_id, $no_setoran, $kd_potongan)
+    public function actionDelete($id)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
@@ -181,24 +165,21 @@ class PotonganrincController extends Controller
             $Tahun = DATE('Y');
         }
 
-        $this->findModel($tahun, $sekolah_id, $no_setoran, $kd_potongan)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**
-     * Finds the TaSetoranPotonganRinc model based on its primary key value.
+     * Finds the RefKomponenBos model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $tahun
-     * @param integer $sekolah_id
-     * @param string $no_setoran
-     * @param integer $kd_potongan
-     * @return TaSetoranPotonganRinc the loaded model
+     * @param integer $id
+     * @return RefKomponenBos the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($tahun, $sekolah_id, $no_setoran, $kd_potongan)
+    protected function findModel($id)
     {
-        if (($model = TaSetoranPotonganRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'no_setoran' => $no_setoran, 'kd_potongan' => $kd_potongan])) !== null) {
+        if (($model = RefKomponenBos::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -209,7 +190,7 @@ class PotonganrincController extends Controller
     protected function cekakses(){
 
         IF(Yii::$app->user->identity){
-            $akses = \app\models\RefUserMenu::find()->where(['kd_user' => Yii::$app->user->identity->kd_user, 'menu' => 509])->one();
+            $akses = \app\models\RefUserMenu::find()->where(['kd_user' => Yii::$app->user->identity->kd_user, 'menu' => $this->menu])->one();
             IF($akses){
                 return true;
             }else{

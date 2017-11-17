@@ -25,20 +25,10 @@ use yii\helpers\Url;
                 ],
             ]);
     ?>
-    <?php  echo $form->field($model, 'kd_sub_program')->widget(DepDrop::classname(), [
-            'data' => isset($model->kd_sub_program) ? [$model->kd_sub_program => $subProgram->uraian_sub_program] : [],
-            'type'=>DepDrop::TYPE_SELECT2,
-            'options'=>['id'=>'refkegiatansekolah-kd_sub_program'],
-            'pluginOptions'=>[
-                'depends'=>['refkegiatansekolah-kd_program'],
-                'placeholder'=>'Pilih Sub Program ...',
-                'url'=>Url::to(['subprogram'])
-            ]
-        ]); ?>   
 
-    <?= $form->field($model, 'kd_kegiatan')->textInput() ?>
+    <?= $form->field($model, 'kd_sub_program')->textInput() ?>
 
-    <?= $form->field($model, 'uraian_kegiatan')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'uraian_sub_program')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -48,6 +38,7 @@ use yii\helpers\Url;
 
 </div>
 <?php
+
 $script = <<<JS
 $('form#{$model->formName()}').on('beforeSubmit',function(e)
 {
@@ -60,7 +51,8 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
             if(result == 1)
             {
                 $("#myModal").modal('hide'); //hide modal after submit
-                $.pjax.reload({container:'#ref-kegiatan-sekolah-pjax'});
+                //$(\$form).trigger("reset"); //reset form to reuse it to input
+                $.pjax.reload({container:'#ref-sub-program-sekolah-pjax'});
             }else
             {
                 $("#message").html(result);

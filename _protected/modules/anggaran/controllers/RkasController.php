@@ -80,6 +80,7 @@ class RkasController extends Controller
         IF(Yii::$app->user->identity->sekolah_id && $sekolah_id = Yii::$app->user->identity->sekolah_id){
             $dataProvider->query->andWhere(['sekolah_id' => $sekolah_id]);
         }
+        $dataProvider->query->orderBy('kd_program, kd_sub_program, kd_kegiatan ASC');
 
         return $this->render('kegiatan', [
             'searchModel' => $searchModel,
@@ -442,6 +443,8 @@ class RkasController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             // var_dump($model);
             $no_rinc = \app\models\TaRkasBelanjaRinc::find()->select('MAX(no_rinc) AS no_rinc')->where(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5])->one();
+            $model->nilai_rp =  str_replace(',', '.', $model->nilai_rp);
+            $model->jml_satuan = str_replace(',', '.', $model->jml_satuan);
             $model->no_rinc = ($no_rinc->no_rinc + 1); 
             $model->total = $model->nilai_rp * $model->jml_satuan;
             // var_dump($model->validate());
@@ -639,7 +642,9 @@ class RkasController extends Controller
         $model->kd_kegiatan = $kd_kegiatan;
         $model->Kd_Rek_1 = $session['Kd_Rek_1'];
         $model->Kd_Rek_2 = $session['Kd_Rek_2'];
-        
+        $model->kd_penerimaan_1 = 2;
+        $model->kd_penerimaan_2 = 1;
+        $model->penerimaan_2 = '2.1';
 
         if ($model->load(Yii::$app->request->post())) {
             // var_dump($model);
@@ -677,6 +682,9 @@ class RkasController extends Controller
         }
         $session->set('Kd_Rek_1', 5);
         $session->set('Kd_Rek_2', 1);
+        $model->kd_penerimaan_1 = 2;
+        $model->kd_penerimaan_2 = 1;
+        $model->penerimaan_2 = '2.1';
 
 
         $model = \app\models\TaRkasBelanja::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'kd_program' => $kd_program, 'kd_sub_program' => $kd_sub_program, 'kd_kegiatan' => $kd_kegiatan , 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5]);
@@ -920,6 +928,8 @@ class RkasController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             // var_dump($model);
             $no_rinc = \app\models\TaRkasPendapatanRinc::find()->select('MAX(no_rinc) AS no_rinc')->where(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5])->one();
+            $model->nilai_rp =  str_replace(',', '.', $model->nilai_rp);
+            $model->jml_satuan = str_replace(',', '.', $model->jml_satuan);
             $model->no_rinc = ($no_rinc->no_rinc + 1); 
             $model->total = $model->nilai_rp * $model->jml_satuan;
             $model->validate();
@@ -951,6 +961,8 @@ class RkasController extends Controller
         $model = \app\models\TaRkasPendapatanRinc::findOne(['tahun' => $tahun, 'sekolah_id' => $sekolah_id, 'Kd_Rek_1' => $Kd_Rek_1, 'Kd_Rek_2' => $Kd_Rek_2, 'Kd_Rek_3' => $Kd_Rek_3, 'Kd_Rek_4' => $Kd_Rek_4, 'Kd_Rek_5' => $Kd_Rek_5, 'kd_penerimaan_1' => $kd_penerimaan_1, 'kd_penerimaan_2' => $kd_penerimaan_2, 'no_rinc' => $no_rinc]);
 
         if ($model->load(Yii::$app->request->post())) {
+            $model->nilai_rp =  str_replace(',', '.', $model->nilai_rp);
+            $model->jml_satuan = str_replace(',', '.', $model->jml_satuan);
             $model->total = $model->nilai_rp * $model->jml_satuan;
             IF($model->save()){
                 echo 1;

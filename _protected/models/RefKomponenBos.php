@@ -43,7 +43,7 @@ class RefKomponenBos extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'komponen' => Yii::t('app', 'Komponen'),
-            'bos_id' => Yii::t('app', 'Bos ID'),
+            'bos_id' => Yii::t('app', 'Dapat dipilih'),
         ];
     }
 

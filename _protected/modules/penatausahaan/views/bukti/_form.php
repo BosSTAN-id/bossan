@@ -74,7 +74,7 @@ use yii\bootstrap\Modal;
         </div> <!--col-->
 
         <div class="col-md-offset-2 col-sm-offset-2 col-xs-offset-2 col-md-7 col-sm-7 col-xs-7">
-            <span id="kegiatan">Kegiatan </span>
+            <span id="kegiatan">Kegiatan <?php if($model->kd_kegiatan) echo $model->refKegiatan->uraian_kegiatan; ?></span>
         </div> <!--col-->
 
     </div><!--row-->
@@ -101,7 +101,7 @@ use yii\bootstrap\Modal;
         </div> <!--col-->
 
         <div class="col-md-7 col-sm-7 col-xs-7">
-            <span id="belanja">Belanja </span>
+            <span id="belanja">Belanja <?php if($model->kd_kegiatan) echo str_replace('Belanja ', '', $model->refRek5->Nm_Rek_5) ?></span>
         </div> <!--col-->
 
     </div> <!--row-->

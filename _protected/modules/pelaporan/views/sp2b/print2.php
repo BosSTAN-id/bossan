@@ -246,28 +246,38 @@ $ttk = 85;
 $pdf->SetXY(15,$y);
 $pdf->MultiCell(70,6,'1.  Saldo Awal', '', 'L', 0);
 $pdf->SetXY($ttk,$y);
-$pdf->MultiCell(115,6,': '.number_format($saldoawal,0, ',', '.'), '', 'L', 0);
+$pdf->MultiCell(10,6,': Rp ', '', 'L', 0);
+$pdf->SetXY($ttk+10,$y);
+$pdf->MultiCell(45,6, number_format($saldoawal,0, ',', '.'), '', 'R', 0);
 $y = $pdf->GetY();
 $pdf->SetXY(15,$y);
 $pdf->MultiCell(70,6,'2.  Pendapatan', '', 'L', 0);
 $pdf->SetXY($ttk,$y);
-$pdf->MultiCell(115,6,': '.number_format($pendapatan,0, ',', '.'), '', 'L', 0);
+$pdf->MultiCell(10,6,': Rp ', '', 'L', 0);
+$pdf->SetXY($ttk+10,$y);
+$pdf->MultiCell(45,6, number_format($pendapatan,0, ',', '.'), '', 'R', 0);
 $y = $pdf->GetY();
 $pdf->SetXY(15,$y);
 $pdf->MultiCell(70,6,'3.  Belanja', '', 'L', 0);
 $pdf->SetXY($ttk,$y);
-$pdf->MultiCell(115,6,': '.number_format($belanja,0, ',', '.'), '', 'L', 0);
+$pdf->MultiCell(10,6,': Rp ', '', 'L', 0);
+$pdf->SetXY($ttk+10,$y);
+$pdf->MultiCell(45,6, number_format($belanja,0, ',', '.'), '', 'R', 0);
 $y = $pdf->GetY();
 $pdf->SetXY(15,$y);
 $pdf->MultiCell(70,6,'4.  Saldo Akhir', '', 'L', 0);
 $pdf->SetXY($ttk,$y);
 $saldoakhir = $saldoawal + $pendapatan - $belanja;
-$pdf->MultiCell(115,6,': '.number_format($saldoakhir,0, ',', '.'), '', 'L', 0);
+$pdf->MultiCell(10,6,': Rp ', '', 'L', 0);
+$pdf->SetXY($ttk+10,$y);
+$pdf->MultiCell(45,6, number_format($saldoakhir,0, ',', '.'), '', 'R', 0);
 $y = $pdf->GetY();
 $pdf->SetXY(15,$y);
 $pdf->MultiCell(70,6,'5.  Jumlah Sekolah', '', 'L', 0);
 $pdf->SetXY($ttk,$y);
-$pdf->MultiCell(115,6,': '.$model['jumlah_sekolah'], '', 'L', 0);
+$pdf->MultiCell(10, 6,': ', '', 'L', 0);
+$pdf->SetXY($ttk+10,$y);
+$pdf->MultiCell(45,6, $model['jumlah_sekolah'], '', 'L', 0);
 
 $y = $pdf->GetY()+4;
 $pdf->SetXY(15,$y);
@@ -278,20 +288,20 @@ $pdf->MultiCell(185,6,'Rincian atas pengesahan pendapatan dan belanja tersebut t
 $y = $pdf->GetY()+8;
 $pdf->SetXY(130,$y);
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,\app\models\TaTh::dokudoku('bulat', $ref['set_6']).', '.DATE('j', strtotime($model['tgl_sp2b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp2b']))).' '.DATE('Y', strtotime($model['tgl_sp2b'])), '', 'C', 0);
+$pdf->MultiCell(80,6,\app\models\TaTh::dokudoku('bulat', $ref['set_6']).', '.DATE('j', strtotime($model['tgl_sp2b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp2b']))).' '.DATE('Y', strtotime($model['tgl_sp2b'])), '', 'C', 0);
 
 
 $pdf->SetXY(130,$pdf->GetY());
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,$model['jbt_penandatangan'], '', 'C', 0);
+$pdf->MultiCell(80,6,$model['jbt_penandatangan'], '', 'C', 0);
 
 $pdf->SetXY(130,$pdf->GetY()+25);
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,$model['penandatangan'], '', 'C', 0);
+$pdf->MultiCell(80,6,$model['penandatangan'], '', 'C', 0);
 
 $pdf->SetXY(130,$pdf->GetY());
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,'NIP '.$model['nip_penandatangan'], '', 'C', 0);
+$pdf->MultiCell(80,6,'NIP '.$model['nip_penandatangan'], '', 'C', 0);
 
 
 // Menampilkan lampiran dari usulan SPD
@@ -356,6 +366,8 @@ $i = 1;
 $ysisa = $y1;
 
 $totalusulan = 0;
+$totalBelanja = 0;
+$totalPendapatan = 0;
 $kegiatanlama = NULL;
 
 
@@ -373,8 +385,8 @@ foreach($data as $data){
 	IF($kegiatanlama <> $kegiatanbaru){
 	    $y = MAX($y1, $y2, $y3);
 
-	    IF($y1 + (4*(strlen($uraiankegiatan)/23)) > 160){ //cek pagebreak
-	        $ylst = 190 - $yst; //207 batas margin bawah dikurang dengan y pertama
+	    IF($y1 + (4*($charkegiatan/23)) > 290){ //cek pagebreak
+	        $ylst = 310 - $yst; //207 batas margin bawah dikurang dengan y pertama
 	        //setiap selesai page maka buat rectangle
             $pdf->Rect($x, $yst, $w['0'] ,$ylst);
             $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
@@ -395,10 +407,10 @@ foreach($data as $data){
             $pdf->SetFont('Arial','B',10);
             $pdf->Cell($w['2'],11,'Uraian ','LTR',0,'C');
             $pdf->SetFont('Arial','B',9);
-            $pdf->Cell($w['3'],11,'Nilai','LTR',0,'C');
+            $pdf->Cell($w['3'],11,'Pendapatan','LTR',0,'C');
             $pdf->SetFont('Arial','B',10);
-            $pdf->Cell($w['4'],11,'Sumber Dana','LTR',0,'C');
-            $pdf->Cell($w['5'],11,'Keterangan','LTR',0,'C');
+            $pdf->Cell($w['4'],11,'Belanja','LTR',0,'C');
+            $pdf->Cell($w['5'],11,'Sumber Dana','LTR',0,'C');
             $pdf->ln();
 
             $pdf->SetFont('Arial','B',10);
@@ -428,7 +440,7 @@ foreach($data as $data){
 	        $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
 	        $x = 15;
 	        $ysisa = $y1;
-
+            $y = MAX($y1, $y2, $y3);
 	    }
 
 	    //new data
@@ -462,8 +474,8 @@ foreach($data as $data){
 	    $pdf->ln();
 	}
 
-    IF($y2 > 160 || $y1 + (4*(strlen($uraianrekening)/23)) > 160 || $y3 > 160  ){ //cek pagebreak
-        $ylst = 190 - $yst; //207 batas margin bawah dikurang dengan y pertama
+    IF($y2 > 290 || $y1 + (4*(strlen($uraianrekening)/23)) > 290 || $y3 > 290  ){ //cek pagebreak
+        $ylst = 310 - $yst; //207 batas margin bawah dikurang dengan y pertama
         //setiap selesai page maka buat rectangle
             $pdf->Rect($x, $yst, $w['0'] ,$ylst);
             $pdf->Rect($x+$w['0'], $yst, $w['1'] ,$ylst);
@@ -484,10 +496,10 @@ foreach($data as $data){
         $pdf->SetFont('Arial','B',10);
         $pdf->Cell($w['2'],11,'Uraian ','LTR',0,'C');
         $pdf->SetFont('Arial','B',9);
-        $pdf->Cell($w['3'],11,'Nilai','LTR',0,'C');
+        $pdf->Cell($w['3'],11,'Pendapatan','LTR',0,'C');
         $pdf->SetFont('Arial','B',10);
-        $pdf->Cell($w['4'],11,'Sumber Dana','LTR',0,'C');
-        $pdf->Cell($w['5'],11,'Keterangan','LTR',0,'C');
+        $pdf->Cell($w['4'],11,'Belanja','LTR',0,'C');
+        $pdf->Cell($w['5'],11,'Sumber Dana','LTR',0,'C');
         $pdf->ln();
 
         $pdf->SetFont('Arial','B',10);
@@ -517,7 +529,7 @@ foreach($data as $data){
         $yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
         $x = 15;
         $ysisa = $y1;
-
+        $y = MAX($y1, $y2, $y3);
     }
 
 
@@ -538,20 +550,25 @@ foreach($data as $data){
     $y1 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan    
     $xcurrent = $xcurrent+$w['2'];
     $pdf->SetXY($xcurrent, $y);
-    $pdf->MultiCell($w['3'],4,number_format($data['nilai'],0,',','.'),'','R');
+    $pdf->MultiCell($w['3'],4,$data['Kd_Rek_1'] != 5 ? number_format($data['nilai'],0,',','.') : '','','R');
     $xcurrent = $xcurrent+$w['3'];
     $pdf->SetXY($xcurrent, $y);
-    $pdf->MultiCell($w['4'],4,$data['abbr'],'','L');
+    $pdf->MultiCell($w['4'],4,$data['Kd_Rek_1'] == 5 ? number_format($data['nilai'],0,',','.') : '','','R');
     $y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
     $xcurrent = $xcurrent+$w['4'];
     $pdf->SetXY($xcurrent, $y);
-    $pdf->MultiCell($w['5'],4,'','','L');
+    $pdf->MultiCell($w['5'],4,$data['abbr'],'','L');
     $y3 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
     $xcurrent = $xcurrent+$w['5'];
     $pdf->SetXY($xcurrent, $y);
 
     
     $totalusulan = $totalusulan+$data['nilai'];
+    if($data['Kd_Rek_1'] == 5){
+        $totalBelanja = $totalBelanja + $data['nilai'];
+    }else{
+        $totalPendapatan += $totalPendapatan + $data['nilai'];
+    }
     $kegiatanlama = $data['kd_program'].'.'.$data['kd_sub_program'].'.'.substr('0'.$data['kd_kegiatan'], -2);
 
     
@@ -575,16 +592,14 @@ $ylst = $y - $yst;  //$y batas marjin bawah dikurangi dengan y pertama
 
 
 //Menampilkan jumlah halaman terakhir
-// $pdf->setTotal($model);
 $pdf->SetFont('Arial','B',8);
 $pdf->setxy($x,$y);
 $pdf->Cell($w['0'],6,'','LB');
 $pdf->Cell($w['1'],6,'','B',0,'C');
 $pdf->Cell($w['2'],6,'TOTAL','B',0,'C');
-$pdf->Cell($w['3'],6,'','B',0,'C');
-$pdf->Cell($w['4'],6,number_format($totalusulan, 0, ',', '.'),'BLR',0,'R');
+$pdf->Cell($w['3'],6,number_format($totalPendapatan, 0, ',', '.'),'LB',0,'R');
+$pdf->Cell($w['4'],6,number_format($totalBelanja, 0, ',', '.'),'BLR',0,'R');
 $pdf->Cell($w['5'],6,'','BR',0,'R');
-// $pdf->Cell($w['5'],6,'','BR',0,'C');
 
 
 $pdf->ln();
@@ -593,19 +608,19 @@ $pdf->ln();
 $y = $pdf->GetY()+8;
 $pdf->SetXY(130,$y);
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6, \app\models\TaTh::dokudoku('bulat', $ref['set_6']).', '.DATE('j', strtotime($model['tgl_sp2b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp2b']))).' '.DATE('Y', strtotime($model['tgl_sp2b'])), '', 'C', 0);
+$pdf->MultiCell(80,6, \app\models\TaTh::dokudoku('bulat', $ref['set_6']).', '.DATE('j', strtotime($model['tgl_sp2b'])).' '.bulan(DATE('m', strtotime($model['tgl_sp2b']))).' '.DATE('Y', strtotime($model['tgl_sp2b'])), '', 'C', 0);
 
 $pdf->SetXY(130,$pdf->GetY());
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,$model['jbt_penandatangan'], '', 'C', 0);
+$pdf->MultiCell(80,6,$model['jbt_penandatangan'], '', 'C', 0);
 
 $pdf->SetXY(130,$pdf->GetY()+25);
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,$model['penandatangan'], '', 'C', 0);
+$pdf->MultiCell(80,6,$model['penandatangan'], '', 'C', 0);
 
 $pdf->SetXY(130,$pdf->GetY());
 $pdf->SetFont('Arial','',11);
-$pdf->MultiCell(70,6,'NIP '.$model['nip_penandatangan'], '', 'C', 0);
+$pdf->MultiCell(80,6,'NIP '.$model['nip_penandatangan'], '', 'C', 0);
 
 //Untuk mengakhiri dokumen pdf, dan mengirip dokumen ke output
 $pdf->Output();

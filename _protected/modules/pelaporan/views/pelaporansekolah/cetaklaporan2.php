@@ -333,25 +333,11 @@ foreach($data as $model){
             $pdf->ln();
             $y = max($y1, $y2);             
         }
-        // //code goes here
-        // $pdf->SetFont('Times','',10);
-        // //new data		
-        // $pdf->SetXY($x, $y);
-        // $xcurrent= $x;
-        // $pdf->MultiCell($w['0'],6,$model['kd_program'].'.'.substr('0'.$model['kd_sub_program'],-2).'.'.substr('0'.$model['kd_kegiatan'],-2) ,'','L');
-        // $y1 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
-        // $xcurrent = $xcurrent+$w['0'];
-        // $pdf->SetXY($xcurrent+10, $y);
-        // $pdf->MultiCell($w['1']-10,6,$model['uraian_kegiatan'],'','L');
-        // $y2 = $pdf->GetY(); //berikan nilai untuk $y1 titik terbawah Uraian Kegiatan
-        // $ysisa = $y;
-        // $pdf->ln();
-        // $y = max($y1, $y2); 
     }
 
 
 
-	IF($y2 > 196 || $y1 + (5*(strlen($model['uraian_kegiatan'])/35)) > 180 ){ //cek pagebreak
+	IF($y2 > 180 || $y1 + (5*(strlen($model['uraian_kegiatan'])/35)) > 180 ){ //cek pagebreak
 		$ylst = 190 - $yst; //207 batas margin bawah dikurang dengan y pertama
 		//setiap selesai page maka buat rectangle
 		$pdf->Rect($x, $yst, $w['0'] ,$ylst);
@@ -405,7 +391,7 @@ foreach($data as $model){
 		$yst = $pdf->GetY(); //untuk Y pertama sebagai awal rectangle
 		$x = 15;
 		$ysisa = $y1;
-
+        $y = max($y1, $y2, $y3);
 	}
 
 

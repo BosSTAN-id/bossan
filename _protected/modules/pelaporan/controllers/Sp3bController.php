@@ -327,6 +327,8 @@ class Sp3bController extends Controller
         }
         $model = $this->findModel($tahun, $no_sp3b);
         $sp3brinc_lalu = \app\models\TaSP3BRinc::find()->where(['tahun' => $Tahun])->andWhere('no_sp3b <> \''.$model->no_sp3b.'\'')->all();
+        // This code suppose to select all previous SPJ not in any SP3B but any sekolah_id already in this SP3B. Only one sekolah_id in one SP3B. If more than one sekolah_id in an SP3B, it will doubled Saldo Awal
+        // $SpjSp3bSekolah = \app\models\TaSP3BRinc::find()->where(['tahun' => $Tahun])->andWhere('no_sp3b <> \''.$model->no_sp3b.'\'')->andWhere('sekolah_id NOT IN ()')->all();
         $no_spjs = [];
         foreach ($sp3brinc_lalu as $data) {
             $no_spjs[] = '\''.$data['no_spj'].'\'';
