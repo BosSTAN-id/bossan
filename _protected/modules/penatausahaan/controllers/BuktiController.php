@@ -252,7 +252,11 @@ class BuktiController extends Controller
             IF($sisa_anggaran['sisa_anggaran'] < $model->nilai){
                 $result = 0;
                 Yii::$app->getSession()->setFlash('warning',  'Sisa Anggaran tidak mencukupi! Sisa anggaran '.number_format($sisa_anggaran['sisa_anggaran'], 0, ',', '.').' pembayaran diajukan senilai '.number_format($model->nilai, 0, ',', '.'));
-                return $this->redirect(['create']);       
+                // return $this->redirect(['create']);  
+                return $this->render('create', [
+                    'model' => $model,
+                    'Tahun' => $Tahun,
+                ]);     
             }
             $query = \Yii::$app->db->createCommand("call sisa_kas($Tahun, ".$model->sekolah_id.",".$model->pembayaran.",'".$model->tgl_bukti."')");
             $sisa_kas = $query->queryOne();
@@ -264,7 +268,11 @@ class BuktiController extends Controller
                 }
                 $result = 0;
                 Yii::$app->getSession()->setFlash('warning',  'Sisa Kas tidak mencukupi! Sisa Kas Untuk pembayaran '.$metode.' '.number_format($sisa_kas['nilai'], 0, ',', '.').' pembayaran diajukan senilai '.number_format($model->nilai, 0, ',', '.'));
-                return $this->redirect(['create']);           
+                // return $this->redirect(['create']);       
+                return $this->render('create', [
+                    'model' => $model,
+                    'Tahun' => $Tahun,
+                ]);    
             }
             $komponen_id = \app\models\TaRkasHistory::find()->where("perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE sekolah_id = ".$model->sekolah_id." AND tahun = $Tahun AND tgl_peraturan <= '".$model->tgl_bukti."')")->andWhere([
                     'tahun' => $model->tahun,
@@ -283,7 +291,11 @@ class BuktiController extends Controller
                 return $this->redirect(['view', 'tahun' => $model->tahun, 'no_bukti' => $model->no_bukti, 'tgl_bukti' => $model->tgl_bukti]);
             }ELSE{
                 Yii::$app->getSession()->setFlash('warning', 'Terjadi masalah, penyimpanan gagal.' );
-                return $this->redirect(['create']);
+                // return $this->redirect(['create']);
+                return $this->render('create', [
+                    'model' => $model,
+                    'Tahun' => $Tahun,
+                ]);
             }
         }else{
                 return $this->render('create', [

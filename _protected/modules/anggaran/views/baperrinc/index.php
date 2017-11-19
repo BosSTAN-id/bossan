@@ -107,3 +107,11 @@ switch ($model->status) {
     "footer"=>"",// always need it for jquery plugin
 ])?>
 <?php Modal::end(); ?>
+<?php 
+$this->registerJs(<<<JS
+    $("form[id^='preview-form-']").on("submit", function(e){
+        window.open('', 'formpopup', 'width=1024,height=768,resizeable,scrollbars');
+        this.target = 'formpopup';
+    });
+JS
+);

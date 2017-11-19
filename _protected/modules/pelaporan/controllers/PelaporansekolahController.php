@@ -222,11 +222,13 @@ class PelaporansekolahController extends Controller
                             (
                                 /*SALDO AWAL */
                                 SELECT
-                                a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, NULL AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
+                                a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
                                 FROM
                                 ta_saldo_awal a
-                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran LIKE '%'
+                                INNER JOIN ref_penerimaan_sekolah_sisa b ON a.kd_penerimaan_1 = b.penerimaan_sisa_1 AND a.kd_penerimaan_2 = b.penerimaan_sisa_2
+                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(b.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran LIKE '%'
                                 GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
+
                                 /*Saldo Awal sejak tanggal */
                                 UNION ALL
                                 SELECT
@@ -236,28 +238,90 @@ class PelaporansekolahController extends Controller
                                 '' AS kd_penerimaan_2,
                                 '' AS kode, 
                                 '' AS no_bukti,
-                                '2016-01-01' AS tgl_bukti,
+                                :tgl_1 AS tgl_bukti,
                                 'Akumulasi Transaksi' AS uraian,
-                                SUM(
-                                CASE a.Kd_Rek_1
+                                SUM(a.nilai) AS nilai
+                                FROM
+                                (                                        
+                                    SELECT
+                                    a.tahun,
+                                    a.sekolah_id,
+                                    '' AS kd_penerimaan_1,
+                                    '' AS kd_penerimaan_2,
+                                    '' AS kode, 
+                                    '' AS no_bukti,
+                                    :tgl_1 AS tgl_bukti,
+                                    'Akumulasi Transaksi' AS uraian,
+                                    SUM(
+                                    CASE a.Kd_Rek_1
                                     WHEN 4 THEN a.nilai
                                     WHEN 5 THEN -(a.nilai)
-                                END
-                                ) AS nilai
-                                FROM
-                                ta_spj_rinc AS a
-                                LEFT JOIN
-                                (
+                                    END
+                                    ) AS nilai
+                                    FROM
+                                    ta_spj_rinc AS a
+                                    LEFT JOIN
+                                    (
                                     SELECT 
                                     a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                     FROM ta_rkas_history a 
                                     WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
                                     AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
                                     GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
-                                ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
-                                AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
-                                GROUP BY a.tahun, a.sekolah_id
+                                    ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                                    AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran LIKE '%'
+                                    GROUP BY a.tahun, a.sekolah_id
+                                    /*Potongan */
+                                    UNION ALL
+                                    SELECT
+                                    a.tahun,
+                                    a.sekolah_id,
+                                    '' AS kd_penerimaan_1,
+                                    '' AS kd_penerimaan_2,
+                                    '' AS kode, 
+                                    '' AS no_bukti,
+                                    :tgl_1 AS tgl_bukti,
+                                    'Akumulasi Transaksi' AS uraian,
+                                    SUM(c.nilai) AS nilai
+                                    FROM
+                                    ta_spj_rinc AS a
+                                    LEFT JOIN
+                                    (
+                                        SELECT 
+                                        a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                        FROM ta_rkas_history a 
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
+                                        AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                                        GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                    ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                                    AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
+                                    INNER JOIN
+                                    ta_spj_pot c ON a.tahun = c.tahun AND a.sekolah_id = c.sekolah_id AND a.no_bukti = c.no_bukti
+                                    INNER JOIN ref_potongan d ON c.kd_potongan =  d.kd_potongan
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <  :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2  AND a.Kd_Rek_1 = 5 AND a.pembayaran LIKE '%'
+                                    GROUP BY a.tahun, a.sekolah_id
+                            
+                                    /*Setoran Potongan */
+                                    UNION ALL
+                                    SELECT
+                                    a.tahun,
+                                    a.sekolah_id,
+                                    '' AS kd_penerimaan_1,
+                                    '' AS kd_penerimaan_2,
+                                    '' AS kode, 
+                                    '' AS no_bukti,
+                                    '2016-01-01' AS tgl_bukti,
+                                    'Akumulasi Transaksi' AS uraian,
+                                    SUM(-(b.nilai)) AS nilai
+                                    FROM ta_setoran_potongan a
+                                    INNER JOIN ta_setoran_potongan_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
+                                    INNER JOIN ref_potongan c ON b.kd_potongan = c.kd_potongan
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
+                                    AND a.tgl_setoran < :tgl_1 AND b.pembayaran LIKE '%'
+                                    GROUP BY a.tahun, a.sekolah_id                                            
+                                ) a GROUP BY a.tahun, a.sekolah_id  
+
                                 /*Transaksi */
                                 UNION ALL
                                 SELECT
@@ -286,7 +350,47 @@ class PelaporansekolahController extends Controller
                                 ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                 AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
                                 WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
-                            ) a ORDER BY tgl_bukti, no_bukti ASC    
+                                
+                                /*Potongan Pajak Transaksi -----------------------------------------------------------------------------------------------*/
+                                UNION ALL
+                                SELECT
+                                a.tahun,
+                                a.sekolah_id,
+                                b.kd_penerimaan_1,
+                                b.kd_penerimaan_2,
+                                CONCAT(a.kd_program, RIGHT(CONCAT('0',a.kd_sub_program),2), RIGHT(CONCAT('0',a.kd_kegiatan),2), '.', a.Kd_Rek_3, RIGHT(CONCAT('0',a.Kd_Rek_4),2), RIGHT(CONCAT('0',a.Kd_Rek_5),2)) AS kode,
+                                a.no_bukti,
+                                a.tgl_bukti,
+                                d.nm_potongan,
+                                (c.nilai) AS nilai
+                                FROM
+                                ta_spj_rinc AS a
+                                LEFT JOIN
+                                (
+                                    SELECT 
+                                    a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                    FROM ta_rkas_history a 
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
+                                    AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                                    GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                                AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
+                                INNER JOIN
+                                ta_spj_pot c ON a.tahun = c.tahun AND a.sekolah_id = c.sekolah_id AND a.no_bukti = c.no_bukti
+                                INNER JOIN ref_potongan d ON c.kd_potongan =  d.kd_potongan
+                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.Kd_Rek_1 = 5 AND a.pembayaran LIKE '%'
+                                
+                                /* Setoran Pajak Transaksi */
+                                UNION ALL
+                                SELECT a.tahun, a.sekolah_id, '' AS kd_penerimaan_1, '' AS kd_penerimaan_2,
+                                b.kd_potongan, CONCAT(a.no_setoran, '-',b.kd_potongan) AS no_bukti, a.tgl_setoran, b.keterangan,
+                                -(b.nilai) AS nilai
+                                FROM ta_setoran_potongan a
+                                INNER JOIN ta_setoran_potongan_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
+                                INNER JOIN ref_potongan c ON b.kd_potongan = c.kd_potongan
+                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
+                                AND a.tgl_setoran <= :tgl_2 AND a.tgl_setoran >= :tgl_1 AND b.pembayaran LIKE '%'
+                            ) a ORDER BY tgl_bukti, no_bukti ASC   
                             ", [
                                 ':tahun' => $Tahun,
                                 ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
@@ -306,8 +410,10 @@ class PelaporansekolahController extends Controller
                                         a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
                                         FROM
                                         ta_saldo_awal a
-                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran LIKE '%'
+                                        INNER JOIN ref_penerimaan_sekolah_sisa b ON a.kd_penerimaan_1 = b.penerimaan_sisa_1 AND a.kd_penerimaan_2 = b.penerimaan_sisa_2
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(b.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran LIKE '%'
                                         GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
+
                                         /*Saldo Awal sejak tanggal */
                                         UNION ALL
                                         SELECT
@@ -319,26 +425,88 @@ class PelaporansekolahController extends Controller
                                         '' AS no_bukti,
                                         :tgl_1 AS tgl_bukti,
                                         'Akumulasi Transaksi' AS uraian,
-                                        SUM(
-                                        CASE a.Kd_Rek_1
+                                        SUM(a.nilai) AS nilai
+                                        FROM
+                                        (                                        
+                                            SELECT
+                                            a.tahun,
+                                            a.sekolah_id,
+                                            '' AS kd_penerimaan_1,
+                                            '' AS kd_penerimaan_2,
+                                            '' AS kode, 
+                                            '' AS no_bukti,
+                                            :tgl_1 AS tgl_bukti,
+                                            'Akumulasi Transaksi' AS uraian,
+                                            SUM(
+                                            CASE a.Kd_Rek_1
                                             WHEN 4 THEN a.nilai
                                             WHEN 5 THEN -(a.nilai)
-                                        END
-                                        ) AS nilai
-                                        FROM
-                                        ta_spj_rinc AS a
-                                        LEFT JOIN
-                                        (
+                                            END
+                                            ) AS nilai
+                                            FROM
+                                            ta_spj_rinc AS a
+                                            LEFT JOIN
+                                            (
                                             SELECT 
                                             a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                             FROM ta_rkas_history a 
                                             WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
                                             AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
                                             GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
-                                        ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
-                                        AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
-                                        GROUP BY a.tahun, a.sekolah_id
+                                            ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                                            AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran LIKE '%'
+                                            GROUP BY a.tahun, a.sekolah_id
+                                            /*Potongan */
+                                            UNION ALL
+                                            SELECT
+                                            a.tahun,
+                                            a.sekolah_id,
+                                            '' AS kd_penerimaan_1,
+                                            '' AS kd_penerimaan_2,
+                                            '' AS kode, 
+                                            '' AS no_bukti,
+                                            :tgl_1 AS tgl_bukti,
+                                            'Akumulasi Transaksi' AS uraian,
+                                            SUM(c.nilai) AS nilai
+                                            FROM
+                                            ta_spj_rinc AS a
+                                            LEFT JOIN
+                                            (
+                                                SELECT 
+                                                a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                                FROM ta_rkas_history a 
+                                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
+                                                AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                                                GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                            ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                                            AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
+                                            INNER JOIN
+                                            ta_spj_pot c ON a.tahun = c.tahun AND a.sekolah_id = c.sekolah_id AND a.no_bukti = c.no_bukti
+                                            INNER JOIN ref_potongan d ON c.kd_potongan =  d.kd_potongan
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <  :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2  AND a.Kd_Rek_1 = 5 AND a.pembayaran LIKE '%'
+                                            GROUP BY a.tahun, a.sekolah_id
+                                    
+                                            /*Setoran Potongan */
+                                            UNION ALL
+                                            SELECT
+                                            a.tahun,
+                                            a.sekolah_id,
+                                            '' AS kd_penerimaan_1,
+                                            '' AS kd_penerimaan_2,
+                                            '' AS kode, 
+                                            '' AS no_bukti,
+                                            '2016-01-01' AS tgl_bukti,
+                                            'Akumulasi Transaksi' AS uraian,
+                                            SUM(-(b.nilai)) AS nilai
+                                            FROM ta_setoran_potongan a
+                                            INNER JOIN ta_setoran_potongan_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
+                                            INNER JOIN ref_potongan c ON b.kd_potongan = c.kd_potongan
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
+                                            AND a.tgl_setoran < :tgl_1 AND b.pembayaran LIKE '%'
+                                            GROUP BY a.tahun, a.sekolah_id                                            
+                                        ) a GROUP BY a.tahun, a.sekolah_id  
+
                                         /*Transaksi */
                                         UNION ALL
                                         SELECT
@@ -367,6 +535,46 @@ class PelaporansekolahController extends Controller
                                         ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                         AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
                                         WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                                        
+                                        /*Potongan Pajak Transaksi -----------------------------------------------------------------------------------------------*/
+                                        UNION ALL
+                                        SELECT
+                                        a.tahun,
+                                        a.sekolah_id,
+                                        b.kd_penerimaan_1,
+                                        b.kd_penerimaan_2,
+                                        CONCAT(a.kd_program, RIGHT(CONCAT('0',a.kd_sub_program),2), RIGHT(CONCAT('0',a.kd_kegiatan),2), '.', a.Kd_Rek_3, RIGHT(CONCAT('0',a.Kd_Rek_4),2), RIGHT(CONCAT('0',a.Kd_Rek_5),2)) AS kode,
+                                        a.no_bukti,
+                                        a.tgl_bukti,
+                                        d.nm_potongan,
+                                        (c.nilai) AS nilai
+                                        FROM
+                                        ta_spj_rinc AS a
+                                        LEFT JOIN
+                                        (
+                                            SELECT 
+                                            a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                            FROM ta_rkas_history a 
+                                            WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
+                                            AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                                            GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                        ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                                        AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
+                                        INNER JOIN
+                                        ta_spj_pot c ON a.tahun = c.tahun AND a.sekolah_id = c.sekolah_id AND a.no_bukti = c.no_bukti
+                                        INNER JOIN ref_potongan d ON c.kd_potongan =  d.kd_potongan
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.Kd_Rek_1 = 5 AND a.pembayaran LIKE '%'
+                                        
+                                        /* Setoran Pajak Transaksi */
+                                        UNION ALL
+                                        SELECT a.tahun, a.sekolah_id, '' AS kd_penerimaan_1, '' AS kd_penerimaan_2,
+                                        b.kd_potongan, CONCAT(a.no_setoran, '-',b.kd_potongan) AS no_bukti, a.tgl_setoran, b.keterangan,
+                                        -(b.nilai) AS nilai
+                                        FROM ta_setoran_potongan a
+                                        INNER JOIN ta_setoran_potongan_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
+                                        INNER JOIN ref_potongan c ON b.kd_potongan = c.kd_potongan
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
+                                        AND a.tgl_setoran <= :tgl_2 AND a.tgl_setoran >= :tgl_1 AND b.pembayaran LIKE '%'
                                     ) a ORDER BY tgl_bukti, no_bukti ASC
                                     ",
                             'params' => [
@@ -395,7 +603,8 @@ class PelaporansekolahController extends Controller
                                         a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
                                         FROM
                                         ta_saldo_awal a
-                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 2
+                                        INNER JOIN ref_penerimaan_sekolah_sisa b ON a.kd_penerimaan_1 = b.penerimaan_sisa_1 AND a.kd_penerimaan_2 = b.penerimaan_sisa_2
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(b.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 2
                                         GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
                                         /*Saldo Awal sejak tanggal */
                                         UNION ALL
@@ -546,7 +755,8 @@ class PelaporansekolahController extends Controller
                                         a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
                                         FROM
                                         ta_saldo_awal a
-                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 2
+                                        INNER JOIN ref_penerimaan_sekolah_sisa b ON a.kd_penerimaan_1 = b.penerimaan_sisa_1 AND a.kd_penerimaan_2 = b.penerimaan_sisa_2
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(b.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 2
                                         GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
                                         /*Saldo Awal sejak tanggal */
                                         UNION ALL
@@ -749,13 +959,14 @@ class PelaporansekolahController extends Controller
                         $totalCount = Yii::$app->db->createCommand("
                             SELECT COUNT(a.tahun) FROM
                             (
-                                        /*SALDO AWAL */
-                                        SELECT
-                                        a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
-                                        FROM
-                                        ta_saldo_awal a
-                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 1
-                                        GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                /*SALDO AWAL */
+                                SELECT
+                                a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
+                                FROM
+                                ta_saldo_awal a
+                                INNER JOIN ref_penerimaan_sekolah_sisa b ON a.kd_penerimaan_1 = b.penerimaan_sisa_1 AND a.kd_penerimaan_2 = b.penerimaan_sisa_2
+                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(b.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 1
+                                GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
                                         /*Saldo Awal sejak tanggal */
                                         UNION ALL
                                         SELECT
@@ -883,7 +1094,8 @@ class PelaporansekolahController extends Controller
                                         a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
                                         FROM
                                         ta_saldo_awal a
-                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 1
+                                        INNER JOIN ref_penerimaan_sekolah_sisa b ON a.kd_penerimaan_1 = b.penerimaan_sisa_1 AND a.kd_penerimaan_2 = b.penerimaan_sisa_2
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(b.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 1
                                         GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
                                         /*Saldo Awal sejak tanggal */
                                         UNION ALL
@@ -2096,8 +2308,10 @@ class PelaporansekolahController extends Controller
                                 a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
                                 FROM
                                 ta_saldo_awal a
-                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran LIKE '%'
+                                INNER JOIN ref_penerimaan_sekolah_sisa b ON a.kd_penerimaan_1 = b.penerimaan_sisa_1 AND a.kd_penerimaan_2 = b.penerimaan_sisa_2
+                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(b.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran LIKE '%'
                                 GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
+
                                 /*Saldo Awal sejak tanggal */
                                 UNION ALL
                                 SELECT
@@ -2109,26 +2323,88 @@ class PelaporansekolahController extends Controller
                                 '' AS no_bukti,
                                 :tgl_1 AS tgl_bukti,
                                 'Akumulasi Transaksi' AS uraian,
-                                SUM(
-                                CASE a.Kd_Rek_1
+                                SUM(a.nilai) AS nilai
+                                FROM
+                                (                                        
+                                    SELECT
+                                    a.tahun,
+                                    a.sekolah_id,
+                                    '' AS kd_penerimaan_1,
+                                    '' AS kd_penerimaan_2,
+                                    '' AS kode, 
+                                    '' AS no_bukti,
+                                    :tgl_1 AS tgl_bukti,
+                                    'Akumulasi Transaksi' AS uraian,
+                                    SUM(
+                                    CASE a.Kd_Rek_1
                                     WHEN 4 THEN a.nilai
                                     WHEN 5 THEN -(a.nilai)
-                                END
-                                ) AS nilai
-                                FROM
-                                ta_spj_rinc AS a
-                                LEFT JOIN
-                                (
+                                    END
+                                    ) AS nilai
+                                    FROM
+                                    ta_spj_rinc AS a
+                                    LEFT JOIN
+                                    (
                                     SELECT 
                                     a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
                                     FROM ta_rkas_history a 
                                     WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
                                     AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
                                     GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
-                                ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
-                                AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
-                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
-                                GROUP BY a.tahun, a.sekolah_id
+                                    ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                                    AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti < :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran LIKE '%'
+                                    GROUP BY a.tahun, a.sekolah_id
+                                    /*Potongan */
+                                    UNION ALL
+                                    SELECT
+                                    a.tahun,
+                                    a.sekolah_id,
+                                    '' AS kd_penerimaan_1,
+                                    '' AS kd_penerimaan_2,
+                                    '' AS kode, 
+                                    '' AS no_bukti,
+                                    :tgl_1 AS tgl_bukti,
+                                    'Akumulasi Transaksi' AS uraian,
+                                    SUM(c.nilai) AS nilai
+                                    FROM
+                                    ta_spj_rinc AS a
+                                    LEFT JOIN
+                                    (
+                                        SELECT 
+                                        a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                        FROM ta_rkas_history a 
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
+                                        AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                                        GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                    ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                                    AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
+                                    INNER JOIN
+                                    ta_spj_pot c ON a.tahun = c.tahun AND a.sekolah_id = c.sekolah_id AND a.no_bukti = c.no_bukti
+                                    INNER JOIN ref_potongan d ON c.kd_potongan =  d.kd_potongan
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <  :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2  AND a.Kd_Rek_1 = 5 AND a.pembayaran LIKE '%'
+                                    GROUP BY a.tahun, a.sekolah_id
+                            
+                                    /*Setoran Potongan */
+                                    UNION ALL
+                                    SELECT
+                                    a.tahun,
+                                    a.sekolah_id,
+                                    '' AS kd_penerimaan_1,
+                                    '' AS kd_penerimaan_2,
+                                    '' AS kode, 
+                                    '' AS no_bukti,
+                                    '2016-01-01' AS tgl_bukti,
+                                    'Akumulasi Transaksi' AS uraian,
+                                    SUM(-(b.nilai)) AS nilai
+                                    FROM ta_setoran_potongan a
+                                    INNER JOIN ta_setoran_potongan_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
+                                    INNER JOIN ref_potongan c ON b.kd_potongan = c.kd_potongan
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
+                                    AND a.tgl_setoran < :tgl_1 AND b.pembayaran LIKE '%'
+                                    GROUP BY a.tahun, a.sekolah_id                                            
+                                ) a GROUP BY a.tahun, a.sekolah_id  
+
                                 /*Transaksi */
                                 UNION ALL
                                 SELECT
@@ -2157,7 +2433,47 @@ class PelaporansekolahController extends Controller
                                 ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
                                 AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
                                 WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
-                            ) a ORDER BY tgl_bukti, no_bukti ASC                    
+                                
+                                /*Potongan Pajak Transaksi -----------------------------------------------------------------------------------------------*/
+                                UNION ALL
+                                SELECT
+                                a.tahun,
+                                a.sekolah_id,
+                                b.kd_penerimaan_1,
+                                b.kd_penerimaan_2,
+                                CONCAT(a.kd_program, RIGHT(CONCAT('0',a.kd_sub_program),2), RIGHT(CONCAT('0',a.kd_kegiatan),2), '.', a.Kd_Rek_3, RIGHT(CONCAT('0',a.Kd_Rek_4),2), RIGHT(CONCAT('0',a.Kd_Rek_5),2)) AS kode,
+                                a.no_bukti,
+                                a.tgl_bukti,
+                                d.nm_potongan,
+                                (c.nilai) AS nilai
+                                FROM
+                                ta_spj_rinc AS a
+                                LEFT JOIN
+                                (
+                                    SELECT 
+                                    a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                    FROM ta_rkas_history a 
+                                    WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = :tahun AND sekolah_id = :sekolah_id)
+                                    AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2
+                                    GROUP BY a.tahun, a.sekolah_id, a.kd_program, a.kd_sub_program, a.kd_kegiatan, a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.kd_penerimaan_1, a.kd_penerimaan_2
+                                ) b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.kd_program = b.kd_program AND a.kd_sub_program = b.kd_sub_program AND a.kd_kegiatan = b.kd_kegiatan 
+                                AND a.Kd_Rek_1 = b.Kd_Rek_1 AND a.Kd_Rek_2 = b.Kd_Rek_2 AND a.Kd_Rek_3 = b.Kd_Rek_3 AND a.Kd_Rek_4 = b.Kd_Rek_4 AND a.Kd_Rek_5 = b.Kd_Rek_5
+                                INNER JOIN
+                                ta_spj_pot c ON a.tahun = c.tahun AND a.sekolah_id = c.sekolah_id AND a.no_bukti = c.no_bukti
+                                INNER JOIN ref_potongan d ON c.kd_potongan =  d.kd_potongan
+                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND a.tgl_bukti <= :tgl_2 AND a.tgl_bukti >= :tgl_1 AND IFNULL(b.kd_penerimaan_1,'') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.Kd_Rek_1 = 5 AND a.pembayaran LIKE '%'
+                                
+                                /* Setoran Pajak Transaksi */
+                                UNION ALL
+                                SELECT a.tahun, a.sekolah_id, '' AS kd_penerimaan_1, '' AS kd_penerimaan_2,
+                                b.kd_potongan, CONCAT(a.no_setoran, '-',b.kd_potongan) AS no_bukti, a.tgl_setoran, b.keterangan,
+                                -(b.nilai) AS nilai
+                                FROM ta_setoran_potongan a
+                                INNER JOIN ta_setoran_potongan_rinc b ON a.tahun = b.tahun AND a.sekolah_id = b.sekolah_id AND a.no_setoran = b.no_setoran
+                                INNER JOIN ref_potongan c ON b.kd_potongan = c.kd_potongan
+                                WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id
+                                AND a.tgl_setoran <= :tgl_2 AND a.tgl_setoran >= :tgl_1 AND b.pembayaran LIKE '%'
+                            ) a ORDER BY tgl_bukti, no_bukti ASC            
                         ")->bindValues([
                                 ':tahun' => $Tahun,
                                 ':sekolah_id' => Yii::$app->user->identity->sekolah_id,
@@ -2179,7 +2495,8 @@ class PelaporansekolahController extends Controller
                                         a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
                                         FROM
                                         ta_saldo_awal a
-                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 2
+                                        INNER JOIN ref_penerimaan_sekolah_sisa b ON a.kd_penerimaan_1 = b.penerimaan_sisa_1 AND a.kd_penerimaan_2 = b.penerimaan_sisa_2
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(b.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 2
                                         GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
                                         /*Saldo Awal sejak tanggal */
                                         UNION ALL
@@ -2380,7 +2697,8 @@ class PelaporansekolahController extends Controller
                                         a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2, '' AS kode, '' AS no_bukti, '$Tahun-01-01' AS tgl_bukti, 'Saldo Awal' AS keterangan, SUM(a.nilai) AS nilai
                                         FROM
                                         ta_saldo_awal a
-                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(a.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(a.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 1
+                                        INNER JOIN ref_penerimaan_sekolah_sisa b ON a.kd_penerimaan_1 = b.penerimaan_sisa_1 AND a.kd_penerimaan_2 = b.penerimaan_sisa_2
+                                        WHERE a.tahun = :tahun AND a.sekolah_id = :sekolah_id AND IFNULL(b.kd_penerimaan_1, '') LIKE :kd_penerimaan_1 AND IFNULL(b.kd_penerimaan_2, '') LIKE :kd_penerimaan_2 AND a.pembayaran = 1
                                         GROUP BY a.tahun, a.sekolah_id, a.kd_penerimaan_1, a.kd_penerimaan_2
                                         /*Saldo Awal sejak tanggal */
                                         UNION ALL

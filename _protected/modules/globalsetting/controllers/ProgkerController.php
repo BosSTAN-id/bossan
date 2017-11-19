@@ -284,7 +284,7 @@ class ProgkerController extends Controller
 
         $model = new RefSubProgramSekolah();
         $model->kd_program = $program->kd_program;
-
+        $model->kd_sub_program = RefSubProgramSekolah::find()->select('MAX(kd_sub_program) AS kd_sub_program')->where(['kd_program' => $id])->one()['kd_sub_program']+1;
         if ($model->load(Yii::$app->request->post())) {
             IF($model->save()){
                 echo 1;
@@ -399,6 +399,7 @@ class ProgkerController extends Controller
         $model->kd_program = $subProgram->kd_program;
         $model->subprogram_id = $subProgram->id;
         $model->kd_sub_program = $subProgram->kd_sub_program;
+        $model->kd_kegiatan = RefKegiatanSekolah::find()->select('MAX(kd_kegiatan) AS kd_kegiatan')->where(['kd_program' => $subProgram->kd_program, 'kd_sub_program' => $subProgram->kd_sub_program])->one()['kd_kegiatan']+1;
 
         if ($model->load(Yii::$app->request->post())) {
             IF($model->save()){

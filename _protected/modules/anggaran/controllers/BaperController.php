@@ -191,17 +191,19 @@ class BaperController extends Controller
         $data =  Yii::$app->db->createCommand("
                 SELECT
                 a.kd_program, b.uraian_program,
-                a.kd_sub_program, c.uraian_sub_program,
-                /* a.kd_kegiatan, d.uraian_kegiatan, */
+                /* a.kd_sub_program, c.uraian_sub_program,
+                 a.kd_kegiatan, d.uraian_kegiatan, */
                 a.Kd_Rek_1, j.Nm_Rek_1, a.Kd_Rek_2, e.Nm_Rek_2,
                 a.Kd_Rek_3, f.Nm_Rek_3,
                 a.Kd_Rek_4, g.Nm_Rek_4,
                 a.Kd_Rek_5, h.Nm_Rek_5,
                 a.sekolah_id, i.nama_sekolah,
+                /*
                 a.keterangan, 
                 a.jml_satuan,
                 a.satuan123,
                 a.nilai_rp,
+                */
                 SUM(a.total) AS total
                 FROM (
                     SELECT
@@ -242,8 +244,8 @@ class BaperController extends Controller
                 INNER JOIN ref_rek_4 g ON a.Kd_Rek_1 = g.Kd_Rek_1 AND a.Kd_Rek_2 =  g.Kd_Rek_2 AND a.Kd_Rek_3 = g.Kd_Rek_3 AND a.Kd_Rek_4 = g.Kd_Rek_4
                 INNER JOIN ref_rek_5 h ON a.Kd_Rek_1 = h.Kd_Rek_1 AND a.Kd_Rek_2 =  h.Kd_Rek_2 AND a.Kd_Rek_3 = h.Kd_Rek_3 AND a.Kd_Rek_4 = h.Kd_Rek_4 AND a.Kd_Rek_5 = h.Kd_Rek_5
                 INNER JOIN ref_sekolah i ON a.sekolah_id = i.id
-                GROUP BY a.kd_program, a.kd_sub_program, /* a.kd_kegiatan,*/  a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.sekolah_id,a.jml_satuan, a.satuan123, a.nilai_rp, a.keterangan
-                ORDER BY a.kd_program, a.kd_sub_program, /* a.kd_kegiatan,*/ a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.sekolah_id ASC                   
+                GROUP BY a.kd_program,/* a.kd_sub_program,  a.kd_kegiatan,*/  a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.sekolah_id /*,a.jml_satuan, a.satuan123, a.nilai_rp, a.keterangan */
+                ORDER BY a.kd_program,/* a.kd_sub_program,  a.kd_kegiatan,*/ a.Kd_Rek_1, a.Kd_Rek_2, a.Kd_Rek_3, a.Kd_Rek_4, a.Kd_Rek_5, a.sekolah_id ASC                   
         ")->bindValues([
                 ':tahun' => $tahun,
                 ':no_ba' => $no_ba,
@@ -308,6 +310,24 @@ class BaperController extends Controller
             $dataProvider->query->andWhere('perubahan_id > 3');
             $dataProvider->query->andWhere("no_peraturan NOT IN(SELECT no_peraturan FROM ta_baver_rinc WHERE tahun = $tahun AND no_ba <> '$no_ba') AND tgl_peraturan <= '".$model->tgl_ba."'");
             $dataProvider->query->orderBy('sekolah_id, tgl_peraturan DESC');
+        }
+
+        if(Yii::$app->request->post() && $post = Yii::$app->request->post()) {
+            // return $this->redirect(Yii::$app->request->referrer);
+            switch ($post['kd_laporan']) {
+                case 2:
+                    return $this->redirect(['baperrinc/k2', 'tahun' => $tahun, 'sekolah_id' => $post['sekolah_id'], 'perubahan_id' => $post['perubahan_id'], 'penerimaan2' => $post['penerimaan2']]);
+                    break;
+                case 8:
+                    return $this->redirect(['baperrinc/bos', 'tahun' => $tahun, 'sekolah_id' => $post['sekolah_id'], 'perubahan_id' => $post['perubahan_id'], 'penerimaan2' => $post['penerimaan2']]);
+                    break;
+                case 10:
+                    return $this->redirect(['baperrinc/rka221', 'tahun' => $tahun, 'sekolah_id' => $post['sekolah_id'], 'perubahan_id' => $post['perubahan_id'], 'penerimaan2' => $post['penerimaan2']]);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
         }
 
         $view = '/baperrinc/index';

@@ -58,6 +58,16 @@ return [
         }
     ],
     [
+        'label' => 'Sumber Dana',
+        'value' => function($model){
+            $rkasHistory = \app\models\TaRkasHistory::find()
+                            ->where(['tahun' => $model->tahun, 'sekolah_id' => $model->sekolah_id, 'kd_program' => $model->kd_program, 'kd_sub_program' => $model->kd_sub_program, 'kd_kegiatan' => $model->kd_kegiatan, 'Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2, 'Kd_Rek_3' => $model->Kd_Rek_3, 'Kd_Rek_4' => $model->Kd_Rek_4, 'Kd_Rek_5' => $model->Kd_Rek_5, ])
+                            ->andWhere('perubahan_id = (SELECT MAX(perubahan_id) FROM ta_rkas_peraturan WHERE tahun = '.$model->tahun.' AND sekolah_id = '.$model->sekolah_id.')')
+                            ->one();
+            return $rkasHistory['penerimaan2']['uraian'];
+        }
+    ],
+    [
         'class' => 'kartik\grid\ActionColumn',
         'dropdown' => false,
         'visibleButtons' => [

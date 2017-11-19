@@ -621,7 +621,7 @@ foreach($bukti as $data){
 		$pdf->Rect($x+$w['0']+$w['1']+$w['2']+$w['3']+$w['4'], $yst, $w['5'] ,$ylst);
 		
 		//setelah buat rectangle baru kemudian addPage
-
+        $pdf->AddPage('P', [216,330]);
         $pdf->SetFont('Times','B',10);
         $pdf->SetXY(15,55);
         $pdf->Cell($w['0'],6,'NO','LBT',0,'C');

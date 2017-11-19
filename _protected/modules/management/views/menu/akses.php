@@ -21,7 +21,7 @@ function akses($id, $menu){
 		</tr>
 		<!--Menu 1 -->
 		<tr>
-			<td rowspan="10">Pengaturan</td>
+			<td rowspan="11">Pengaturan</td>
 			<td>Pengaturan Global</td>
 			<td>-</td>
 			<td>
@@ -126,6 +126,27 @@ function akses($id, $menu){
 			?>
 			</td>
 		</tr>
+		<tr>
+			<td>Mapping Sisa Kas</td>
+			<td>-</td>
+			<td>
+			<?php
+				$menu = 109;
+				IF(akses($model->id, $menu) === true){
+					echo Html::a('<span class = "label label-success"><i class="fa  fa-sign-in bg-white"></i></span>', ['give', 'id' => $model->id, 'menu' => $menu, 'akses' => 0 ],
+                            [  
+                             'id' => 'access-'.$menu,
+                          ]);							
+				}ELSE{
+					echo Html::a('<span class = "label label-danger"><i class="fa  fa-lock bg-white"></i></span>', ['give', 'id' => $model->id, 'menu' => $menu, 'akses' => 1 ],
+                            [  
+                             'id' => 'access-'.$menu,
+                          ]);
+				}
+
+			?>
+			</td>
+		</tr>		
 		<tr>
 			<td>Pengumuman</td>
 			<td>-</td>

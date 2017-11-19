@@ -68,6 +68,11 @@ class RefPenerimaanSekolah2 extends \yii\db\ActiveRecord
         return $this->hasOne(RefPenerimaanSekolah1::className(), ['kd_penerimaan_1' => 'kd_penerimaan_1']);
     }
 
+    public function getSisa()
+    {
+        return $this->hasOne(RefPenerimaanSekolahSisa::className(), ['penerimaan_sisa_1' => 'kd_penerimaan_1', 'penerimaan_sisa_2' => 'kd_penerimaan_2']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

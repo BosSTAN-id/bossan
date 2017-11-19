@@ -47,7 +47,7 @@ use kartik\widgets\DatePicker;
     <div class="col-md-3">
         <?php
             $model->Kd_Sumber = isset(Yii::$app->request->queryParams['Laporan']['Kd_Sumber']) ? Yii::$app->request->queryParams['Laporan']['Kd_Sumber'] : '';
-            $dataSumber = ArrayHelper::map(\app\models\RefPenerimaanSekolah2::find()->where(['sekolah' => 1])->all(), 'kode', 'uraian');
+            $dataSumber = ArrayHelper::map(\app\models\RefPenerimaanSekolah2::find()->where(['sekolah' => 1])->andWhere('kd_penerimaan_1 != 1')->all(), 'kode', 'uraian');
             $dataSumber['0.0'] = 'Semua Dana';
             ksort($dataSumber);
             echo $form->field($model, 'Kd_Sumber')->widget(Select2::classname(), [

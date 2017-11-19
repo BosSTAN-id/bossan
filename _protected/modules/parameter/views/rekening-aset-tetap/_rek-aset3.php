@@ -16,17 +16,23 @@ use yii\bootstrap\Modal;
         'responsiveWrap' => false,        
         'toolbar' => [
             [
-                // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
+                'content' => Html::a('<i class="fa fa-plus"></i> Tambah', ['rek-aset3-tambah', 'Kd_Aset1' => $model->Kd_Aset1, 'Kd_Aset2' => $model->Kd_Aset2], [
+                    'class' => 'btn btn-xs btn-default',
+                    'title' => 'Tambah',
+                    'data-toggle'=>"modal",
+                    'data-target'=>"#myModal",
+                    'data-title'=> "Tambah",
+                ]),
             ],
         ],       
         'pager' => [
             'firstPageLabel' => 'Awal',
             'lastPageLabel'  => 'Akhir'
         ],
-        // 'pjax'=>true,
-        // 'pjaxSettings'=>[
-        //     'options' => ['id' => 'ref-rek-aset2-pjax', 'timeout' => 5000],
-        // ],
+        'pjax'=>true,
+        'pjaxSettings'=>[
+            'options' => ['id' => 'ref-rek-aset3-pjax', 'timeout' => 5000],
+        ],
         'columns' => [
             [
                 'attribute' => 'Kd_Aset3',
@@ -38,7 +44,7 @@ use yii\bootstrap\Modal;
             'Nm_Aset3',
             [
                 'class' => 'kartik\grid\ActionColumn',
-                'template' => '{rek-aset4}',
+                'template' => '{rek-aset3-update} {rek-aset3-delete} {rek-aset4}',
                 'noWrap' => true,
                 'vAlign'=>'top',
                 'buttons' => [
@@ -50,27 +56,30 @@ use yii\bootstrap\Modal;
                                 'class' => 'btn btn-xs btn-default rek4',
                                 // 'data-pjax' => 1
                             ]);
-                        },                       
+                        },
+                        'rek-aset3-update' => function ($url, $model) {
+                            return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url,
+                            [  
+                                'title' => Yii::t('yii', 'ubah'),
+                                'data-toggle'=>"modal",
+                                'data-target'=>"#myModal",
+                                'data-title'=> "Ubah",
+                            ]);
+                        },  
+                        'rek-aset3-delete' => function ($url, $model) {
+                            return Html::a('<span class="glyphicon glyphicon-trash"></span>', $url,
+                            [  
+                                'title' => Yii::t('yii', 'delete'),                              
+                                'data-confirm' => "Yakin menghapus ini?",
+                                'data-method' => 'POST',
+                                'data-pjax' => 1
+                            ]);
+                        },                      
                 ]
             ],
         ],
     ]); ?>
 </div>
-<?php 
-// $this->registerJs(<<<JS
-//     $("a[id^='rek4-']").on("click", function(event){
-//         event.preventDefault();
-//         var href = $(this).attr("href");
-//         var modalBody = $("#modalAset .modal-body");
-//         modalBody.html('<i class=\"fa fa-spinner fa-spin\"></i>');
-//         $.post(href)
-//         .done(function( data ) {
-//             modalBody.html(data)
-//         });
-//     })
-// JS
-// );
-?>
 <script>
     $("a[id^='rek4-']").on("click", function(e){
         e.preventDefault()
