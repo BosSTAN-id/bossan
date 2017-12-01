@@ -62,7 +62,7 @@ use yii\widgets\MaskedInput;
                         FROM
                             ta_rkas_peraturan
                         WHERE
-                            a.sekolah_id = $sekolah_id
+                            sekolah_id = $sekolah_id
                     )
                 ");
             $data = $skpd->queryAll();

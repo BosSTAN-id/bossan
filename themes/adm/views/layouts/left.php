@@ -54,7 +54,7 @@
         ?>
         <?= dmstr\widgets\Menu::widget(
             [
-                'options' => ['class' => 'sidebar-menu'],
+                'options' => ['class' => 'sidebar-menu', 'data-widget' => 'tree'],
                 'items' => [
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     ['label' => 'Dashboard', 'icon' => 'home', 'url' => ['/'],],

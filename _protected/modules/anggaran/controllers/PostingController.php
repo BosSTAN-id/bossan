@@ -24,19 +24,20 @@ class PostingController extends \yii\web\Controller
         ];
     }
 
-    public function actionRepost($no_peraturan)
+    public function actionRepost($no_peraturan, $sekolah_id = null)
     {
         IF($this->cekakses() !== true){
             Yii::$app->getSession()->setFlash('warning',  'Anda tidak memiliki hak akses');
             return $this->redirect(Yii::$app->request->referrer);
-        }    
+        }
         IF(Yii::$app->session->get('tahun'))
         {
             $Tahun = Yii::$app->session->get('tahun');
         }ELSE{
             $Tahun = DATE('Y');
         }
-        $model = \app\models\TaRkasPeraturan::findOne(['no_peraturan' => $no_peraturan]);
+        if(!$sekolah_id || $sekolah_id == null) $sekolah_id = Yii::$app->user->identity->sekolah_id;
+        $model = \app\models\TaRkasPeraturan::findOne(['no_peraturan' => $no_peraturan, 'sekolah_id' => $sekolah_id]);
         if($model->delete()){
             Yii::$app->getSession()->setFlash('success',  'Posting telah dihapus! Silahkan posting kondisi terbaru!');
             return $this->redirect(Yii::$app->request->referrer);   
@@ -55,6 +56,8 @@ class PostingController extends \yii\web\Controller
         }ELSE{
             $Tahun = DATE('Y');
         }
+
+        $laporan = new \app\models\Laporan();
         $sekolah_id = Yii::$app->user->identity->sekolah_id ? Yii::$app->user->identity->sekolah_id : NULL;
         $kd_rencana = 3;
         $kd_induk = 4;
@@ -533,6 +536,7 @@ class PostingController extends \yii\web\Controller
             'pdt' => $pdt,
             'belanja' => $belanja,
             'btl' => $btl,
+            'laporan' => $laporan
         ]);
     }
 

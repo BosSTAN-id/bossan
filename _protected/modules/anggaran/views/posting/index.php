@@ -25,12 +25,12 @@ function angka($n) {
     return number_format($n);
 }
 
-function getBaRinc($no_peraturan){
-	$data = \app\models\TaBaverRinc::findOne(['no_peraturan' => $no_peraturan]);
+function getBaRinc($no_peraturan, $sekolah_id){
+	$data = \app\models\TaBaverRinc::findOne(['no_peraturan' => $no_peraturan, 'sekolah_id' => $sekolah_id]);
 	return $data;
 }
-function getStatusBa($no_peraturan){
-	$ba = getBaRinc($no_peraturan);
+function getStatusBa($no_peraturan, $sekolah_id){
+	$ba = getBaRinc($no_peraturan, $sekolah_id);
 	if($ba != NULL){
 		$data = \app\models\TaBaver::findOne(['no_ba' => $ba->no_ba])->status;
 		if($data == 1) return true;
@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		        	<?= date('d-m-Y', strtotime($rencana->tgl_peraturan)) ?>
 					<div class="pull-right">
 						<?php
-							if(getStatusBa($rencana->no_peraturan) == false) echo Html::a('<i class="fa fa-trash fa-fw"></i>', ['repost', 'no_peraturan' => $rencana->no_peraturan],
+							if(getStatusBa($rencana->no_peraturan, $rencana->sekolah_id) == false) echo Html::a('<i class="fa fa-trash fa-fw"></i>', ['repost', 'no_peraturan' => $rencana->no_peraturan, 'sekolah_id' => $rencana->sekolah_id],
                               [  
                                  'title' => Yii::t('yii', 'Hapus Posting'),
 								 'class' => 'btn btn-xs btn-danger',                       
@@ -175,7 +175,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		        	<?= date('d-m-Y', strtotime($induk->tgl_peraturan)) ?>
 					<div class="pull-right">
 						<?php
-							if(getStatusBa($induk->no_peraturan) == false) echo Html::a('<i class="fa fa-trash fa-fw"></i>', ['repost', 'no_peraturan' => $induk->no_peraturan],
+							if(getStatusBa($induk->no_peraturan, $induk->sekolah_id) == false) echo Html::a('<i class="fa fa-trash fa-fw"></i>', ['repost', 'no_peraturan' => $induk->no_peraturan, 'sekolah_id' => $induk->sekolah_id],
                               [  
                                  'title' => Yii::t('yii', 'Hapus Posting'),
 								 'class' => 'btn btn-xs btn-danger',                       
@@ -248,7 +248,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		        	<?= date('d-m-Y', strtotime($perubahan1->tgl_peraturan)) ?>
 					<div class="pull-right">
 						<?php 
-							if(getStatusBa($perubahan1->no_peraturan) == false) echo Html::a('<i class="fa fa-trash fa-fw"></i>', ['repost', 'no_peraturan' => $perubahan1->no_peraturan],
+							if(getStatusBa($perubahan1->no_peraturan, $perubahan1->sekolah_id) == false) echo Html::a('<i class="fa fa-trash fa-fw"></i>', ['repost', 'no_peraturan' => $perubahan1->no_peraturan, 'sekolah_id' => $perubahan1->sekolah_id],
                               [  
                                  'title' => Yii::t('yii', 'Hapus Posting'),
 								 'class' => 'btn btn-xs btn-danger',                       
@@ -278,6 +278,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <p style="margin-top: 10px;" class="text-muted well well-sm no-shadow">
                 Berikut posisi penginputan RKAS yang akan diposting. Periksa kembali dan pastikan data sudah benar.
             </p>
+			<div class="col-md-12 well">
+				<?= $this->render('_search', [
+					'model' => $laporan,
+				]) ?>
+			</div>
             <div class="col-md-6">      
 	            <div class="col-md-12 col-sm-12 col-xs-12">
 	                <div class="info-box">

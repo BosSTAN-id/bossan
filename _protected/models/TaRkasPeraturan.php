@@ -38,6 +38,7 @@ class TaRkasPeraturan extends \yii\db\ActiveRecord
             [['sekolah_id', 'perubahan_id', 'verifikasi'], 'integer'],
             [['no_peraturan', 'penandatangan', 'jabatan', 'komite_sekolah', 'jabatan_komite'], 'string', 'max' => 100],
             [['nip'], 'string', 'max' => 18],
+            [['no_peraturan'], 'unique'],
         ];
     }
 
