@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Belanja Tidak Langsung'];
                 'buttons' => [
                         'rencanabtl' => function ($url, $model) {
                             $return = "";
-                            $rencana = \app\models\TaRkasBelanjaRencana::findOne(['tahun' => $model->tahun, 'sekolah_id' => $model->sekolah_id, 'Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2, 'Kd_Rek_3' => $model->Kd_Rek_3, 'Kd_Rek_4' => $model->Kd_Rek_4, 'Kd_Rek_5' => $model->Kd_Rek_5]);
+                            $rencana = \app\models\TaRkasBelanjaRencana::findOne(['tahun' => $model->tahun, 'sekolah_id' => $model->sekolah_id, 'kd_program' => $model->kd_program, 'kd_sub_program' => $model->kd_sub_program, 'kd_kegiatan' => $model->kd_kegiatan, 'Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2, 'Kd_Rek_3' => $model->Kd_Rek_3, 'Kd_Rek_4' => $model->Kd_Rek_4, 'Kd_Rek_5' => $model->Kd_Rek_5]);
                             IF($rencana){
                                 $buttonColor = 'btn-success';
                                 $totalRencana =  $rencana['januari1'] + $rencana['februari1'] + $rencana['maret1'] + $rencana['april1'] + $rencana['mei1'] + $rencana['juni1'] + $rencana['juli'] + $rencana['agustus'] + $rencana['september'] + $rencana['oktober'] + $rencana['november'] + $rencana['desember'];

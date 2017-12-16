@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
                 'value' => function($model){
                     return totalbelanja($model->tahun, $model->sekolah_id, $model->kd_program, $model->kd_sub_program, $model->kd_kegiatan, $model->Kd_Rek_1, $model->Kd_Rek_2, $model->Kd_Rek_3, $model->Kd_Rek_4, $model->Kd_Rek_5);
                 }
-            ],            
+            ], 
             [
                 'class' => 'kartik\grid\ActionColumn',
                 'template' => '{rencanabtl}',
@@ -111,7 +111,7 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
                 'buttons' => [
                         'rencanabtl' => function ($url, $model) {
                             $return = "";
-                            $rencana = \app\models\TaRkasBelanjaRencana::findOne(['tahun' => $model->tahun, 'sekolah_id' => $model->sekolah_id, 'Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2, 'Kd_Rek_3' => $model->Kd_Rek_3, 'Kd_Rek_4' => $model->Kd_Rek_4, 'Kd_Rek_5' => $model->Kd_Rek_5]);
+                            $rencana = \app\models\TaRkasBelanjaRencana::findOne(['tahun' => $model->tahun, 'sekolah_id' => $model->sekolah_id, 'kd_program' => $model->kd_program, 'kd_sub_program' => $model->kd_sub_program, 'kd_kegiatan' => $model->kd_kegiatan, 'Kd_Rek_1' => $model->Kd_Rek_1, 'Kd_Rek_2' => $model->Kd_Rek_2, 'Kd_Rek_3' => $model->Kd_Rek_3, 'Kd_Rek_4' => $model->Kd_Rek_4, 'Kd_Rek_5' => $model->Kd_Rek_5]);
                             IF($rencana){
                                 $buttonColor = 'btn-success';
                                 $totalRencana =  $rencana['januari1'] + $rencana['februari1'] + $rencana['maret1'] + $rencana['april1'] + $rencana['mei1'] + $rencana['juni1'] + $rencana['juli'] + $rencana['agustus'] + $rencana['september'] + $rencana['oktober'] + $rencana['november'] + $rencana['desember'];
@@ -146,76 +146,77 @@ $this->params['breadcrumbs'][] = $kegiatan->refKegiatan->uraian_kegiatan;
         </div>
     <!-- /.box-header -->
     <div class="box-body">
-        <div id="accordion" class="box-group">
-            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-            <?php $i = 1; foreach($treeprogram AS $treeprogram): ?>
-            <div class="panel box box-<?= $treeprogram->kd_program == $kegiatan->kd_program ? 'danger' : 'primary' ?>">
-                <div class="box-header with-border">
-                    <h5 class="box-title">
-                    <a href="#collapse<?= $i ?>" data-parent="#accordion" data-toggle="collapse" class="<?= $treeprogram->kd_program == $kegiatan->kd_program ? '' : 'collapsed' ?>" aria-expanded="<?= $treeprogram->kd_program == $kegiatan->kd_program ? 'true' : 'false' ?>">
-                    <?= $treeprogram->refProgram->uraian_program ?>
-                    </a>
-                    </h5>
-                </div>
-                <div class="panel-collapse <?= $treeprogram->kd_program == $kegiatan->kd_program ? 'collapse in' : 'collapse' ?>" id="collapse<?= $i ?>" aria-expanded="<?= $treeprogram->kd_program == $kegiatan->kd_program ? 'true' : 'false' ?>" style="<?= $treeprogram->kd_program == $kegiatan->kd_program ? '' : 'height: 0px;' ?>">
-                    <div class="box-body">
-                    <?php 
-                    $subprogramawal = NULL;
-                    $listkegiatan = \app\models\TaRkasKegiatan::find()
-                        // ->select('tahun, sekolah_id, kd_program, kd_sub_program, kd_kegiatan')
-                        ->where(['tahun' => $Tahun, 'sekolah_id' => $kegiatan->sekolah_id, 'kd_program' => $treeprogram->kd_program])
-                        // ->groupBy('tahun, sekolah_id, kd_program, kd_sub_program,)
-                        ->all();
-                        foreach($listkegiatan as $listkegiatan){
-                            $subprogram = $listkegiatan->refSubProgram->uraian_sub_program;
-                            IF($subprogramawal != $subprogram){
-                                echo $subprogram;
-                                echo '<ol>';
-                                echo Html::a('<li>'.$listkegiatan->refKegiatan->uraian_kegiatan.'</li>', 
-                                    [
-                                        'rkasbelanja',
-                                        'tahun' => $listkegiatan->tahun,
-                                        'sekolah_id' => $listkegiatan->sekolah_id,
-                                        'kd_program' => $listkegiatan->kd_program,
-                                        'kd_sub_program' => $listkegiatan->kd_sub_program,
-                                        'kd_kegiatan' => $listkegiatan->kd_kegiatan,
-                                    ],
-                                    [
-                                        'class' => $listkegiatan->kd_sub_program.'.'.$listkegiatan->kd_kegiatan == $kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan ? 'text-bold' : '',
-                                    ]
-                                );
-                            }ELSE{
-                                echo Html::a('<li>'.$listkegiatan->refKegiatan->uraian_kegiatan.'</li>', 
-                                    [
-                                        'rkasbelanja',
-                                        'tahun' => $listkegiatan->tahun,
-                                        'sekolah_id' => $listkegiatan->sekolah_id,
-                                        'kd_program' => $listkegiatan->kd_program,
-                                        'kd_sub_program' => $listkegiatan->kd_sub_program,
-                                        'kd_kegiatan' => $listkegiatan->kd_kegiatan,
-                                    ],
-                                    [
-                                        'class' => $listkegiatan->kd_sub_program.'.'.$listkegiatan->kd_kegiatan == $kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan ? 'text-bold' : '',
-                                    ]
-                                );
-                            }
-                        }
-                    ?>
-<!--                     Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
-                    <ol>
-                        <li>Lorem ipsum dolor sit amet</li>
-                        <li>Consectetur adipiscing elit</li>
-                        <li>Integer molestie lorem at massa</li>
-                        <li>Facilisis in pretium nisl aliquet</li>
-                        <li>Faucibus porta lacus fringilla vel</li>
-                        <li>Aenean sit amet erat nunc</li>
-                        <li>Eget porttitor lorem</li> -->
-                    </ol>                    
-                    </div>
-                </div>
-            </div>
-            <?php $i++; endforeach; ?>
+    <div id="accordion" class="box-group">
+    <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+    <?php $i = 1; foreach($treeprogram AS $treeprogram): ?>
+    <div class="panel box box-<?= $treeprogram->kd_program == $kegiatan->kd_program ? 'danger' : 'primary' ?>">
+        <div class="box-header with-border">
+            <h5 class="box-title">
+            <a href="#collapse<?= $i ?>" data-parent="#accordion" data-toggle="collapse" class="<?= $treeprogram->kd_program == $kegiatan->kd_program ? '' : 'collapsed' ?>" aria-expanded="<?= $treeprogram->kd_program == $kegiatan->kd_program ? 'true' : 'false' ?>">
+            <?= $treeprogram->refProgram->uraian_program ?>
+            </a>
+            </h5>
         </div>
+        <div class="panel-collapse <?= $treeprogram->kd_program == $kegiatan->kd_program ? 'collapse in' : 'collapse' ?>" id="collapse<?= $i ?>" aria-expanded="<?= $treeprogram->kd_program == $kegiatan->kd_program ? 'true' : 'false' ?>" style="<?= $treeprogram->kd_program == $kegiatan->kd_program ? '' : 'height: 0px;' ?>">
+            <div class="box-body">
+            <?php 
+            $subprogramawal = NULL;
+            $listkegiatan = \app\models\TaRkasKegiatan::find()
+                // ->select('tahun, sekolah_id, kd_program, kd_sub_program, kd_kegiatan')
+                ->where(['tahun' => $Tahun, 'sekolah_id' => $kegiatan->sekolah_id, 'kd_program' => $treeprogram->kd_program])
+                // ->groupBy('tahun, sekolah_id, kd_program, kd_sub_program,)
+                ->all();
+            foreach($listkegiatan as $listkegiatan){
+                $subprogram = $listkegiatan->refSubProgram->uraian_sub_program;
+                // IF($subprogramawal != $subprogram){
+                //     echo $subprogram;
+                //     echo '<ol>';
+                //     echo Html::a('<li>'.$listkegiatan->refKegiatan->uraian_kegiatan.'</li>', 
+                //         [
+                //             'rkasbelanja',
+                //             'tahun' => $listkegiatan->tahun,
+                //             'sekolah_id' => $listkegiatan->sekolah_id,
+                //             'kd_program' => $listkegiatan->kd_program,
+                //             'kd_sub_program' => $listkegiatan->kd_sub_program,
+                //             'kd_kegiatan' => $listkegiatan->kd_kegiatan,
+                //         ],
+                //         [
+                //             'class' => $listkegiatan->kd_sub_program.'.'.$listkegiatan->kd_kegiatan == $kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan ? 'text-bold' : '',
+                //         ]
+                //     );
+                //     echo '</ol>';
+                // }ELSE{
+                    echo Html::a('<li>'.$listkegiatan->refKegiatan->uraian_kegiatan.'</li>', 
+                        [
+                            'rkasbelanja',
+                            'tahun' => $listkegiatan->tahun,
+                            'sekolah_id' => $listkegiatan->sekolah_id,
+                            'kd_program' => $listkegiatan->kd_program,
+                            'kd_sub_program' => $listkegiatan->kd_sub_program,
+                            'kd_kegiatan' => $listkegiatan->kd_kegiatan,
+                        ],
+                        [
+                            'class' => $listkegiatan->kd_sub_program.'.'.$listkegiatan->kd_kegiatan == $kegiatan->kd_sub_program.'.'.$kegiatan->kd_kegiatan ? 'text-bold' : '',
+                        ]
+                    );
+                // }
+            }
+            ?>
+<!--                     Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid.
+            <ol>
+                <li>Lorem ipsum dolor sit amet</li>
+                <li>Consectetur adipiscing elit</li>
+                <li>Integer molestie lorem at massa</li>
+                <li>Facilisis in pretium nisl aliquet</li>
+                <li>Faucibus porta lacus fringilla vel</li>
+                <li>Aenean sit amet erat nunc</li>
+                <li>Eget porttitor lorem</li> -->
+            </ol>                    
+            </div>
+        </div>
+    </div>
+    <?php $i++; endforeach; ?>
+</div>
     </div>
     <!-- /.box-body -->
     </div>
