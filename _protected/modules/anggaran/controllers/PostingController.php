@@ -514,7 +514,7 @@ class PostingController extends \yii\web\Controller
                 if($cekrencanapendapatan){
                     $returnBelanja .= "Rencana Belanja Belum Terisi: ";
                     foreach($cekrencanapendapatan as $cekrencanapendapatandata){
-                        $returnBelanja.= "(".$cekrencanapendapatandata['kd_program'].".".$cekrencanapendapatandata['kd_sub_program'].".".$cekrencanapendapatandata['kd_kegiatan']
+                        $returnBelanja.= "("
                         .".".$cekrencanapendapatandata['Kd_Rek_1']
                         .".".$cekrencanapendapatandata['Kd_Rek_2']
                         .".".$cekrencanapendapatandata['Kd_Rek_3']
