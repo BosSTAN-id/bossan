@@ -13,6 +13,7 @@ use kartik\widgets\DepDrop;
 ?>
 
 <div class="ta-rkas-belanja-form">
+    <div id="message"></div>
     <?= Html::a('Kamus Belanja', ['kamusbelanja'], [
                                                 'class' => 'btn btn-xs btn-info',
                                                 'onClick' => "return !window.open(this.href, 'SPH', 'width=1024,height=600,scrollbars=1')"
@@ -115,7 +116,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
                 $("#message").html(result);
             }
         }).fail(function(){
-            console.log("server error");
+            $("#message").html("server error");
         });
     return false;
 });
@@ -143,7 +144,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
                 $("#message").html(result);
             }
         }).fail(function(){
-            console.log("server error");
+            $("#message").html("server error");
         });
     return false;
 });

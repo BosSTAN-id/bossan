@@ -13,6 +13,7 @@ use kartik\widgets\DepDrop;
 ?>
 
 <div class="ta-rkas-belanja-form">
+    <div id="message"></div>
     <?php $form = ActiveForm::begin(['id' => $model->formName()
     // , 'layout' => 'horizontal'
     ]); ?>
@@ -135,7 +136,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
                 $("#message").html(result);
             }
         }).fail(function(){
-            console.log("server error");
+            $("#message").html("server error");
         });
     return false;
 });
@@ -163,7 +164,7 @@ $('form#{$model->formName()}').on('beforeSubmit',function(e)
                 $("#message").html(result);
             }
         }).fail(function(){
-            console.log("server error");
+            $("#message").html("server error");
         });
     return false;
 });

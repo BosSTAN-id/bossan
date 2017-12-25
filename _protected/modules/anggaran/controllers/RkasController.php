@@ -110,12 +110,16 @@ class RkasController extends Controller
             // var_dump($model);
             IF($model->penerimaan_2)
                 list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
-            $model->validate();
-            IF($model->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
+            try {
+                $model->validate();
+                IF($model->save()){
+                    return 1;
+                }ELSE{
+                    return '<div class="alert alert-warning">Pilihan belum diisi</div>';
+                }                
+            }catch(\Exception $e){
+                return '<div class="alert alert-warning">'.substr($e->getMessage(), 0, 100).'</div>';
+            } 
         } else {
             return $this->renderAjax('_form', [
                 'model' => $model,
@@ -146,11 +150,15 @@ class RkasController extends Controller
             }
             IF($model->penerimaan_2)
                 list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
-            IF($model->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
+            try {
+                IF($model->save()){
+                    return 1;
+                }ELSE{
+                    return '<div class="alert alert-warning">Pilihan belum diisi</div>';
+                }                
+            }catch(\Exception $e){
+                return '<div class="alert alert-warning">'.substr($e->getMessage(), 0, 100).'</div>';
+            } 
         } else {
             return $this->renderAjax('_form', [
                 'model' => $model,
@@ -268,12 +276,16 @@ class RkasController extends Controller
             // var_dump($model);
             IF($model->penerimaan_2)
                 list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
-            $model->validate();
-            IF($model->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
+            try {
+                $model->validate();
+                IF($model->save()){
+                    return 1;
+                }ELSE{
+                    return '<div class="alert alert-warning">Pilihan belum diisi</div>';
+                }                
+            }catch(\Exception $e){
+                return '<div class="alert alert-warning">'.substr($e->getMessage(), 0, 100).'</div>';
+            } 
         } else {
             return $this->renderAjax('_formbelanja', [
                 'model' => $model,
@@ -323,11 +335,15 @@ class RkasController extends Controller
 
             IF($model->penerimaan_2)
                 list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
-            IF($model->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
+            try {
+                IF($model->save()){
+                    return 1;
+                }ELSE{
+                    return '<div class="alert alert-warning">Pilihan belum diisi</div>';
+                }                
+            }catch(\Exception $e){
+                return '<div class="alert alert-warning">'.substr($e->getMessage(), 0, 100).'</div>';
+            } 
         } else {
             return $this->renderAjax('_formbelanja', [
                 'model' => $model,
@@ -448,12 +464,16 @@ class RkasController extends Controller
             $model->no_rinc = ($no_rinc->no_rinc + 1); 
             $model->total = $model->nilai_rp * $model->jml_satuan;
             // var_dump($model->validate());
-            $model->validate();
-            IF($model->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
+            try {
+                $model->validate();
+                IF($model->save()){
+                    return 1;
+                }ELSE{
+                    return '<div class="alert alert-warning">Pilihan belum diisi</div>';
+                }                
+            }catch(\Exception $e){
+                return '<div class="alert alert-warning">'.substr($e->getMessage(), 0, 100).'</div>';
+            } 
         } else {
             return $this->renderAjax('_formbelanjarinci', [
                 'model' => $model,
@@ -508,11 +528,14 @@ class RkasController extends Controller
                 Yii::$app->getSession()->setFlash('warning',  'Sudah ada realisasi atas belanja ini yang melebihi perubahan yang diajukan.');
                 return $this->redirect(Yii::$app->request->referrer);
             }
-            // return var_dump($model->validate());
-            IF($model->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
+            try {
+                IF($model->save()){
+                    return 1;
+                }ELSE{
+                    return '<div class="alert alert-warning">Pilihan belum diisi</div>';
+                }                
+            }catch(\Exception $e){
+                return '<div class="alert alert-warning">'.substr($e->getMessage(), 0, 100).'</div>';
             }
         } else {
             return $this->renderAjax('_formbelanjarinci', [
@@ -650,12 +673,16 @@ class RkasController extends Controller
             // var_dump($model);
             IF($model->penerimaan_2)
                 list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
-            $model->validate();
-            IF($model->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
+            try {
+                $model->validate();
+                IF($model->save()){
+                    return 1;
+                }ELSE{
+                    return '<div class="alert alert-warning">Pilihan belum diisi</div>';
+                }                
+            }catch(\Exception $e){
+                return '<div class="alert alert-warning">'.substr($e->getMessage(), 0, 100).'</div>';
+            } 
         } else {
             return $this->renderAjax('_formbelanja', [
                 'model' => $model,
@@ -692,11 +719,15 @@ class RkasController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             IF($model->penerimaan_2)
                 list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
-            IF($model->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
+            try {
+                IF($model->save()){
+                    return 1;
+                }ELSE{
+                    return '<div class="alert alert-warning">Pilihan belum diisi</div>';
+                }                
+            }catch(\Exception $e){
+                return '<div class="alert alert-warning">'.substr($e->getMessage(), 0, 100).'</div>';
+            } 
         } else {
             return $this->renderAjax('_formbelanja', [
                 'model' => $model,
@@ -764,53 +795,12 @@ class RkasController extends Controller
             $Tahun = DATE('Y');
         }
 
-        // $model = new \app\models\TaRkasPendapatanRinc();
-        // $model->tahun = $tahun;
-        // $model->sekolah_id = $sekolah_id;
-        
-
-        // if ($model->load(Yii::$app->request->post())) {
-        //     IF($model->penerimaan_2)
-        //         list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
-        //     $mapping = \app\models\RefRekPenerimaan::findOne(['kd_penerimaan_1' => $model->kd_penerimaan_1, 'kd_penerimaan_2' => $model->kd_penerimaan_2]);
-        //     IF($mapping){
-        //         //cek terlebih dahulu apakah sudah ada ta_rkas_pendapatan
-        //         $tabelpendapatan = \app\models\TaRkasPendapatan::findOne(['tahun' => $Tahun, 'sekolah_id' => $sekolah_id, 'kd_penerimaan_1' => $model->kd_penerimaan_1, 'kd_penerimaan_2' => $model->kd_penerimaan_2]);
-        //         IF(!$tabelpendapatan){
-        //             $pendapatan = new \app\models\TaRkasPendapatan();
-        //             $pendapatan->tahun = $model->tahun;
-        //             $pendapatan->sekolah_id = $model->sekolah_id;
-        //             $pendapatan->kd_penerimaan_1 = $model->kd_penerimaan_1;
-        //             $pendapatan->kd_penerimaan_2 = $model->kd_penerimaan_2;
-        //             $pendapatan->Kd_Rek_1 = $model->Kd_Rek_1 = $mapping->Kd_Rek_1;
-        //             $pendapatan->Kd_Rek_2 = $model->Kd_Rek_2 = $mapping->Kd_Rek_2;
-        //             $pendapatan->Kd_Rek_3 = $model->Kd_Rek_3 = $mapping->Kd_Rek_3;
-        //             $pendapatan->Kd_Rek_4 = $model->Kd_Rek_4 = $mapping->Kd_Rek_4;
-        //             $pendapatan->Kd_Rek_5 = $model->Kd_Rek_5 = $mapping->Kd_Rek_5;
-        //         }
-        //     }
-        //     $model->no_rinc = 1;
-        //     $model->total = $model->nilai_rp * $model->jml_satuan;
-        //     // var_dump($model->validate());
-        //     // var_dump($pendapatan->validate());
-        //     $model->validate();
-        //     IF($pendapatan->save() && $model->save()){
-        //         echo 1;
-        //     }ELSE{
-        //         echo 0;
-        //     }
-        // } else {
-        //     return $this->renderAjax('_formpendapatan', [
-        //         'model' => $model,
-        //     ]);
-        // }      
-
         $model = new \app\models\TaRkasPendapatan();
         $model->tahun = $tahun;
         $model->sekolah_id = Yii::$app->user->identity->sekolah_id;        
 
         if ($model->load(Yii::$app->request->post())) {
-            // var_dump($model);
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
             IF($model->penerimaan_2)
                 list($model->kd_penerimaan_1, $model->kd_penerimaan_2) = explode('.', $model->penerimaan_2);
             $mapping = \app\models\RefRekPenerimaan::findOne(['kd_penerimaan_1' => $model->kd_penerimaan_1, 'kd_penerimaan_2' => $model->kd_penerimaan_2]);
@@ -821,12 +811,16 @@ class RkasController extends Controller
                 $model->Kd_Rek_4 = $mapping->Kd_Rek_4;
                 $model->Kd_Rek_5 = $mapping->Kd_Rek_5;
             }                
-            $model->validate();
-            IF($model->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
+            try {
+                $model->validate();
+                IF($model->save()){
+                    return 1;
+                }ELSE{
+                    return '<div class="alert alert-warning">Pilihan belum diisi</div>';
+                }                
+            }catch(\Exception $e){
+                return '<div class="alert alert-warning">'.substr($e->getMessage(), 0, 100).'</div>';
+            }            
         } else {
             return $this->renderAjax('_formpendapatan2', [
                 'model' => $model,
@@ -869,11 +863,15 @@ class RkasController extends Controller
                 $model->Kd_Rek_4 = $mapping->Kd_Rek_4;
                 $model->Kd_Rek_5 = $mapping->Kd_Rek_5;
             }  
-            IF($model->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
+            try {
+                IF($model->save()){
+                    return 1;
+                }ELSE{
+                    return '<div class="alert alert-warning">Pilihan belum diisi</div>';
+                }                
+            }catch(\Exception $e){
+                return '<div class="alert alert-warning">'.substr($e->getMessage(), 0, 100).'</div>';
+            } 
         } else {
             return $this->renderAjax('_formpendapatan2', [
                 'model' => $model,
@@ -932,12 +930,16 @@ class RkasController extends Controller
             $model->jml_satuan = str_replace(',', '.', $model->jml_satuan);
             $model->no_rinc = ($no_rinc->no_rinc + 1); 
             $model->total = $model->nilai_rp * $model->jml_satuan;
-            $model->validate();
-            IF($model->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
+            try {
+                $model->validate();
+                IF($model->save()){
+                    return 1;
+                }ELSE{
+                    return '<div class="alert alert-warning">Pilihan belum diisi</div>';
+                }                
+            }catch(\Exception $e){
+                return '<div class="alert alert-warning">'.substr($e->getMessage(), 0, 100).'</div>';
+            } 
         } else {
             return $this->renderAjax('_formpendapatanrinci', [
                 'model' => $model,
@@ -964,11 +966,15 @@ class RkasController extends Controller
             $model->nilai_rp =  str_replace(',', '.', $model->nilai_rp);
             $model->jml_satuan = str_replace(',', '.', $model->jml_satuan);
             $model->total = $model->nilai_rp * $model->jml_satuan;
-            IF($model->save()){
-                echo 1;
-            }ELSE{
-                echo 0;
-            }
+            try {
+                IF($model->save()){
+                    return 1;
+                }ELSE{
+                    return '<div class="alert alert-warning">Pilihan belum diisi</div>';
+                }                
+            }catch(\Exception $e){
+                return '<div class="alert alert-warning">'.substr($e->getMessage(), 0, 100).'</div>';
+            } 
         } else {
             return $this->renderAjax('_formpendapatanrinci', [
                 'model' => $model,
