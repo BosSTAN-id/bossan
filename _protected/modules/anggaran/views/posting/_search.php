@@ -25,8 +25,8 @@ use kartik\widgets\DatePicker;
             $model->Kd_Laporan = isset(Yii::$app->request->queryParams['Laporan']['Kd_Laporan']) ? Yii::$app->request->queryParams['Laporan']['Kd_Laporan'] : '';
             echo $form->field($model, 'Kd_Laporan')->widget(Select2::classname(), [
                 'data' => [
-                    '1' => 'BOS-K1 Rencana Anggaran Pendapatan dan Belanja Sekolah',
-                    '2' => 'BOS-K2 Rencana Kegiatan dan Anggaran',
+                    // '1' => 'BOS-K1 Rencana Anggaran Pendapatan dan Belanja Sekolah',
+                    // '2' => 'BOS-K2 Rencana Kegiatan dan Anggaran',
                     '8' => 'BOS-03 Rencana Penggunaan dana BOS per Periode',
                     '10' => 'Form RKA OPD 2.2.1 (Rincian Pendapatan dan Belanja)',              
                 ],
