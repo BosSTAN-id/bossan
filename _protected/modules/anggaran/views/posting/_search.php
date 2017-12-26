@@ -13,7 +13,8 @@ use kartik\widgets\DatePicker;
 ?>
 
     <?php $form = ActiveForm::begin([
-        'action' => ['index'],
+        'id' => 'preview-posting-form',
+        'action' => ['cetak'],
         'method' => 'get',
     ]); ?>
 
@@ -44,3 +45,20 @@ use kartik\widgets\DatePicker;
 </div>
 
 <?php ActiveForm::end(); ?>
+<?php 
+$this->registerJs(<<<JS
+    $("form#preview-posting-form").on("submit", function(e){
+        e.preventDefault();
+        actionUrl = $(this).attr("action") + "?" + $(this).serialize();
+        // console.log(actionUrl);
+        window.open(actionUrl, 'Cetak', 'width=1024,height=768')
+        // this.target = 'formpopup';
+        // Shadowbox.open({
+        //     content:    'link',
+        //     height:     300,
+        //     width:      500
+        // });
+    })
+JS
+);
+?>
