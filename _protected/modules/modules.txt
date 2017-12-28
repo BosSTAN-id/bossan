@@ -60,7 +60,7 @@
 	07 => saldoawal
 	08 => Mutasi Kas
 	09 => Potongan
-	10 => 
+	10 => Ubah Status SPJ
 	11 => 
 	12 => 
 6 => Pelaporan

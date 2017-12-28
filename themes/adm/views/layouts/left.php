@@ -100,6 +100,7 @@
                             ['label' => 'SPJ', 'icon' => 'circle-o', 'url' => ['/penatausahaan/spj'], 'visible' => akses(502)],
                             ['label' => 'Setoran Potongan', 'icon' => 'circle-o', 'url' => ['/penatausahaan/potongan'], 'visible' => akses(509)],
                             ['label' => 'Verifikasi SPJ', 'icon' => 'circle-o', 'url' => ['/penatausahaan/verspj'], 'visible' => akses(503)],
+                            ['label' => 'Ubah Status SPJ', 'icon' => 'circle-o', 'url' => ['/penatausahaan/ubahstatusspj'], 'visible' => akses(510)],
                         ],
                     ], 
                     ['label' => 'Aset Tetap', 'icon' => 'chevron-circle-right', 'url' => '#', 'visible' => !Yii::$app->user->isGuest, 'items' => 
