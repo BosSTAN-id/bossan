@@ -100,124 +100,21 @@ $this->params['breadcrumbs'][] = $this->title;
             'spj.keterangan',
             // 'tgl_spj',
             'sekolah.nama_sekolah',
+            [
+                'class' => 'kartik\grid\ActionColumn',
+                'header' => 'Preview',
+                'template' => '{printspj}',
+                'noWrap' => true,
+                'vAlign'=>'top',
+                'buttons' => [
+                        'printspj' => function($url, $model){
+                            return  Html::a('<i class="glyphicon glyphicon-print bg-white"></i>', $url, ['onClick' => "return !window.open(this.href, 'SPJ', 'width=1024,height=768')"]);
+                        },                                             
+                ]
+            ],
         ],
     ]);
     ?>
-    <?php
-//     IF($model->kd_sah == 1){
-// $form = ActiveForm::begin();
-// echo TabularForm::widget([
-//     'form' => $form,
-//     'dataProvider' => $dataProvider,
-//     'actionColumn'=>false,
-//     'checkboxColumn' => [],
-//     'attributes' => [
-//         'no_spj' => ['type' => TabularForm::INPUT_STATIC, 'columnOptions'=>['hAlign'=>GridView::ALIGN_LEFT]],
-//         'tgl_spj' => [
-//                 'type' => TabularForm::INPUT_STATIC, 
-//                 'format' => 'date',
-//                 'columnOptions'=>[
-//                     'hAlign'=>GridView::ALIGN_RIGHT,
-//                     'noWrap' => true,
-//                 ]
-//             ],
-//         'nilai' => [
-//             'type' => TabularForm::INPUT_STATIC,
-//             'format' => 'decimal', 
-//             'columnOptions'=> ['hAlign'=>GridView::ALIGN_RIGHT]
-//         ],
-//         '' => [
-//             'type' => TabularForm::INPUT_STATIC, 
-//             'value' => function($model){
-//                 IF($model->no_spj <> null){
-//                     return '<i class="glyphicon glyphicon-ok"></i>';
-//                 }ELSE{
-//                     return '';
-//                 }
-//             }, 
-//             'columnOptions'=>['hAlign'=>GridView::ALIGN_LEFT]
-//         ],
-        
-//     ],
-//     'gridSettings' => [
-//         'id' => 'ta-spjbukti',    
-//         'dataProvider' => $dataProvider,
-//         'export' => false, 
-//         'responsive'=>true,
-//         'hover'=>true,     
-//         'resizableColumns'=>true,    
-//         'responsiveWrap' => false,       
-//         'pager' => [
-//             'firstPageLabel' => 'Awal',
-//             'lastPageLabel'  => 'Akhir'
-//         ],
-//         'pjax'=>true,
-//         'pjaxSettings'=>[
-//             'options' => ['id' => 'belanja-pjax', 'timeout' => 5000],
-//         ], 
-//         'floatHeader' => false,
-//         'panel' => [
-//             'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i> Bukti Untuk SPJ '.$model->no_spj.'</h3>',
-//             'type' => GridView::TYPE_PRIMARY,
-//             'after'=> 
-//                 // Html::a(
-//                 //     '<i class="glyphicon glyphicon-plus"></i> Set Bukti SPJ', 
-//                 //     ['assign'], 
-//                 //     ['class'=>'btn btn-xs btn-success']
-//                 // ) . '&nbsp;' . 
-//                 // Html::a(
-//                 //     '<i class="glyphicon glyphicon-remove"></i> Delete', 
-//                 //     $deleteUrl, 
-//                 //     ['class'=>'btn btn-danger']
-//                 // ) . '&nbsp;' .
-//                 Html::submitButton(
-//                     '<i class="glyphicon glyphicon-floppy-disk"></i> Tambahkan Bukti', 
-//                     ['class'=>'btn btn-xs btn-success']
-//                 )
-//         ]
-//     ]     
-// ]); 
-// ActiveForm::end();
-//     }ELSE{
-//     echo GridView::widget([
-//         'id' => 'ta-rkas-kegiatan',    
-//         'dataProvider' => $dataProvider,
-//         'export' => false, 
-//         'responsive'=>true,
-//         'hover'=>true,     
-//         'resizableColumns'=>true,
-//         'panel'=>['type'=>'primary', 'heading'=>$this->title],
-//         'responsiveWrap' => false,        
-//         'toolbar' => [
-//             [
-//                 // 'content' => $this->render('_search', ['model' => $searchModel, 'Tahun' => $Tahun]),
-//             ],
-//         ],       
-//         'pager' => [
-//             'firstPageLabel' => 'Awal',
-//             'lastPageLabel'  => 'Akhir'
-//         ],
-//         'pjax'=>true,
-//         'pjaxSettings'=>[
-//             'options' => ['id' => 'belanja-pjax', 'timeout' => 5000],
-//         ],        
-//         // 'filterModel' => $searchModel,
-//         'showPageSummary'=>true,
-//         'columns' => [
-//             ['class' => 'kartik\grid\SerialColumn'],
-//             [
-//                 'label' => 'Jenis Belanja',
-//                 'value' => function($model){
-//                     return $model->refRek5->Nm_Rek_5;
-//                 }
-//             ],
-//             'no_bukti',
-//             'tgl_bukti',            
-//             'uraian',
-//             'nilai:decimal',
-//         ],
-//     ]);
-//     } ?>
 </div><!--col-->
 </div><!--row-->
 </div>

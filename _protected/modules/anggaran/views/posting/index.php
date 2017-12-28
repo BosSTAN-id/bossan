@@ -11,7 +11,7 @@ use kartik\widgets\DatePicker;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 function angka($n) {
     // first strip any formatting;
-    $n = (0+str_replace(",","",$n));
+    // $n = (0+str_replace(",","",$n));
     
     // is this a number?
     if(!is_numeric($n)) return false;

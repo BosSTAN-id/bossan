@@ -19,7 +19,7 @@ IF(Yii::$app->session->get('tahun'))
 
     <nav class="navbar navbar-static-top" role="navigation">
 
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
             <span class="sr-only">Toggle navigation</span>
             <!--<img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/> -->
             <span class"pull-left"><B>  <?= Yii::$app->user->identity->sekolah_id == NULL ? strtoupper(\app\models\TaTh::dokudoku('bulat', \app\models\TaTh::findOne(['tahun' => $Tahun])['set_10'])) : strtoupper(Yii::$app->user->identity->refSekolah->nama_sekolah) ?></B></span>
