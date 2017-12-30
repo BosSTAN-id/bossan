@@ -16,7 +16,19 @@ use kartik\widgets\DatePicker;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
-
+<div class="col-md-12">
+    <?php
+    $checkParameter = \app\models\RefSekolah::findOne(['id' => Yii::$app->user->identity->sekolah_id]);
+    if(!($checkParameter['kelurahan_id'])):
+    ?>
+    <div class="alert alert-danger alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <h4><i class="icon fa fa-ban"></i> Perhatian!</h4>
+        Sepertinya anda belum mengisi parameter Desa/Kelurahan sekolah anda. Isi parameter Desa/Kelurahan terlebih dahulu agar dapat mencetak laporan melalui menu <?= Html::a("<b>Parameter > Data Sekolah </b>", ['/parameter/datasekolah']) ?>
+    </div>
+    <?php endif;?>
+<div class="box box-info">
+<div class="box-body">
 <div class="row col-md-12">
     <div class="col-md-4">
         <?php
@@ -131,6 +143,9 @@ use kartik\widgets\DatePicker;
     <div class="col-md-2 pull-right">
         <?= Html::submitButton( 'Pilih', ['class' => 'btn btn-default']) ?>        
     </div>
+</div>
+</div>
+</div>
 </div>
 
     <?php ActiveForm::end(); ?>
