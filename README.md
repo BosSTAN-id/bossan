@@ -28,6 +28,13 @@ INSTALLATION
 If you do not have [Composer](http://getcomposer.org/), you may install it by following the instructions
 at [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
 
+Make sure you have fxp-asset-plugin installed. If not, run this following code:
+~~~
+composer global require "fxp/composer-asset-plugin:~1.3"
+~~~
+
+For additional information of fxp-asset-plugin visit this [link](https://github.com/fxpio/composer-asset-plugin/blob/master/Resources/doc/index.md).
+
 You can then install this project template using the following command:
 
 ~~~
