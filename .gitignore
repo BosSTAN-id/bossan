@@ -16,6 +16,9 @@ nbproject
 Thumbs.db
 
 _protected/config/db.php
+_protected/runtime/cache/
+_protected/runtime/logs/
+
 
 # composer itself is not needed
 composer.phar
