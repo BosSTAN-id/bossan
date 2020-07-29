@@ -13,7 +13,7 @@ Demo:  [Demo](http://showcase.belajararief.com/bossan)
 
 User Diknas : diknas/diknas
 
-user Sekolah: smpn2ba3/smpn2ba3
+user Sekolah: sekolah/sekolah
 
 Database
 ------------
